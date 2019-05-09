@@ -11,11 +11,13 @@
     "plugin:prettier/recommended",
     "prettier/react"
   ],
+  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 6,
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "experimentalObjectRestSpread": true
     }
   },
   "plugins": [
@@ -25,7 +27,7 @@
   "rules": {
     "prettier/prettier": [
       "error", { 
-        "singleQuote": false, 
+        "singleQuote": true, 
         "semi": false,
         "jsxSingleQuote": false,
         "printWidth": 90
