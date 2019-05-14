@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "grommet": "^2.6.6",
-    "grommet-icons": "^4.2.0",
     "mapbox-gl": "^0.54.0",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",

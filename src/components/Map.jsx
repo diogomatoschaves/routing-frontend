@@ -28,7 +28,8 @@ export default class Map extends Component {
 
     const map = new mapboxgl.Map({
       container: this.mapContainer,
-      style: 'mapbox://styles/mapbox/dark-v9',
+      // style: 'mapbox://styles/mapbox/dark-v9',
+      style: 'mapbox://styles/mapbox/light-v9',
       hash: true,
       maxZoom: 24.999,
       minZoom: 1,
