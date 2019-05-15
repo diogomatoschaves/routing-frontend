@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Box, Button, Grommet, ResponsiveContext } from 'grommet'
 import styled from 'styled-components'
 import Map from './Map'
 import Panel from './Panel'
+import '../App.css'
+// import 'antd/dist/antd.css';
 
-const AppWrapper = styled.div`
+const AppWrapper: any = styled.div`
   width: 100vw;
   height: 100vh;
 `
@@ -12,12 +13,14 @@ const AppWrapper = styled.div`
 class App extends Component {
   state = {
     // showSidebar: false
+    title: 'Routing API'
   }
 
-  render() {
+  public render() {
+
     return (
       <AppWrapper>
-        <Panel />
+        <Panel/>
         <Map />
       </AppWrapper>
     )
