@@ -18,8 +18,8 @@ const PanelWrapper: any = styled.div`
   height: 250px;
   /* max-height: 200px;
   ma-height: 200px; */
-  left: 10px;
-  top: 10px;
+  left: 20px;
+  top: 20px;
   padding: 30px;
   background: rgba(30, 30, 30, 0.8);
   border-radius: 6px;

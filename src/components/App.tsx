@@ -11,16 +11,14 @@ const AppWrapper: any = styled.div`
 `
 
 class App extends Component {
-  state = {
-    // showSidebar: false
-    title: 'Routing API'
-  }
+  
+  state = {}
 
   public render() {
 
     return (
       <AppWrapper>
-        <Panel/>
+        <Panel />
         <Map />
       </AppWrapper>
     )
