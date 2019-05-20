@@ -11,14 +11,19 @@ const AppWrapper: any = styled.div`
 `
 
 class App extends Component {
-  
-  state = {}
+
+  state = {
+    startPoint: null,
+    endPoint: null,
+  }
 
   public render() {
 
+    const { startPoint, endPoint } = this.state
+
     return (
       <AppWrapper>
-        <Panel />
+        <Panel startPoint={startPoint} endPoint={endPoint}/>
         <Map />
       </AppWrapper>
     )

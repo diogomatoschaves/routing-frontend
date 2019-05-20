@@ -1,14 +1,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Input from 'antd/lib/input'
+import { Box, StyledIcon } from '../styledComponents'
+import InputRow from './InputRow'
+import { PETROL_4 } from '../utils/colours'
 
 // const StyledInput = styled(Input)`
-const StyledInput: typeof Input = styled(Input as any)`
-  &.ant-input{
-    border-radius: 7px
-    height: 40px;
-  }
-` as any
 
 const PanelWrapper: any = styled.div`
   position: absolute;
@@ -16,21 +12,23 @@ const PanelWrapper: any = styled.div`
   width: 30%;
   max-width: 600px;
   height: 250px;
-  /* max-height: 200px;
-  ma-height: 200px; */
   left: 20px;
   top: 20px;
   padding: 30px;
-  background: rgba(30, 30, 30, 0.8);
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.88);
 `
 
-export default class Panel extends Component<any, any>{
-  render() {
-    return (
-      <PanelWrapper >
-        <StyledInput/>
-      </PanelWrapper>
-    )
-  }
+const Panel: any = (props: any) => {
+  return (
+    <PanelWrapper >
+      <Box direction="column" justify="flex-start">
+        <InputRow iconName="map marker alternate" color={PETROL_4}/>
+        <InputRow iconName="flag checkered" color={PETROL_4}/>
+      </Box>
+    </PanelWrapper>
+  )
 }
+
+export default Panel
