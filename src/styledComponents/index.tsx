@@ -34,14 +34,15 @@ export const StyledIcon: typeof Icon = styled(Icon as any)`
 export const Circle: any = styled.div`
   position: ${(props: any) => props.position && props.position};
   width: ${(props: any) => props.diameter ? `${props.diameter}px` : '20px'};
-  height: ${(props: any) => props.diameter ? `${Math.round(0.9 * props.diameter)}px` : '20px'};
+  height: ${(props: any) => props.diameter ? `${props.diameter}px` : '20px'};
   border-radius: ${(props: any) => props.diameter ? `${Math.round(props.diameter / 2)}px` : '10px'};
   background-color: ${(props: any) => props.color ? props.color : 'black'};
   margin: ${(props: any) => props.margin && props.margin};
 ` as any
 
 export const EmptySpace: any = styled.div`
-  width: ${(props: any) => props.width && props.width}
-  height: ${(props: any) => props.height && props.height}
+  position: ${(props: any) => props.position && props.position};
+  width: ${(props: any) => props.width && props.width};
+  height: ${(props: any) => props.height && props.height};
 `
 

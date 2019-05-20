@@ -11,11 +11,13 @@ interface Props {
   updatePoint: UpdatePoint
 }
 
+const diameter = 38
+
 const InputRow: any = (props: Props) => {
   return (
     <Box direction="row" justify="space-around" padding="10px 0">
-      <Circle diameter="38" color={props.color} margin="0 7px 0 0" position="relative">
-        <Box height="100%">
+      <Circle diameter={diameter} color={props.color} margin="0 7px 0 0" position="relative">
+        <Box height="100%" padding={`${Math.round(diameter / 2)}px`}>
           <StyledIcon 
             padding="0 0 0 0" 
             overridecolor={'white'} 
