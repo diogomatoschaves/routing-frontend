@@ -14,8 +14,8 @@ const PanelWrapper: any = styled.div`
   max-width: 600px;
   max-height: 1000px;
   /* height: 250px; */
-  left: 20px;
-  top: 20px;
+  left: 40px;
+  top: 40px;
   padding: 30px;
   background: rgba(255, 255, 255, 0.85);
   border: 1px solid rgb(245, 245, 245);
@@ -67,14 +67,14 @@ const Panel: any = ({ updatePoint } : { updatePoint: UpdatePoint }) => {
         </Box>
         <InputRow 
           rowKey={'start'}
+          placeholder={'Origin'}
           iconName="map marker alternate" 
-          color={PETROL_2} 
           updatePoint={updatePoint}
         />
         <InputRow 
           rowKey={'end'}
+          placeholder={'Destination'}
           iconName="flag checkered" 
-          color={PETROL_2} 
           updatePoint={updatePoint}
         />
       </Box>

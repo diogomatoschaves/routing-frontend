@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Input } from 'semantic-ui-react'
-import { UpdatePoint } from '../types'
+import { UpdatePoint, UpdateColor } from '../types'
 
 
 interface Props {
   updatePoint: UpdatePoint,
-  rowKey: string
+  updateColor: UpdateColor,
+  rowKey: string,
+  placeholder: string
 }
 
 const StyledInput: typeof Input = styled(Input as any)`
@@ -17,7 +19,7 @@ const StyledInput: typeof Input = styled(Input as any)`
     border-radius: 7px;
     border: none;
     height: 45px;
-    background-color: rgb(245, 245, 245)
+    background-color: rgb(242, 242, 242)
   }
 ` as any
 
@@ -33,14 +35,16 @@ class ControlledInput extends Component<Props, any> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const { rowKey, updatePoint } = this.props
+    const { rowKey, updatePoint, updateColor} = this.props
 
     updatePoint(rowKey, value)
+    updateColor()
   }
 
   public render(){
 
     const { value } = this.state
+    const { placeholder, updateColor } = this.props
 
     return (
       <StyledInput 
@@ -48,6 +52,8 @@ class ControlledInput extends Component<Props, any> {
         value={value} 
         onChange={(e, { value }) => this.handleChange(value)}
         onBlur={this.handleBlur}
+        onFocus={updateColor}
+        placeholder={placeholder}
       />
     )
   }
