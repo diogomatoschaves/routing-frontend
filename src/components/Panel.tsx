@@ -1,39 +1,61 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import { Box, StyledIcon } from '../styledComponents'
+import { Box, StyledIcon, Circle, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
-import { PETROL_4 } from '../utils/colours'
+import { PETROL_4, PETROL_5, PETROL_2, PETROL_1, MAIN_GREY } from '../utils/colours'
 import { UpdatePoint } from '../types'
 
 
 const PanelWrapper: any = styled.div`
   position: absolute;
   z-index: 1000;
-  width: 30%;
+  width: 32%;
   max-width: 600px;
-  height: 250px;
+  max-height: 1000px;
+  /* height: 250px; */
   left: 20px;
   top: 20px;
   padding: 30px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgb(245, 245, 245);
   border-radius: 10px;
-  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.88);
+  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.4);
 `
 
 const Panel: any = ({ updatePoint } : { updatePoint: UpdatePoint }) => {
   return (
     <PanelWrapper >
       <Box direction="column" justify="flex-start">
+        <Box direction="row" justify="flex-start" padding="10px 0">
+          {/* <EmptySpace width="38px"/> */}
+          <Circle diameter="38" color={MAIN_GREY} margin="0 7px 0 0" position="relative">
+            <Box height="100%">
+              <StyledIcon 
+                padding="0 0 0 0" 
+                overridecolor={PETROL_4} 
+                name="car"
+                size="large"
+                position="absolute"
+              />
+            </Box>
+          </Circle>
+          <StyledIcon 
+            padding="0 0 0 0" 
+            overridecolor={PETROL_1} 
+            name="male"
+            size="large"
+          />
+        </Box>
         <InputRow 
           rowKey={'start'}
           iconName="map marker alternate" 
-          color={PETROL_4} 
+          color={PETROL_2} 
           updatePoint={updatePoint}
         />
         <InputRow 
           rowKey={'end'}
           iconName="flag checkered" 
-          color={PETROL_4} 
+          color={PETROL_5} 
           updatePoint={updatePoint}
         />
       </Box>

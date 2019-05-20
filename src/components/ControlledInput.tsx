@@ -16,8 +16,8 @@ const StyledInput: typeof Input = styled(Input as any)`
   &.ui.input > input {
     border-radius: 7px;
     border: none;
-    height: 40px;
-    background-color: rgb(240, 240, 240)
+    height: 45px;
+    background-color: rgb(245, 245, 245)
   }
 ` as any
 
@@ -36,7 +36,6 @@ class ControlledInput extends Component<Props, any> {
     const { rowKey, updatePoint } = this.props
 
     updatePoint(rowKey, value)
-
   }
 
   public render(){
