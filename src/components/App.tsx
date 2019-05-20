@@ -4,6 +4,7 @@ import Map from './Map'
 import Panel from './Panel'
 import '../App.css'
 // import 'antd/dist/antd.css';
+import { UpdatePoint } from '../types'
 
 const AppWrapper: any = styled.div`
   width: 100vw;
@@ -17,13 +18,22 @@ class App extends Component {
     endPoint: null,
   }
 
+  updatePoint: UpdatePoint = (key, value) => {
+    this.setState({ [`${key}Point`]: value})
+    console.log(key, value)
+  }
+
   public render() {
 
     const { startPoint, endPoint } = this.state
 
     return (
       <AppWrapper>
-        <Panel startPoint={startPoint} endPoint={endPoint}/>
+        <Panel 
+          startPoint={startPoint} 
+          endPoint={endPoint}
+          updatePoint={this.updatePoint}
+        />
         <Map />
       </AppWrapper>
     )

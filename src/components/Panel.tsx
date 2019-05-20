@@ -3,8 +3,8 @@ import styled from 'styled-components'
 import { Box, StyledIcon } from '../styledComponents'
 import InputRow from './InputRow'
 import { PETROL_4 } from '../utils/colours'
+import { UpdatePoint } from '../types'
 
-// const StyledInput = styled(Input)`
 
 const PanelWrapper: any = styled.div`
   position: absolute;
@@ -20,12 +20,22 @@ const PanelWrapper: any = styled.div`
   box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.88);
 `
 
-const Panel: any = (props: any) => {
+const Panel: any = ({ updatePoint } : { updatePoint: UpdatePoint }) => {
   return (
     <PanelWrapper >
       <Box direction="column" justify="flex-start">
-        <InputRow iconName="map marker alternate" color={PETROL_4}/>
-        <InputRow iconName="flag checkered" color={PETROL_4}/>
+        <InputRow 
+          rowKey={'start'}
+          iconName="map marker alternate" 
+          color={PETROL_4} 
+          updatePoint={updatePoint}
+        />
+        <InputRow 
+          rowKey={'end'}
+          iconName="flag checkered" 
+          color={PETROL_4} 
+          updatePoint={updatePoint}
+        />
       </Box>
     </PanelWrapper>
   )

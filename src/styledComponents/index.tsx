@@ -24,3 +24,5 @@ export const StyledIcon: typeof Icon = styled(Icon as any)`
   color: ${(props: any) => props.overridecolor ? props.overridecolor : 'black'}
   ${(props: any) => props.paddingright && css`padding-right:  ${props.paddingright}px;`}
 ` as any
+
+
