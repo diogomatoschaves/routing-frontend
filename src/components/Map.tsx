@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import styled from 'styled-components'
+import { UpdatePoint, Location } from '../types'
+
 
 const MapContainer = styled.div`
   position: absolute;
@@ -11,20 +13,47 @@ const MapContainer = styled.div`
   height: 100%;
 `
 
-interface MapState {
-  map: any
+interface State {
+  map: mapboxgl.Map
 }
 
-export default class Map extends Component<any, MapState> {
+interface Props {
+  locations: Array<Location>,
+  updatePoint: UpdatePoint
+}
+
+export default class Map extends Component<Props, State> {
 
   mapContainer: any;
 
+  componentDidUpdate(prevProps: Props, prevState: State) {
+
+    const { locations } = this.props
+    
+    if (prevProps.locations !== locations) {
+      console.log(locations)
+    }
+  }
+
   componentDidMount() {
+
+    const { updatePoint } = this.props
+
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
+
+    this.loadMap(updatePoint)
+  }
+
+  componentWillUnmount() {
+    const { map } = this.state
+    map && map.remove()
+  }
+
+  loadMap = (updatePoint: UpdatePoint) => {
 
     const mapContainer = this.mapContainer
 
-    const map: any = new mapboxgl.Map({
+    const map: mapboxgl.Map = new mapboxgl.Map({
       container: mapContainer,
       // style: 'mapbox://styles/mapbox/dark-v9',
       style: 'mapbox://styles/mapbox/light-v9',
@@ -34,7 +63,7 @@ export default class Map extends Component<any, MapState> {
       zoom: 4,
       center: [13.4147, 52.502],
       transformRequest: (url: any, resourceType: any): any => {
-        if (resourceType === 'Tile' && url.includes('routing')) {
+        if (url.includes('routing')) {
           return {
             url,
             method: 'GET',
@@ -47,17 +76,31 @@ export default class Map extends Component<any, MapState> {
       }
     })
 
-    this.setState({ map })
-
     map.on('style.load', () => {
       map.addControl(new mapboxgl.NavigationControl());
     })
+
+    map.on('click', (event) => {
+      const { locations } = this.props
+      this.handleMapClick(event, updatePoint, locations)
+    });
+
+    this.setState({ map })
   }
 
-  componentWillUnmount() {
-    const { map } = this.state
+  handleMapClick = (event: any, updatePoint: UpdatePoint, locations: Array<Location>) => {
+    console.log(event)
 
-    map && map.remove()
+    const coords = {
+      lat: event.lngLat.lat,
+      lng: event.lngLat.lng,
+    }
+
+    if (!locations[0].lat || !locations[0].lng) {
+      updatePoint(0, coords)
+    } else {
+      updatePoint(locations.length - 1, coords)
+    }
   }
 
   public render() {
