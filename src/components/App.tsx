@@ -20,7 +20,6 @@ class App extends Component {
 
   updatePoint: UpdatePoint = (key, value) => {
     this.setState({ [`${key}Point`]: value})
-    console.log(key, value)
   }
 
   public render() {

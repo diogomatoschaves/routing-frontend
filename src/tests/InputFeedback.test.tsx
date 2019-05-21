@@ -1,6 +1,5 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { render, cleanup } from 'react-testing-library'
 import { Input } from 'semantic-ui-react'
 // import 'jest-dom/extend-expect'
 import App from '../components/App'
