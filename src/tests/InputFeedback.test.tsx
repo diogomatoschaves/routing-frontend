@@ -32,13 +32,16 @@ describe('Start point Input updates App state on Blur', () => {
     const input = root.findAllByType(Input);
 
     input[0].props.onChange('', { value: 'test' })
-    await delay(500)
-
     input[0].props.onBlur()
+
+    await delay(500)
 
     const AppComponent = root.findByType(App);
 
-    expect(AppComponent.instance.state.startPoint).toBe('test');
+    const { locations } = AppComponent.instance.state
+    const startPoint = locations.find((el: any) => el.name === 'start')
+
+    expect(startPoint.point).toBe('test');
 
   })
 })
@@ -53,13 +56,16 @@ describe('End point Input updates App state on Blur', () => {
     const input = root.findAllByType(Input);
 
     input[1].props.onChange('', { value: 'test' })
-    await delay(500)
-
     input[1].props.onBlur()
+
+    await delay(500)
 
     const AppComponent = root.findByType(App);
 
-    expect(AppComponent.instance.state.endPoint).toBe('test');
+    const { locations } = AppComponent.instance.state
+    const endPoint = locations.find((el: any) => el.name === 'end')
+
+    expect(endPoint.point).toBe('test');
 
   })
 })

@@ -8,6 +8,7 @@ interface Props {
   updatePoint: UpdatePoint,
   updateColor: UpdateColor,
   rowKey: string,
+  index: number,
   placeholder: string
 }
 
@@ -39,9 +40,9 @@ class ControlledInput extends Component<Props, any> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const { rowKey, updatePoint, updateColor} = this.props
+    const { index, updatePoint, updateColor} = this.props
 
-    updatePoint(rowKey, value)
+    updatePoint(index, value)
     updateColor()
   }
 

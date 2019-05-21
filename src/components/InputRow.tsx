@@ -7,6 +7,7 @@ import { PETROL_4, PETROL_3 } from '../utils/colours'
 
 interface Props {
   rowKey: string,
+  index: number,
   placeholder: string,
   iconName: string | any,
   updatePoint: UpdatePoint
@@ -29,7 +30,7 @@ class InputRow extends Component<Props, any> {
 
   public render() {
 
-    const { iconName, rowKey, updatePoint, placeholder } = this.props
+    const { iconName, rowKey, index, updatePoint, placeholder } = this.props
     const { color } = this.state
 
     return (
@@ -46,7 +47,8 @@ class InputRow extends Component<Props, any> {
           </Box>
         </ColoredDiv>
         <ControlledInput 
-          rowKey={rowKey} 
+          rowKey={rowKey}
+          index={index}
           updatePoint={updatePoint}
           updateColor={this.updateColor}
           placeholder={placeholder}

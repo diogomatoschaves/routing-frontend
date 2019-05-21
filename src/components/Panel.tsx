@@ -4,8 +4,12 @@ import { Popup, Divider } from 'semantic-ui-react'
 import { Box, StyledIcon, ColoredDiv, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
 import { PETROL_4, PETROL_5, PETROL_2, PETROL_1, MAIN_GREY } from '../utils/colours'
-import { UpdatePoint } from '../types'
+import { UpdatePoint, Location } from '../types'
 
+interface Props {
+  updatePoint: UpdatePoint,
+  locations: Array<Location>
+}
 
 const PanelWrapper: any = styled.div`
   position: absolute;
@@ -34,7 +38,7 @@ const StyledDivider = styled(Divider)`
   width: calc(100%);
 `
 
-const Panel: any = ({ updatePoint } : { updatePoint: UpdatePoint }) => {
+const Panel: any = ({ updatePoint, locations } : Props) => {
   return (
     <PanelWrapper >
       <Box direction="column" justify="flex-start">
@@ -77,18 +81,18 @@ const Panel: any = ({ updatePoint } : { updatePoint: UpdatePoint }) => {
           />
         </Box>
         <StyledDivider />
-        <InputRow 
-          rowKey={'start'}
-          placeholder={'Origin'}
-          iconName="map marker alternate" 
-          updatePoint={updatePoint}
-        />
-        <InputRow 
-          rowKey={'end'}
-          placeholder={'Destination'}
-          iconName="flag checkered" 
-          updatePoint={updatePoint}
-        />
+        {locations.map((item: Location, index: number) => {
+          return (
+            <InputRow
+              key={index}
+              rowKey={item.name}
+              index={index}
+              placeholder={item.placeholder}
+              iconName={item.marker} 
+              updatePoint={updatePoint}
+            />
+          )
+        })}
       </Box>
     </PanelWrapper>
   )
