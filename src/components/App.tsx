@@ -21,21 +21,29 @@ class App extends Component<any, State> {
       name: 'start', 
       marker: 'map marker alternate',
       placeholder: 'Origin',
-      point: null
+      lat: null,
+      lng: null
     }, { 
       name: 'end', 
       marker: 'flag checkered',
       placeholder: 'Destination',
-      point: null
+      lat: null,
+      lng: null
     }]
   }
 
-  updatePoint: UpdatePoint = (index, value) => {
-    this.setState(state => {
-      let newLocations = [...state.locations]
-      newLocations[index].point = value
+  updatePoint: UpdatePoint = (index, coords) => {
+    this.setState((state) => {
       return {
-        locations: newLocations
+        locations: state.locations.reduce((accum: Array<Location>, element: Location, currentIndex: number) => {
+          return index !== currentIndex ? 
+            [...accum, element] : 
+            [...accum, { 
+              ...element,
+              lat: coords.lat,
+              lng: coords.lng
+            }]
+        }, [])
       }
     })
   }
@@ -50,7 +58,10 @@ class App extends Component<any, State> {
           locations={locations}
           updatePoint={this.updatePoint}
         />
-        <Map />
+        <Map 
+          locations={locations}
+          updatePoint={this.updatePoint}
+        />
       </AppWrapper>
     )
   }

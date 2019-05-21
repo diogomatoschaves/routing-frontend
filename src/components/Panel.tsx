@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Popup, Divider } from 'semantic-ui-react'
 import { Box, StyledIcon, ColoredDiv, EmptySpace } from '../styledComponents'
@@ -24,7 +24,7 @@ const PanelWrapper: any = styled.div`
   padding: 25px;
   background: rgba(255, 255, 255, 0.9);
   /* border: 1px solid rgb(205, 205, 205); */
-  border-radius: 7px;
+  border-radius: 4px;
   box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.4);
 `
 
@@ -87,6 +87,7 @@ const Panel: any = ({ updatePoint, locations } : Props) => {
               key={index}
               rowKey={item.name}
               index={index}
+              coords={{lat: item.lat, lng: item.lng}}
               placeholder={item.placeholder}
               iconName={item.marker} 
               updatePoint={updatePoint}

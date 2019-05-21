@@ -1,7 +1,7 @@
 
 
 // Functions
-export type UpdatePoint = (index: number, value: string) => void
+export type UpdatePoint = (index: number, coords: Coords) => void
 export type UpdateColor = () => void
 
 //Objects
@@ -9,5 +9,11 @@ export type Location = {
   name: string, 
   marker: string,
   placeholder: string,
-  point: null | string
+  lat: null | number
+  lng: null | number
+}
+
+export type Coords = {
+  lat: null | number,
+  lng: null | number,
 }

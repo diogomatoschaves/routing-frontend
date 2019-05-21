@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Box, StyledIcon, ColoredDiv } from '../styledComponents'
 import ControlledInput from './ControlledInput'
-import { UpdatePoint } from '../types'
+import { UpdatePoint, Coords } from '../types'
 import { PETROL_4, PETROL_3 } from '../utils/colours'
 
 
 interface Props {
   rowKey: string,
   index: number,
+  coords: Coords,
   placeholder: string,
   iconName: string | any,
   updatePoint: UpdatePoint
@@ -30,7 +31,7 @@ class InputRow extends Component<Props, any> {
 
   public render() {
 
-    const { iconName, rowKey, index, updatePoint, placeholder } = this.props
+    const { iconName, rowKey, index, coords, updatePoint, placeholder } = this.props
     const { color } = this.state
 
     return (
@@ -49,6 +50,7 @@ class InputRow extends Component<Props, any> {
         <ControlledInput 
           rowKey={rowKey}
           index={index}
+          coords={coords}
           updatePoint={updatePoint}
           updateColor={this.updateColor}
           placeholder={placeholder}
