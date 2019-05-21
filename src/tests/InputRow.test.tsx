@@ -18,7 +18,8 @@ it('expect to render Panel component', () => {
     name: 'start', 
     marker: 'map marker alternate',
     placeholder: 'Origin',
-    point: null
+    lat: null,
+    lng: null
   }
 
   const testInstance = TestRenderer.create(

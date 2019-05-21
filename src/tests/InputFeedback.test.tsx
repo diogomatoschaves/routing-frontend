@@ -24,11 +24,11 @@ const delay = (ms: number) =>
 
 describe('Start point Input updates App state on Blur', () => {
 
-  test('', async () => {
+  const testInstance = TestRenderer.create(<App />)
+  const root = testInstance.root
 
-    const testInstance = TestRenderer.create(<App />)
-    const root = testInstance.root
-    
+  test('value without comma', async () => {
+
     const input = root.findAllByType(Input);
 
     input[0].props.onChange('', { value: 'test' })
@@ -41,18 +41,36 @@ describe('Start point Input updates App state on Blur', () => {
     const { locations } = AppComponent.instance.state
     const startPoint = locations.find((el: any) => el.name === 'start')
 
-    expect(startPoint.point).toBe('test');
+    expect(startPoint.lat).toBe(null);
+    expect(startPoint.lng).toBe(null);
+  })
 
+  test('value with comma', async () => {
+
+    const input = root.findAllByType(Input);
+
+    input[0].props.onChange('', { value: '53,12' })
+    input[0].props.onBlur()
+
+    await delay(500)
+
+    const AppComponent = root.findByType(App);
+
+    const { locations } = AppComponent.instance.state
+    const startPoint = locations.find((el: any) => el.name === 'start')
+
+    expect(startPoint.lat).toBe(53);
+    expect(startPoint.lng).toBe(12);
   })
 })
 
 describe('End point Input updates App state on Blur', () => {
 
-  test('', async () => {
+  const testInstance = TestRenderer.create(<App />)
+  const root = testInstance.root
 
-    const testInstance = TestRenderer.create(<App />)
-    const root = testInstance.root
-    
+  test('value without comma', async () => {
+
     const input = root.findAllByType(Input);
 
     input[1].props.onChange('', { value: 'test' })
@@ -65,8 +83,27 @@ describe('End point Input updates App state on Blur', () => {
     const { locations } = AppComponent.instance.state
     const endPoint = locations.find((el: any) => el.name === 'end')
 
-    expect(endPoint.point).toBe('test');
-
+    expect(endPoint.lat).toBe(null);
+    expect(endPoint.lng).toBe(null);
   })
+
+  test('value with comma', async () => {
+
+    const input = root.findAllByType(Input);
+
+    input[1].props.onChange('', { value: '53,12' })
+    input[1].props.onBlur()
+
+    await delay(500)
+
+    const AppComponent = root.findByType(App);
+
+    const { locations } = AppComponent.instance.state
+    const endPoint = locations.find((el: any) => el.name === 'end')
+
+    expect(endPoint.lat).toBe(53);
+    expect(endPoint.lng).toBe(12);
+  })
+
 })
 

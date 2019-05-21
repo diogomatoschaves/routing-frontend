@@ -16,12 +16,14 @@ const mockLocations = [{
   name: 'start', 
   marker: 'map marker alternate',
   placeholder: 'Origin',
-  point: null
+  lat: null,
+  lng: null
 }, { 
   name: 'end', 
   marker: 'flag checkered',
   placeholder: 'Destination',
-  point: null
+  lat: null,
+  lng: null
 }]
 
 it('expect to render Panel component', () => {
