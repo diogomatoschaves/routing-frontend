@@ -18,8 +18,12 @@ const StyledInput: typeof Input = styled(Input as any)`
   &.ui.input > input {
     border-radius: 7px;
     border: none;
-    height: 45px;
-    background-color: rgb(242, 242, 242)
+    height: 43px;
+    background-color: rgb(242, 242, 242);
+
+    &:focus {
+      background-color: rgb(248, 248, 248);
+    }
   }
 ` as any
 

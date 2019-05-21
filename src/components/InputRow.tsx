@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Box, StyledIcon, Circle } from '../styledComponents'
+import { Box, StyledIcon, ColoredDiv } from '../styledComponents'
 import ControlledInput from './ControlledInput'
 import { UpdatePoint } from '../types'
-import { PETROL_4, PETROL_2 } from '../utils/colours'
+import { PETROL_4, PETROL_3 } from '../utils/colours'
 
 
 interface Props {
@@ -19,12 +19,12 @@ class InputRow extends Component<Props, any> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      color: PETROL_2
+      color: PETROL_3
     }
   }
 
   updateColor = () => {
-    this.setState((state: any) => ({ color: state.color === PETROL_2 ? PETROL_4 : PETROL_2 }))
+    this.setState((state: any) => ({ color: state.color === PETROL_3 ? PETROL_4 : PETROL_3 }))
   }
 
   public render() {
@@ -34,7 +34,7 @@ class InputRow extends Component<Props, any> {
 
     return (
       <Box direction="row" justify="space-around" padding="10px 0">
-        <Circle diameter={diameter} color={color} margin="0 10px 0 0" position="relative">
+        <ColoredDiv circle diameter={diameter} color={color} margin="0 10px 0 0" position="relative">
           <Box height="100%" padding={`${Math.round(diameter / 2)}px`}>
             <StyledIcon 
               padding="0 0 0 0" 
@@ -44,7 +44,7 @@ class InputRow extends Component<Props, any> {
               position="absolute"
             />
           </Box>
-        </Circle>
+        </ColoredDiv>
         <ControlledInput 
           rowKey={rowKey} 
           updatePoint={updatePoint}

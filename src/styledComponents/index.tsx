@@ -2,15 +2,6 @@ import styled, { css } from 'styled-components'
 import { Input, Icon } from 'semantic-ui-react'
 
 
-export const StyledInput: typeof Input = styled(Input as any)`
-  &.ui.input > input {
-    border-radius: 7px;
-    border: none;
-    height: 40px;
-    background-color: rgb(240, 240, 240)
-  }
-` as any
-
 export const Box: any = styled.div`
   width: 100%;
   height: ${(props: any) => props.height && props.height};
@@ -31,11 +22,12 @@ export const StyledIcon: typeof Icon = styled(Icon as any)`
 
 ` as any
 
-export const Circle: any = styled.div`
+export const ColoredDiv: any = styled.div`
   position: ${(props: any) => props.position && props.position};
   width: ${(props: any) => props.diameter ? `${props.diameter}px` : '20px'};
   height: ${(props: any) => props.diameter ? `${props.diameter}px` : '20px'};
-  border-radius: ${(props: any) => props.diameter ? `${Math.round(props.diameter / 2)}px` : '10px'};
+  border-radius: ${(props: any) => props.circle ? props.diameter ? `${Math.round(props.diameter / 2)}px` : '10px' :
+    props.radius ? props.radius : '7px'};
   background-color: ${(props: any) => props.color ? props.color : 'black'};
   margin: ${(props: any) => props.margin && props.margin};
 ` as any
