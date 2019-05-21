@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import ControlledInput from '../components/ControlledInput'
+import InputRow from '../components/InputRow'
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
   GeolocateControl: jest.fn(),
@@ -12,14 +12,23 @@ jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
   NavigationControl: jest.fn()
 }));
 
-it('expect to render App component', () => {
+it('expect to render Panel component', () => {
+
+  const item = { 
+    name: 'start', 
+    marker: 'map marker alternate',
+    placeholder: 'Origin',
+    point: null
+  }
+
   const testInstance = TestRenderer.create(
-    <ControlledInput  
-      updatePoint={jest.fn()}
-      updateColor={jest.fn()}
-      rowKey='start'
+    <InputRow
+      rowKey={item.name}
       index={0}
-      placeholder='Origin'
-    />)
+      placeholder={item.placeholder}
+      iconName={item.marker} 
+      updatePoint={jest.fn()}
+    />
+  )
   expect(testInstance.toJSON()).toMatchSnapshot()
 }) 

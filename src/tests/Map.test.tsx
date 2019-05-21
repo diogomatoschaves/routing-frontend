@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import Map from '../components/App'
+import Map from '../components/Map'
 
 jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
   GeolocateControl: jest.fn(),
