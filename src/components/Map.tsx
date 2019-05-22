@@ -123,7 +123,7 @@ export default class Map extends Component<Props, State> {
     const marker = new mapboxgl.Marker({
       element: el,
       anchor: 'bottom',
-      offset: new mapboxgl.Point(location.markerOffset[0], location.markerOffset[1]),
+      offset: location.markerOffset && new mapboxgl.Point(location.markerOffset[0], location.markerOffset[1]),
       draggable: true,
     })
       .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
@@ -141,7 +141,7 @@ export default class Map extends Component<Props, State> {
     let bounds = new mapboxgl.LngLatBounds()
 
     markers.forEach(marker => {
-      const coords = marker.getLngLat()
+      const coords = marker && marker.getLngLat()
       bounds.extend(coords)
     })
 

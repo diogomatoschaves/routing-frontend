@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Input, Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react'
 
 
 export const Box: any = styled.div`
@@ -18,6 +18,8 @@ export const StyledIcon: typeof Icon = styled(Icon as any)`
     position: ${(props: any) => props.position && props.position};
     color: ${(props: any) => props.overridecolor ? props.overridecolor : 'black'};
     ${(props: any) => props.padding && css`padding:  ${props.padding};`}
+    ${(props: any) => props.fontSize && css`font-size:  ${props.fontSize};`}
+    ${(props: any) => props.height && css`height:  ${props.height};`}
   }
 
 ` as any

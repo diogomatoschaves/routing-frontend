@@ -20,12 +20,14 @@ class App extends Component<any, State> {
     locations: [{ 
       name: 'start', 
       marker: 'map marker alternate',
+      markerOffset: [0, 5],
       placeholder: 'Origin',
       lat: null,
       lng: null
     }, { 
       name: 'end', 
-      marker: 'flag checkered',
+      marker: 'map marker',
+      markerOffset: [0, 5],
       placeholder: 'Destination',
       lat: null,
       lng: null

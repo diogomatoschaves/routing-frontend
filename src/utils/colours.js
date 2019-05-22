@@ -15,3 +15,6 @@ export const GREY_4 = '#444444'
 
 export const BLACK = '#000000'
 export const WHITE = '#FFFFFF'
+
+export const NORMAL_INPUT = PETROL_4
+export const FOCUSED_INPUT = PETROL_5

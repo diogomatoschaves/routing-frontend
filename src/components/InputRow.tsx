@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Box, StyledIcon, ColoredDiv } from '../styledComponents'
 import ControlledInput from './ControlledInput'
 import { UpdatePoint, Coords } from '../types'
-import { PETROL_4, PETROL_3 } from '../utils/colours'
+import { NORMAL_INPUT, FOCUSED_INPUT } from '../utils/colours'
 
 
 interface Props {
@@ -21,12 +21,12 @@ class InputRow extends Component<Props, any> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      color: PETROL_3
+      color: NORMAL_INPUT
     }
   }
 
   updateColor = () => {
-    this.setState((state: any) => ({ color: state.color === PETROL_3 ? PETROL_4 : PETROL_3 }))
+    this.setState((state: any) => ({ color: state.color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT }))
   }
 
   public render() {
@@ -39,10 +39,11 @@ class InputRow extends Component<Props, any> {
         <ColoredDiv circle diameter={diameter} color={color} margin="0 10px 0 0" position="relative">
           <Box height="100%" padding={`${Math.round(diameter / 2)}px`}>
             <StyledIcon 
+              fontSize={'25px'}
+              height={'20px'}
               padding="0 0 0 0" 
               overridecolor={'white'} 
               name={iconName}
-              size="large"
               position="absolute"
             />
           </Box>

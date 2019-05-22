@@ -16,7 +16,7 @@ const PanelWrapper: any = styled.div`
   z-index: 1000;
   width: 32%;
   min-width: 400px;
-  max-width: 600px;
+  max-width: 550px;
   max-height: 1000px;
   /* height: 250px; */
   left: 40px;
@@ -24,7 +24,7 @@ const PanelWrapper: any = styled.div`
   padding: 25px;
   background: rgba(255, 255, 255, 0.9);
   /* border: 1px solid rgb(205, 205, 205); */
-  border-radius: 4px;
+  border-radius: 7px;
   box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.4);
 `
 
