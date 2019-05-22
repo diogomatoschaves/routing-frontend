@@ -14,7 +14,8 @@ const MapContainer = styled.div`
 `
 
 interface State {
-  map: mapboxgl.Map
+  map?: mapboxgl.Map,
+  markers: Array<mapboxgl.Marker>
 }
 
 interface Props {
@@ -26,17 +27,33 @@ export default class Map extends Component<Props, State> {
 
   mapContainer: any;
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      markers: []
+    }
+  }
 
+  componentDidUpdate(prevProps: Props, prevState: State) {
     const { locations } = this.props
+    const { map, markers } = this.state
     
-    if (prevProps.locations !== locations) {
-      console.log(locations)
+    if (map && prevProps.locations !== locations) {
+      this.removeMarkers(markers)
+      const newMarkers = locations.reduce((accum: Array<mapboxgl.Marker>, location: Location) => {
+        if (location.lng && location.lat) {
+          return [...accum, this.addMarker(location, map)]
+        } else return accum
+      }, [])
+      this.setState({ markers: newMarkers })
+    }
+
+    if (map && prevState.markers !== markers) {
+      this.fitBounds(markers, map)
     }
   }
 
   componentDidMount() {
-
     const { updatePoint } = this.props
 
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
@@ -55,8 +72,8 @@ export default class Map extends Component<Props, State> {
 
     const map: mapboxgl.Map = new mapboxgl.Map({
       container: mapContainer,
-      // style: 'mapbox://styles/mapbox/dark-v9',
-      style: 'mapbox://styles/mapbox/light-v9',
+      style: 'mapbox://styles/mapbox/dark-v9',
+      // style: 'mapbox://styles/mapbox/light-v9',
       hash: true,
       maxZoom: 24.999,
       minZoom: 1,
@@ -76,9 +93,7 @@ export default class Map extends Component<Props, State> {
       }
     })
 
-    map.on('style.load', () => {
-      map.addControl(new mapboxgl.NavigationControl());
-    })
+    map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl()))
 
     map.on('click', (event) => {
       const { locations } = this.props
@@ -89,8 +104,6 @@ export default class Map extends Component<Props, State> {
   }
 
   handleMapClick = (event: any, updatePoint: UpdatePoint, locations: Array<Location>) => {
-    console.log(event)
-
     const coords = {
       lat: event.lngLat.lat,
       lng: event.lngLat.lng,
@@ -103,12 +116,52 @@ export default class Map extends Component<Props, State> {
     }
   }
 
+  addMarker = (location: Location, map: mapboxgl.Map) => {
+    const el = document.createElement('i');
+    el.className = `${location.marker} icon custom-marker`
+
+    const marker = new mapboxgl.Marker({
+      element: el,
+      anchor: 'bottom',
+      offset: new mapboxgl.Point(location.markerOffset[0], location.markerOffset[1]),
+      draggable: true,
+    })
+      .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
+      .addTo(map);
+
+    return marker
+  }
+
+  removeMarkers = (markers: Array<mapboxgl.Marker>) => {
+    markers.forEach(marker => marker.remove())
+  }
+
+  fitBounds = (markers: Array<mapboxgl.Marker>, map: mapboxgl.Map) => {
+
+    let bounds = new mapboxgl.LngLatBounds()
+
+    markers.forEach(marker => {
+      const coords = marker.getLngLat()
+      bounds.extend(coords)
+    })
+
+    map.fitBounds(bounds, {
+      padding: {
+        top: 350,
+        left: 450,
+        right: 120,
+        bottom: 120
+      },
+      linear: true,
+      easing: (time: number) => time,
+      ...(markers.length == 1 && {maxZoom: 17})
+    });
+  }
+
   public render() {
     return (
       <MapContainer
-        ref={el => {
-          this.mapContainer = el
-        }}
+        ref={el => this.mapContainer = el}
       />
     )
   }
