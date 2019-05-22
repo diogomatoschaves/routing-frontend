@@ -1,26 +1,21 @@
 
-
-// export default mapboxgl = jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-//   GeolocateControl: jest.fn(),
-//   Map: jest.fn(() => ({
-//     addControl: jest.fn(),
-//     on: jest.fn(),
-//     remove: jest.fn()
-//   })),
-//   NavigationControl: jest.fn(),
-//   Point: jest.fn(),
-//   Marker: jest.fn(() => ({
-//     setLngLat: jest.fn(),
-//     addTo: jest.fn(),
-//     remove: jest.fn()
-//   }))
-// }));
-
 const mapboxgl = jest.genMockFromModule('mapbox-gl/dist/mapbox-gl');
 
 class Map {
   addControl = () => jest.fn()
-  on = () => jest.fn()
+  on = (input) => {
+    if (input === 'click') {
+      const event = {
+        lngLat: {
+          lat: 53,
+          lng: 12
+        }
+      }
+      return () => jest.fn(event)
+    }
+    else return () => jest.fn()
+  }
+  // on = () => jest.fn()
   remove = () => jest.fn()
   fitBounds = () => jest.fn()
 }
@@ -29,7 +24,6 @@ class Marker {
   setLngLat = jest.fn().mockImplementation(() => ({
     addTo: jest.fn()
   }))
-  // setLngLat = setLngLat
   addTo = () => jest.fn()
   remove = () => jest.fn()
   getLngLat = () => jest.fn()

@@ -58,7 +58,7 @@ export default class Map extends Component<Props, State> {
 
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
 
-    this.loadMap(updatePoint)
+    this.loadMap()
   }
 
   componentWillUnmount() {
@@ -66,7 +66,7 @@ export default class Map extends Component<Props, State> {
     map && map.remove()
   }
 
-  loadMap = (updatePoint: UpdatePoint) => {
+  loadMap = () => {
 
     const mapContainer = this.mapContainer
 
@@ -95,15 +95,15 @@ export default class Map extends Component<Props, State> {
 
     map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl()))
 
-    map.on('click', (event) => {
-      const { locations } = this.props
-      this.handleMapClick(event, updatePoint, locations)
-    });
+    map.on('click', (event) => this.handleMapClick(event));
 
     this.setState({ map })
   }
 
-  handleMapClick = (event: any, updatePoint: UpdatePoint, locations: Array<Location>) => {
+  handleMapClick = (event: any) => {
+
+    const { updatePoint, locations } = this.props
+
     const coords = {
       lat: event.lngLat.lat,
       lng: event.lngLat.lng,
@@ -133,7 +133,8 @@ export default class Map extends Component<Props, State> {
   }
 
   removeMarkers = (markers: Array<mapboxgl.Marker>) => {
-    markers.forEach(marker => marker.remove())
+    markers.forEach(marker => marker && marker.remove())
+    this.setState({ markers: []})
   }
 
   fitBounds = (markers: Array<mapboxgl.Marker>, map: mapboxgl.Map) => {

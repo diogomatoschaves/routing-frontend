@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import round from 'lodash/round'
 import { Input } from 'semantic-ui-react'
 import { UpdatePoint, UpdateColor, Coords } from '../types'
+import { formatCoords } from '../utils/functions'
 
 
 interface Props {
@@ -44,7 +45,7 @@ class ControlledInput extends Component<Props, State> {
     const { coords } = this.props
 
     if (prevProps.coords !== coords && coords.lat && coords.lng) {
-      this.setState({ value: `${round(coords.lat, 3)}, ${round(coords.lng, 3)}`})
+      this.setState({ value: formatCoords(coords) })
     }
   }
 
