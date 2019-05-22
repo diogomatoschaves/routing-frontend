@@ -5,7 +5,7 @@ exports[`expect to render App component 1`] = `
   className="sc-htoDjs kiFXfZ"
 >
   <div
-    className="sc-bZQynM qDtbV"
+    className="sc-bZQynM hrwUeE"
   >
     <div
       className="sc-bwzfXH hJLVqs"
@@ -30,7 +30,7 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="car large icon sc-htpNat ebAPFZ"
+              className="car large icon sc-htpNat gwdxbh"
               onClick={[Function]}
               overridecolor="#007a93"
               padding="0 0 0 0"
@@ -54,7 +54,7 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="male large icon sc-htpNat gEtUoh"
+              className="male large icon sc-htpNat jUOzvs"
               onClick={[Function]}
               overridecolor="#a6cad8"
               padding="0 0 0 0"
@@ -71,8 +71,8 @@ exports[`expect to render App component 1`] = `
         direction="row"
       >
         <div
-          className="sc-bxivhb ivTYgH"
-          color="#5097ab"
+          className="sc-bxivhb fXPyoA"
+          color="#007a93"
         >
           <div
             className="sc-bwzfXH VORLP"
@@ -80,7 +80,9 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="map marker alternate large icon sc-htpNat bjlGuj"
+              className="map marker alternate icon sc-htpNat iIqnlv"
+              fontSize="25px"
+              height="20px"
               onClick={[Function]}
               overridecolor="white"
               padding="0 0 0 0"
@@ -106,8 +108,8 @@ exports[`expect to render App component 1`] = `
         direction="row"
       >
         <div
-          className="sc-bxivhb ivTYgH"
-          color="#5097ab"
+          className="sc-bxivhb fXPyoA"
+          color="#007a93"
         >
           <div
             className="sc-bwzfXH VORLP"
@@ -115,7 +117,9 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="flag checkered large icon sc-htpNat bjlGuj"
+              className="map marker icon sc-htpNat iIqnlv"
+              fontSize="25px"
+              height="20px"
               onClick={[Function]}
               overridecolor="white"
               padding="0 0 0 0"

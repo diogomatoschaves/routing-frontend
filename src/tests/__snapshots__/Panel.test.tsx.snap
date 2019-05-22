@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-EHOje hFUiUM"
+  className="sc-EHOje eGLaLN"
 >
   <div
     className="sc-bdVaJa joXRQP"
@@ -27,7 +27,7 @@ exports[`expect to render Panel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="car large icon sc-bwzfXH nAhp"
+            className="car large icon sc-bwzfXH etItJS"
             onClick={[Function]}
             overridecolor="#007a93"
             padding="0 0 0 0"
@@ -51,7 +51,7 @@ exports[`expect to render Panel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="male large icon sc-bwzfXH tbuCZ"
+            className="male large icon sc-bwzfXH flRDq"
             onClick={[Function]}
             overridecolor="#a6cad8"
             padding="0 0 0 0"
@@ -68,8 +68,8 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-htpNat gmEThX"
-        color="#5097ab"
+        className="sc-htpNat iOFJBU"
+        color="#007a93"
       >
         <div
           className="sc-bdVaJa gqMWUP"
@@ -77,7 +77,9 @@ exports[`expect to render Panel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="map marker alternate large icon sc-bwzfXH oTEOt"
+            className="map marker alternate icon sc-bwzfXH kqGHeA"
+            fontSize="25px"
+            height="20px"
             onClick={[Function]}
             overridecolor="white"
             padding="0 0 0 0"
@@ -103,8 +105,8 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-htpNat gmEThX"
-        color="#5097ab"
+        className="sc-htpNat iOFJBU"
+        color="#007a93"
       >
         <div
           className="sc-bdVaJa gqMWUP"
@@ -112,7 +114,9 @@ exports[`expect to render Panel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="flag checkered large icon sc-bwzfXH oTEOt"
+            className="flag checkered icon sc-bwzfXH kqGHeA"
+            fontSize="25px"
+            height="20px"
             onClick={[Function]}
             overridecolor="white"
             padding="0 0 0 0"

@@ -2,15 +2,15 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import Panel from '../components/Panel'
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-  GeolocateControl: jest.fn(),
-  Map: jest.fn(() => ({
-    addControl: jest.fn(),
-    on: jest.fn(),
-    remove: jest.fn()
-  })),
-  NavigationControl: jest.fn()
-}));
+// jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
+//   GeolocateControl: jest.fn(),
+//   Map: jest.fn(() => ({
+//     addControl: jest.fn(),
+//     on: jest.fn(),
+//     remove: jest.fn()
+//   })),
+//   NavigationControl: jest.fn()
+// }));
 
 const mockLocations = [{ 
   name: 'start', 

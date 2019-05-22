@@ -6,8 +6,8 @@ exports[`expect to render Panel component 1`] = `
   direction="row"
 >
   <div
-    className="sc-htpNat gmEThX"
-    color="#5097ab"
+    className="sc-htpNat iOFJBU"
+    color="#007a93"
   >
     <div
       className="sc-bdVaJa gqMWUP"
@@ -15,7 +15,9 @@ exports[`expect to render Panel component 1`] = `
     >
       <i
         aria-hidden="true"
-        className="map marker alternate large icon sc-bwzfXH oTEOt"
+        className="map marker alternate icon sc-bwzfXH kqGHeA"
+        fontSize="25px"
+        height="20px"
         onClick={[Function]}
         overridecolor="white"
         padding="0 0 0 0"

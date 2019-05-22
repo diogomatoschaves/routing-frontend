@@ -8,6 +8,7 @@ export type UpdateColor = () => void
 export type Location = {
   name: string, 
   marker: string,
+  markerOffset?: Array<number>
   placeholder: string,
   lat: null | number
   lng: null | number
