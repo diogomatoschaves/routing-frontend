@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import styled from 'styled-components'
-import { UpdatePoint, Location } from '../types'
+import { UpdatePoint, Location, Coords2 } from '../types'
+import { routeLineSettings, emptyLineString } from '../utils/input'
+import { transformPoints } from '../utils/functions'
 
 
 const MapContainer = styled.div`
@@ -20,7 +22,8 @@ interface State {
 
 interface Props {
   locations: Array<Location>,
-  updatePoint: UpdatePoint
+  updatePoint: UpdatePoint,
+  routePath: Array<Coords2>
 }
 
 export default class Map extends Component<Props, State> {
@@ -30,15 +33,17 @@ export default class Map extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
+      ...(process.env.NODE_ENV === 'test' && { map: new mapboxgl.Map }),
       markers: []
     }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    const { locations } = this.props
+    const { locations, routePath } = this.props
     const { map, markers } = this.state
     
     if (map && prevProps.locations !== locations) {
+
       this.removeMarkers(markers)
       const newMarkers = locations.reduce((accum: Array<mapboxgl.Marker>, location: Location) => {
         if (location.lng && location.lat) {
@@ -49,13 +54,19 @@ export default class Map extends Component<Props, State> {
     }
 
     if (map && prevState.markers !== markers) {
-      this.fitBounds(markers, map)
+      const points = this.getMarkerCoords(markers)
+      this.fitBounds(points, map)
+    }
+
+    if (map && prevProps.routePath !== routePath) {
+      const routeCoords = transformPoints(routePath)
+      const points = this.getMarkerCoords(markers)
+      this.addRoute(routeCoords, map)
+      this.fitBounds([...points, ...routeCoords], map)
     }
   }
 
   componentDidMount() {
-    const { updatePoint } = this.props
-
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
 
     this.loadMap()
@@ -66,14 +77,14 @@ export default class Map extends Component<Props, State> {
     map && map.remove()
   }
 
-  loadMap = () => {
+  private loadMap = () => {
 
     const mapContainer = this.mapContainer
 
     const map: mapboxgl.Map = new mapboxgl.Map({
       container: mapContainer,
-      style: 'mapbox://styles/mapbox/dark-v9',
-      // style: 'mapbox://styles/mapbox/light-v9',
+      // style: 'mapbox://styles/mapbox/dark-v9',
+      style: 'mapbox://styles/mapbox/light-v9',
       hash: true,
       maxZoom: 24.999,
       minZoom: 1,
@@ -95,12 +106,12 @@ export default class Map extends Component<Props, State> {
 
     map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl()))
 
-    map.on('click', (event) => this.handleMapClick(event));
+    map.on('load', () => this.setState({ map }))
 
-    this.setState({ map })
+    map.on('click', (event) => this.handleMapClick(event));
   }
 
-  handleMapClick = (event: any) => {
+  private handleMapClick = (event: any) => {
 
     const { updatePoint, locations } = this.props
 
@@ -116,7 +127,7 @@ export default class Map extends Component<Props, State> {
     }
   }
 
-  addMarker = (location: Location, map: mapboxgl.Map) => {
+  private addMarker = (location: Location, map: mapboxgl.Map) => {
     const el = document.createElement('i');
     el.className = `${location.marker} icon custom-marker`
 
@@ -132,18 +143,33 @@ export default class Map extends Component<Props, State> {
     return marker
   }
 
-  removeMarkers = (markers: Array<mapboxgl.Marker>) => {
+  private removeMarkers = (markers: Array<mapboxgl.Marker>) => {
     markers.forEach(marker => marker && marker.remove())
     this.setState({ markers: []})
   }
 
-  fitBounds = (markers: Array<mapboxgl.Marker>, map: mapboxgl.Map) => {
+  private getMarkerCoords = (markers: Array<mapboxgl.Marker>): number[][] => {
+    return markers.map((marker: mapboxgl.Marker) => {
+      const coords = marker && marker.getLngLat()
+      return coords ? [coords.lng, coords.lat] : []
+    })
+  }
+
+  private fitBounds = (coords: number[][], map: mapboxgl.Map) => {
 
     let bounds = new mapboxgl.LngLatBounds()
 
-    markers.forEach(marker => {
-      const coords = marker && marker.getLngLat()
-      bounds.extend(coords)
+    if (coords.length === 1) {
+      map.flyTo({
+        center: new mapboxgl.LngLat(coords[0][0], coords[0][1]),
+        speed: 0.4,
+      })
+      return
+    }
+
+    coords.forEach(coord => {
+      const point = new mapboxgl.LngLat(coord[0], coord[1])
+      bounds.extend(point)
     })
 
     map.fitBounds(bounds, {
@@ -155,15 +181,51 @@ export default class Map extends Component<Props, State> {
       },
       linear: true,
       easing: (time: number) => time,
-      ...(markers.length == 1 && {maxZoom: 17})
     });
+  }
+
+  private removeSourceLayer = (sourceName: string, map: mapboxgl.Map) => {
+    const styles = map.getStyle()
+  
+    Promise.resolve(
+      styles && styles.layers && styles.layers.filter(layer => layer.id.includes(sourceName)).forEach(layer => {
+        map.removeLayer(layer.id)
+      })
+    )
+    .then(() => map.getSource(sourceName) && map.removeSource(sourceName))
+  }
+
+  private addRoute = (routePath: number[][], map: mapboxgl.Map) => {
+
+    Promise.resolve(this.removeSourceLayer('route', map))
+    .then(() => {
+      return map.addSource('route', {
+        'type': 'geojson',
+        // 'data': ''
+        'data': {
+          ...emptyLineString as any,
+          features: [{
+            ...emptyLineString.features[0],
+            geometry: {
+              ...emptyLineString.features[0].geometry,
+              coordinates: routePath
+            }
+          }]
+        }
+      })
+    })
+    .then(() => {
+      map.addLayer({
+        ...routeLineSettings as any,
+        id: `route-polyline`,
+        source: 'route'
+      });
+    })
   }
 
   public render() {
     return (
-      <MapContainer
-        ref={el => this.mapContainer = el}
-      />
+      <MapContainer ref={el => this.mapContainer = el} />
     )
   }
 }

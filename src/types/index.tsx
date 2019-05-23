@@ -18,3 +18,14 @@ export type Coords = {
   lat: null | number,
   lng: null | number,
 }
+
+export type Coords2 = {
+  lat: number,
+  lon: number,
+}
+
+export type Response = {
+  code: string,
+  routes: Array<any>,
+  locations: Array<any>
+}

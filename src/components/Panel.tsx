@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Popup, Divider } from 'semantic-ui-react'
 import { Box, StyledIcon, ColoredDiv, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
-import { PETROL_4, PETROL_5, PETROL_2, PETROL_1, MAIN_GREY } from '../utils/colours'
+import { PETROL_4, PETROL_1, PROFILE_BACKGROUND } from '../utils/colours'
 import { UpdatePoint, Location } from '../types'
 
 interface Props {
@@ -16,16 +16,16 @@ const PanelWrapper: any = styled.div`
   z-index: 1000;
   width: 32%;
   min-width: 400px;
-  max-width: 550px;
+  max-width: 500px;
   max-height: 1000px;
   /* height: 250px; */
   left: 40px;
   top: 40px;
   padding: 25px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   /* border: 1px solid rgb(205, 205, 205); */
-  border-radius: 7px;
-  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.4);
+  border-radius: 10px;
+  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.5);
 `
 
 const StyledDivider = styled(Divider)`
@@ -45,7 +45,7 @@ const Panel: any = ({ updatePoint, locations } : Props) => {
         <Box direction="row" justify="flex-start" padding="5px 0 15px 0">
           <Popup
             trigger={
-              <ColoredDiv diameter="38" color={MAIN_GREY} margin="0 7px 0 0" position="relative">
+              <ColoredDiv diameter="38" color={PROFILE_BACKGROUND} margin="0 7px 0 0" position="relative">
                 <Box height="100%">
                   <StyledIcon 
                     padding="0 0 0 0" 

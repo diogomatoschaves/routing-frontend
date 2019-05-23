@@ -29,7 +29,7 @@ const mockEventEnd = {
   }
 }
 
-describe('Start point Input works as expected on blur', () => {
+describe('Start and end points work as expected', () => {
 
   describe('When user clicks on map', async () => {
 
