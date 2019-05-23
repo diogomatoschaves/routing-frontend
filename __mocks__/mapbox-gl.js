@@ -18,6 +18,8 @@ class Map {
   // on = () => jest.fn()
   remove = () => jest.fn()
   fitBounds = () => jest.fn()
+  getStyle = () => jest.fn()
+  flyTo = () => jest.fn()
 }
 
 class Marker {
@@ -36,6 +38,7 @@ class LngLatBounds {
 const GeolocateControl = jest.fn()
 const NavigationControl = jest.fn()
 const Point = jest.fn()
+const LngLat = jest.fn()
 
 mapboxgl.Map = Map
 mapboxgl.Marker = Marker
@@ -43,5 +46,6 @@ mapboxgl.GeolocateControl = GeolocateControl
 mapboxgl.NavigationControl = NavigationControl
 mapboxgl.Point = Point
 mapboxgl.LngLatBounds = LngLatBounds
+mapboxgl.LngLat = LngLat
 
 export default mapboxgl;

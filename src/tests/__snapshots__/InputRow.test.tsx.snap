@@ -6,7 +6,7 @@ exports[`expect to render Panel component 1`] = `
   direction="row"
 >
   <div
-    className="sc-htpNat iOFJBU"
+    className="sc-bwzfXH gXAlSF"
     color="#007a93"
   >
     <div
@@ -15,7 +15,7 @@ exports[`expect to render Panel component 1`] = `
     >
       <i
         aria-hidden="true"
-        className="map marker alternate icon sc-bwzfXH kqGHeA"
+        className="map marker alternate icon sc-htpNat iIqnlv"
         fontSize="25px"
         height="20px"
         onClick={[Function]}
@@ -26,7 +26,7 @@ exports[`expect to render Panel component 1`] = `
     </div>
   </div>
   <div
-    className="ui fluid input sc-ifAKCX iWrmoi"
+    className="ui fluid input sc-EHOje kbRwGm"
   >
     <input
       onBlur={[Function]}

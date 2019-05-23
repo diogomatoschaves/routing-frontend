@@ -2,10 +2,10 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-htoDjs kiFXfZ"
+  className="sc-dnqmqq gqcTDv"
 >
   <div
-    className="sc-bZQynM hrwUeE"
+    className="sc-gzVnrw kPKqNa"
   >
     <div
       className="sc-bwzfXH hJLVqs"
@@ -16,8 +16,8 @@ exports[`expect to render App component 1`] = `
         direction="row"
       >
         <div
-          className="sc-bxivhb kTtFdZ"
-          color="#e6e6e6"
+          className="sc-htpNat eXUJcT"
+          color="#e1e1e1"
           onBlur={[Function]}
           onClick={[Function]}
           onFocus={[Function]}
@@ -30,7 +30,7 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="car large icon sc-htpNat gwdxbh"
+              className="car large icon sc-bxivhb jkNoJT"
               onClick={[Function]}
               overridecolor="#007a93"
               padding="0 0 0 0"
@@ -54,7 +54,7 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="male large icon sc-htpNat jUOzvs"
+              className="male large icon sc-bxivhb hgrlEC"
               onClick={[Function]}
               overridecolor="#a6cad8"
               padding="0 0 0 0"
@@ -64,14 +64,14 @@ exports[`expect to render App component 1`] = `
         </div>
       </div>
       <div
-        className="ui divider sc-gzVnrw bKqAAp"
+        className="ui divider sc-htoDjs lgjrUI"
       />
       <div
         className="sc-bwzfXH kxumdV"
         direction="row"
       >
         <div
-          className="sc-bxivhb fXPyoA"
+          className="sc-htpNat iOFJBU"
           color="#007a93"
         >
           <div
@@ -80,7 +80,7 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="map marker alternate icon sc-htpNat iIqnlv"
+              className="map marker alternate icon sc-bxivhb gUqPoa"
               fontSize="25px"
               height="20px"
               onClick={[Function]}
@@ -91,7 +91,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="ui fluid input sc-EHOje kbRwGm"
+          className="ui fluid input sc-bZQynM dlgHZH"
         >
           <input
             onBlur={[Function]}
@@ -108,7 +108,7 @@ exports[`expect to render App component 1`] = `
         direction="row"
       >
         <div
-          className="sc-bxivhb fXPyoA"
+          className="sc-htpNat iOFJBU"
           color="#007a93"
         >
           <div
@@ -117,7 +117,7 @@ exports[`expect to render App component 1`] = `
           >
             <i
               aria-hidden="true"
-              className="map marker icon sc-htpNat iIqnlv"
+              className="map marker icon sc-bxivhb gUqPoa"
               fontSize="25px"
               height="20px"
               onClick={[Function]}
@@ -128,7 +128,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="ui fluid input sc-EHOje kbRwGm"
+          className="ui fluid input sc-bZQynM dlgHZH"
         >
           <input
             onBlur={[Function]}
