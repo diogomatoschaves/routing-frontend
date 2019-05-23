@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Box, StyledIcon, ColoredDiv } from '../styledComponents'
 import ControlledInput from './ControlledInput'
+import BackgroundIcon from './BackgroundIcon'
 import { UpdatePoint, Coords } from '../types'
 import { NORMAL_INPUT, FOCUSED_INPUT } from '../utils/colours'
 
@@ -36,18 +37,14 @@ class InputRow extends Component<Props, any> {
 
     return (
       <Box direction="row" justify="space-around" padding="10px 0">
-        <ColoredDiv circle diameter={diameter} color={color} margin="0 10px 0 0" position="relative">
-          <Box height="100%" padding={`${Math.round(diameter / 2)}px`}>
-            <StyledIcon 
-              fontSize={'25px'}
-              height={'20px'}
-              padding="0 0 0 0" 
-              overridecolor={'white'} 
-              name={iconName}
-              position="absolute"
-            />
-          </Box>
-        </ColoredDiv>
+        <BackgroundIcon 
+          diameter={diameter}
+          color={color}
+          iconColor={'white'}
+          circle={true}
+          iconName={iconName}
+          margin={"0 10px 0 0"}
+        />
         <ControlledInput 
           rowKey={rowKey}
           index={index}

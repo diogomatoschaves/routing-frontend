@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 
 const Box: any = styled.div`
-  width: 100%;
+  width: ${(props: any) => props.width ? props.width : '100%'};
   height: ${(props: any) => props.height && props.height};
   padding: ${(props: any) => props.padding && props.padding};
   display: flex;

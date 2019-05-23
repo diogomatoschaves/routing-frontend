@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Popup, Divider } from 'semantic-ui-react'
 import { Box, StyledIcon, ColoredDiv, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
+import BackgroundIcon from './BackgroundIcon'
 import { PETROL_4, PETROL_1, PROFILE_BACKGROUND } from '../utils/colours'
 import { UpdatePoint, Location } from '../types'
 
@@ -38,24 +39,23 @@ const StyledDivider = styled(Divider)`
   width: calc(100%);
 `
 
+const diameter = 50
+
 const Panel: any = ({ updatePoint, locations } : Props) => {
   return (
     <PanelWrapper >
       <Box direction="column" justify="flex-start">
-        <Box direction="row" justify="flex-start" padding="5px 0 15px 0">
+        <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
           <Popup
             trigger={
-              <ColoredDiv diameter="38" color={PROFILE_BACKGROUND} margin="0 7px 0 0" position="relative">
-                <Box height="100%">
-                  <StyledIcon 
-                    padding="0 0 0 0" 
-                    overridecolor={PETROL_4} 
-                    name="car"
-                    size="large"
-                    position="absolute"
-                  />
-                </Box>
-              </ColoredDiv>}
+              <BackgroundIcon 
+                diameter={diameter}
+                color={PROFILE_BACKGROUND}
+                iconColor={PETROL_4}
+                circle={false}
+                iconName={'car'}
+                margin={"0 7px 0 0"}
+              />}
             content="Car"
             position='top center'
             inverted

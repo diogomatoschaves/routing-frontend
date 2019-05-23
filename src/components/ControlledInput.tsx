@@ -55,7 +55,7 @@ class ControlledInput extends Component<Props, State> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const { index, updatePoint, updateColor} = this.props
+    const { index, updatePoint, updateColor, coords: prevCoords } = this.props
 
     updateColor()
 
@@ -65,7 +65,7 @@ class ControlledInput extends Component<Props, State> {
       lng: Number(lng) 
     }
 
-    if (lat && lng) updatePoint(index, coords)
+    if (coords.lat && coords.lng && formatCoords(prevCoords) !== formatCoords(coords)) updatePoint(index, coords)
   }
 
   public render(){

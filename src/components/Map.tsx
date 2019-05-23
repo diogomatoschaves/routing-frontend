@@ -83,8 +83,8 @@ export default class Map extends Component<Props, State> {
 
     const map: mapboxgl.Map = new mapboxgl.Map({
       container: mapContainer,
-      // style: 'mapbox://styles/mapbox/dark-v9',
-      style: 'mapbox://styles/mapbox/light-v9',
+      style: 'mapbox://styles/mapbox/dark-v9',
+      // style: 'mapbox://styles/mapbox/light-v9',
       hash: true,
       maxZoom: 24.999,
       minZoom: 1,
@@ -176,7 +176,7 @@ export default class Map extends Component<Props, State> {
       padding: {
         top: 350,
         left: 450,
-        right: 120,
+        right: 200,
         bottom: 120
       },
       linear: true,

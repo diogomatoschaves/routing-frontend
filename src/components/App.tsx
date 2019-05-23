@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Map from './Map'
 import Panel from './Panel'
+import RouteInfo from './RouteInfo'
 import { StyledSegment } from '../styledComponents'
 import '../App.css'
 import { UpdatePoint, Location, Response, Coords2 } from '../types'
@@ -17,7 +18,9 @@ interface State {
   locations: Array<Location>,
   authorization: string,
   response: Response,
-  routePath?: Array<Coords2>
+  routePath?: Array<Coords2>,
+  duration: number
+  distance: number
 }
 
 class App extends Component<any, State> {
@@ -25,9 +28,17 @@ class App extends Component<any, State> {
   state = {
     authorization: '',
     routePath: [],
+    duration: 0,
+    distance: 0,
     response: {
       code: 'Ok',
-      routes: [{ legs: [{ geometry: [] }]}],
+      routes: [{ 
+        legs: [{ 
+          geometry: [],
+          duration: 0,
+          distance: 0
+        }]
+      }],
       locations: []
     },
     locations: [{ 
@@ -69,8 +80,11 @@ class App extends Component<any, State> {
 
     if (prevState.response !== response) {
       if (Object.keys(response).includes('code') && response.code == 'Ok') {
-        const routePath = response.routes[0].legs[0].geometry
-        this.setState({ routePath })
+        const leg = response.routes[0].legs[0]
+        const routePath = leg.geometry
+        const duration = leg.duration
+        const distance = leg.distance
+        this.setState({ routePath, duration, distance })
       }
     }
   }
@@ -93,19 +107,12 @@ class App extends Component<any, State> {
 
   public render() {
 
-    const { locations, routePath } = this.state
+    const { locations, routePath, duration, distance } = this.state
 
     return (
       <AppWrapper>
-        {routePath && (
-          <StyledSegment
-            position="absolute"
-            right="50px"
-            bottom="50px"
-            zindex={1000}
-            width="300px"
-            height="150px"
-          />
+        {duration && (
+          <RouteInfo duration={duration} distance={distance} />
         )}
         <Panel 
           locations={locations}
