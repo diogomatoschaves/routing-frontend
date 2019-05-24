@@ -8,6 +8,7 @@
     "@types/node": "^12.0.2",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
+    "@types/react-test-renderer": "^16.8.1",
     "@types/styled-components": "^4.1.15",
     "antd": "^3.18.1",
     "mapbox-gl": "^0.54.0",
@@ -15,6 +16,8 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-scripts": "2.1.8",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.87.1",
     "styled-components": "^4.2.0",
     "typescript": "^3.4.5"
   },
@@ -46,8 +49,9 @@
     "eslint-plugin-react": "^7.12.4",
     "eslint-plugin-react-hooks": "^1.6.0",
     "prettier": "^1.17.0",
-    "watch": "^1.0.2",
     "react-test-renderer": "^16.8.6",
-    "typescript-eslint-parser": "^22.0.0"
+    "react-testing-library": "^7.0.1",
+    "typescript-eslint-parser": "^22.0.0",
+    "watch": "^1.0.2"
   }
 }

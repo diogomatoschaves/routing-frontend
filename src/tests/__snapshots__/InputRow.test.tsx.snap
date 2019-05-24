@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render Panel component 1`] = `
+<div
+  className="sc-bdVaJa ecsjM"
+  direction="row"
+>
+  <div
+    className="sc-htpNat gmEThX"
+    color="#5097ab"
+  >
+    <div
+      className="sc-bdVaJa gqMWUP"
+      height="100%"
+    >
+      <i
+        aria-hidden="true"
+        className="map marker alternate large icon sc-bwzfXH oTEOt"
+        onClick={[Function]}
+        overridecolor="white"
+        padding="0 0 0 0"
+        position="absolute"
+      />
+    </div>
+  </div>
+  <div
+    className="ui fluid input sc-ifAKCX iWrmoi"
+  >
+    <input
+      onBlur={[Function]}
+      onChange={[Function]}
+      onFocus={[Function]}
+      placeholder="Origin"
+      type="text"
+      value=""
+    />
+  </div>
+</div>
+`;

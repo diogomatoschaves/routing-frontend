@@ -1,36 +1,101 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import Input from 'antd/lib/input'
+import { Popup, Divider } from 'semantic-ui-react'
+import { Box, StyledIcon, ColoredDiv, EmptySpace } from '../styledComponents'
+import InputRow from './InputRow'
+import { PETROL_4, PETROL_5, PETROL_2, PETROL_1, MAIN_GREY } from '../utils/colours'
+import { UpdatePoint, Location } from '../types'
 
-// const StyledInput = styled(Input)`
-const StyledInput: typeof Input = styled(Input as any)`
-  &.ant-input{
-    border-radius: 7px
-    height: 40px;
-  }
-` as any
+interface Props {
+  updatePoint: UpdatePoint,
+  locations: Array<Location>
+}
 
 const PanelWrapper: any = styled.div`
   position: absolute;
   z-index: 1000;
-  width: 30%;
+  width: 32%;
+  min-width: 400px;
   max-width: 600px;
-  height: 250px;
-  /* max-height: 200px;
-  ma-height: 200px; */
-  left: 20px;
-  top: 20px;
-  padding: 30px;
-  background: rgba(30, 30, 30, 0.8);
-  border-radius: 6px;
+  max-height: 1000px;
+  /* height: 250px; */
+  left: 40px;
+  top: 40px;
+  padding: 25px;
+  background: rgba(255, 255, 255, 0.9);
+  /* border: 1px solid rgb(205, 205, 205); */
+  border-radius: 7px;
+  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.4);
 `
 
-export default class Panel extends Component<any, any>{
-  render() {
-    return (
-      <PanelWrapper >
-        <StyledInput/>
-      </PanelWrapper>
-    )
+const StyledDivider = styled(Divider)`
+
+  &.ui.divider {
+    margin-top: 0.6rem;
+    border-top: 1px solid rgb(0, 0, 0)
   }
+
+  width: calc(100%);
+`
+
+const Panel: any = ({ updatePoint, locations } : Props) => {
+  return (
+    <PanelWrapper >
+      <Box direction="column" justify="flex-start">
+        <Box direction="row" justify="flex-start" padding="5px 0 15px 0">
+          <Popup
+            trigger={
+              <ColoredDiv diameter="38" color={MAIN_GREY} margin="0 7px 0 0" position="relative">
+                <Box height="100%">
+                  <StyledIcon 
+                    padding="0 0 0 0" 
+                    overridecolor={PETROL_4} 
+                    name="car"
+                    size="large"
+                    position="absolute"
+                  />
+                </Box>
+              </ColoredDiv>}
+            content="Car"
+            position='top center'
+            inverted
+            style={{ borderRadius: '7px'}}
+          />
+          <Popup
+            trigger={
+              <EmptySpace width="38px" height="38px" position="relative">
+                <Box height="100%">
+                  <StyledIcon 
+                    padding="0 0 0 0" 
+                    overridecolor={PETROL_1} 
+                    name="male"
+                    size="large"
+                    position="absolute"
+                  />
+                </Box>
+              </EmptySpace>}
+            content="Foot"
+            position='top center'
+            inverted
+            style={{ borderRadius: '7px'}}
+          />
+        </Box>
+        <StyledDivider />
+        {locations.map((item: Location, index: number) => {
+          return (
+            <InputRow
+              key={index}
+              rowKey={item.name}
+              index={index}
+              placeholder={item.placeholder}
+              iconName={item.marker} 
+              updatePoint={updatePoint}
+            />
+          )
+        })}
+      </Box>
+    </PanelWrapper>
+  )
 }
+
+export default Panel
