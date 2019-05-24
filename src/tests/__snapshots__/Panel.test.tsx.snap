@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render Panel component 1`] = `
+<div
+  className="sc-EHOje iXVvXc"
+>
+  <div
+    className="sc-bdVaJa joXRQP"
+    direction="column"
+  >
+    <div
+      className="sc-bdVaJa jViJYI"
+      direction="row"
+    >
+      <div
+        className="sc-htpNat iaxsdU"
+        color="#e6e6e6"
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+      >
+        <div
+          className="sc-bdVaJa jwVeAY"
+          height="100%"
+        >
+          <i
+            aria-hidden="true"
+            className="car large icon sc-bwzfXH nAhp"
+            onClick={[Function]}
+            overridecolor="#007a93"
+            padding="0 0 0 0"
+            position="absolute"
+          />
+        </div>
+      </div>
+      <div
+        className="sc-bxivhb jrYrcA"
+        height="38px"
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        width="38px"
+      >
+        <div
+          className="sc-bdVaJa jwVeAY"
+          height="100%"
+        >
+          <i
+            aria-hidden="true"
+            className="male large icon sc-bwzfXH tbuCZ"
+            onClick={[Function]}
+            overridecolor="#a6cad8"
+            padding="0 0 0 0"
+            position="absolute"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      className="ui divider sc-bZQynM isWDVW"
+    />
+    <div
+      className="sc-bdVaJa ecsjM"
+      direction="row"
+    >
+      <div
+        className="sc-htpNat gmEThX"
+        color="#5097ab"
+      >
+        <div
+          className="sc-bdVaJa gqMWUP"
+          height="100%"
+        >
+          <i
+            aria-hidden="true"
+            className="map marker alternate large icon sc-bwzfXH oTEOt"
+            onClick={[Function]}
+            overridecolor="white"
+            padding="0 0 0 0"
+            position="absolute"
+          />
+        </div>
+      </div>
+      <div
+        className="ui fluid input sc-ifAKCX iWrmoi"
+      >
+        <input
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          placeholder="Origin"
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      className="sc-bdVaJa ecsjM"
+      direction="row"
+    >
+      <div
+        className="sc-htpNat gmEThX"
+        color="#5097ab"
+      >
+        <div
+          className="sc-bdVaJa gqMWUP"
+          height="100%"
+        >
+          <i
+            aria-hidden="true"
+            className="flag checkered large icon sc-bwzfXH oTEOt"
+            onClick={[Function]}
+            overridecolor="white"
+            padding="0 0 0 0"
+            position="absolute"
+          />
+        </div>
+      </div>
+      <div
+        className="ui fluid input sc-ifAKCX iWrmoi"
+      >
+        <input
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          placeholder="Destination"
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
