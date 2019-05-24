@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render App component 1`] = `
+<div
+  className="ui fluid input sc-bdVaJa iKYdOr"
+>
+  <input
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[MockFunction]}
+    placeholder="Origin"
+    type="text"
+    value=""
+  />
+</div>
+`;

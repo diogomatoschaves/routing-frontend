@@ -50,6 +50,7 @@ export default class Map extends Component<any, MapState> {
     this.setState({ map })
 
     map.on('style.load', () => {
+      map.addControl(new mapboxgl.NavigationControl());
     })
   }
 
