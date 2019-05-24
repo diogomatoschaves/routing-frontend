@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import Map from './Map'
 import Panel from './Panel'
 import RouteInfo from './RouteInfo'
-import { StyledSegment } from '../styledComponents'
 import '../App.css'
 import { UpdatePoint, Location, Response, Coords2 } from '../types'
 import { Base64 } from 'js-base64';

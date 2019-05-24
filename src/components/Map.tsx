@@ -68,7 +68,6 @@ export default class Map extends Component<Props, State> {
 
   componentDidMount() {
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
-
     this.loadMap()
   }
 
@@ -104,7 +103,7 @@ export default class Map extends Component<Props, State> {
       }
     })
 
-    map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl()))
+    map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl(), 'bottom-right'))
 
     map.on('load', () => this.setState({ map }))
 
@@ -224,8 +223,6 @@ export default class Map extends Component<Props, State> {
   }
 
   public render() {
-    return (
-      <MapContainer ref={el => this.mapContainer = el} />
-    )
+    return <MapContainer ref={el => this.mapContainer = el} />
   }
 }

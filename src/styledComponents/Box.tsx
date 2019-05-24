@@ -6,9 +6,9 @@ const Box: any = styled.div`
   height: ${(props: any) => props.height && props.height};
   padding: ${(props: any) => props.padding && props.padding};
   display: flex;
-  flex-direction: ${(props: any) => props.direction ? props.direction : 'column'}
-  justify-content: ${(props: any) => props.justify ? props.justify : 'center'}
-  align-items: ${(props: any) => props.align ? props.align : 'center'}
+  flex-direction: ${(props: any) => props.direction ? props.direction : 'column'};
+  justify-content: ${(props: any) => props.justify ? props.justify : 'center'};
+  align-items: ${(props: any) => props.align ? props.align : 'center'};
 ` as any
 
 export default Box

@@ -22,7 +22,7 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
     <StyledSegment
       position="absolute"
       right="50px"
-      bottom="50px"
+      top="50px"
       zindex={1000}
       width="200px"
     >

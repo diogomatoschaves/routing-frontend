@@ -29,3 +29,5 @@ export type Response = {
   routes: Array<any>,
   locations: Array<any>
 }
+
+export type Dict = { [key: string]: string };
