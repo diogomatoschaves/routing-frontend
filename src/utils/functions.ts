@@ -26,7 +26,7 @@ export const computeDistance = (distance: number) => {
   const meters = round(distance % 1000)
 
   if (km !== 0) {
-    return [km, km === 1 ? 'km' : 'kms']
+    return [km, 'km']
   } else {
     return [meters, meters === 1 ? 'meter' : 'meters']
   }

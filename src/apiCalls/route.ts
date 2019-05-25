@@ -27,12 +27,14 @@ const apiFetch = async (profile: string, authorization: string, locations: Array
     headers,
     body
   })
+
+  return await response.json()
   
-  if(response.status !== 200) {
-    throw(new Error(`Error fetching route, received ${response.status}`))
-  } else {
-    return await response.json()
-  }
+  // if(response.status !== 200) {
+  //   console.log(`Error fetching route, received ${response.status}`)
+  // } else {
+    
+  // }
 }
 
 export default apiFetch

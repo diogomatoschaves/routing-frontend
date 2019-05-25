@@ -21,13 +21,13 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
   return (
     <StyledSegment
       position="absolute"
-      right="50px"
-      top="50px"
+      right="40px"
+      top="40px"
       zindex={1000}
       width="200px"
     >
       <Box direction="column" justify="space-between">
-        <Box direction="row" justify="space-around" width="60%" padding="5px 0 5px 0">
+        <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
           <BackgroundIcon 
             diameter={diameter}
             color={PROFILE_BACKGROUND}
@@ -45,7 +45,7 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
             </Statistic.Label>
           </Statistic>
         </Box>
-        <Box direction="row" justify="space-around" width="60%" padding="5px 0 5px 0">
+        <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
           <BackgroundIcon 
             diameter={diameter}
             color={PROFILE_BACKGROUND}
