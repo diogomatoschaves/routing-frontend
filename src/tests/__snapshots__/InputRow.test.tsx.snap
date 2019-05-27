@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-bdVaJa ecsjM"
+  className="sc-bdVaJa gSlpgJ"
   direction="row"
 >
   <div
@@ -10,7 +10,7 @@ exports[`expect to render Panel component 1`] = `
     color="#007a93"
   >
     <div
-      className="sc-bdVaJa gqMWUP"
+      className="sc-bdVaJa lajepV"
       height="100%"
     >
       <i

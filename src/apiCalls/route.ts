@@ -1,6 +1,6 @@
 import { Location, Coords2 } from '../types'
 
-const apiFetch = async (profile: string, authorization: string, locations: Array<Location>) => {
+const routingApi = async (profile: string, authorization: string, locations: Array<Location>) => {
 
   const headers = new Headers() as any
   headers.set('Authorization', authorization);
@@ -37,4 +37,4 @@ const apiFetch = async (profile: string, authorization: string, locations: Array
   // }
 }
 
-export default apiFetch
+export default routingApi

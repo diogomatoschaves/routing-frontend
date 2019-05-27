@@ -74,7 +74,9 @@ class App extends Component<any, State> {
     if (prevState.locations !== locations) {
       if (locations.length >= 2 && !locations.some((el: Location) => (!el.lat || !el.lng))) {
         routingApi('car', authorization, locations)
-        .then((response: Response) => this.setState({ response }))
+        .then((response: Response) => {
+          this.setState({ response })
+        })
         .catch(() => this.setState({ message: 'There was an error fetching the route. Try again later' }))       
       }
     }

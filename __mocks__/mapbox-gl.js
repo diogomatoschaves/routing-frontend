@@ -20,6 +20,10 @@ class Map {
   fitBounds = () => jest.fn()
   getStyle = () => jest.fn()
   flyTo = () => jest.fn()
+  getSource = () => jest.fn()
+  addSource = () => jest.fn()
+  removeSource = () => jest.fn()
+  addLayer = () => jest.fn()
 }
 
 class Marker {

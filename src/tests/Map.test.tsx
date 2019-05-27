@@ -21,6 +21,7 @@ it('expect to render Panel comoponent', () => {
     <Map
       locations={mockLocations}
       updatePoint={jest.fn()}
+      routePath={[{lat: 53, lon: 12}]}
     />
   )
   expect(testInstance.toJSON()).toMatchSnapshot()

@@ -4,33 +4,31 @@ exports[`expect to render App component 1`] = `
 <div
   className="sc-dnqmqq gqcTDv"
 >
+  0
   <div
     className="sc-gzVnrw kPKqNa"
   >
     <div
-      className="sc-bwzfXH hJLVqs"
+      className="sc-bwzfXH islmOK"
       direction="column"
     >
       <div
-        className="sc-bwzfXH cjfvYC"
+        className="sc-bwzfXH iSONxz"
         direction="row"
       >
         <div
-          className="sc-htpNat eXUJcT"
+          className="sc-htpNat eEBUlg"
           color="#e1e1e1"
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
         >
           <div
-            className="sc-bwzfXH jtixks"
+            className="sc-bwzfXH dmJOrF"
             height="100%"
           >
             <i
               aria-hidden="true"
-              className="car large icon sc-bxivhb jkNoJT"
+              className="car icon sc-bxivhb vcXGv"
+              fontSize="25px"
+              height="20px"
               onClick={[Function]}
               overridecolor="#007a93"
               padding="0 0 0 0"
@@ -49,7 +47,7 @@ exports[`expect to render App component 1`] = `
           width="38px"
         >
           <div
-            className="sc-bwzfXH jtixks"
+            className="sc-bwzfXH hETasM"
             height="100%"
           >
             <i
@@ -67,7 +65,7 @@ exports[`expect to render App component 1`] = `
         className="ui divider sc-htoDjs lgjrUI"
       />
       <div
-        className="sc-bwzfXH kxumdV"
+        className="sc-bwzfXH fOQsml"
         direction="row"
       >
         <div
@@ -75,7 +73,7 @@ exports[`expect to render App component 1`] = `
           color="#007a93"
         >
           <div
-            className="sc-bwzfXH VORLP"
+            className="sc-bwzfXH gzsoVo"
             height="100%"
           >
             <i
@@ -104,7 +102,7 @@ exports[`expect to render App component 1`] = `
         </div>
       </div>
       <div
-        className="sc-bwzfXH kxumdV"
+        className="sc-bwzfXH fOQsml"
         direction="row"
       >
         <div
@@ -112,7 +110,7 @@ exports[`expect to render App component 1`] = `
           color="#007a93"
         >
           <div
-            className="sc-bwzfXH VORLP"
+            className="sc-bwzfXH gzsoVo"
             height="100%"
           >
             <i

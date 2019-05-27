@@ -1,12 +1,13 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { Input } from 'semantic-ui-react'
+import mockRoute from '../apiCalls/__mocks__/mockRoute'
 // import 'jest-dom/extend-expect'
 import App from '../components/App'
 import Map from '../components/Map'
 import ControlledInput from '../components/ControlledInput'
 import { formatCoords } from '../utils/functions'
 
+jest.mock('../apiCalls');
 
 const delay = (ms: number) =>
   new Promise(resolve => {
@@ -100,10 +101,18 @@ describe('Start and end points work as expected', () => {
     })
 
     it('inserts a marker on the map', () => {
-
       const { markers } = MapComponent.state
-
       expect(markers.length).toBe(2)
+    })
+
+    it('correctly fetches a route and it is shown to the user', (done) => {
+      
+      delay(500)
+      .then(() => {
+        const { routePath } = MapComponent.props
+        expect(routePath).toEqual(mockRoute)
+        done()
+      })
     })
   })
 })
