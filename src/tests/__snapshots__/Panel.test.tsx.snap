@@ -2,32 +2,29 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-EHOje iXVvXc"
+  className="sc-bZQynM iWDKdM"
 >
   <div
-    className="sc-bdVaJa joXRQP"
+    className="sc-bdVaJa jsucjq"
     direction="column"
   >
     <div
-      className="sc-bdVaJa jViJYI"
+      className="sc-bdVaJa fuiAsE"
       direction="row"
     >
       <div
-        className="sc-htpNat iaxsdU"
-        color="#e6e6e6"
-        onBlur={[Function]}
-        onClick={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
+        className="sc-bwzfXH knLexA"
+        color="#e1e1e1"
       >
         <div
-          className="sc-bdVaJa jwVeAY"
+          className="sc-bdVaJa dbHwHO"
           height="100%"
         >
           <i
             aria-hidden="true"
-            className="car large icon sc-bwzfXH nAhp"
+            className="car icon sc-htpNat eifqop"
+            fontSize="25px"
+            height="20px"
             onClick={[Function]}
             overridecolor="#007a93"
             padding="0 0 0 0"
@@ -46,12 +43,12 @@ exports[`expect to render Panel component 1`] = `
         width="38px"
       >
         <div
-          className="sc-bdVaJa jwVeAY"
+          className="sc-bdVaJa cCYAHW"
           height="100%"
         >
           <i
             aria-hidden="true"
-            className="male large icon sc-bwzfXH tbuCZ"
+            className="male large icon sc-htpNat jUOzvs"
             onClick={[Function]}
             overridecolor="#a6cad8"
             padding="0 0 0 0"
@@ -61,23 +58,25 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="ui divider sc-bZQynM isWDVW"
+      className="ui divider sc-gzVnrw bKqAAp"
     />
     <div
-      className="sc-bdVaJa ecsjM"
+      className="sc-bdVaJa gSlpgJ"
       direction="row"
     >
       <div
-        className="sc-htpNat gmEThX"
-        color="#5097ab"
+        className="sc-bwzfXH gXAlSF"
+        color="#007a93"
       >
         <div
-          className="sc-bdVaJa gqMWUP"
+          className="sc-bdVaJa lajepV"
           height="100%"
         >
           <i
             aria-hidden="true"
-            className="map marker alternate large icon sc-bwzfXH oTEOt"
+            className="map marker alternate icon sc-htpNat iIqnlv"
+            fontSize="25px"
+            height="20px"
             onClick={[Function]}
             overridecolor="white"
             padding="0 0 0 0"
@@ -86,7 +85,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-ifAKCX iWrmoi"
+        className="ui fluid input sc-EHOje kbRwGm"
       >
         <input
           onBlur={[Function]}
@@ -99,20 +98,22 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="sc-bdVaJa ecsjM"
+      className="sc-bdVaJa gSlpgJ"
       direction="row"
     >
       <div
-        className="sc-htpNat gmEThX"
-        color="#5097ab"
+        className="sc-bwzfXH gXAlSF"
+        color="#007a93"
       >
         <div
-          className="sc-bdVaJa gqMWUP"
+          className="sc-bdVaJa lajepV"
           height="100%"
         >
           <i
             aria-hidden="true"
-            className="flag checkered large icon sc-bwzfXH oTEOt"
+            className="flag checkered icon sc-htpNat iIqnlv"
+            fontSize="25px"
+            height="20px"
             onClick={[Function]}
             overridecolor="white"
             padding="0 0 0 0"
@@ -121,7 +122,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-ifAKCX iWrmoi"
+        className="ui fluid input sc-EHOje kbRwGm"
       >
         <input
           onBlur={[Function]}

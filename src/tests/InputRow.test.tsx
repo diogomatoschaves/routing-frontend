@@ -2,15 +2,6 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import InputRow from '../components/InputRow'
 
-jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
-  GeolocateControl: jest.fn(),
-  Map: jest.fn(() => ({
-    addControl: jest.fn(),
-    on: jest.fn(),
-    remove: jest.fn()
-  })),
-  NavigationControl: jest.fn()
-}));
 
 it('expect to render Panel component', () => {
 
@@ -18,13 +9,15 @@ it('expect to render Panel component', () => {
     name: 'start', 
     marker: 'map marker alternate',
     placeholder: 'Origin',
-    point: null
+    lat: null,
+    lng: null
   }
 
   const testInstance = TestRenderer.create(
     <InputRow
       rowKey={item.name}
       index={0}
+      coords={{lat: 52, lng: 12}}
       placeholder={item.placeholder}
       iconName={item.marker} 
       updatePoint={jest.fn()}

@@ -12,6 +12,12 @@ export const GREY_1 = '#e6e6e6'
 export const GREY_2 = '#9e9e9e'
 export const GREY_3 = '#707070'
 export const GREY_4 = '#444444'
+export const GREY_5 = '#e1e1e1'
 
 export const BLACK = '#000000'
 export const WHITE = '#FFFFFF'
+
+export const NORMAL_INPUT = PETROL_4
+export const FOCUSED_INPUT = PETROL_5
+export const PROFILE_BACKGROUND = GREY_5
+export const POLYLINE_COLOR = PETROL_2

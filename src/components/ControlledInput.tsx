@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import round from 'lodash/round'
 import { Input } from 'semantic-ui-react'
-import { UpdatePoint, UpdateColor } from '../types'
+import { UpdatePoint, UpdateColor, Coords } from '../types'
+import { formatCoords } from '../utils/functions'
 
 
 interface Props {
@@ -9,7 +11,12 @@ interface Props {
   updateColor: UpdateColor,
   rowKey: string,
   index: number,
+  coords: Coords,
   placeholder: string
+}
+
+interface State {
+  value: string
 }
 
 const StyledInput: typeof Input = styled(Input as any)`
@@ -28,10 +35,18 @@ const StyledInput: typeof Input = styled(Input as any)`
   }
 ` as any
 
-class ControlledInput extends Component<Props, any> {
+class ControlledInput extends Component<Props, State> {
 
   state = {
     value: ''
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { coords } = this.props
+
+    if (prevProps.coords !== coords && coords.lat && coords.lng) {
+      this.setState({ value: formatCoords(coords) })
+    }
   }
 
   handleChange = (value: string): void => {
@@ -40,10 +55,17 @@ class ControlledInput extends Component<Props, any> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const { index, updatePoint, updateColor} = this.props
+    const { index, updatePoint, updateColor, coords: prevCoords } = this.props
 
-    updatePoint(index, value)
     updateColor()
+
+    const [lat, lng] = value.split(',')
+    const coords = { 
+      lat: Number(lat), 
+      lng: Number(lng) 
+    }
+
+    if (coords.lat && coords.lng && formatCoords(prevCoords) !== formatCoords(coords)) updatePoint(index, coords)
   }
 
   public render(){

@@ -2,35 +2,33 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-htoDjs kiFXfZ"
+  className="sc-dnqmqq gqcTDv"
 >
+  0
   <div
-    className="sc-bZQynM ghvIYz"
+    className="sc-gzVnrw kPKqNa"
   >
     <div
-      className="sc-bwzfXH hJLVqs"
+      className="sc-bwzfXH islmOK"
       direction="column"
     >
       <div
-        className="sc-bwzfXH cjfvYC"
+        className="sc-bwzfXH iSONxz"
         direction="row"
       >
         <div
-          className="sc-bxivhb kTtFdZ"
-          color="#e6e6e6"
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
+          className="sc-htpNat eEBUlg"
+          color="#e1e1e1"
         >
           <div
-            className="sc-bwzfXH jtixks"
+            className="sc-bwzfXH dmJOrF"
             height="100%"
           >
             <i
               aria-hidden="true"
-              className="car large icon sc-htpNat ebAPFZ"
+              className="car icon sc-bxivhb vcXGv"
+              fontSize="25px"
+              height="20px"
               onClick={[Function]}
               overridecolor="#007a93"
               padding="0 0 0 0"
@@ -49,12 +47,12 @@ exports[`expect to render App component 1`] = `
           width="38px"
         >
           <div
-            className="sc-bwzfXH jtixks"
+            className="sc-bwzfXH hETasM"
             height="100%"
           >
             <i
               aria-hidden="true"
-              className="male large icon sc-htpNat gEtUoh"
+              className="male large icon sc-bxivhb hgrlEC"
               onClick={[Function]}
               overridecolor="#a6cad8"
               padding="0 0 0 0"
@@ -64,23 +62,25 @@ exports[`expect to render App component 1`] = `
         </div>
       </div>
       <div
-        className="ui divider sc-gzVnrw bKqAAp"
+        className="ui divider sc-htoDjs lgjrUI"
       />
       <div
-        className="sc-bwzfXH kxumdV"
+        className="sc-bwzfXH fOQsml"
         direction="row"
       >
         <div
-          className="sc-bxivhb ivTYgH"
-          color="#5097ab"
+          className="sc-htpNat iOFJBU"
+          color="#007a93"
         >
           <div
-            className="sc-bwzfXH VORLP"
+            className="sc-bwzfXH gzsoVo"
             height="100%"
           >
             <i
               aria-hidden="true"
-              className="map marker alternate large icon sc-htpNat bjlGuj"
+              className="map marker alternate icon sc-bxivhb gUqPoa"
+              fontSize="25px"
+              height="20px"
               onClick={[Function]}
               overridecolor="white"
               padding="0 0 0 0"
@@ -89,7 +89,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="ui fluid input sc-EHOje kbRwGm"
+          className="ui fluid input sc-bZQynM dlgHZH"
         >
           <input
             onBlur={[Function]}
@@ -102,20 +102,22 @@ exports[`expect to render App component 1`] = `
         </div>
       </div>
       <div
-        className="sc-bwzfXH kxumdV"
+        className="sc-bwzfXH fOQsml"
         direction="row"
       >
         <div
-          className="sc-bxivhb ivTYgH"
-          color="#5097ab"
+          className="sc-htpNat iOFJBU"
+          color="#007a93"
         >
           <div
-            className="sc-bwzfXH VORLP"
+            className="sc-bwzfXH gzsoVo"
             height="100%"
           >
             <i
               aria-hidden="true"
-              className="flag checkered large icon sc-htpNat bjlGuj"
+              className="map marker icon sc-bxivhb gUqPoa"
+              fontSize="25px"
+              height="20px"
               onClick={[Function]}
               overridecolor="white"
               padding="0 0 0 0"
@@ -124,7 +126,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="ui fluid input sc-EHOje kbRwGm"
+          className="ui fluid input sc-bZQynM dlgHZH"
         >
           <input
             onBlur={[Function]}

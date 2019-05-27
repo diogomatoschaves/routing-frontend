@@ -2,20 +2,22 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-bdVaJa ecsjM"
+  className="sc-bdVaJa gSlpgJ"
   direction="row"
 >
   <div
-    className="sc-htpNat gmEThX"
-    color="#5097ab"
+    className="sc-bwzfXH gXAlSF"
+    color="#007a93"
   >
     <div
-      className="sc-bdVaJa gqMWUP"
+      className="sc-bdVaJa lajepV"
       height="100%"
     >
       <i
         aria-hidden="true"
-        className="map marker alternate large icon sc-bwzfXH oTEOt"
+        className="map marker alternate icon sc-htpNat iIqnlv"
+        fontSize="25px"
+        height="20px"
         onClick={[Function]}
         overridecolor="white"
         padding="0 0 0 0"
@@ -24,7 +26,7 @@ exports[`expect to render Panel component 1`] = `
     </div>
   </div>
   <div
-    className="ui fluid input sc-ifAKCX iWrmoi"
+    className="ui fluid input sc-EHOje kbRwGm"
   >
     <input
       onBlur={[Function]}

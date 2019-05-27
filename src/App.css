@@ -1,6 +1,11 @@
-@import '~antd/dist/antd.css';
 
 body {
   font-size: 20px;
+}
+
+.custom-marker {
+  color: #007a93;
+  font-size: 3.6em !important;
+  /* box-shadow: 0px 17px 5px 0px rgba(0,0,0,0.75); */
 }
 
