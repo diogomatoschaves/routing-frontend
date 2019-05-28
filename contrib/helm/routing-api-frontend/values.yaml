@@ -1,0 +1,6 @@
+global:
+  image: registry.mobilityservices.io/am/roam/routing-api-frontend
+  registry: mobilityservices.io
+  base_url: otonomousmobility.com
+port: 3000
+service: routing-frontend

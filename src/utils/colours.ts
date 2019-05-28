@@ -1,3 +1,5 @@
+import { Dict } from '../types'
+
 export const MAIN_PETROL = '#00677f'
 export const PETROL_7 = '#003340'
 export const PETROL_6 = '#004355'
@@ -21,3 +23,16 @@ export const NORMAL_INPUT = PETROL_4
 export const FOCUSED_INPUT = PETROL_5
 export const PROFILE_BACKGROUND = GREY_5
 export const POLYLINE_COLOR = PETROL_2
+
+export const colors: Dict = {
+  '90+': '#9e0142', // purple
+  '80-90': '#d53e4f', // blue
+  '70-80': '#f46d43', // teal
+  '60-70': '#fdae61', // green 
+  '50-60': '#fee08b', // light green 
+  '40-50': '#e6f598', // yellow
+  '30-40': '#abdda4', // light orange
+  '20-30': '#66c2a5', // orange
+  '10-20': '#3288bd', // red
+  '< 10': '#5e4fa2', // burgundy
+}

@@ -1,15 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Popup, Divider } from 'semantic-ui-react'
-import { Box, StyledIcon, ColoredDiv, EmptySpace } from '../styledComponents'
+import { Divider, Checkbox } from 'semantic-ui-react'
+import { Box, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
-import BackgroundIcon from './BackgroundIcon'
-import { PETROL_4, PETROL_1, PROFILE_BACKGROUND } from '../utils/colours'
-import { UpdatePoint, Location } from '../types'
+import ProfilesRow from './ProfilesRow'
+import ProfileToggler from './ProfileToggler'
+import { UpdatePoint, UpdateState, Location, Geography } from '../types'
 
 interface Props {
   updatePoint: UpdatePoint,
-  locations: Array<Location>
+  locations: Array<Location>,
+  routingGraphVisible: boolean,
+  polygonsVisible: boolean,
+  updateState: UpdateState,
+  geography: Geography,
+  geographies: Array<Geography>,
+  profile: string
 }
 
 const PanelWrapper: any = styled.div`
@@ -30,7 +36,6 @@ const PanelWrapper: any = styled.div`
 `
 
 const StyledDivider = styled(Divider)`
-
   &.ui.divider {
     margin-top: 0.6rem;
     border-top: 1px solid rgb(0, 0, 0)
@@ -38,47 +43,31 @@ const StyledDivider = styled(Divider)`
 
   width: calc(100%);
 `
+const StyledText = styled.label`
+  margin: 0;
+  padding-left: 15px;
+  font-size: 16px;
+  color: rgb(70, 70, 70);
+  font-weight: 200;
+`
+const StyledCheckbox = styled(Checkbox)`
+  &.ui.checked.fitted.toggle.checkbox input:checked~label:before {
+    background-color: #79aebf !important;
+  }
+`
 
 const diameter = 50
 
-const Panel: any = ({ updatePoint, locations } : Props) => {
+const Panel: any = (props : Props) => {
+
+  const { updatePoint, locations, routingGraphVisible, polygonsVisible, 
+    updateState, geography, geographies, profile } = props
+
   return (
     <PanelWrapper >
       <Box direction="column" justify="flex-start">
         <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
-          <Popup
-            trigger={
-              <BackgroundIcon 
-                diameter={diameter}
-                color={PROFILE_BACKGROUND}
-                iconColor={PETROL_4}
-                circle={false}
-                iconName={'car'}
-                margin={"0 7px 0 0"}
-              />}
-            content="Car"
-            position='top center'
-            inverted
-            style={{ borderRadius: '7px'}}
-          />
-          <Popup
-            trigger={
-              <EmptySpace width="38px" height="38px" position="relative">
-                <Box height="100%">
-                  <StyledIcon 
-                    padding="0 0 0 0" 
-                    overridecolor={PETROL_1} 
-                    name="male"
-                    size="large"
-                    position="absolute"
-                  />
-                </Box>
-              </EmptySpace>}
-            content="Foot"
-            position='top center'
-            inverted
-            style={{ borderRadius: '7px'}}
-          />
+          <ProfilesRow diameter={diameter} updateState={updateState} profile={profile}/>
         </Box>
         <StyledDivider />
         {locations.map((item: Location, index: number) => {
@@ -94,6 +83,52 @@ const Panel: any = ({ updatePoint, locations } : Props) => {
             />
           )
         })}
+        <StyledDivider />
+        <Box 
+          direction="row" 
+          justify="space-between" 
+          padding="0 0 0 0" 
+        >
+          <Box 
+            direction="column" 
+            justify="flex-start" 
+            padding="0 0 0 0"
+            width="50%"
+          >
+            <Box direction="row" height="50px">
+              <StyledCheckbox 
+                className="custom-class"
+                checked={polygonsVisible} 
+                onChange={(e: any, { checked }: { checked: boolean }) => updateState('polygonsVisible', checked)}
+                toggle
+              />
+              <StyledText>Covered Areas</StyledText>
+            </Box>
+            <Box direction="row" height="50px">
+              <StyledCheckbox 
+                checked={routingGraphVisible} 
+                onChange={(e: any, { checked }: { checked: boolean }) => updateState('routingGraphVisible', checked)}
+                toggle
+              />
+              <StyledText>Routing Graph</StyledText>
+            </Box>
+          </Box>
+          <Box 
+            direction="column" 
+            padding="0 0 0 0"
+            width="40%"
+          >
+            {routingGraphVisible || polygonsVisible ? (
+              <ProfileToggler 
+                geography={geography} 
+                geographies={geographies} 
+                updateState={updateState}
+              />
+            ) : (
+              <EmptySpace width="40%" position="relative" />
+            )}
+          </Box>
+        </Box>
       </Box>
     </PanelWrapper>
   )

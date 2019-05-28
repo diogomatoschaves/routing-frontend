@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import styled from 'styled-components'
-import { UpdatePoint, Location, Coords2 } from '../types'
-import { routeLineSettings, emptyLineString } from '../utils/input'
-import { transformPoints } from '../utils/functions'
+import { UpdatePoint, UpdateState, Location, Coords2, Geography, MapboxStyle } from '../types'
+import { routeLineSettings, emptyLineString, speedTilesInput, defaultResponse } from '../utils/input'
+import { transformPoints, getSpeedsLayers } from '../utils/functions'
 
 
 const MapContainer = styled.div`
@@ -17,16 +17,34 @@ const MapContainer = styled.div`
 
 interface State {
   map?: mapboxgl.Map,
-  markers: Array<mapboxgl.Marker>
+  markers: Array<mapboxgl.Marker>,
+  style: string
 }
 
 interface Props {
   locations: Array<Location>,
   updatePoint: UpdatePoint,
-  routePath: Array<Coords2>
+  updateState: UpdateState,
+  routePath: Array<Coords2>,
+  routingGraphVisible: boolean,
+  polygonsVisible: boolean,
+  geography: Geography,
+  geographies: Array<Geography>,
+  recenter: boolean,
+  mapboxStyle: Array<MapboxStyle>
 }
 
 export default class Map extends Component<Props, State> {
+
+  static defaultProps = {
+    mapboxStyle: [{
+      'type': 'dark',
+      'endpoint': 'mapbox://styles/mapbox/dark-v9'
+    },{
+      'type': 'light',
+      'endpoint': 'mapbox://styles/mapbox/light-v9'
+    }]
+  }
 
   mapContainer: any;
 
@@ -34,20 +52,21 @@ export default class Map extends Component<Props, State> {
     super(props)
     this.state = {
       ...(process.env.NODE_ENV === 'test' && { map: new mapboxgl.Map }),
-      markers: []
+      markers: [],
+      style: 'light'
     }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    const { locations, routePath } = this.props
-    const { map, markers } = this.state
+    const { locations, routePath, routingGraphVisible, updatePoint,
+      polygonsVisible, geography, geographies, recenter, updateState } = this.props
+    const { map, markers, style } = this.state
     
     if (map && prevProps.locations !== locations) {
-
       this.removeMarkers(markers)
-      const newMarkers = locations.reduce((accum: Array<mapboxgl.Marker>, location: Location) => {
+      const newMarkers = locations.reduce((accum: Array<mapboxgl.Marker>, location: Location, index: number) => {
         if (location.lng && location.lat) {
-          return [...accum, this.addMarker(location, map)]
+          return [...accum, this.addMarker(location, map, index, updatePoint)]
         } else return accum
       }, [])
       this.setState({ markers: newMarkers })
@@ -55,20 +74,55 @@ export default class Map extends Component<Props, State> {
 
     if (map && prevState.markers !== markers) {
       const points = this.getMarkerCoords(markers)
-      this.fitBounds(points, map)
+      points.length >= 1 && this.fitBounds(points, map)
+
+      if (prevState.markers.length >= 2 && markers.length === 1) {
+        this.removeSourceLayer('route', map)
+        updateState('response', defaultResponse)
+      }
     }
 
     if (map && prevProps.routePath !== routePath) {
       const routeCoords = transformPoints(routePath)
       const points = this.getMarkerCoords(markers)
-      this.addRoute(routeCoords, map)
+      this.addRoute(routeCoords, map, routingGraphVisible, style)
       this.fitBounds([...points, ...routeCoords], map)
+    }
+
+    if (map && prevProps.routingGraphVisible !== routingGraphVisible) {
+      if(routingGraphVisible) {
+        Promise.resolve(this.removeSourceLayer('speeds', map))
+        .then(() => this.addSpeedsLayer(map, 'speeds'))
+      } else {
+        this.removeSourceLayer('speeds', map)
+      }
+    }
+
+    if (map && prevProps.polygonsVisible !== polygonsVisible) {
+      geographies.forEach(geography => {
+        if(polygonsVisible) {
+          Promise.resolve(this.removeSourceLayer(geography.name, map))
+          .then(() => this.addGeojson(geography, map))
+        } else {
+          this.removeSourceLayer(geography.name, map)
+        }
+      })
+    }
+
+    if (map && ((prevProps.geography !== geography) || (recenter && prevProps.recenter !== recenter))) {
+      const center = new mapboxgl.LngLat(geography.coords[0], geography.coords[1])
+      this.flyTo(center, map, 1)
+      recenter && updateState('recenter', false)
     }
   }
 
   componentDidMount() {
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
-    this.loadMap()
+
+    const { mapboxStyle } = this.props
+    const { style } = this.state
+    const styleOption = mapboxStyle.find(el => el.type === style)
+    this.loadMap(styleOption ? styleOption : mapboxStyle[0])
   }
 
   componentWillUnmount() {
@@ -76,14 +130,13 @@ export default class Map extends Component<Props, State> {
     map && map.remove()
   }
 
-  private loadMap = () => {
+  private loadMap = (mapboxStyle: MapboxStyle) => {
 
     const mapContainer = this.mapContainer
 
     const map: mapboxgl.Map = new mapboxgl.Map({
       container: mapContainer,
-      style: 'mapbox://styles/mapbox/dark-v9',
-      // style: 'mapbox://styles/mapbox/light-v9',
+      style: mapboxStyle.endpoint,
       hash: true,
       maxZoom: 24.999,
       minZoom: 1,
@@ -103,11 +156,27 @@ export default class Map extends Component<Props, State> {
       }
     })
 
-    map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl(), 'bottom-right'))
-
     map.on('load', () => this.setState({ map }))
 
+    map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl(), 'bottom-right'))
+
     map.on('click', (event) => this.handleMapClick(event));
+  }
+
+  private addGeojson = (geography: Geography, map: mapboxgl.Map) => {
+    map.addLayer({
+      'id': geography.name,
+      'type': 'fill',
+      'source': {
+        'type': 'geojson',
+        'data': require(`../utils/assets/geojson/${geography.polygon}`)
+      },
+      'layout': {},
+      'paint': {
+        'fill-color': '#088',
+        'fill-opacity': 0.2
+      }
+    })
   }
 
   private handleMapClick = (event: any) => {
@@ -126,7 +195,7 @@ export default class Map extends Component<Props, State> {
     }
   }
 
-  private addMarker = (location: Location, map: mapboxgl.Map) => {
+  private addMarker = (location: Location, map: mapboxgl.Map, index: number, updatePoint: UpdatePoint) => {
     const el = document.createElement('i');
     el.className = `${location.marker} icon custom-marker`
 
@@ -138,6 +207,11 @@ export default class Map extends Component<Props, State> {
     })
       .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
       .addTo(map);
+
+    marker.on('dragend', () => {
+      const coords = marker.getLngLat()
+      updatePoint(index, { lat: coords.lat, lng: coords.lng })
+    });
 
     return marker
   }
@@ -154,15 +228,16 @@ export default class Map extends Component<Props, State> {
     })
   }
 
-  private fitBounds = (coords: number[][], map: mapboxgl.Map) => {
+  private flyTo = (center: mapboxgl.LngLat, map: mapboxgl.Map, speed: number) => {
+    map.flyTo({ center, speed })
+  }
 
+  private fitBounds = (coords: number[][], map: mapboxgl.Map) => {
     let bounds = new mapboxgl.LngLatBounds()
 
     if (coords.length === 1) {
-      map.flyTo({
-        center: new mapboxgl.LngLat(coords[0][0], coords[0][1]),
-        speed: 0.4,
-      })
+      const center = new mapboxgl.LngLat(coords[0][0], coords[0][1])
+      this.flyTo(center, map, 0.4)
       return
     }
 
@@ -183,6 +258,28 @@ export default class Map extends Component<Props, State> {
     });
   }
 
+  private addSpeedsLayer = (map: mapboxgl.Map, source: null | string = null,  datasourceFilter: null | Array<string> = null) => {
+    const speedsEntries = source ? speedTilesInput.filter(entry => entry.id === source) : speedTilesInput 
+    const sourceNames = speedsEntries.map(input => {
+
+      const sourceName = input.id
+
+      map.addSource(input.id, {
+        type: 'vector',
+        tiles: [input.url],
+        maxzoom: 20
+      })
+
+      getSpeedsLayers(sourceName, datasourceFilter).forEach(layer => {
+        map.addLayer(layer)
+      })
+
+      return input.id
+    }).filter(item => item)
+
+    return sourceNames
+  }
+
   private removeSourceLayer = (sourceName: string, map: mapboxgl.Map) => {
     const styles = map.getStyle()
   
@@ -194,13 +291,12 @@ export default class Map extends Component<Props, State> {
     .then(() => map.getSource(sourceName) && map.removeSource(sourceName))
   }
 
-  private addRoute = (routePath: number[][], map: mapboxgl.Map) => {
+  private addRoute = (routePath: number[][], map: mapboxgl.Map, routingGraphVisible: boolean, style: string) => {
 
     Promise.resolve(this.removeSourceLayer('route', map))
     .then(() => {
       return map.addSource('route', {
         'type': 'geojson',
-        // 'data': ''
         'data': {
           ...emptyLineString as any,
           features: [{
@@ -217,7 +313,11 @@ export default class Map extends Component<Props, State> {
       map.addLayer({
         ...routeLineSettings as any,
         id: `route-polyline`,
-        source: 'route'
+        source: 'route',
+        paint: {
+          ...routeLineSettings.paint,
+          'line-color': routingGraphVisible ? 'black' : routeLineSettings.paint['line-color']
+        }
       });
     })
   }

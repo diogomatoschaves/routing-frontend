@@ -3,8 +3,10 @@ import styled from 'styled-components'
 import Map from './Map'
 import Panel from './Panel'
 import RouteInfo from './RouteInfo'
+import TrafficLegend from './TrafficLegend'
 import '../App.css'
-import { UpdatePoint, Location, Response, Coords2 } from '../types'
+import { UpdatePoint, UpdateState, Location, Response, Coords2, Geography } from '../types'
+import { defaultResponse } from '../utils/input'
 import { Base64 } from 'js-base64';
 import { routingApi } from '../apiCalls'
 
@@ -21,26 +23,50 @@ interface State {
   duration: number
   distance: number,
   message?: string | null
+  routingGraphVisible?: boolean,
+  polygonsVisible?: boolean,
+  geography: Geography,
+  recenter: boolean,
+  profile: string
 }
 
 class App extends Component<any, State> {
 
+  static defaultProps = {
+    geographies: [{
+      name: 'Berlin',
+      coords: [13.38408, 52.51721],
+      polygon: 'berlin.geojson'
+    }, {
+      name: 'Stuttgart',
+      coords: [9.033, 48.7111],
+      polygon: 'stuttgart.geojson'
+    }, {
+      name: 'Immendingen',
+      coords: [8.7214, 47.912],
+      polygon: 'immendingen.geojson'
+    }, {
+      name: 'San José',
+      coords: [-121.97588, 37.34606],
+      polygon: 'sunnyvale.geojson'
+    }]
+  }
+
   state = {
+    routingGraphVisible: false,
+    polygonsVisible: false,
+    profile: 'car',
+    geography: {
+      name: 'Berlin',
+      coords: [13.38408, 52.51721],
+      polygon: 'berlin.geojson'
+    },
+    recenter: false,
     authorization: '',
     routePath: [],
     duration: 0,
     distance: 0,
-    response: {
-      code: 'Ok',
-      routes: [{ 
-        legs: [{ 
-          geometry: [],
-          duration: 0,
-          distance: 0
-        }]
-      }],
-      locations: []
-    },
+    response: defaultResponse,
     locations: [{ 
       name: 'start', 
       marker: 'map marker alternate',
@@ -69,16 +95,10 @@ class App extends Component<any, State> {
 
   componentDidUpdate(prevProps: any, prevState: State) {
 
-    const { locations, authorization, response } = this.state
+    const { locations, authorization, response, profile } = this.state
 
-    if (prevState.locations !== locations) {
-      if (locations.length >= 2 && !locations.some((el: Location) => (!el.lat || !el.lng))) {
-        routingApi('car', authorization, locations)
-        .then((response: Response) => {
-          this.setState({ response })
-        })
-        .catch(() => this.setState({ message: 'There was an error fetching the route. Try again later' }))       
-      }
+    if (prevState.locations !== locations || prevState.profile !== profile) {
+      this.getRoute(locations, profile, authorization)
     }
 
     if (prevState.response !== response) {
@@ -89,6 +109,14 @@ class App extends Component<any, State> {
         const distance = leg.distance
         this.setState({ routePath, duration, distance })
       }
+    }
+  }
+
+  getRoute = (locations: Array<Location>, profile: string, authorization: string) => {
+    if (locations.length >= 2 && !locations.some((el: Location) => (!el.lat || !el.lng))) {
+      routingApi(profile, authorization, locations)
+      .then((response: Response) => this.setState({ response }))
+      .catch(() => this.setState({ message: 'There was an error fetching the route. Try again later' }))
     }
   }
 
@@ -108,24 +136,44 @@ class App extends Component<any, State> {
     })
   }
 
+  updateState: UpdateState = (stateKey: string, value: any) => {
+    this.setState(prevState => ({ 
+      ...prevState,
+      [stateKey]: value 
+    }))
+  }
+
   public render() {
 
-    const { locations, routePath, duration, distance } = this.state
+    const { locations, routePath, duration, distance, routingGraphVisible, 
+      polygonsVisible, geography, recenter, profile } = this.state
+    const { geographies } = this.props
 
     return (
       <AppWrapper>
-        {duration && (
-          <RouteInfo duration={duration} distance={distance} />
-        )}
+        {duration && <RouteInfo duration={duration} distance={distance} />}
         <Panel 
           locations={locations}
           updatePoint={this.updatePoint}
+          updateState={this.updateState}
+          routingGraphVisible={routingGraphVisible}
+          polygonsVisible={polygonsVisible}
+          geography={geography}
+          geographies={geographies}
+          profile={profile}
         />
         <Map 
           locations={locations}
           updatePoint={this.updatePoint}
+          updateState={this.updateState}
           routePath={routePath}
+          routingGraphVisible={routingGraphVisible}
+          polygonsVisible={polygonsVisible}
+          geography={geography}
+          geographies={geographies}
+          recenter={recenter}
         />
+        {routingGraphVisible && <TrafficLegend />}
       </AppWrapper>
     )
   }

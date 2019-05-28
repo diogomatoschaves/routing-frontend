@@ -4,16 +4,24 @@ import { Box, StyledIcon, ColoredDiv } from '../styledComponents'
 
 interface Props {
   diameter: number, 
-  color: string,
+  color?: string | undefined | boolean,
   iconColor: string,
-  circle: boolean, 
+  circle?: boolean, 
   iconName: any,
-  margin: string
+  margin: string,
+  cursor?: string
 }
 
-export default function BackgroundIcon({ diameter, color, iconColor, circle, iconName, margin } : Props) {
+export default function BackgroundIcon({ diameter, color, iconColor, circle, iconName, margin, cursor } : Props) {
   return (
-    <ColoredDiv circle={circle} diameter={diameter} color={color} margin={margin} position="relative">
+    <ColoredDiv 
+      circle={circle} 
+      diameter={diameter} 
+      color={color} 
+      margin={margin} 
+      position="relative" 
+      cursor={cursor}
+    >
       <Box height="100%" padding={`${Math.round(diameter / 2)}px`}>
         <StyledIcon 
           fontSize={'25px'}

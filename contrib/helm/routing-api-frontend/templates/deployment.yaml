@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-{{ .Chart.Name }}
+    service: {{ .Release.Name }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  # https://container-solutions.com/kubernetes-deployment-strategies/
+  replicas: {{ .Values.replicas }}
+  strategy:
+    type: Recreate
+
+  revisionHistoryLimit: 5
+
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-{{ .Chart.Name }}
+
+  template:
+    metadata:
+      # https://github.com/kubernetes/helm/blob/master/docs/charts_tips_and_tricks.md#automatically-roll-deployments-when-configmaps-or-secrets-change
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum | quote}}
+      labels:
+        app: {{ .Release.Name }}-{{ .Chart.Name }}
+        service: {{ .Release.Name }}
+      name: {{ .Release.Name }}-{{ .Chart.Name }}
+
+    spec:
+      imagePullSecrets:
+        - name: {{ .Values.global.registry }}
+      containers:
+        - image: {{ .Values.global.image }}
+          name: react-app
+          ports:
+            - containerPort: {{ .Values.port }}
+
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-{{ .Chart.Name }}
+
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            httpGet:
+              path: /health
+              port: {{ .Values.port }}
+
+          livenessProbe:
+            initialDelaySeconds: 100
+            periodSeconds: 10
+            httpGet:
+              path: /health
+              port: {{ .Values.port }}
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: {{ .Release.Name }}-{{ .Chart.Name }}
+  name: {{ .Release.Name }}-{{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    app: {{ .Release.Name }}-{{ .Chart.Name }}
+  ports:
+    - protocol: TCP
+      name: http
+      port: {{ .Values.port }}
+      targetPort: {{ .Values.port }}

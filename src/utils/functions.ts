@@ -1,7 +1,8 @@
 import round from 'lodash/round'
 import { Coords, Coords2 } from '../types'
+import { layersArray } from '../utils/input'
 
-export const formatCoords = (coords: Coords) => coords.lat && coords.lng ? `${round(coords.lat, 3)}, ${round(coords.lng, 3)}` : ''
+export const formatCoords = (coords: Coords) => coords.lat && coords.lng ? `${round(coords.lat, 7)}, ${round(coords.lng, 7)}` : ''
 
 export const transformPoints = (array: Array<Coords2>) => {
   return array.map(point => [point.lon, point.lat])
@@ -30,4 +31,20 @@ export const computeDistance = (distance: number) => {
   } else {
     return [meters, meters === 1 ? 'meter' : 'meters']
   }
+}
+
+export const getSpeedsLayers = (sourceName: string, extraFilter: Array<string> | null) => {
+  return layersArray.map((layer: any) => ({
+    ...layer,
+    source: sourceName,
+    id: `${sourceName} ${layer.id}`,
+    filter: extraFilter ? layer.filter.includes('all') ? [
+      'all',
+      layer.filter[1],
+      [
+        ...layer.filter[2],
+      ],
+      extraFilter
+    ] : layer.filter : layer.filter
+  }))
 }
