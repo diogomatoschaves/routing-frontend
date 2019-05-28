@@ -24,9 +24,11 @@ const StyledInput: typeof Input = styled(Input as any)`
   width: 100%;
 
   &.ui.input > input {
+    font-size: 16px;
     border-radius: 7px;
     border: none;
     height: 43px;
+    color: rgb(100, 100, 100);
     background-color: rgb(242, 242, 242);
 
     &:focus {
@@ -66,6 +68,13 @@ class ControlledInput extends Component<Props, State> {
     }
 
     if (coords.lat && coords.lng && formatCoords(prevCoords) !== formatCoords(coords)) updatePoint(index, coords)
+    else if (value === '') updatePoint(index, { lat: null, lng: null })
+  }
+
+  cleanInput = () => {
+    const { index, updatePoint } = this.props
+    this.setState({ value: '' }, () => updatePoint(index, { lat: null, lng: null }))
+    
   }
 
   public render(){
@@ -81,6 +90,8 @@ class ControlledInput extends Component<Props, State> {
         onBlur={this.handleBlur}
         onFocus={updateColor}
         placeholder={placeholder}
+        icon={value !== '' ? 
+        { name: 'remove circle', link: true, onClick: this.cleanInput } : false}
       />
     )
   }

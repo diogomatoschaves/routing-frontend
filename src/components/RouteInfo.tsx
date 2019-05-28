@@ -28,40 +28,48 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
     >
       <Box direction="column" justify="space-between">
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <BackgroundIcon 
-            diameter={diameter}
-            color={PROFILE_BACKGROUND}
-            iconColor={NORMAL_INPUT}
-            circle={false}
-            iconName={'time'}
-            margin={"0 7px 0 0"}
-          />
-          <Statistic size={"small"} style={{ margin: 0 }}>
-            <Statistic.Value>
-              {durationValue}
-            </Statistic.Value>
-            <Statistic.Label>
-              {durationLabel}
-            </Statistic.Label>
-          </Statistic>
+          <Box direction="row" width="40%">
+            <BackgroundIcon 
+              diameter={diameter}
+              color={PROFILE_BACKGROUND}
+              iconColor={NORMAL_INPUT}
+              circle={false}
+              iconName={'time'}
+              margin={"0 7px 0 0"}
+            />
+          </Box>
+          <Box direction="row" width="60%">
+            <Statistic size={"small"} style={{ margin: 0 }}>
+              <Statistic.Value>
+                {durationValue}
+              </Statistic.Value>
+              <Statistic.Label>
+                {durationLabel}
+              </Statistic.Label>
+            </Statistic>
+          </Box>
         </Box>
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <BackgroundIcon 
-            diameter={diameter}
-            color={PROFILE_BACKGROUND}
-            iconColor={NORMAL_INPUT}
-            circle={false}
-            iconName={'share alternate'}
-            margin={"0 7px 0 0"}
-          />
-          <Statistic size={'small'} style={{ margin: 0 }}>
-            <Statistic.Value>
-              {distanceValue}
-            </Statistic.Value>
-            <Statistic.Label>
-              {distanceLabel}
-            </Statistic.Label>
-          </Statistic>
+          <Box direction="row" width="40%">
+            <BackgroundIcon 
+              diameter={diameter}
+              color={PROFILE_BACKGROUND}
+              iconColor={NORMAL_INPUT}
+              circle={false}
+              iconName={'share alternate'}
+              margin={"0 7px 0 0"}
+            />
+          </Box>
+          <Box direction="row" width="60%">
+            <Statistic size={'small'} style={{ margin: 0 }}>
+              <Statistic.Value>
+                {distanceValue}
+              </Statistic.Value>
+              <Statistic.Label>
+                {distanceLabel}
+              </Statistic.Label>
+            </Statistic>
+          </Box>
         </Box>
       </Box>
     </StyledSegment>

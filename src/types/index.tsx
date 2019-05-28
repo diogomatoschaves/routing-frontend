@@ -3,6 +3,7 @@
 // Functions
 export type UpdatePoint = (index: number, coords: Coords) => void
 export type UpdateColor = () => void
+export type UpdateState = (stateKey: string, value: any) => void
 
 //Objects
 export type Location = {
@@ -31,3 +32,14 @@ export type Response = {
 }
 
 export type Dict = { [key: string]: string };
+
+export type Geography = {
+  name: string,
+  coords: Array<number>,
+  polygon: string
+}
+
+export type MapboxStyle = { 
+  type: string, 
+  endpoint: string
+}

@@ -23,7 +23,7 @@ const StyledSegment: any = styled(Segment as any)`
     ${(props: any) => props.position && css`position: ${props.position};`}
     border: none;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.92);
     box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.5);
   }
 

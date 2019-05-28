@@ -16,7 +16,7 @@ const locations = [{
 //   json: () => Promise.resolve(mockServerResponse)
 // }))
 
-// window.fetch = jest.fn().mockImplementation((profile, authorization, locations) => {
+// window.fetch = jest.fn().mockImplementation((geography, authorization, locations) => {
 //   console.log('mock api fetch was called')
 //   return {
 //     status: 200,
