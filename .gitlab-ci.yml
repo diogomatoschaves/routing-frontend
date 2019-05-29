@@ -3,4 +3,4 @@ include:
   - 'https://gitlab.mobilityservices.io/infra/gitlab-ci/raw/master/afm-nodejs.yaml'
 
 variables:
-    SKIP_PREFLIGHT_CHECK: true
+  SKIP_PREFLIGHT_CHECK: true
