@@ -1,4 +1,3 @@
-
 // export default mapboxgl = jest.mock('mapbox-gl/dist/mapbox-gl', () => ({
 //   GeolocateControl: jest.fn(),
 //   Map: jest.fn(() => ({
