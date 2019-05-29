@@ -2,6 +2,10 @@
 .dockerignore
 .editorconfig
 .eslint*
+.eslintrc.json
+.prettierrc
+.prettierignore.
+.tslint.json
 .git/
 .gitignore
 .gitlab*
@@ -16,9 +20,10 @@ Dockerfile.dev
 Dockerfile*
 helm/
 node_modules/
-.*
 contrib/
 coverage/
 jest.config.js
 src/tests/
 src/mockups/
+build/
+server/node_modules/

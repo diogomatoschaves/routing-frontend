@@ -31,7 +31,8 @@ interface Props {
   geography: Geography,
   geographies: Array<Geography>,
   recenter: boolean,
-  mapboxStyle: Array<MapboxStyle>
+  mapboxStyle: Array<MapboxStyle>,
+  authorization: string
 }
 
 export default class Map extends Component<Props, State> {
@@ -47,7 +48,8 @@ export default class Map extends Component<Props, State> {
   }
 
   mapContainer: any;
-
+  authorization: any;
+  
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -58,7 +60,7 @@ export default class Map extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    const { locations, routePath, routingGraphVisible, updatePoint,
+    const { locations, routePath, routingGraphVisible, updatePoint, authorization,
       polygonsVisible, geography, geographies, recenter, updateState } = this.props
     const { map, markers, style } = this.state
     
@@ -114,15 +116,19 @@ export default class Map extends Component<Props, State> {
       this.flyTo(center, map, 1)
       recenter && updateState('recenter', false)
     }
+
+    if (prevProps.authorization !== authorization && authorization) {
+      this.authorization = authorization
+    }
   }
 
   componentDidMount() {
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
 
-    const { mapboxStyle } = this.props
+    const { mapboxStyle, authorization } = this.props
     const { style } = this.state
     const styleOption = mapboxStyle.find(el => el.type === style)
-    this.loadMap(styleOption ? styleOption : mapboxStyle[0])
+    this.loadMap(styleOption ? styleOption : mapboxStyle[0], authorization)
   }
 
   componentWillUnmount() {
@@ -130,7 +136,7 @@ export default class Map extends Component<Props, State> {
     map && map.remove()
   }
 
-  private loadMap = (mapboxStyle: MapboxStyle) => {
+  private loadMap = (mapboxStyle: MapboxStyle, authorization: string) => {
 
     const mapContainer = this.mapContainer
 
@@ -142,18 +148,20 @@ export default class Map extends Component<Props, State> {
       minZoom: 1,
       zoom: 4,
       center: [13.4147, 52.502],
-      transformRequest: (url: any, resourceType: any): any => {
-        if (url.includes('routing')) {
-          return {
-            url,
-            method: 'GET',
-            headers: {
-              Authorization: 'Basic RE1BVE9TQzpPbGlzc2lwbzE5ODY=',
-              method: 'GET'
+      ...(process.env.NODE_ENV !== 'production' && {
+        transformRequest: (url: any, resourceType: any): any => {
+          if (url.includes('routing')) {
+            return {
+              url,
+              method: 'GET',
+              headers: {
+                Authorization: this.authorization,
+                method: 'GET'
+              }
             }
           }
         }
-      }
+      })
     })
 
     map.on('load', () => this.setState({ map }))

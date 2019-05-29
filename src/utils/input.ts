@@ -58,16 +58,16 @@ export const routeLineSettings = {
   },
   'paint': {
     'line-color': POLYLINE_COLOR,
-    // 'line-color': '#ed6498',
     'line-width': 5,
     'line-opacity': .8
   }
 }
 
+// TODO: Adapt tile endpoint based on profile
 export const speedTilesInput = [{
     name: 'Routing-Service Graph',
     id: 'speeds',
-    url: 'https://routing.develop.otonomousmobility.com/car/v1/tile/{x},{y},{z}',
+    url: process.env.REACT_APP_TILE_URL || '',
     type: 'speeds',
   }]
 

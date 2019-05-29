@@ -1,18 +1,25 @@
-FROM node:10.15-slim
-ENV NODE_ENV=production APP=/app/ PORT=3000
+FROM node:10.15-slim as build-step
+ENV APP=/app/ PORT=3000
+ENV NODE_ENV=production
 
 RUN mkdir ${APP}
 WORKDIR ${APP}
 
 COPY package.json .
-RUN npm install --no-audit
+RUN npm install
 
-COPY . .
+COPY . ./
 
-# Application port
-EXPOSE ${PORT}
+RUN npm run build
 
-# Remote debugging port
-EXPOSE 9229
+FROM node:10.15-slim
 
-CMD ["npm", "start"]
+COPY server/ ./
+
+RUN npm install
+
+COPY --from=build-step app/build /build
+
+EXPOSE $PORT
+
+CMD ["node","index.js"]

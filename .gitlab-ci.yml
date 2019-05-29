@@ -18,6 +18,7 @@ lint:
     - npm i
   script:
     - npm run lint
+  allow_failure: true
 
 test:
   stage: test
@@ -44,7 +45,7 @@ sast:
   script:
     - echo "disabled"
   only:
-    - disabled-afm-job
+    - disabled-frontend-job
 
 terraform:statuscake:backup:
   stage: build
@@ -54,13 +55,6 @@ terraform:statuscake:backup:
     - disabled-frontend-job
 
 terraform:statuscake:plan:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-    
-terraform:statuscake:apply:
   stage: build
   script:
     - echo "disabled"
@@ -109,3 +103,31 @@ container_scanning:
     - echo "disabled"
   only:
     - disabled-frontend-job
+
+wait for previous builds to complete:
+  stage: check
+  script:
+    - echo "disabled"
+  only:
+    - disabled-frontend-job
+
+helm:upgrade:
+  dependencies: []
+  image: registry.mobilityservices.io/infra/images/helm
+  stage: deploy
+  retry: 2
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: https://${CI_PROJECT_NAME::-8}.$CI_COMMIT_REF_NAME.otonomousmobility.com/
+  only:
+    - develop
+    - testing
+    - staging
+  script:
+    - echo $BASE_HELM && echo $CI_COMMIT_REF_NAME && echo $IMAGE && echo $CI_PROJECT_NAME
+    # - kubectl -n develop get secret mapbox-key -o yaml
+    - helm dependency update $BASE_HELM || true
+    - helm upgrade --install $HELM_OPTIONS -f $BASE_HELM/$CI_COMMIT_REF_NAME.yaml
+        --namespace $CI_COMMIT_REF_NAME --set image=$IMAGE:$VERSION --version $VERSION
+        --set global.image=$IMAGE:$VERSION $CI_COMMIT_REF_NAME-$CI_PROJECT_NAME $BASE_HELM
+    - kubectl logs -l app.kubernetes.io/name=$CI_COMMIT_REF_NAME-$CI_PROJECT_NAME -n $CI_COMMIT_REF_NAME

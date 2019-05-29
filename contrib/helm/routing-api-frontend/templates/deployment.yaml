@@ -37,12 +37,22 @@ spec:
           ports:
             - containerPort: {{ .Values.port }}
 
+          env:
+          - name: REACT_APP_MAPBOX_TOKEN
+            value: pk.eyJ1IjoiZGlvZ29tYXRvc2NoYXZlcyIsImEiOiJjanQ4ZnN6OHAwN3F2M3ltcndlZmdlcDRqIn0.HvTPjIfYeEqK2FT_SMplbQ
+            # valueFrom:
+            #   secretKeyRef:
+            #     key: token
+            #     name: mapbox-key
+          - name: REACT_APP_ROUTE_URL
+            value: https://routing.develop.otonomousmobility.com
+
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-{{ .Chart.Name }}
 
           readinessProbe:
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 10
             httpGet:
               path: /health

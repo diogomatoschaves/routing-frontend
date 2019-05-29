@@ -146,7 +146,7 @@ class App extends Component<any, State> {
   public render() {
 
     const { locations, routePath, duration, distance, routingGraphVisible, 
-      polygonsVisible, geography, recenter, profile } = this.state
+      polygonsVisible, geography, recenter, profile, authorization } = this.state
     const { geographies } = this.props
 
     return (
@@ -172,6 +172,7 @@ class App extends Component<any, State> {
           geography={geography}
           geographies={geographies}
           recenter={recenter}
+          authorization={authorization}
         />
         {routingGraphVisible && <TrafficLegend />}
       </AppWrapper>
