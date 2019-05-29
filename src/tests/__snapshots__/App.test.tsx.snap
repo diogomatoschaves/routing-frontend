@@ -2,11 +2,11 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-dnqmqq gqcTDv"
+  className="sc-fjdhpX kkBxQN"
 >
   0
   <div
-    className="sc-gzVnrw kPKqNa"
+    className="sc-dnqmqq cPuIDw"
   >
     <div
       className="sc-bwzfXH islmOK"
@@ -17,59 +17,73 @@ exports[`expect to render App component 1`] = `
         direction="row"
       >
         <div
-          className="sc-htpNat eEBUlg"
-          color="#e1e1e1"
-        >
-          <div
-            className="sc-bwzfXH dmJOrF"
-            height="100%"
-          >
-            <i
-              aria-hidden="true"
-              className="car icon sc-bxivhb vcXGv"
-              fontSize="25px"
-              height="20px"
-              onClick={[Function]}
-              overridecolor="#007a93"
-              padding="0 0 0 0"
-              position="absolute"
-            />
-          </div>
-        </div>
-        <div
-          className="sc-ifAKCX dquRAm"
-          height="38px"
           onBlur={[Function]}
           onClick={[Function]}
           onFocus={[Function]}
           onMouseEnter={[Function]}
           onMouseLeave={[Function]}
-          width="38px"
         >
           <div
-            className="sc-bwzfXH hETasM"
-            height="100%"
+            className="sc-htpNat oWmeC"
+            color="#e1e1e1"
+            cursor="pointer"
           >
-            <i
-              aria-hidden="true"
-              className="male large icon sc-bxivhb hgrlEC"
-              onClick={[Function]}
-              overridecolor="#a6cad8"
-              padding="0 0 0 0"
-              position="absolute"
-            />
+            <div
+              className="sc-bwzfXH dmJOrF"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="car icon sc-bxivhb vcXGv"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#007a93"
+                padding="0 0 0 0"
+                position="absolute"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <div
+            className="sc-htpNat fuietq"
+            color={false}
+            cursor="pointer"
+          >
+            <div
+              className="sc-bwzfXH dmJOrF"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="male icon sc-bxivhb hFCAaS"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#a6cad8"
+                padding="0 0 0 0"
+                position="absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
       <div
-        className="ui divider sc-htoDjs lgjrUI"
+        className="ui divider sc-iwsKbI cNFsEY"
       />
       <div
         className="sc-bwzfXH fOQsml"
         direction="row"
       >
         <div
-          className="sc-htpNat iOFJBU"
+          className="sc-htpNat aNfhF"
           color="#007a93"
         >
           <div
@@ -89,7 +103,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="ui fluid input sc-bZQynM dlgHZH"
+          className="ui fluid input sc-bZQynM iPUAKv"
         >
           <input
             onBlur={[Function]}
@@ -106,7 +120,7 @@ exports[`expect to render App component 1`] = `
         direction="row"
       >
         <div
-          className="sc-htpNat iOFJBU"
+          className="sc-htpNat aNfhF"
           color="#007a93"
         >
           <div
@@ -126,7 +140,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="ui fluid input sc-bZQynM dlgHZH"
+          className="ui fluid input sc-bZQynM iPUAKv"
         >
           <input
             onBlur={[Function]}
@@ -135,6 +149,84 @@ exports[`expect to render App component 1`] = `
             placeholder="Destination"
             type="text"
             value=""
+          />
+        </div>
+      </div>
+      <div
+        className="ui divider sc-iwsKbI cNFsEY"
+      />
+      <div
+        className="sc-bwzfXH jduFbp"
+        direction="row"
+      >
+        <div
+          className="sc-bwzfXH bYbhoh"
+          direction="column"
+          width="50%"
+        >
+          <div
+            className="sc-bwzfXH gDHXVX"
+            direction="row"
+            height="50px"
+          >
+            <div
+              className="ui fitted toggle checkbox custom-class sc-gqjmRU iRsILw"
+              onChange={[Function]}
+              onClick={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+            >
+              <input
+                checked={false}
+                className="hidden"
+                readOnly={true}
+                tabIndex={0}
+                type="checkbox"
+              />
+              <label />
+            </div>
+            <label
+              className="sc-gZMcBi hfUeqT"
+            >
+              Covered Areas
+            </label>
+          </div>
+          <div
+            className="sc-bwzfXH gDHXVX"
+            direction="row"
+            height="50px"
+          >
+            <div
+              className="ui fitted toggle checkbox sc-gqjmRU iRsILw"
+              onChange={[Function]}
+              onClick={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+            >
+              <input
+                checked={false}
+                className="hidden"
+                readOnly={true}
+                tabIndex={0}
+                type="checkbox"
+              />
+              <label />
+            </div>
+            <label
+              className="sc-gZMcBi hfUeqT"
+            >
+              Routing Graph
+            </label>
+          </div>
+        </div>
+        <div
+          className="sc-bwzfXH hUCHrA"
+          direction="column"
+          width="40%"
+        >
+          <div
+            className="sc-ifAKCX hUGWRE"
+            width="40%"
           />
         </div>
       </div>

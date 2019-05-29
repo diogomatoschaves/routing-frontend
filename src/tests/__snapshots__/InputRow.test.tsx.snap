@@ -6,7 +6,7 @@ exports[`expect to render Panel component 1`] = `
   direction="row"
 >
   <div
-    className="sc-bwzfXH gXAlSF"
+    className="sc-bwzfXH jWeZli"
     color="#007a93"
   >
     <div
@@ -26,7 +26,7 @@ exports[`expect to render Panel component 1`] = `
     </div>
   </div>
   <div
-    className="ui fluid input sc-EHOje kbRwGm"
+    className="ui fluid input sc-EHOje jROHdq"
   >
     <input
       onBlur={[Function]}

@@ -44,6 +44,8 @@ class Marker {
   remove = () => jest.fn()
 
   getLngLat = () => jest.fn()
+
+  on = () => jest.fn()
 }
 
 class LngLatBounds {

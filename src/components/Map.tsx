@@ -208,7 +208,7 @@ export default class Map extends Component<Props, State> {
       .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
       .addTo(map);
 
-    marker.on('dragend', () => {
+    marker && marker.on('dragend', () => {
       const coords = marker.getLngLat()
       updatePoint(index, { lat: coords.lat, lng: coords.lng })
     });

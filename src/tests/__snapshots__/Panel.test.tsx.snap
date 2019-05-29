@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-bZQynM iWDKdM"
+  className="sc-htoDjs eDjBPZ"
 >
   <div
     className="sc-bdVaJa jsucjq"
@@ -13,59 +13,73 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bwzfXH knLexA"
-        color="#e1e1e1"
-      >
-        <div
-          className="sc-bdVaJa dbHwHO"
-          height="100%"
-        >
-          <i
-            aria-hidden="true"
-            className="car icon sc-htpNat eifqop"
-            fontSize="25px"
-            height="20px"
-            onClick={[Function]}
-            overridecolor="#007a93"
-            padding="0 0 0 0"
-            position="absolute"
-          />
-        </div>
-      </div>
-      <div
-        className="sc-bxivhb jrYrcA"
-        height="38px"
         onBlur={[Function]}
         onClick={[Function]}
         onFocus={[Function]}
         onMouseEnter={[Function]}
         onMouseLeave={[Function]}
-        width="38px"
       >
         <div
-          className="sc-bdVaJa cCYAHW"
-          height="100%"
+          className="sc-bwzfXH ksYGh"
+          color={false}
+          cursor="pointer"
         >
-          <i
-            aria-hidden="true"
-            className="male large icon sc-htpNat jUOzvs"
-            onClick={[Function]}
-            overridecolor="#a6cad8"
-            padding="0 0 0 0"
-            position="absolute"
-          />
+          <div
+            className="sc-bdVaJa dbHwHO"
+            height="100%"
+          >
+            <i
+              aria-hidden="true"
+              className="car icon sc-htpNat bxTmCt"
+              fontSize="25px"
+              height="20px"
+              onClick={[Function]}
+              overridecolor="#a6cad8"
+              padding="0 0 0 0"
+              position="absolute"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+      >
+        <div
+          className="sc-bwzfXH ksYGh"
+          color={false}
+          cursor="pointer"
+        >
+          <div
+            className="sc-bdVaJa dbHwHO"
+            height="100%"
+          >
+            <i
+              aria-hidden="true"
+              className="male icon sc-htpNat bxTmCt"
+              fontSize="25px"
+              height="20px"
+              onClick={[Function]}
+              overridecolor="#a6cad8"
+              padding="0 0 0 0"
+              position="absolute"
+            />
+          </div>
         </div>
       </div>
     </div>
     <div
-      className="ui divider sc-gzVnrw bKqAAp"
+      className="ui divider sc-dnqmqq hWpGx"
     />
     <div
       className="sc-bdVaJa gSlpgJ"
       direction="row"
     >
       <div
-        className="sc-bwzfXH gXAlSF"
+        className="sc-bwzfXH jWeZli"
         color="#007a93"
       >
         <div
@@ -85,7 +99,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-EHOje kbRwGm"
+        className="ui fluid input sc-EHOje jROHdq"
       >
         <input
           onBlur={[Function]}
@@ -102,7 +116,7 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bwzfXH gXAlSF"
+        className="sc-bwzfXH jWeZli"
         color="#007a93"
       >
         <div
@@ -122,7 +136,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-EHOje kbRwGm"
+        className="ui fluid input sc-EHOje jROHdq"
       >
         <input
           onBlur={[Function]}
@@ -131,6 +145,84 @@ exports[`expect to render Panel component 1`] = `
           placeholder="Destination"
           type="text"
           value=""
+        />
+      </div>
+    </div>
+    <div
+      className="ui divider sc-dnqmqq hWpGx"
+    />
+    <div
+      className="sc-bdVaJa bSEcKq"
+      direction="row"
+    >
+      <div
+        className="sc-bdVaJa jKBHhj"
+        direction="column"
+        width="50%"
+      >
+        <div
+          className="sc-bdVaJa bouXiG"
+          direction="row"
+          height="50px"
+        >
+          <div
+            className="ui fitted toggle checkbox custom-class sc-gZMcBi iQoUkb"
+            onChange={[Function]}
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onMouseUp={[Function]}
+          >
+            <input
+              checked={false}
+              className="hidden"
+              readOnly={true}
+              tabIndex={0}
+              type="checkbox"
+            />
+            <label />
+          </div>
+          <label
+            className="sc-iwsKbI gfrWkS"
+          >
+            Covered Areas
+          </label>
+        </div>
+        <div
+          className="sc-bdVaJa bouXiG"
+          direction="row"
+          height="50px"
+        >
+          <div
+            className="ui fitted toggle checkbox sc-gZMcBi iQoUkb"
+            onChange={[Function]}
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onMouseUp={[Function]}
+          >
+            <input
+              checked={false}
+              className="hidden"
+              readOnly={true}
+              tabIndex={0}
+              type="checkbox"
+            />
+            <label />
+          </div>
+          <label
+            className="sc-iwsKbI gfrWkS"
+          >
+            Routing Graph
+          </label>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa fiugTd"
+        direction="column"
+        width="40%"
+      >
+        <div
+          className="sc-bxivhb edpdVn"
+          width="40%"
         />
       </div>
     </div>
