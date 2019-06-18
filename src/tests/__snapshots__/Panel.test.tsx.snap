@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-htoDjs eDjBPZ"
+  className="sc-iwsKbI hlsNJJ"
 >
   <div
     className="sc-bdVaJa jsucjq"
@@ -21,7 +21,6 @@ exports[`expect to render Panel component 1`] = `
       >
         <div
           className="sc-bwzfXH ksYGh"
-          color={false}
           cursor="pointer"
         >
           <div
@@ -50,7 +49,6 @@ exports[`expect to render Panel component 1`] = `
       >
         <div
           className="sc-bwzfXH ksYGh"
-          color={false}
           cursor="pointer"
         >
           <div
@@ -72,7 +70,7 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="ui divider sc-dnqmqq hWpGx"
+      className="ui divider sc-gZMcBi czuoAP"
     />
     <div
       className="sc-bdVaJa gSlpgJ"
@@ -149,7 +147,7 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="ui divider sc-dnqmqq hWpGx"
+      className="ui divider sc-gZMcBi czuoAP"
     />
     <div
       className="sc-bdVaJa bSEcKq"
@@ -166,7 +164,7 @@ exports[`expect to render Panel component 1`] = `
           height="50px"
         >
           <div
-            className="ui fitted toggle checkbox custom-class sc-gZMcBi iQoUkb"
+            className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
             onChange={[Function]}
             onClick={[Function]}
             onMouseDown={[Function]}
@@ -175,14 +173,17 @@ exports[`expect to render Panel component 1`] = `
             <input
               checked={false}
               className="hidden"
+              id="polygonsVisible"
               readOnly={true}
               tabIndex={0}
               type="checkbox"
             />
-            <label />
+            <label
+              htmlFor="polygonsVisible"
+            />
           </div>
           <label
-            className="sc-iwsKbI gfrWkS"
+            className="sc-bZQynM bhGoVA"
           >
             Covered Areas
           </label>
@@ -193,7 +194,7 @@ exports[`expect to render Panel component 1`] = `
           height="50px"
         >
           <div
-            className="ui fitted toggle checkbox sc-gZMcBi iQoUkb"
+            className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
             onChange={[Function]}
             onClick={[Function]}
             onMouseDown={[Function]}
@@ -202,16 +203,49 @@ exports[`expect to render Panel component 1`] = `
             <input
               checked={false}
               className="hidden"
+              id="routingGraphVisible"
               readOnly={true}
               tabIndex={0}
               type="checkbox"
             />
-            <label />
+            <label
+              htmlFor="routingGraphVisible"
+            />
           </div>
           <label
-            className="sc-iwsKbI gfrWkS"
+            className="sc-bZQynM bhGoVA"
           >
             Routing Graph
+          </label>
+        </div>
+        <div
+          className="sc-bdVaJa bouXiG"
+          direction="row"
+          height="50px"
+        >
+          <div
+            className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+            onChange={[Function]}
+            onClick={[Function]}
+            onMouseDown={[Function]}
+            onMouseUp={[Function]}
+          >
+            <input
+              checked={false}
+              className="hidden"
+              id="googleMapsOption"
+              readOnly={true}
+              tabIndex={0}
+              type="checkbox"
+            />
+            <label
+              htmlFor="googleMapsOption"
+            />
+          </div>
+          <label
+            className="sc-bZQynM bhGoVA"
+          >
+            Compare 3rd Party
           </label>
         </div>
       </div>

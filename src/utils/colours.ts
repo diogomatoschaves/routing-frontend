@@ -1,4 +1,5 @@
 import { Dict } from '../types'
+import { lightenDarkenColor } from './functions'
 
 export const MAIN_PETROL = '#00677f'
 export const PETROL_7 = '#003340'
@@ -22,7 +23,25 @@ export const WHITE = '#FFFFFF'
 export const NORMAL_INPUT = PETROL_4
 export const FOCUSED_INPUT = PETROL_5
 export const PROFILE_BACKGROUND = GREY_5
-export const POLYLINE_COLOR = PETROL_2
+
+
+export const POLYLINE_COLOR = PETROL_3
+export const ROUTING_SERVICE = PETROL_6
+export const ROUTING_SERVICE_STATS = PETROL_5
+
+
+// export const THIRD_PARTY_COLOR = '#8A0F00'
+// export const THIRD_PARTY_STATS = '#C44D3D'
+// export const THIRD_PARTY_POLYLINE = '#FFA99E'
+
+
+// export const THIRD_PARTY_STATS = '#E03997'
+export const THIRD_PARTY_STATS = '#B84843'
+// export const THIRD_PARTY_STATS = '#000000'
+// export const THIRD_PARTY_COLOR = lightenDarkenColor(THIRD_PARTY_STATS, -60)
+export const THIRD_PARTY_COLOR = '#C2292A'
+// export const THIRD_PARTY_POLYLINE = lightenDarkenColor(THIRD_PARTY_STATS, 40)
+export const THIRD_PARTY_POLYLINE = '#FF8E8E'
 
 export const colors: Dict = {
   '90+': '#9e0142', // purple

@@ -19,7 +19,7 @@ export default function ProfilesRow({ diameter, updateState, profile }: Props) {
           <div onClick={() => updateState('profile', 'car')}>
             <BackgroundIcon 
               diameter={diameter}
-              color={profile === 'car' && PROFILE_BACKGROUND}
+              color={profile === 'car' ? PROFILE_BACKGROUND : undefined}
               iconColor={profile === 'car' ? PETROL_4 : PETROL_1}
               circle={false}
               iconName={'car'}
@@ -37,7 +37,7 @@ export default function ProfilesRow({ diameter, updateState, profile }: Props) {
           <div onClick={() => updateState('profile', 'foot')}>
             <BackgroundIcon 
               diameter={diameter}
-              color={profile === 'foot' && PROFILE_BACKGROUND}
+              color={profile === 'foot' ? PROFILE_BACKGROUND : undefined}
               iconColor={profile === 'foot' ? PETROL_4 : PETROL_1}
               circle={false}
               iconName={'male'}
