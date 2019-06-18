@@ -7,6 +7,7 @@ import Map from '../components/Map'
 import ControlledInput from '../components/ControlledInput'
 import { formatCoords } from '../utils/functions'
 
+
 jest.mock('../apiCalls');
 
 const delay = (ms: number) =>
@@ -30,12 +31,14 @@ const mockEventEnd = {
   }
 }
 
+
 describe('Start and end points work as expected', () => {
 
-  describe('When user clicks on map', async () => {
+  describe('When user clicks on map', () => {
 
     const testInstance = TestRenderer.create(<App />)
     const root = testInstance.root
+
     const MapComponent = root.findByType(Map).instance
     const InputComponent = root.findAllByType(ControlledInput)
 
@@ -52,6 +55,12 @@ describe('Start and end points work as expected', () => {
 
       expect(startPoint.lat).toBe(mockEventStart.lngLat.lat);
       expect(startPoint.lng).toBe(mockEventStart.lngLat.lng);
+
+      const endPoint = locations.find((el: any) => el.name === 'end')
+
+      expect(endPoint.lat).toBe(null);
+      expect(endPoint.lng).toBe(null);
+
     })
 
     it('updates start input\'s value', () => {
@@ -67,10 +76,11 @@ describe('Start and end points work as expected', () => {
     })
   })
 
-  describe('When user clicks twice on map', async () => {
+  describe('When user clicks twice on map', () => {
 
     const testInstance = TestRenderer.create(<App />)
     const root = testInstance.root
+
     const MapComponent = root.findByType(Map).instance
     const InputComponent = root.findAllByType(ControlledInput)
 

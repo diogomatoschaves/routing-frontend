@@ -43,3 +43,9 @@ export type MapboxStyle = {
   type: string, 
   endpoint: string
 }
+
+export type Route = {
+  distance: number,
+  duration: number,
+  routePath: Array<Coords2>
+}

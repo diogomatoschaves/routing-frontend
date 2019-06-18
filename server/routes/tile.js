@@ -4,7 +4,7 @@ const http = require('http')
 const route = async (req, res) => {
   const { x, y, z, profile } = req.params
 
-  const url = `http://develop-routing-service-${profile}.develop-routing-service:5000/v1/tile/${x},${y},${z}`
+  const url = `http://develop-routing-service-${profile}.develop:5000/v1/tile/${x},${y},${z}`
 
   const options = {
     method: 'GET',

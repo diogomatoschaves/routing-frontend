@@ -2,11 +2,11 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-fjdhpX kkBxQN"
+  className="sc-cSHVUG hxJCVV"
 >
   0
   <div
-    className="sc-dnqmqq cPuIDw"
+    className="sc-gZMcBi KzVVe"
   >
     <div
       className="sc-bwzfXH islmOK"
@@ -54,7 +54,6 @@ exports[`expect to render App component 1`] = `
         >
           <div
             className="sc-htpNat fuietq"
-            color={false}
             cursor="pointer"
           >
             <div
@@ -76,7 +75,7 @@ exports[`expect to render App component 1`] = `
         </div>
       </div>
       <div
-        className="ui divider sc-iwsKbI cNFsEY"
+        className="ui divider sc-gqjmRU frCDpq"
       />
       <div
         className="sc-bwzfXH fOQsml"
@@ -153,7 +152,7 @@ exports[`expect to render App component 1`] = `
         </div>
       </div>
       <div
-        className="ui divider sc-iwsKbI cNFsEY"
+        className="ui divider sc-gqjmRU frCDpq"
       />
       <div
         className="sc-bwzfXH jduFbp"
@@ -170,7 +169,7 @@ exports[`expect to render App component 1`] = `
             height="50px"
           >
             <div
-              className="ui fitted toggle checkbox custom-class sc-gqjmRU iRsILw"
+              className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
               onChange={[Function]}
               onClick={[Function]}
               onMouseDown={[Function]}
@@ -179,14 +178,17 @@ exports[`expect to render App component 1`] = `
               <input
                 checked={false}
                 className="hidden"
+                id="polygonsVisible"
                 readOnly={true}
                 tabIndex={0}
                 type="checkbox"
               />
-              <label />
+              <label
+                htmlFor="polygonsVisible"
+              />
             </div>
             <label
-              className="sc-gZMcBi hfUeqT"
+              className="sc-gzVnrw bulIkC"
             >
               Covered Areas
             </label>
@@ -197,7 +199,7 @@ exports[`expect to render App component 1`] = `
             height="50px"
           >
             <div
-              className="ui fitted toggle checkbox sc-gqjmRU iRsILw"
+              className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
               onChange={[Function]}
               onClick={[Function]}
               onMouseDown={[Function]}
@@ -206,16 +208,49 @@ exports[`expect to render App component 1`] = `
               <input
                 checked={false}
                 className="hidden"
+                id="routingGraphVisible"
                 readOnly={true}
                 tabIndex={0}
                 type="checkbox"
               />
-              <label />
+              <label
+                htmlFor="routingGraphVisible"
+              />
             </div>
             <label
-              className="sc-gZMcBi hfUeqT"
+              className="sc-gzVnrw bulIkC"
             >
               Routing Graph
+            </label>
+          </div>
+          <div
+            className="sc-bwzfXH gDHXVX"
+            direction="row"
+            height="50px"
+          >
+            <div
+              className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+              onChange={[Function]}
+              onClick={[Function]}
+              onMouseDown={[Function]}
+              onMouseUp={[Function]}
+            >
+              <input
+                checked={false}
+                className="hidden"
+                id="googleMapsOption"
+                readOnly={true}
+                tabIndex={0}
+                type="checkbox"
+              />
+              <label
+                htmlFor="googleMapsOption"
+              />
+            </div>
+            <label
+              className="sc-gzVnrw bulIkC"
+            >
+              Compare 3rd Party
             </label>
           </div>
         </div>

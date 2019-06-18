@@ -5,7 +5,7 @@ const route = async (req, res) => {
 
   const body = JSON.stringify(req.body)
 
-  const url = `http://develop-routing-service-${profile}.develop-routing-service:5000/v1/route`
+  const url = `http://develop-routing-service-${profile}.develop:5000/v1/route`
   // const url = `https://routing.staging.otonomousmobility.com/${profile}/v1/route`
 
   fetch(url, {

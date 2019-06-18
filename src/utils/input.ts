@@ -59,7 +59,7 @@ export const routeLineSettings = {
   'paint': {
     'line-color': POLYLINE_COLOR,
     'line-width': 5,
-    'line-opacity': .8
+    'line-opacity': 0.45
   }
 }
 

@@ -2,6 +2,24 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import Map from '../components/Map'
 
+const mockGeographies = [{
+  name: 'Berlin',
+  coords: [13.38408, 52.51721],
+  polygon: 'berlin.geojson'
+}, {
+  name: 'Stuttgart',
+  coords: [9.033, 48.7111],
+  polygon: 'stuttgart.geojson'
+}, {
+  name: 'Immendingen',
+  coords: [8.7214, 47.912],
+  polygon: 'immendingen.geojson'
+}, {
+  name: 'San José',
+  coords: [-121.97588, 37.34606],
+  polygon: 'sunnyvale.geojson'
+}]
+
 const mockLocations = [{ 
   name: 'start', 
   marker: 'map marker alternate',
@@ -16,12 +34,32 @@ const mockLocations = [{
   lng: null
 }]
 
+const mockRoutePath = [
+  {lat: 52.5184035, lon: 13.3818403}, 
+  {lat: 52.5108246, lon: 13.3953626}
+]
+
+const mockRoute = {
+  distance: 100,
+  duration: 60,
+  routePath: mockRoutePath
+}
+
 it('expect to render Panel comoponent', () => {
   const testInstance = TestRenderer.create(
     <Map
       locations={mockLocations}
       updatePoint={jest.fn()}
-      routePath={[{lat: 53, lon: 12}]}
+      updateState={jest.fn()}
+      routePath={mockRoutePath}
+      routingGraphVisible={false}
+      polygonsVisible={false}
+      googleMapsOption={false}
+      recenter={false}
+      authorization={''}
+      geographies={mockGeographies}
+      geography={mockGeographies[0]}
+      googleRoute={mockRoute}
     />
   )
   expect(testInstance.toJSON()).toMatchSnapshot()

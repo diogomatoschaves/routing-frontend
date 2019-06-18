@@ -5,6 +5,7 @@ import mockRoute from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
 
+
 jest.mock('../apiCalls')
 
 const delay = (ms: number) =>
@@ -14,16 +15,17 @@ const delay = (ms: number) =>
     }, ms);
   });
 
-  const mockCoords = {
-    lat: 53,
-    lng: 12
-  }
+const mockCoords = {
+  lat: 53,
+  lng: 12
+}
 
 describe('Start point Input works as expected on blur', () => {
 
-  describe('When an invalid value is inserted', async () => {
+  describe('When an invalid value is inserted', () => {
 
     const testInstance = TestRenderer.create(<App />)
+
     const root = testInstance.root
     const input = root.findAllByType(Input);
 
@@ -50,7 +52,7 @@ describe('Start point Input works as expected on blur', () => {
 
   })
 
-  describe('When a valid value is inserted', async () => {
+  describe('When a valid value is inserted', () => {
 
     const testInstance = TestRenderer.create(<App />)
     const root = testInstance.root
@@ -82,7 +84,7 @@ describe('Start point Input works as expected on blur', () => {
 
 describe('End point Input works as expected on blur', () => {
 
-  describe('When an invalid value is inserted', async () => {
+  describe('When an invalid value is inserted', () => {
 
     const testInstance = TestRenderer.create(<App />)
     const root = testInstance.root
@@ -108,10 +110,9 @@ describe('End point Input works as expected on blur', () => {
       const { markers } = MapComponent.state
       expect(markers.length).toBe(0)
     })
-
   })
 
-  describe('When a valid value is inserted', async () => {
+  describe('When a valid value is inserted', () => {
 
     const testInstance = TestRenderer.create(<App />)
     const root = testInstance.root
