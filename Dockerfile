@@ -7,6 +7,7 @@ WORKDIR ${APP}
 
 COPY package*.json ./
 RUN npm install
+RUN npm install typescript@^3.2.1
 
 COPY . ./
 
