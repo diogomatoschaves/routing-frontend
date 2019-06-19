@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Divider, Checkbox, Button, Form, TextArea } from 'semantic-ui-react'
 import { Box, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
+import OptionsSwitch from './OptionsSwitch'
 import ProfilesRow from './ProfilesRow'
 import ProfileToggler from './ProfileToggler'
 import { UpdatePoint, UpdateState, Location, Geography } from '../types'
@@ -13,6 +14,7 @@ interface Props {
   locations: Array<Location>,
   routingGraphVisible: boolean,
   polygonsVisible: boolean,
+  googleMapsOption: boolean,
   updateState: UpdateState,
   geography: Geography,
   geographies: Array<Geography>,
@@ -46,24 +48,12 @@ const StyledDivider = styled(Divider)`
 
   width: calc(100%);
 `
-const StyledText = styled.label`
-  margin: 0;
-  padding-left: 15px;
-  font-size: 16px;
-  color: rgb(70, 70, 70);
-  font-weight: 200;
-`
-const StyledCheckbox = styled(Checkbox)`
-  &.ui.checked.fitted.toggle.checkbox input:checked~label:before {
-    background-color: #79aebf !important;
-  }
-`
 
 const diameter = 50
 
 const Panel: any = (props : Props) => {
 
-  const { updatePoint, locations, routingGraphVisible, polygonsVisible, 
+  const { updatePoint, locations, routingGraphVisible, polygonsVisible, googleMapsOption,
     updateState, geography, geographies, profile, handleShowClick, urlMatchString } = props
 
   return (
@@ -99,23 +89,24 @@ const Panel: any = (props : Props) => {
             padding="0 0 0 0"
             width="50%"
           >
-            <Box direction="row" height="50px">
-              <StyledCheckbox 
-                className="custom-class"
-                checked={polygonsVisible} 
-                onChange={(e: any, { checked }: { checked: boolean }) => updateState('polygonsVisible', checked)}
-                toggle
-              />
-              <StyledText>Covered Areas</StyledText>
-            </Box>
-            <Box direction="row" height="50px">
-              <StyledCheckbox 
-                checked={routingGraphVisible} 
-                onChange={(e: any, { checked }: { checked: boolean }) => updateState('routingGraphVisible', checked)}
-                toggle
-              />
-              <StyledText>Routing Graph</StyledText>
-            </Box>
+            <OptionsSwitch 
+              checked={polygonsVisible}
+              text={'Covered Areas'}
+              id={'polygonsVisible'}
+              updateState={updateState}
+            />
+            <OptionsSwitch 
+              checked={routingGraphVisible}
+              text={'Routing Graph'}
+              id={'routingGraphVisible'}
+              updateState={updateState}
+            />
+            <OptionsSwitch 
+              checked={googleMapsOption}
+              text={'Compare 3rd Party'}
+              id={'googleMapsOption'}
+              updateState={updateState}
+            />
           </Box>
           <Box 
             direction="column" 

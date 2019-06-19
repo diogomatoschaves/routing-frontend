@@ -1,5 +1,6 @@
 include:
-  - "https://gitlab.mobilityservices.io/infra/gitlab-ci/raw/master/.otonomousmobility.com.yaml"
+  - project: 'infra/gitlab-ci'
+    file: '.otonomousmobility.com.yaml'
 
 variables:
   SKIP_PREFLIGHT_CHECK: "true"
@@ -13,7 +14,6 @@ lint:
   before_script:
     - npm config set //nexus.mobilityservices.io/repository/npm-das/:_authToken ${NPM_TOKEN} 
     - npm config set @das:registry https://nexus.mobilityservices.io/repository/npm-das/
-
     - npm config set unsafe-perm true
     - npm i
   script:

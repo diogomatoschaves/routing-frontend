@@ -2,12 +2,13 @@ import React, { Component } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import styled from 'styled-components'
-import { UpdatePoint, UpdateState, Location, Coords2, Geography, MapboxStyle } from '../types'
+import { UpdatePoint, UpdateState, Location, Coords2, Geography, MapboxStyle, Route } from '../types'
 import { routeLineSettings, emptyLineString, speedTilesInput, defaultResponse } from '../utils/input'
 import { transformPoints, getSpeedsLayers } from '../utils/functions'
+import { POLYLINE_COLOR, THIRD_PARTY_POLYLINE } from '../utils/colours'
 
 
-const MapContainer = styled.div`
+const MapWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -28,11 +29,14 @@ interface Props {
   routePath: Array<Coords2>,
   routingGraphVisible: boolean,
   polygonsVisible: boolean,
+  googleMapsOption: boolean,
   geography: Geography,
   geographies: Array<Geography>,
   recenter: boolean,
   mapboxStyle: Array<MapboxStyle>,
-  authorization: string
+  authorization: string,
+  google?: any,
+  googleRoute: Route | null
 }
 
 export default class Map extends Component<Props, State> {
@@ -60,8 +64,8 @@ export default class Map extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    const { locations, routePath, routingGraphVisible, updatePoint, authorization,
-      polygonsVisible, geography, geographies, recenter, updateState } = this.props
+    const { locations, routePath, routingGraphVisible, updatePoint, authorization, googleMapsOption,
+      polygonsVisible, geography, geographies, recenter, updateState, googleRoute } = this.props
     const { map, markers, style } = this.state
     
     if (map && prevProps.locations !== locations) {
@@ -85,10 +89,11 @@ export default class Map extends Component<Props, State> {
     }
 
     if (map && prevProps.routePath !== routePath) {
-      const routeCoords = transformPoints(routePath)
-      const points = this.getMarkerCoords(markers)
-      this.addRoute(routeCoords, map, routingGraphVisible, style)
-      this.fitBounds([...points, ...routeCoords], map)
+      this.addPolyline(routePath, markers, map, routingGraphVisible, 'routeDAS', POLYLINE_COLOR)
+    }
+
+    if (map && prevProps.googleRoute !== googleRoute && googleRoute) {
+      this.addPolyline(googleRoute.routePath, markers, map, false, 'routeGOOGLE', THIRD_PARTY_POLYLINE)
     }
 
     if (map && prevProps.routingGraphVisible !== routingGraphVisible) {
@@ -119,6 +124,10 @@ export default class Map extends Component<Props, State> {
 
     if (prevProps.authorization !== authorization && authorization) {
       this.authorization = authorization
+    }
+
+    if (map && prevProps.googleMapsOption !== googleMapsOption && !googleMapsOption) {
+      this.removeSourceLayer('routeGOOGLE', map)
     }
   }
 
@@ -260,7 +269,7 @@ export default class Map extends Component<Props, State> {
     map.fitBounds(bounds, {
       padding: {
         top: 350,
-        left: 450,
+        left: 500,
         right: 200,
         bottom: 120
       },
@@ -303,11 +312,22 @@ export default class Map extends Component<Props, State> {
     .then(() => map.getSource(sourceName) && map.removeSource(sourceName))
   }
 
-  private addRoute = (routePath: number[][], map: mapboxgl.Map, routingGraphVisible: boolean, style: string) => {
+  private addPolyline = (routePath: Array<Coords2>, markers: Array<mapboxgl.Marker>, map: mapboxgl.Map, routingGraphVisible: boolean, id: string, color: string) => {
+    const routeCoords = transformPoints(routePath)
+      const points = this.getMarkerCoords(markers)
+      const type = {
+        id,
+        color
+      }
+      this.addRoute(routeCoords, map, routingGraphVisible, type)
+      this.fitBounds([...points, ...routeCoords], map)
+  }
 
-    Promise.resolve(this.removeSourceLayer('route', map))
+  private addRoute = (routePath: number[][], map: mapboxgl.Map, routingGraphVisible: boolean, type: { color: string, id: string }) => {
+
+    Promise.resolve(this.removeSourceLayer(type.id, map))
     .then(() => {
-      return map.addSource('route', {
+      return map.addSource(type.id, {
         'type': 'geojson',
         'data': {
           ...emptyLineString as any,
@@ -324,17 +344,17 @@ export default class Map extends Component<Props, State> {
     .then(() => {
       map.addLayer({
         ...routeLineSettings as any,
-        id: `route-polyline`,
-        source: 'route',
+        id: `${type.id}-polyline`,
+        source: type.id,
         paint: {
           ...routeLineSettings.paint,
-          'line-color': routingGraphVisible ? 'black' : routeLineSettings.paint['line-color']
+          'line-color': routingGraphVisible ? 'black' : type.color
         }
       });
     })
   }
 
   public render() {
-    return <MapContainer ref={el => this.mapContainer = el} />
+    return <MapWrapper ref={el => this.mapContainer = el} />
   }
 }

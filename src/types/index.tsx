@@ -49,3 +49,8 @@ export type Body = {
   reportGeometry: boolean,
   reportNodes?: true
 }
+export type Route = {
+  distance: number,
+  duration: number,
+  routePath: Array<Coords2>
+}

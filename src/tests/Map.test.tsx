@@ -41,6 +41,12 @@ const mockRoutePath = [
   {lat: 52.5108246, lon: 13.3953626}
 ]
 
+const mockRoute = {
+  distance: 100,
+  duration: 60,
+  routePath: mockRoutePath
+}
+
 it('expect to render Panel comoponent', () => {
   const testInstance = TestRenderer.create(
     <MemoryRouter initialEntries={[ '/' ]}>
@@ -51,11 +57,12 @@ it('expect to render Panel comoponent', () => {
         routePath={mockRoutePath}
         routingGraphVisible={false}
         polygonsVisible={false}
+        googleMapsOption={false}
         recenter={false}
         authorization={''}
         geographies={mockGeographies}
         geography={mockGeographies[0]}
-  
+        googleRoute={mockRoute}
       />
     </MemoryRouter>
   )

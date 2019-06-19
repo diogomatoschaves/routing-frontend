@@ -5,7 +5,7 @@ ENV NODE_ENV=production
 RUN mkdir ${APP}
 WORKDIR ${APP}
 
-COPY package.json .
+COPY package*.json ./
 RUN npm install
 
 COPY . ./

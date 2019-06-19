@@ -8,6 +8,7 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import { getPath, formatCoords } from '../utils/functions'
 
 
+
 jest.mock('../apiCalls')
 
 const delay = (ms: number) =>

@@ -8,6 +8,7 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import ControlledInput from '../components/ControlledInput'
 import { formatCoords, getPath } from '../utils/functions'
 
+
 jest.mock('../apiCalls');
 
 const delay = (ms: number) =>
@@ -66,6 +67,12 @@ describe('Start and end points work as expected', () => {
 
       expect(startPoint.lat).toBe(mockEventStart.lngLat.lat);
       expect(startPoint.lng).toBe(mockEventStart.lngLat.lng);
+
+      const endPoint = locations.find((el: any) => el.name === 'end')
+
+      expect(endPoint.lat).toBe(null);
+      expect(endPoint.lng).toBe(null);
+
     })
 
     it('updates start input\'s value', () => {
