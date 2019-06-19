@@ -51,7 +51,7 @@ const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsC
       <Box direction="column" justify="space-between">
         <StyledHeader overridecolor={textColor}>{title}</StyledHeader>
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <Box direction="row" width="40%">
+          <Box direction="row" width="40%" justify="center">
             <BackgroundIcon 
               diameter={diameter}
               color={PROFILE_BACKGROUND}
@@ -73,13 +73,13 @@ const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsC
           </Box>
         </Box>
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <Box direction="row" width="40%">
+          <Box direction="row" width="40%" justify="center">
             <BackgroundIcon 
               diameter={diameter}
               color={PROFILE_BACKGROUND}
               iconColor={iconColor}
               circle={false}
-              iconName={'share alternate'}
+              iconName={'road'}
               margin={"0 7px 0 0"}
             />
           </Box>

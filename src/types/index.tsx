@@ -44,6 +44,11 @@ export type MapboxStyle = {
   endpoint: string
 }
 
+export type Body = {
+  locations: Array<Coords2>,
+  reportGeometry: boolean,
+  reportNodes?: true
+}
 export type Route = {
   distance: number,
   duration: number,

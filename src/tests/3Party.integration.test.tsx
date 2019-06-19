@@ -3,8 +3,10 @@ import TestRenderer from 'react-test-renderer'
 import { Checkbox, Input } from 'semantic-ui-react'
 import App from '../components/App'
 import Map from '../components/Map'
+import { MemoryRouter, Route } from 'react-router-dom'
 import mockRoute from '../apiCalls/__mocks__/mockRoute'
 import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
+import { getPath } from '../utils/functions'
 
 
 jest.mock('../apiCalls')
@@ -21,9 +23,26 @@ const mockCoords = {
   lng: 12
 }
 
+const urlMatchString = '/:profile/:start/:end'
+
 describe('When 3rd party option is selected', () => {
 
-  const testInstance = TestRenderer.create(<App windowProp={true}/>)
+  const testInstance = TestRenderer.create(
+    <MemoryRouter initialEntries={[ '/' ]}>
+      <Route render={({ location }) => (
+        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+          <App 
+            location={location} 
+            history={history} 
+            match={match} 
+            urlMatchString={urlMatchString}
+            windowProp={true}
+          />
+        )}/>
+      )}/>
+    </MemoryRouter>
+  )
+
   const root = testInstance.root
 
   const togglerProps = {

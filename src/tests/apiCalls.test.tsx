@@ -1,4 +1,4 @@
-import mockServerResponse from '../apiCalls/__mocks__/mockResponse'
+import { mockCarResponse, mockFootResponse } from '../apiCalls/__mocks__/mockResponse'
 import { routingApi } from '../apiCalls'
 
 jest.mock('../apiCalls')
@@ -26,13 +26,29 @@ const locations = [{
 
 describe('Api Calls', () => {
   
-  describe('routingApi', () => {
+  describe('routingApi with car profile', () => {
+
+    const mockProfile = 'car'
     
     it('returns an object if status code is ok', (done) => {
 
-      routingApi('car', 'Basic RE1BVE9TQzpPbGlzc2lwbzE5ODY=', locations)
+      routingApi(mockProfile, 'Basic RE1BVE9TQzpPbGlzc2lwbzE5ODY=', locations)
       .then((response) => {
-        expect(response).toEqual(mockServerResponse)
+        expect(response).toEqual(mockCarResponse)
+        done()
+      })
+    })
+  })
+
+  describe('routingApi with foot profile', () => {
+
+    const mockProfile = 'foot'
+    
+    it('returns an object if status code is ok', (done) => {
+
+      routingApi(mockProfile, 'Basic RE1BVE9TQzpPbGlzc2lwbzE5ODY=', locations)
+      .then((response) => {
+        expect(response).toEqual(mockFootResponse)
         done()
       })
     })

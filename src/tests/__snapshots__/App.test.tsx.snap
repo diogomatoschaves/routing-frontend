@@ -2,273 +2,400 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-cSHVUG hxJCVV"
+  className="sc-chPdSV jYcmlt"
 >
-  0
   <div
-    className="sc-gZMcBi KzVVe"
+    className="ui segment pushable sc-kgoBCf loDXNK"
   >
     <div
-      className="sc-bwzfXH islmOK"
-      direction="column"
+      className="ui vertical labeled icon ui overlay left very wide sidebar menu"
     >
       <div
-        className="sc-bwzfXH iSONxz"
-        direction="row"
+        className="sc-bwzfXH dlzeER"
       >
         <div
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
+          className="sc-bwzfXH hqmSIq"
+          direction="row"
         >
-          <div
-            className="sc-htpNat oWmeC"
-            color="#e1e1e1"
-            cursor="pointer"
-          >
-            <div
-              className="sc-bwzfXH dmJOrF"
-              height="100%"
-            >
-              <i
-                aria-hidden="true"
-                className="car icon sc-bxivhb vcXGv"
-                fontSize="25px"
-                height="20px"
-                onClick={[Function]}
-                overridecolor="#007a93"
-                padding="0 0 0 0"
-                position="absolute"
-              />
-            </div>
-          </div>
-        </div>
-        <div
-          onBlur={[Function]}
-          onClick={[Function]}
-          onFocus={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <div
-            className="sc-htpNat fuietq"
-            cursor="pointer"
-          >
-            <div
-              className="sc-bwzfXH dmJOrF"
-              height="100%"
-            >
-              <i
-                aria-hidden="true"
-                className="male icon sc-bxivhb hFCAaS"
-                fontSize="25px"
-                height="20px"
-                onClick={[Function]}
-                overridecolor="#a6cad8"
-                padding="0 0 0 0"
-                position="absolute"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        className="ui divider sc-gqjmRU frCDpq"
-      />
-      <div
-        className="sc-bwzfXH fOQsml"
-        direction="row"
-      >
-        <div
-          className="sc-htpNat aNfhF"
-          color="#007a93"
-        >
-          <div
-            className="sc-bwzfXH gzsoVo"
-            height="100%"
+          <button
+            className="ui icon button"
+            onClick={[Function]}
           >
             <i
               aria-hidden="true"
-              className="map marker alternate icon sc-bxivhb gUqPoa"
-              fontSize="25px"
-              height="20px"
+              className="chevron left big icon"
               onClick={[Function]}
-              overridecolor="white"
-              padding="0 0 0 0"
-              position="absolute"
             />
-          </div>
+          </button>
         </div>
         <div
-          className="ui fluid input sc-bZQynM iPUAKv"
-        >
-          <input
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            placeholder="Origin"
-            type="text"
-            value=""
-          />
-        </div>
-      </div>
-      <div
-        className="sc-bwzfXH fOQsml"
-        direction="row"
-      >
-        <div
-          className="sc-htpNat aNfhF"
-          color="#007a93"
+          className="sc-bwzfXH kwvKmS"
+          width="80%"
         >
           <div
-            className="sc-bwzfXH gzsoVo"
-            height="100%"
+            className="ui header sc-kAzzGY fwDpBk"
+            overridecolor="#00677f"
           >
-            <i
-              aria-hidden="true"
-              className="map marker icon sc-bxivhb gUqPoa"
-              fontSize="25px"
-              height="20px"
-              onClick={[Function]}
-              overridecolor="white"
-              padding="0 0 0 0"
-              position="absolute"
+            Request Endpoint
+          </div>
+          <form
+            className="ui form sc-cSHVUG jrcJLi"
+            focuscolor="#5097ab"
+            onSubmit={[Function]}
+          >
+            <textarea
+              disabled={true}
+              id="endpointValue"
+              onChange={[Function]}
+              onInput={[Function]}
+              readOnly={true}
+              rows={1}
+              value="https://routing.develop.otonomousmobility.com"
             />
-          </div>
+          </form>
         </div>
         <div
-          className="ui fluid input sc-bZQynM iPUAKv"
-        >
-          <input
-            onBlur={[Function]}
-            onChange={[Function]}
-            onFocus={[Function]}
-            placeholder="Destination"
-            type="text"
-            value=""
-          />
-        </div>
-      </div>
-      <div
-        className="ui divider sc-gqjmRU frCDpq"
-      />
-      <div
-        className="sc-bwzfXH jduFbp"
-        direction="row"
-      >
-        <div
-          className="sc-bwzfXH bYbhoh"
-          direction="column"
-          width="50%"
+          className="sc-bwzfXH kwvKmS"
+          width="80%"
         >
           <div
-            className="sc-bwzfXH gDHXVX"
-            direction="row"
-            height="50px"
+            className="ui header sc-kAzzGY fwDpBk"
+            overridecolor="#00677f"
           >
-            <div
-              className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
-              onChange={[Function]}
-              onClick={[Function]}
-              onMouseDown={[Function]}
-              onMouseUp={[Function]}
-            >
-              <input
-                checked={false}
-                className="hidden"
-                id="polygonsVisible"
-                readOnly={true}
-                tabIndex={0}
-                type="checkbox"
-              />
-              <label
-                htmlFor="polygonsVisible"
-              />
-            </div>
-            <label
-              className="sc-gzVnrw bulIkC"
-            >
-              Covered Areas
-            </label>
+            Request Body
           </div>
-          <div
-            className="sc-bwzfXH gDHXVX"
-            direction="row"
-            height="50px"
+          <form
+            className="ui form sc-cSHVUG jrcJLi"
+            focuscolor="#5097ab"
+            onSubmit={[Function]}
           >
-            <div
-              className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+            <textarea
+              id="bodyValue"
               onChange={[Function]}
-              onClick={[Function]}
-              onMouseDown={[Function]}
-              onMouseUp={[Function]}
-            >
-              <input
-                checked={false}
-                className="hidden"
-                id="routingGraphVisible"
-                readOnly={true}
-                tabIndex={0}
-                type="checkbox"
-              />
-              <label
-                htmlFor="routingGraphVisible"
-              />
-            </div>
-            <label
-              className="sc-gzVnrw bulIkC"
-            >
-              Routing Graph
-            </label>
-          </div>
-          <div
-            className="sc-bwzfXH gDHXVX"
-            direction="row"
-            height="50px"
-          >
-            <div
-              className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
-              onChange={[Function]}
-              onClick={[Function]}
-              onMouseDown={[Function]}
-              onMouseUp={[Function]}
-            >
-              <input
-                checked={false}
-                className="hidden"
-                id="googleMapsOption"
-                readOnly={true}
-                tabIndex={0}
-                type="checkbox"
-              />
-              <label
-                htmlFor="googleMapsOption"
-              />
-            </div>
-            <label
-              className="sc-gzVnrw bulIkC"
-            >
-              Compare 3rd Party
-            </label>
-          </div>
+              onInput={[Function]}
+              rows={10}
+              value=""
+            />
+          </form>
         </div>
         <div
-          className="sc-bwzfXH hUCHrA"
-          direction="column"
-          width="40%"
+          className="sc-bwzfXH kwvKmS"
+          width="80%"
         >
           <div
-            className="sc-ifAKCX hUGWRE"
-            width="40%"
-          />
+            className="ui header sc-kAzzGY fwDpBk"
+            overridecolor="#00677f"
+          >
+            Response
+          </div>
+          <form
+            className="ui form sc-cSHVUG jrcJLi"
+            focuscolor="#5097ab"
+            onSubmit={[Function]}
+          >
+            <textarea
+              id="responseValue"
+              onChange={[Function]}
+              onInput={[Function]}
+              rows={15}
+              value=""
+            />
+          </form>
         </div>
       </div>
     </div>
+    <div
+      className="pusher"
+    >
+      0
+      <div
+        className="sc-gZMcBi KzVVe"
+      >
+        <div
+          className="sc-bwzfXH islmOK"
+          direction="column"
+        >
+          <div
+            className="sc-bwzfXH iSONxz"
+            direction="row"
+          >
+            <div
+              id="car-profile"
+              onClick={[Function]}
+            >
+              <div
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
+              >
+                <div
+                  className="sc-htpNat oWmeC"
+                  color="#e1e1e1"
+                  cursor="pointer"
+                >
+                  <div
+                    className="sc-bwzfXH dmJOrF"
+                    height="100%"
+                  >
+                    <i
+                      aria-hidden="true"
+                      className="car icon sc-bxivhb vcXGv"
+                      fontSize="25px"
+                      height="20px"
+                      onClick={[Function]}
+                      overridecolor="#007a93"
+                      padding="0 0 0 0"
+                      position="absolute"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="foot-profile"
+              onClick={[Function]}
+            >
+              <div
+                onBlur={[Function]}
+                onClick={[Function]}
+                onFocus={[Function]}
+                onMouseEnter={[Function]}
+                onMouseLeave={[Function]}
+              >
+                <div
+                  className="sc-htpNat gQmiyd"
+                  color="transparent"
+                  cursor="pointer"
+                >
+                  <div
+                    className="sc-bwzfXH dmJOrF"
+                    height="100%"
+                  >
+                    <i
+                      aria-hidden="true"
+                      className="male icon sc-bxivhb hFCAaS"
+                      fontSize="25px"
+                      height="20px"
+                      onClick={[Function]}
+                      overridecolor="#a6cad8"
+                      padding="0 0 0 0"
+                      position="absolute"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="ui divider sc-gqjmRU bxMepl"
+          />
+          <div
+            className="sc-bwzfXH fOQsml"
+            direction="row"
+          >
+            <div
+              className="sc-htpNat aNfhF"
+              color="#007a93"
+            >
+              <div
+                className="sc-bwzfXH gzsoVo"
+                height="100%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="map marker alternate icon sc-bxivhb gUqPoa"
+                  fontSize="25px"
+                  height="20px"
+                  onClick={[Function]}
+                  overridecolor="white"
+                  padding="0 0 0 0"
+                  position="absolute"
+                />
+              </div>
+            </div>
+            <div
+              className="ui fluid input sc-bZQynM iPUAKv"
+            >
+              <input
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                placeholder="Origin"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            className="sc-bwzfXH fOQsml"
+            direction="row"
+          >
+            <div
+              className="sc-htpNat aNfhF"
+              color="#007a93"
+            >
+              <div
+                className="sc-bwzfXH gzsoVo"
+                height="100%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="map marker icon sc-bxivhb gUqPoa"
+                  fontSize="25px"
+                  height="20px"
+                  onClick={[Function]}
+                  overridecolor="white"
+                  padding="0 0 0 0"
+                  position="absolute"
+                />
+              </div>
+            </div>
+            <div
+              className="ui fluid input sc-bZQynM iPUAKv"
+            >
+              <input
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                placeholder="Destination"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            className="ui divider sc-gqjmRU bxMepl"
+          />
+          <div
+            className="sc-bwzfXH jduFbp"
+            direction="row"
+          >
+            <div
+              className="sc-bwzfXH bYbhoh"
+              direction="column"
+              width="50%"
+            >
+              <div
+                className="sc-bwzfXH cUgWoN"
+                direction="row"
+                height="50px"
+              >
+                <div
+                  className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                  onChange={[Function]}
+                  onClick={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseUp={[Function]}
+                >
+                  <input
+                    checked={false}
+                    className="hidden"
+                    id="polygonsVisible"
+                    readOnly={true}
+                    tabIndex={0}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor="polygonsVisible"
+                  />
+                </div>
+                <label
+                  className="sc-gzVnrw bulIkC"
+                >
+                  Covered Areas
+                </label>
+              </div>
+              <div
+                className="sc-bwzfXH cUgWoN"
+                direction="row"
+                height="50px"
+              >
+                <div
+                  className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                  onChange={[Function]}
+                  onClick={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseUp={[Function]}
+                >
+                  <input
+                    checked={false}
+                    className="hidden"
+                    id="routingGraphVisible"
+                    readOnly={true}
+                    tabIndex={0}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor="routingGraphVisible"
+                  />
+                </div>
+                <label
+                  className="sc-gzVnrw bulIkC"
+                >
+                  Routing Graph
+                </label>
+              </div>
+              <div
+                className="sc-bwzfXH cUgWoN"
+                direction="row"
+                height="50px"
+              >
+                <div
+                  className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                  onChange={[Function]}
+                  onClick={[Function]}
+                  onMouseDown={[Function]}
+                  onMouseUp={[Function]}
+                >
+                  <input
+                    checked={false}
+                    className="hidden"
+                    id="googleMapsOption"
+                    readOnly={true}
+                    tabIndex={0}
+                    type="checkbox"
+                  />
+                  <label
+                    htmlFor="googleMapsOption"
+                  />
+                </div>
+                <label
+                  className="sc-gzVnrw bulIkC"
+                >
+                  Compare 3rd Party
+                </label>
+              </div>
+            </div>
+            <div
+              className="sc-bwzfXH jZLqJu"
+              direction="column"
+              width="40%"
+            >
+              <div
+                className="sc-ifAKCX hUGWRE"
+                width="40%"
+              />
+            </div>
+          </div>
+          <div
+            className="sc-bwzfXH iiGiMM"
+            direction="row"
+          >
+            <button
+              className="ui button"
+              onClick={[Function]}
+            >
+              See response
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa jthvZh"
+      />
+    </div>
   </div>
-  <div
-    className="sc-bdVaJa jthvZh"
-  />
 </div>
 `;

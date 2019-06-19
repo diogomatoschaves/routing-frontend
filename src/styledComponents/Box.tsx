@@ -7,7 +7,7 @@ const Box: any = styled.div`
   padding: ${(props: any) => props.padding && props.padding};
   display: flex;
   flex-direction: ${(props: any) => props.direction ? props.direction : 'column'};
-  justify-content: ${(props: any) => props.justify ? props.justify : 'center'};
+  justify-content: ${(props: any) => props.justify && props.justify};
   align-items: ${(props: any) => props.align ? props.align : 'center'};
 ` as any
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Box, StyledIcon, ColoredDiv } from '../styledComponents'
+import { Box } from '../styledComponents'
 import ControlledInput from './ControlledInput'
 import BackgroundIcon from './BackgroundIcon'
 import { UpdatePoint, Coords } from '../types'
@@ -12,7 +12,8 @@ interface Props {
   coords: Coords,
   placeholder: string,
   iconName: string | any,
-  updatePoint: UpdatePoint
+  updatePoint: UpdatePoint,
+  urlMatchString: string
 }
 
 const diameter = 38
@@ -32,7 +33,7 @@ class InputRow extends Component<Props, any> {
 
   public render() {
 
-    const { iconName, rowKey, index, coords, updatePoint, placeholder } = this.props
+    const { iconName, rowKey, index, coords, updatePoint, placeholder, urlMatchString } = this.props
     const { color } = this.state
 
     return (
@@ -52,6 +53,7 @@ class InputRow extends Component<Props, any> {
           updatePoint={updatePoint}
           updateColor={this.updateColor}
           placeholder={placeholder}
+          urlMatchString={urlMatchString}
         />
       </Box>
     )

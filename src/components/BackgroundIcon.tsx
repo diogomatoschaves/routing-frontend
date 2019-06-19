@@ -22,7 +22,7 @@ export default function BackgroundIcon({ diameter, color, iconColor, circle, ico
       position="relative" 
       cursor={cursor}
     >
-      <Box height="100%" padding={`${Math.round(diameter / 2)}px`}>
+      <Box justify="center" height="100%" padding={`${Math.round(diameter / 2)}px`}>
         <StyledIcon 
           fontSize={'25px'}
           height={'20px'}

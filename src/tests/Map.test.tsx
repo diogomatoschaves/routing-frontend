@@ -1,6 +1,8 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import Map from '../components/Map'
+import { MemoryRouter } from 'react-router-dom'
+
 
 const mockGeographies = [{
   name: 'Berlin',
@@ -47,20 +49,22 @@ const mockRoute = {
 
 it('expect to render Panel comoponent', () => {
   const testInstance = TestRenderer.create(
-    <Map
-      locations={mockLocations}
-      updatePoint={jest.fn()}
-      updateState={jest.fn()}
-      routePath={mockRoutePath}
-      routingGraphVisible={false}
-      polygonsVisible={false}
-      googleMapsOption={false}
-      recenter={false}
-      authorization={''}
-      geographies={mockGeographies}
-      geography={mockGeographies[0]}
-      googleRoute={mockRoute}
-    />
+    <MemoryRouter initialEntries={[ '/' ]}>
+      <Map
+        locations={mockLocations}
+        updatePoint={jest.fn()}
+        updateState={jest.fn()}
+        routePath={mockRoutePath}
+        routingGraphVisible={false}
+        polygonsVisible={false}
+        googleMapsOption={false}
+        recenter={false}
+        authorization={''}
+        geographies={mockGeographies}
+        geography={mockGeographies[0]}
+        googleRoute={mockRoute}
+      />
+    </MemoryRouter>
   )
   expect(testInstance.toJSON()).toMatchSnapshot()
 }) 
