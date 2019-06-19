@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Divider, Checkbox } from 'semantic-ui-react'
+import { Divider, Checkbox, Button, Form, TextArea } from 'semantic-ui-react'
 import { Box, EmptySpace } from '../styledComponents'
 import InputRow from './InputRow'
 import ProfilesRow from './ProfilesRow'
@@ -9,13 +9,16 @@ import { UpdatePoint, UpdateState, Location, Geography } from '../types'
 
 interface Props {
   updatePoint: UpdatePoint,
+  handleShowClick: () => void,
   locations: Array<Location>,
   routingGraphVisible: boolean,
   polygonsVisible: boolean,
   updateState: UpdateState,
   geography: Geography,
   geographies: Array<Geography>,
-  profile: string
+  profile: string,
+  duration: number,
+  urlMatchString: string
 }
 
 const PanelWrapper: any = styled.div`
@@ -38,7 +41,7 @@ const PanelWrapper: any = styled.div`
 const StyledDivider = styled(Divider)`
   &.ui.divider {
     margin-top: 0.6rem;
-    border-top: 1px solid rgb(0, 0, 0)
+    border-top: 1px solid rgb(200, 200, 200);
   }
 
   width: calc(100%);
@@ -61,7 +64,7 @@ const diameter = 50
 const Panel: any = (props : Props) => {
 
   const { updatePoint, locations, routingGraphVisible, polygonsVisible, 
-    updateState, geography, geographies, profile } = props
+    updateState, geography, geographies, profile, handleShowClick, urlMatchString } = props
 
   return (
     <PanelWrapper >
@@ -80,6 +83,7 @@ const Panel: any = (props : Props) => {
               placeholder={item.placeholder}
               iconName={item.marker} 
               updatePoint={updatePoint}
+              urlMatchString={urlMatchString}
             />
           )
         })}
@@ -128,6 +132,15 @@ const Panel: any = (props : Props) => {
               <EmptySpace width="40%" position="relative" />
             )}
           </Box>
+        </Box>
+        <Box 
+          direction="row"
+          justify="flex-start" 
+          padding="10px 0 10px 0"
+        >
+          <Button onClick={handleShowClick}>
+            See response
+          </Button>
         </Box>
       </Box>
     </PanelWrapper>

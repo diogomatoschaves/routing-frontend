@@ -28,7 +28,7 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
     >
       <Box direction="column" justify="space-between">
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <Box direction="row" width="40%">
+          <Box direction="row" width="40%" justify="center">
             <BackgroundIcon 
               diameter={diameter}
               color={PROFILE_BACKGROUND}
@@ -38,7 +38,7 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
               margin={"0 7px 0 0"}
             />
           </Box>
-          <Box direction="row" width="60%">
+          <Box direction="row" width="60%" justify="center">
             <Statistic size={"small"} style={{ margin: 0 }}>
               <Statistic.Value>
                 {durationValue}
@@ -50,17 +50,17 @@ const RouteInfo: any = ({ duration, distance } : Props) => {
           </Box>
         </Box>
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <Box direction="row" width="40%">
+          <Box direction="row" width="40%" justify="center">
             <BackgroundIcon 
               diameter={diameter}
               color={PROFILE_BACKGROUND}
               iconColor={NORMAL_INPUT}
               circle={false}
-              iconName={'share alternate'}
+              iconName={'road'}
               margin={"0 7px 0 0"}
             />
           </Box>
-          <Box direction="row" width="60%">
+          <Box direction="row" width="60%" justify="center">
             <Statistic size={'small'} style={{ margin: 0 }}>
               <Statistic.Value>
                 {distanceValue}

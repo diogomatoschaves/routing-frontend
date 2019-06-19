@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
-import round from 'lodash/round'
 import { Input } from 'semantic-ui-react'
+import { generatePath, matchPath, withRouter, RouteComponentProps } from 'react-router-dom'
 import { UpdatePoint, UpdateColor, Coords } from '../types'
-import { formatCoords } from '../utils/functions'
+import { formatCoords, splitCoords, getPath } from '../utils/functions'
 
 
 interface Props {
@@ -12,7 +12,10 @@ interface Props {
   rowKey: string,
   index: number,
   coords: Coords,
-  placeholder: string
+  placeholder: string,
+  history?: any,
+  location?: any,
+  urlMatchString: string
 }
 
 interface State {
@@ -37,7 +40,7 @@ const StyledInput: typeof Input = styled(Input as any)`
   }
 ` as any
 
-class ControlledInput extends Component<Props, State> {
+class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
   state = {
     value: ''
@@ -57,24 +60,39 @@ class ControlledInput extends Component<Props, State> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const { index, updatePoint, updateColor, coords: prevCoords } = this.props
+    const { index, rowKey, updatePoint, updateColor, coords: prevCoords, history, location, urlMatchString } = this.props
 
     updateColor()
 
-    const [lat, lng] = value.split(',')
-    const coords = { 
-      lat: Number(lat), 
-      lng: Number(lng) 
-    }
+    const coords = splitCoords(value)
 
-    if (coords.lat && coords.lng && formatCoords(prevCoords) !== formatCoords(coords)) updatePoint(index, coords)
-    else if (value === '') updatePoint(index, { lat: null, lng: null })
+    // const pathToMatch = getPath(location.pathname)
+
+    // const params = matchPath(location.pathname, {
+    //   path: pathToMatch,
+    //   exact: false,
+    //   strict: false
+    // }) || { params: {}}
+
+    // if (coords) {
+    //   const path = generatePath(pathToMatch, {
+    //     ...params.params,
+    //     [rowKey]: formatCoords(coords)
+    //   })
+
+    //   history.push(path)
+    // }
+
+    if (coords && formatCoords(prevCoords) !== formatCoords(coords)) {
+      updatePoint(index, coords)
+    } else if (value === '') {
+      updatePoint(index, { lat: null, lng: null })
+    }
   }
 
   cleanInput = () => {
     const { index, updatePoint } = this.props
     this.setState({ value: '' }, () => updatePoint(index, { lat: null, lng: null }))
-    
   }
 
   public render(){
@@ -97,4 +115,4 @@ class ControlledInput extends Component<Props, State> {
   }
 }
 
-export default ControlledInput
+export default withRouter(ControlledInput)

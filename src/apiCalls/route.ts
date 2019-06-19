@@ -1,6 +1,6 @@
-import { Location, Coords2 } from '../types'
+import { Body } from '../types'
 
-const routingApi = async (profile: string, authorization: string, locations: Array<Location>) => {
+const routingApi = async (profile: string, authorization: string, body: Body) => {
 
   const headers = new Headers() as any
 
@@ -12,31 +12,13 @@ const routingApi = async (profile: string, authorization: string, locations: Arr
 
   const url = baseUrl.replace(':profile', profile)
 
-  const body =  JSON.stringify({
-    locations: locations.reduce((accum: Array<Coords2>, location: Location) => {
-      return [
-        ...accum, {
-          lat: location.lat ? location.lat : 0, 
-          lon: location.lng ? location.lng : 0
-        }
-      ]
-    }, []), 
-    reportGeometry: true,
-  })
-
   const response = await fetch(url, {
     method: 'POST',
     headers,
-    body
+    body: JSON.stringify(body)
   })
 
   return await response.json()
-  
-  // if(response.status !== 200) {
-  //   console.log(`Error fetching route, received ${response.status}`)
-  // } else {
-    
-  // }
 }
 
 export default routingApi

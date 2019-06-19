@@ -1,6 +1,7 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import Panel from '../components/Panel'
+import { MemoryRouter } from 'react-router-dom'
 
 
 const mockLocations = [{ 
@@ -19,6 +20,10 @@ const mockLocations = [{
 
 it('expect to render Panel component', () => {
 
-  const testInstance = TestRenderer.create(<Panel locations={mockLocations}/>)
+  const testInstance = TestRenderer.create(
+    <MemoryRouter initialEntries={[ '/' ]}>
+      <Panel locations={mockLocations}/>
+    </MemoryRouter>
+  )
   expect(testInstance.toJSON()).toMatchSnapshot()
 }) 

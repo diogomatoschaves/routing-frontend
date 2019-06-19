@@ -125,10 +125,10 @@ export default class Map extends Component<Props, State> {
   componentDidMount() {
     mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN || ''
 
-    const { mapboxStyle, authorization } = this.props
+    const { mapboxStyle, updateState } = this.props
     const { style } = this.state
     const styleOption = mapboxStyle.find(el => el.type === style)
-    this.loadMap(styleOption ? styleOption : mapboxStyle[0], authorization)
+    this.loadMap(styleOption ? styleOption : mapboxStyle[0], updateState)
   }
 
   componentWillUnmount() {
@@ -136,7 +136,7 @@ export default class Map extends Component<Props, State> {
     map && map.remove()
   }
 
-  private loadMap = (mapboxStyle: MapboxStyle, authorization: string) => {
+  private loadMap = (mapboxStyle: MapboxStyle, updateState: UpdateState) => {
 
     const mapContainer = this.mapContainer
 
@@ -155,8 +155,8 @@ export default class Map extends Component<Props, State> {
               url,
               method: 'GET',
               headers: {
-                Authorization: this.authorization,
-                method: 'GET'
+                'Authorization': this.authorization,
+                'Content-Type': 'application/x-protobuf'
               }
             }
           }
@@ -164,7 +164,10 @@ export default class Map extends Component<Props, State> {
       })
     })
 
-    map.on('load', () => this.setState({ map }))
+    map.on('load', () => {
+      this.setState({ map })
+      updateState('mapLoaded', true)
+    })
 
     map.on('style.load', () => map.addControl(new mapboxgl.NavigationControl(), 'bottom-right'))
 
@@ -275,7 +278,8 @@ export default class Map extends Component<Props, State> {
       map.addSource(input.id, {
         type: 'vector',
         tiles: [input.url],
-        maxzoom: 20
+        minzoom: 11,
+        maxzoom: 18
       })
 
       getSpeedsLayers(sourceName, datasourceFilter).forEach(layer => {

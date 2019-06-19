@@ -43,3 +43,9 @@ export type MapboxStyle = {
   type: string, 
   endpoint: string
 }
+
+export type Body = {
+  locations: Array<Coords2>,
+  reportGeometry: boolean,
+  reportNodes?: true
+}

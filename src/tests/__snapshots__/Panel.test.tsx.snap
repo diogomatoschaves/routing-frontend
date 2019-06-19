@@ -13,66 +13,76 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        onBlur={[Function]}
+        id="car-profile"
         onClick={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
       >
         <div
-          className="sc-bwzfXH ksYGh"
-          color={false}
-          cursor="pointer"
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
         >
           <div
-            className="sc-bdVaJa dbHwHO"
-            height="100%"
+            className="sc-bwzfXH deebee"
+            color="transparent"
+            cursor="pointer"
           >
-            <i
-              aria-hidden="true"
-              className="car icon sc-htpNat bxTmCt"
-              fontSize="25px"
-              height="20px"
-              onClick={[Function]}
-              overridecolor="#a6cad8"
-              padding="0 0 0 0"
-              position="absolute"
-            />
+            <div
+              className="sc-bdVaJa dbHwHO"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="car icon sc-htpNat bxTmCt"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#a6cad8"
+                padding="0 0 0 0"
+                position="absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
       <div
-        onBlur={[Function]}
+        id="foot-profile"
         onClick={[Function]}
-        onFocus={[Function]}
-        onMouseEnter={[Function]}
-        onMouseLeave={[Function]}
       >
         <div
-          className="sc-bwzfXH ksYGh"
-          color={false}
-          cursor="pointer"
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
         >
           <div
-            className="sc-bdVaJa dbHwHO"
-            height="100%"
+            className="sc-bwzfXH deebee"
+            color="transparent"
+            cursor="pointer"
           >
-            <i
-              aria-hidden="true"
-              className="male icon sc-htpNat bxTmCt"
-              fontSize="25px"
-              height="20px"
-              onClick={[Function]}
-              overridecolor="#a6cad8"
-              padding="0 0 0 0"
-              position="absolute"
-            />
+            <div
+              className="sc-bdVaJa dbHwHO"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="male icon sc-htpNat bxTmCt"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#a6cad8"
+                padding="0 0 0 0"
+                position="absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
     <div
-      className="ui divider sc-dnqmqq hWpGx"
+      className="ui divider sc-dnqmqq gjoctF"
     />
     <div
       className="sc-bdVaJa gSlpgJ"
@@ -149,7 +159,7 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="ui divider sc-dnqmqq hWpGx"
+      className="ui divider sc-dnqmqq gjoctF"
     />
     <div
       className="sc-bdVaJa bSEcKq"
@@ -161,7 +171,7 @@ exports[`expect to render Panel component 1`] = `
         width="50%"
       >
         <div
-          className="sc-bdVaJa bouXiG"
+          className="sc-bdVaJa ffZrYn"
           direction="row"
           height="50px"
         >
@@ -188,7 +198,7 @@ exports[`expect to render Panel component 1`] = `
           </label>
         </div>
         <div
-          className="sc-bdVaJa bouXiG"
+          className="sc-bdVaJa ffZrYn"
           direction="row"
           height="50px"
         >
@@ -216,7 +226,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="sc-bdVaJa fiugTd"
+        className="sc-bdVaJa lcGQXu"
         direction="column"
         width="40%"
       >
@@ -225,6 +235,17 @@ exports[`expect to render Panel component 1`] = `
           width="40%"
         />
       </div>
+    </div>
+    <div
+      className="sc-bdVaJa iLYYQR"
+      direction="row"
+    >
+      <button
+        className="ui button"
+        onClick={[Function]}
+      >
+        See response
+      </button>
     </div>
   </div>
 </div>

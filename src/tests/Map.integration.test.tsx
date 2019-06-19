@@ -1,11 +1,12 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import mockRoute from '../apiCalls/__mocks__/mockRoute'
-// import 'jest-dom/extend-expect'
 import App from '../components/App'
 import Map from '../components/Map'
+import { Input } from 'semantic-ui-react'
+import { MemoryRouter, Route } from 'react-router-dom'
 import ControlledInput from '../components/ControlledInput'
-import { formatCoords } from '../utils/functions'
+import { formatCoords, getPath } from '../utils/functions'
 
 jest.mock('../apiCalls');
 
@@ -30,17 +31,30 @@ const mockEventEnd = {
   }
 }
 
+const urlMatchString = '/:profile/:start/:end'
+
 describe('Start and end points work as expected', () => {
 
-  describe('When user clicks on map', async () => {
+  describe('When user clicks on map', () => {
 
-    const testInstance = TestRenderer.create(<App />)
+    const testInstance = TestRenderer.create(
+      <MemoryRouter initialEntries={[ '/' ]}>
+        <Route render={({ location }) => (
+          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
+          )}/>
+        )}/>
+      </MemoryRouter>
+    )
+
     const root = testInstance.root
+
+    const AppComponent = root.findByType(App).instance
     const MapComponent = root.findByType(Map).instance
-    const InputComponent = root.findAllByType(ControlledInput)
+
+    const input = root.findAllByType(Input);
 
     MapComponent.handleMapClick(mockEventStart)
-    // console.log(MapComponent)
     
     it('updates locations object with coordinates', () => {
 
@@ -55,7 +69,8 @@ describe('Start and end points work as expected', () => {
     })
 
     it('updates start input\'s value', () => {
-      const { value: valueStartInput } = InputComponent[0].instance.state
+
+      const { value: valueStartInput } = input[0].props
 
       expect(valueStartInput).toBe(formatCoords(mockEventStart.lngLat))
     })
@@ -65,14 +80,36 @@ describe('Start and end points work as expected', () => {
 
       expect(markers.length).toBe(1)
     })
+
+    it('correctly updates the Url', () => {
+      const { location } = AppComponent.props
+
+      const splitUrl = location.pathname.split('/')
+
+      expect(splitUrl).toHaveLength(4)
+      expect(splitUrl[2]).toBe(formatCoords(mockEventStart.lngLat))
+      expect(splitUrl[3]).toBe('-')
+    })
   })
 
-  describe('When user clicks twice on map', async () => {
+  describe('When user clicks twice on map', () => {
 
-    const testInstance = TestRenderer.create(<App />)
+    const testInstance = TestRenderer.create(
+      <MemoryRouter initialEntries={[ '/' ]}>
+        <Route render={({ location }) => (
+          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
+          )}/>
+        )}/>
+      </MemoryRouter>
+    )
+
     const root = testInstance.root
+
+    const AppComponent = root.findByType(App).instance
     const MapComponent = root.findByType(Map).instance
-    const InputComponent = root.findAllByType(ControlledInput)
+
+    const input = root.findAllByType(Input);
 
     MapComponent.handleMapClick(mockEventStart)
     MapComponent.handleMapClick(mockEventEnd)
@@ -93,8 +130,8 @@ describe('Start and end points work as expected', () => {
     })
 
     it('updates start and end inputs\' value', () => {
-      const { value: valueStartInput } = InputComponent[0].instance.state
-      const { value: valueEndInput } = InputComponent[1].instance.state
+      const { value: valueStartInput } = input[0].props
+      const { value: valueEndInput } = input[1].props
 
       expect(valueStartInput).toBe(formatCoords(mockEventStart.lngLat))
       expect(valueEndInput).toBe(formatCoords(mockEventEnd.lngLat))
@@ -113,6 +150,16 @@ describe('Start and end points work as expected', () => {
         expect(routePath).toEqual(mockRoute)
         done()
       })
+    })
+
+    it('correctly updates the Url', () => {
+      const { location } = AppComponent.props
+
+      const splitUrl = location.pathname.split('/')
+
+      expect(splitUrl).toHaveLength(4)
+      expect(splitUrl[2]).toBe(formatCoords(mockEventStart.lngLat))
+      expect(splitUrl[3]).toBe(formatCoords(mockEventEnd.lngLat))
     })
   })
 })
