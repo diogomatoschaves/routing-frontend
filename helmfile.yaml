@@ -1,0 +1,22 @@
+environments:
+  sandbox:
+  develop:
+
+helmDefaults:
+  tillerNamespace: kube-system
+  force: true
+  recreatePods: true
+  verify: false
+  wait: true
+
+releases:
+  - name: {{ requiredEnv "CI_COMMIT_REF_NAME" }}-{{ requiredEnv "CI_PROJECT_NAME" }}
+    namespace: {{ requiredEnv "CI_COMMIT_REF_NAME" }}-{{ requiredEnv "CI_PROJECT_NAME" }}
+    chart: ./helm/
+    values:
+      - ./helm/environment_variables/{{ .Environment.Name }}.yaml
+      - global:
+         base_url: {{ .Environment.Name }}.otonomousmobility.com
+         image:
+           repository: {{ requiredEnv "IMAGE" }}
+           tag: {{ requiredEnv "VERSION" }}

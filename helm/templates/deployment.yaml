@@ -30,22 +30,12 @@ spec:
 
     spec:
       imagePullSecrets:
-        - name: {{ .Values.global.registry }}
+        - name: {{ .Release.Name }}-dockerconfigjson
       containers:
-        - image: {{ .Values.global.image }}
+        - image: {{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}
           name: react-app
           ports:
             - containerPort: {{ .Values.port }}
-
-          env:
-          - name: REACT_APP_MAPBOX_TOKEN
-            value: pk.eyJ1IjoiZGlvZ29tYXRvc2NoYXZlcyIsImEiOiJjanQ4ZnN6OHAwN3F2M3ltcndlZmdlcDRqIn0.HvTPjIfYeEqK2FT_SMplbQ
-            # valueFrom:
-            #   secretKeyRef:
-            #     key: token
-            #     name: mapbox-key
-          - name: REACT_APP_ROUTE_URL
-            value: https://routing.develop.otonomousmobility.com
 
           envFrom:
             - configMapRef:
