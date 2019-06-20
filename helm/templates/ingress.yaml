@@ -21,7 +21,7 @@ spec:
     - host: {{ .Values.service }}.{{ .Values.global.base_url }}
       http:
         paths:
-          - path: /{{ .Chart.Name }}/
+          - path: /
             backend:
               serviceName: {{ .Release.Name }}-{{ .Chart.Name }}
               servicePort: {{ .Values.port }}
