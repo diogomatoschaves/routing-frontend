@@ -1,133 +1,16 @@
 include:
-  - project: 'infra/gitlab-ci'
-    file: '.otonomousmobility.com.yaml'
-
-variables:
-  SKIP_PREFLIGHT_CHECK: "true"
+  - project: "infra/ci-cd/base"
+    file: ".gitlab-ci.yml"
+  - project: "infra/ci-cd/docker"
+    file: ".gitlab-ci.yml"
+  - project: "infra/ci-cd/tests"
+    file: ".gitlab-ci.yml"
+  - project: "infra/ci-cd/deploy"
+    file: ".gitlab-ci.yml"
+  - project: "infra/ci-cd/nodejs"
+    file: ".gitlab-ci.yml"
+  - project: "infra/ci-cd/sandbox"
+    file: ".gitlab-ci.yml"
 
 lint:
-  stage: test
-  image: node:10-alpine
-  cache:
-    paths:
-      - node_modules/
-  before_script:
-    - npm config set //nexus.mobilityservices.io/repository/npm-das/:_authToken ${NPM_TOKEN} 
-    - npm config set @das:registry https://nexus.mobilityservices.io/repository/npm-das/
-    - npm config set unsafe-perm true
-    - npm i
-  script:
-    - npm run lint
   allow_failure: true
-
-test:
-  stage: test
-  image: node:10-alpine
-  cache:
-    paths:
-      - node_modules/
-  variables:
-    NODE_ENV: test
-    NODE_CONFIG_ENV: test
-  before_script:
-    - npm config set //nexus.mobilityservices.io/repository/npm-das/:_authToken ${NPM_TOKEN}
-    - npm config set @das:registry https://nexus.mobilityservices.io/repository/npm-das/
-      
-    - npm config set unsafe-perm true
-    - npm i
-  script:
-    - npm run test
-  coverage: /^Coverage. ([^%]+)/
-  
-  # disabled jobs
-sast:
-  stage: test
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-terraform:statuscake:backup:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-terraform:statuscake:plan:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-terraform:statuscake:apply:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-terraform:destroy:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-dependency_scanning:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-    
-    
-license_management:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-code_quality:
-  stage: build
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-    
-container_scanning:
-  stage: test
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-wait for previous builds to complete:
-  stage: check
-  script:
-    - echo "disabled"
-  only:
-    - disabled-frontend-job
-
-helm:upgrade:
-  dependencies: []
-  image: registry.mobilityservices.io/infra/images/helm
-  stage: deploy
-  retry: 2
-  environment:
-    name: $CI_COMMIT_REF_NAME
-    url: https://${CI_PROJECT_NAME::-8}.$CI_COMMIT_REF_NAME.otonomousmobility.com/
-  only:
-    - develop
-    - testing
-    - staging
-  script:
-    - echo $BASE_HELM && echo $CI_COMMIT_REF_NAME && echo $IMAGE && echo $CI_PROJECT_NAME
-    # - kubectl -n develop get secret mapbox-key -o yaml
-    - helm dependency update $BASE_HELM || true
-    - helm upgrade --install $HELM_OPTIONS -f $BASE_HELM/$CI_COMMIT_REF_NAME.yaml
-        --namespace $CI_COMMIT_REF_NAME --set image=$IMAGE:$VERSION --version $VERSION
-        --set global.image=$IMAGE:$VERSION $CI_COMMIT_REF_NAME-$CI_PROJECT_NAME $BASE_HELM
-    - kubectl logs -l app.kubernetes.io/name=$CI_COMMIT_REF_NAME-$CI_PROJECT_NAME -n $CI_COMMIT_REF_NAME
