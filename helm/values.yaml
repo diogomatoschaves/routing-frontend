@@ -1,0 +1,8 @@
+# These global values need to be initialized here but will all be replace with values in the profile templates
+global:
+  base_url: default
+  image:
+    repository: default
+    tag: default
+port: 3000
+service: routing-frontend
