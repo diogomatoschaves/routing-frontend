@@ -15,6 +15,7 @@ interface Props {
   routingGraphVisible: boolean,
   polygonsVisible: boolean,
   googleMapsOption: boolean,
+  trafficOption: boolean,
   updateState: UpdateState,
   geography: Geography,
   geographies: Array<Geography>,
@@ -54,7 +55,7 @@ const diameter = 50
 const Panel: any = (props : Props) => {
 
   const { updatePoint, locations, routingGraphVisible, polygonsVisible, googleMapsOption,
-    updateState, geography, geographies, profile, handleShowClick, urlMatchString } = props
+    updateState, geography, geographies, profile, handleShowClick, urlMatchString, trafficOption } = props
 
   return (
     <PanelWrapper >
@@ -101,12 +102,6 @@ const Panel: any = (props : Props) => {
               id={'routingGraphVisible'}
               updateState={updateState}
             />
-            <OptionsSwitch 
-              checked={googleMapsOption}
-              text={'Compare 3rd Party'}
-              id={'googleMapsOption'}
-              updateState={updateState}
-            />
           </Box>
           <Box 
             direction="column" 
@@ -123,6 +118,20 @@ const Panel: any = (props : Props) => {
               <EmptySpace width="40%" position="relative" />
             )}
           </Box>
+        </Box>
+        <Box direction='row' justify='space-around'>
+          <OptionsSwitch 
+            checked={googleMapsOption}
+            text={'Compare 3rd Party'}
+            id={'googleMapsOption'}
+            updateState={updateState}
+          />
+          <OptionsSwitch
+            checked={trafficOption}
+            text={'Traffic'}
+            id={'trafficOption'}
+            updateState={updateState}
+          />
         </Box>
         <Box 
           direction="row"

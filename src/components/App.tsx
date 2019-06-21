@@ -27,13 +27,14 @@ import {
 interface State {
   locations: Array<Location>,
   authorization: string,
-  response: Response,
-  routePath?: Array<Coords2>,
-  duration: number
-  distance: number,
+  response: Response | null,
+  trafficResponse: Response,
+  route: Route
   message?: string | null
   googleMessage?: string | null
   routingGraphVisible?: boolean,
+  googleMapsOption?: boolean,
+  trafficOption?: boolean,
   polygonsVisible?: boolean,
   geography: Geography,
   recenter: boolean,
@@ -111,6 +112,7 @@ class App extends Component<any, State> {
     routingGraphVisible: false,
     polygonsVisible: false,
     googleMapsOption: false,
+    trafficOption: false,
     profile: 'car',
     geography: {
       name: 'Berlin',
@@ -119,10 +121,9 @@ class App extends Component<any, State> {
     },
     recenter: false,
     authorization: '',
-    routePath: [],
-    duration: 0,
-    distance: 0,
+    route: null,
     response: defaultResponse,
+    trafficResponse: defaultResponse,
     locations: [{ 
       name: 'start', 
       marker: 'map marker alternate',
@@ -187,7 +188,17 @@ class App extends Component<any, State> {
 
   componentDidUpdate(prevProps: any, prevState: State) {
 
-    const { locations, authorization, response, profile, googleMapsOption, google } = this.state
+    const { 
+      locations, 
+      authorization, 
+      response, 
+      profile, 
+      googleMapsOption, 
+      google, 
+      trafficOption, 
+      trafficResponse 
+    } = this.state
+
     const { match, urlMatchString, history } = this.props
     const { requiredParams } = this.props.urlParams
 
@@ -208,6 +219,19 @@ class App extends Component<any, State> {
     if (prevState.response !== response) {
       if (Object.keys(response).includes('code') && response.code == 'Ok') {
         const leg = response.routes[0].legs[0]
+        const route = {
+          routePath: leg.geometry,
+          duration: leg.duration,
+          distance: leg.distance
+        }
+        
+        this.setState({ route })
+      }
+    }
+
+    if (prevState.trafficResponse !== trafficResponse) {
+      if (Object.keys(response).includes('code') && response.code == 'Ok') {
+        const leg = response.routes[0].legs[0]
         const routePath = leg.geometry
         const duration = leg.duration
         const distance = leg.distance
@@ -219,7 +243,7 @@ class App extends Component<any, State> {
     if (prevProps.match.params !== match.params && Object.keys(match.params).length === 3) {
       const { locations: urlLocations, profile: urlProfile } = 
         this.getProfileLocations(locations, match.params, requiredParams)
-      this.getRoute(urlLocations, urlProfile, authorization, googleMapsOption, google)
+      this.getRoute(urlLocations, urlProfile, authorization, googleMapsOption, google, trafficOption)
     }
   }
 
@@ -241,7 +265,14 @@ class App extends Component<any, State> {
     })
   }
 
-  getRoute = (locations: Array<Location>, profile: string, authorization: string, googleMapsOption: boolean, google: any) => {
+  getRoute = (
+    locations: Array<Location>, 
+    profile: string, 
+    authorization: string, 
+    googleMapsOption: boolean,
+    google: any,
+    trafficOption: boolean
+    ) => {
     if (locations.length >= 2 && !locations.some((el: Location) => (!el.lat || !el.lng))) {
       const body = getRequestBody(locations)
 
@@ -254,11 +285,16 @@ class App extends Component<any, State> {
         .then((googleRoute: Route) => this.setState({ googleRoute }))
         .catch(() => this.setState({ googleMessage: 'There was an error fetching the google route. Try again later' }))
       }
+
+      if (trafficOption && profile === 'car') {
+        routingApi('car-traffic', authorization, body)
+        .then((response: Response) => this.setState({ trafficResponse: response }))
+        .catch(() => this.setState({ message: 'There was an error fetching the route. Try again later' }))
+      }
     }
   }
 
   addGoogleObject = (windowProp: boolean) => {
-
     if (!windowProp && !window.google) {
       const script = document.createElement('script');
       script.type = 'text/javascript';
