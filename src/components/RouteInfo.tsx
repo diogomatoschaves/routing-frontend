@@ -15,6 +15,7 @@ interface Props {
   top: string,
   right: string,
   title: string,
+  subTitle?: string,
   textColor: string
   iconColor: string
   statsColor: string
@@ -23,7 +24,7 @@ interface Props {
 const StyledHeader = styled(Header)`
   &.ui.header {
     color: ${props => props.overridecolor ? props.overridecolor : 'black'};
-    margin: 10px 0;
+    margin: ${props => props.noMargin ? 0 : props.noMarginBottom ? '10px 0 0 0' : '10px 0'};
   }
 `
 
@@ -35,7 +36,7 @@ const StyledStatistic = styled(Statistic)`
 
 const diameter = 50
 
-const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsColor } : Props) => {
+const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsColor, subTitle } : Props) => {
 
   const [durationValue, durationLabel] = computeDuration(route.duration)
   const [distanceValue, distanceLabel] = computeDistance(route.distance)
@@ -49,7 +50,8 @@ const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsC
       width="200px"
     >
       <Box direction="column" justify="space-between">
-        <StyledHeader overridecolor={textColor}>{title}</StyledHeader>
+        <StyledHeader noMarginBottom overridecolor={textColor}>{title}</StyledHeader>
+        {subTitle && <StyledHeader size="small" overridecolor={iconColor}>{subTitle}</StyledHeader>}
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
           <Box direction="row" width="40%" justify="center">
             <BackgroundIcon 
@@ -61,7 +63,7 @@ const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsC
               margin={"0 7px 0 0"}
             />
           </Box>
-          <Box direction="row" width="60%">
+          <Box direction="row" width="60%" justify="center">
             <StyledStatistic overridecolor={statsColor} size={"small"} style={{ margin: 0 }}>
               <Statistic.Value>
                 {durationValue}
@@ -83,7 +85,7 @@ const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsC
               margin={"0 7px 0 0"}
             />
           </Box>
-          <Box direction="row" width="60%">
+          <Box direction="row" width="60%" justify="center">
           <StyledStatistic overridecolor={statsColor} size={'small'} style={{ margin: 0 }}>
               <Statistic.Value>
                 {distanceValue}
