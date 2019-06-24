@@ -24,13 +24,14 @@ interface Props {
   checked: boolean,
   text: string,
   id: string,
-  updateState: UpdateState
+  updateState: UpdateState,
+  width?: string
 }
 
 
-const OptionsSwitch = ({ checked, text, id, updateState }: Props) => {
+const OptionsSwitch = ({ checked, text, id, updateState, width }: Props) => {
   return (
-    <Box direction="row" height="50px">
+    <Box direction="row" height="50px" width={width ? width : undefined}>
       <StyledCheckbox 
         id={id}
         className="custom-class"
