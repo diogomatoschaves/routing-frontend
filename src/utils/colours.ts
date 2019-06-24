@@ -37,11 +37,14 @@ export const ROUTING_SERVICE_STATS = PETROL_5
 
 // export const THIRD_PARTY_STATS = '#E03997'
 export const THIRD_PARTY_STATS = '#B84843'
-// export const THIRD_PARTY_STATS = '#000000'
-// export const THIRD_PARTY_COLOR = lightenDarkenColor(THIRD_PARTY_STATS, -60)
 export const THIRD_PARTY_COLOR = '#C2292A'
-// export const THIRD_PARTY_POLYLINE = lightenDarkenColor(THIRD_PARTY_STATS, 40)
 export const THIRD_PARTY_POLYLINE = '#FF8E8E'
+
+export const TRAFFIC_PARTY_STATS = '#007841'
+export const TRAFFIC_PARTY_COLOR = '#004525'
+export const TRAFFIC_PARTY_POLYLINE = '#00C469'
+
+
 
 export const colors: Dict = {
   '90+': '#9e0142', // purple

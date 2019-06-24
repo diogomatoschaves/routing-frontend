@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-iwsKbI hlsNJJ"
+  className="sc-iwsKbI dNAtZr"
 >
   <div
     className="sc-bdVaJa jsucjq"
@@ -109,7 +109,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-EHOje jROHdq"
+        className="ui fluid input sc-EHOje egxHjk"
       >
         <input
           onBlur={[Function]}
@@ -146,7 +146,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-EHOje jROHdq"
+        className="ui fluid input sc-EHOje egxHjk"
       >
         <input
           onBlur={[Function]}
@@ -230,36 +230,6 @@ exports[`expect to render Panel component 1`] = `
             Routing Graph
           </label>
         </div>
-        <div
-          className="sc-bdVaJa ffZrYn"
-          direction="row"
-          height="50px"
-        >
-          <div
-            className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
-            onChange={[Function]}
-            onClick={[Function]}
-            onMouseDown={[Function]}
-            onMouseUp={[Function]}
-          >
-            <input
-              checked={false}
-              className="hidden"
-              id="googleMapsOption"
-              readOnly={true}
-              tabIndex={0}
-              type="checkbox"
-            />
-            <label
-              htmlFor="googleMapsOption"
-            />
-          </div>
-          <label
-            className="sc-bZQynM bhGoVA"
-          >
-            Compare 3rd Party
-          </label>
-        </div>
       </div>
       <div
         className="sc-bdVaJa lcGQXu"
@@ -270,6 +240,73 @@ exports[`expect to render Panel component 1`] = `
           className="sc-bxivhb edpdVn"
           width="40%"
         />
+      </div>
+    </div>
+    <div
+      className="sc-bdVaJa bKXYdD"
+      direction="row"
+    >
+      <div
+        className="sc-bdVaJa dbyCSG"
+        direction="row"
+        height="50px"
+        width="65%"
+      >
+        <div
+          className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+          onChange={[Function]}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseUp={[Function]}
+        >
+          <input
+            checked={false}
+            className="hidden"
+            id="googleMapsOption"
+            readOnly={true}
+            tabIndex={0}
+            type="checkbox"
+          />
+          <label
+            htmlFor="googleMapsOption"
+          />
+        </div>
+        <label
+          className="sc-bZQynM bhGoVA"
+        >
+          Compare Google Maps
+        </label>
+      </div>
+      <div
+        className="sc-bdVaJa gpVhCu"
+        direction="row"
+        height="50px"
+        width="35%"
+      >
+        <div
+          className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+          onChange={[Function]}
+          onClick={[Function]}
+          onMouseDown={[Function]}
+          onMouseUp={[Function]}
+        >
+          <input
+            checked={false}
+            className="hidden"
+            id="trafficOption"
+            readOnly={true}
+            tabIndex={0}
+            type="checkbox"
+          />
+          <label
+            htmlFor="trafficOption"
+          />
+        </div>
+        <label
+          className="sc-bZQynM bhGoVA"
+        >
+          Traffic
+        </label>
       </div>
     </div>
     <div

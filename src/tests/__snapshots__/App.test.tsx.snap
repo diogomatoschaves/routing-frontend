@@ -5,7 +5,7 @@ exports[`expect to render App component 1`] = `
   className="sc-chPdSV jYcmlt"
 >
   <div
-    className="ui segment pushable sc-kgoBCf loDXNK"
+    className="ui segment pushable sc-kgoBCf iQqiWl"
   >
     <div
       className="ui vertical labeled icon ui overlay left very wide sidebar menu"
@@ -14,9 +14,54 @@ exports[`expect to render App component 1`] = `
         className="sc-bwzfXH dlzeER"
       >
         <div
-          className="sc-bwzfXH hqmSIq"
+          className="sc-bwzfXH hCLfPE"
           direction="row"
         >
+          <div
+            className="sc-bwzfXH fiQaAu"
+            width="45%"
+          >
+            <div
+              className="sc-bwzfXH dfIKGx"
+              direction="row"
+              height="45px"
+            >
+              <div
+                className="sc-bwzfXH gmInAj"
+                onClick={[Function]}
+                width="10%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="grey angle left large icon sc-dnqmqq bPwZQa"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="sc-bwzfXH gCPlrj"
+                width="60%"
+              >
+                <div
+                  className="ui large label sc-iwsKbI boLuZU"
+                  inverted={true}
+                  onClick={[Function]}
+                >
+                  No Traffic
+                </div>
+              </div>
+              <div
+                className="sc-bwzfXH gmInAj"
+                onClick={[Function]}
+                width="10%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="grey angle right large icon sc-dnqmqq bPwZQa"
+                  onClick={[Function]}
+                />
+              </div>
+            </div>
+          </div>
           <button
             className="ui icon button"
             onClick={[Function]}
@@ -107,9 +152,8 @@ exports[`expect to render App component 1`] = `
     <div
       className="pusher"
     >
-      0
       <div
-        className="sc-gZMcBi KzVVe"
+        className="sc-gZMcBi jAREqb"
       >
         <div
           className="sc-bwzfXH islmOK"
@@ -216,7 +260,7 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
             <div
-              className="ui fluid input sc-bZQynM iPUAKv"
+              className="ui fluid input sc-bZQynM euAhRA"
             >
               <input
                 onBlur={[Function]}
@@ -253,7 +297,7 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
             <div
-              className="ui fluid input sc-bZQynM iPUAKv"
+              className="ui fluid input sc-bZQynM euAhRA"
             >
               <input
                 onBlur={[Function]}
@@ -337,36 +381,6 @@ exports[`expect to render App component 1`] = `
                   Routing Graph
                 </label>
               </div>
-              <div
-                className="sc-bwzfXH cUgWoN"
-                direction="row"
-                height="50px"
-              >
-                <div
-                  className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
-                  onChange={[Function]}
-                  onClick={[Function]}
-                  onMouseDown={[Function]}
-                  onMouseUp={[Function]}
-                >
-                  <input
-                    checked={false}
-                    className="hidden"
-                    id="googleMapsOption"
-                    readOnly={true}
-                    tabIndex={0}
-                    type="checkbox"
-                  />
-                  <label
-                    htmlFor="googleMapsOption"
-                  />
-                </div>
-                <label
-                  className="sc-gzVnrw bulIkC"
-                >
-                  Compare 3rd Party
-                </label>
-              </div>
             </div>
             <div
               className="sc-bwzfXH jZLqJu"
@@ -377,6 +391,73 @@ exports[`expect to render App component 1`] = `
                 className="sc-ifAKCX hUGWRE"
                 width="40%"
               />
+            </div>
+          </div>
+          <div
+            className="sc-bwzfXH JRVD"
+            direction="row"
+          >
+            <div
+              className="sc-bwzfXH eoImHn"
+              direction="row"
+              height="50px"
+              width="65%"
+            >
+              <div
+                className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                onChange={[Function]}
+                onClick={[Function]}
+                onMouseDown={[Function]}
+                onMouseUp={[Function]}
+              >
+                <input
+                  checked={false}
+                  className="hidden"
+                  id="googleMapsOption"
+                  readOnly={true}
+                  tabIndex={0}
+                  type="checkbox"
+                />
+                <label
+                  htmlFor="googleMapsOption"
+                />
+              </div>
+              <label
+                className="sc-gzVnrw bulIkC"
+              >
+                Compare Google Maps
+              </label>
+            </div>
+            <div
+              className="sc-bwzfXH cQpeMM"
+              direction="row"
+              height="50px"
+              width="35%"
+            >
+              <div
+                className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                onChange={[Function]}
+                onClick={[Function]}
+                onMouseDown={[Function]}
+                onMouseUp={[Function]}
+              >
+                <input
+                  checked={false}
+                  className="hidden"
+                  id="trafficOption"
+                  readOnly={true}
+                  tabIndex={0}
+                  type="checkbox"
+                />
+                <label
+                  htmlFor="trafficOption"
+                />
+              </div>
+              <label
+                className="sc-gzVnrw bulIkC"
+              >
+                Traffic
+              </label>
             </div>
           </div>
           <div

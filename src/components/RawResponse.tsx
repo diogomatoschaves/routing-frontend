@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
+import ProfileToggler from './ProfileToggler'
 import { Button, Icon, TextArea, Form, Header } from 'semantic-ui-react';
 import { Box } from '../styledComponents';
-import { Response, Body } from '../types'
+import { Response, Body, UpdateState } from '../types'
 import { MAIN_PETROL, PETROL_3 } from '../utils/colours'
 
 
@@ -10,7 +11,9 @@ interface Props {
   handleHideClick: () => void,
   response: Response,
   body: Body | undefined,
-  endpoint: string
+  endpoint: string,
+  updateState: UpdateState,
+  responseOption: string
 }
 
 interface State {
@@ -93,12 +96,19 @@ export default class RawResponse extends Component<Props, State> {
 
   render() {
 
-    const { handleHideClick, endpoint } = this.props
+    const { handleHideClick, endpoint, updateState, responseOption } = this.props
     const { bodyValue, responseValue } = this.state
 
     return (
       <Box>
-        <Box padding="15px 15px 0 0" direction="row" justify="flex-end">
+        <Box padding="15px 15px 0 0" direction="row" justify="space-between">
+          <Box width="45%" padding="0 0 0 10%">
+            <ProfileToggler 
+              updateState={updateState}
+              id={'responseOption'}
+              responseOption={responseOption}
+            />
+          </Box>
           <Button icon onClick={handleHideClick}>
             <Icon size="big" name='chevron left' />
           </Button>

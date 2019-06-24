@@ -50,7 +50,7 @@ export type Body = {
   reportNodes?: true
 }
 export type Route = {
-  distance: number,
-  duration: number,
-  routePath: Array<Coords2>
+  distance: number | null,
+  duration: number | null,
+  routePath: Array<Coords2> | null
 }

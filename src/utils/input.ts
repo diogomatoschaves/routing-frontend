@@ -12,6 +12,12 @@ export const defaultResponse = {
   locations: []
 }
 
+export const defaultRoute = {
+  duration: null,
+  distance: null,
+  routePath: null
+}
+
 export const exampleLine = [
   {"lon":13.41438,"lat":52.532085},
   {"lon":13.415716,"lat":52.531629},
@@ -58,7 +64,7 @@ export const routeLineSettings = {
   },
   'paint': {
     'line-color': POLYLINE_COLOR,
-    'line-width': 5,
+    'line-width': 6.5,
     'line-opacity': 0.45
   }
 }
