@@ -6,10 +6,12 @@ import { UpdateState, Geography } from '../types'
 import { PETROL_5 } from '../utils/colours'
 
 interface Props {
-  geography: Geography, 
-  geographies: Array<Geography>, 
-  width?: string,
-  updateState: UpdateState,
+  geography?: Geography
+  geographies?: Array<Geography>
+  width?: string
+  updateState: UpdateState
+  responseOption?: string,
+  id: string
 }
 
 const StyledIcon = styled(Icon)`
@@ -24,34 +26,66 @@ const StyledLabel = styled(Label)`
   }
 `
 
-const getNewProfile = (geographies: Array<Geography>, geography: Geography, left: boolean) => {
+const getNewProfile = (
+  geographies: Array<Geography>,
+  geography: Geography,
+  left: boolean
+) => {
   const index = geographies.findIndex(el => el.name === geography.name)
   const lastIndex = geographies.length - 1
-  return left ? index === 0 ? geographies[lastIndex] : geographies[index - 1] : 
-    index === lastIndex ? geographies[0] : geographies[index + 1]
+  return left
+    ? index === 0
+      ? geographies[lastIndex]
+      : geographies[index - 1]
+    : index === lastIndex
+    ? geographies[0]
+    : geographies[index + 1]
 }
 
-const ProfileToggler = ({ geography, geographies, width, updateState }: Props) => {
+const names: any= {
+  normal: 'No Traffic',
+  traffic: 'Traffic'
+}
+
+const ProfileToggler = ({ geography, geographies, width, updateState, responseOption, id }: Props) => {
   return (
-    <Box 
-      direction="row" 
-      justify="space-around" 
-      padding="0 0 0 0" 
+    <Box
+      direction="row"
+      justify="space-around"
+      padding="0 0 0 0"
       height="45px"
       width={width}
     >
-      <Box 
-        width='10%' 
-        onClick={() => updateState('geography', getNewProfile(geographies, geography, true))}
+      <Box
+        width="10%"
+        onClick={() => {
+          updateState(
+            id, 
+            geographies && geography
+              ? getNewProfile(geographies, geography, true) : 
+              responseOption === 'normal' ? 'traffic' : 'normal'
+          )
+        }}
       >
-        <StyledIcon color="grey" size="large" name={'angle left'}/>
+        <StyledIcon color="grey" size="large" name={'angle left'} />
       </Box>
-      <Box width='60%'><StyledLabel onClick={() => updateState('recenter', true)} inverted size="large">{geography.name}</StyledLabel></Box>
-      <Box 
-        width='10%'
-        onClick={() => updateState('geography', getNewProfile(geographies, geography, false))}
+      <Box width="60%">
+        <StyledLabel onClick={() => updateState('recenter', true)} inverted size="large">
+          {geography ? geography.name : responseOption ? names[responseOption] : responseOption}
+        </StyledLabel>
+      </Box>
+      <Box
+        width="10%"
+        onClick={() => {
+          updateState(
+            id, 
+            geographies && geography
+              ? getNewProfile(geographies, geography, false) : 
+              responseOption === 'normal' ? 'traffic' : 'normal'
+          )
+        }}
       >
-        <StyledIcon color="grey" size="large" name={'angle right'}/>
+        <StyledIcon color="grey" size="large" name={'angle right'} />
       </Box>
     </Box>
   )

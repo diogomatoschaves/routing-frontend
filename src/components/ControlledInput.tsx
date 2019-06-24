@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Input } from 'semantic-ui-react'
-import { generatePath, matchPath, withRouter, RouteComponentProps } from 'react-router-dom'
+import {
+  generatePath,
+  matchPath,
+  withRouter,
+  RouteComponentProps
+} from 'react-router-dom'
 import { UpdatePoint, UpdateColor, Coords } from '../types'
 import { formatCoords, splitCoords, getPath } from '../utils/functions'
 
-
 interface Props {
-  updatePoint: UpdatePoint,
-  updateColor: UpdateColor,
-  rowKey: string,
-  index: number,
-  coords: Coords,
-  placeholder: string,
-  history?: any,
-  location?: any,
+  updatePoint: UpdatePoint
+  updateColor: UpdateColor
+  rowKey: string
+  index: number
+  coords: Coords
+  placeholder: string
+  history?: any
+  location?: any
   urlMatchString: string
 }
 
@@ -23,7 +27,6 @@ interface State {
 }
 
 const StyledInput: typeof Input = styled(Input as any)`
-
   width: 100%;
 
   &.ui.input > input {
@@ -41,7 +44,6 @@ const StyledInput: typeof Input = styled(Input as any)`
 ` as any
 
 class ControlledInput extends Component<Props & RouteComponentProps, State> {
-
   state = {
     value: ''
   }
@@ -60,28 +62,20 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const { index, rowKey, updatePoint, updateColor, coords: prevCoords, history, location, urlMatchString } = this.props
+    const {
+      index,
+      rowKey,
+      updatePoint,
+      updateColor,
+      coords: prevCoords,
+      history,
+      location,
+      urlMatchString
+    } = this.props
 
     updateColor()
 
     const coords = splitCoords(value)
-
-    // const pathToMatch = getPath(location.pathname)
-
-    // const params = matchPath(location.pathname, {
-    //   path: pathToMatch,
-    //   exact: false,
-    //   strict: false
-    // }) || { params: {}}
-
-    // if (coords) {
-    //   const path = generatePath(pathToMatch, {
-    //     ...params.params,
-    //     [rowKey]: formatCoords(coords)
-    //   })
-
-    //   history.push(path)
-    // }
 
     if (coords && formatCoords(prevCoords) !== formatCoords(coords)) {
       updatePoint(index, coords)
@@ -95,21 +89,23 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     this.setState({ value: '' }, () => updatePoint(index, { lat: null, lng: null }))
   }
 
-  public render(){
-
+  public render() {
     const { value } = this.state
     const { placeholder, updateColor } = this.props
 
     return (
-      <StyledInput 
+      <StyledInput
         fluid
-        value={value} 
+        value={value}
         onChange={(e, { value }) => this.handleChange(value)}
         onBlur={this.handleBlur}
         onFocus={updateColor}
         placeholder={placeholder}
-        icon={value !== '' ? 
-        { name: 'remove circle', link: true, onClick: this.cleanInput } : false}
+        icon={
+          value !== ''
+            ? { name: 'remove circle', link: true, onClick: this.cleanInput }
+            : false
+        }
       />
     )
   }

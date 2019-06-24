@@ -9,18 +9,18 @@ import ProfileToggler from './ProfileToggler'
 import { UpdatePoint, UpdateState, Location, Geography } from '../types'
 
 interface Props {
-  updatePoint: UpdatePoint,
-  handleShowClick: () => void,
-  locations: Array<Location>,
-  routingGraphVisible: boolean,
-  polygonsVisible: boolean,
-  googleMapsOption: boolean,
-  trafficOption: boolean,
-  updateState: UpdateState,
-  geography: Geography,
-  geographies: Array<Geography>,
-  profile: string,
-  duration: number,
+  updatePoint: UpdatePoint
+  handleShowClick: () => void
+  locations: Array<Location>
+  routingGraphVisible: boolean
+  polygonsVisible: boolean
+  googleMapsOption: boolean
+  trafficOption: boolean
+  updateState: UpdateState
+  geography: Geography
+  geographies: Array<Geography>
+  profile: string
+  duration: number
   urlMatchString: string
 }
 
@@ -38,7 +38,7 @@ const PanelWrapper: any = styled.div`
   background: rgba(255, 255, 255, 0.92);
   /* border: 1px solid rgb(205, 205, 205); */
   border-radius: 10px;
-  box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.5);
+  box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);
 `
 
 const StyledDivider = styled(Divider)`
@@ -52,16 +52,27 @@ const StyledDivider = styled(Divider)`
 
 const diameter = 50
 
-const Panel: any = (props : Props) => {
-
-  const { updatePoint, locations, routingGraphVisible, polygonsVisible, googleMapsOption,
-    updateState, geography, geographies, profile, handleShowClick, urlMatchString, trafficOption } = props
+const Panel: any = (props: Props) => {
+  const {
+    updatePoint,
+    locations,
+    routingGraphVisible,
+    polygonsVisible,
+    googleMapsOption,
+    updateState,
+    geography,
+    geographies,
+    profile,
+    handleShowClick,
+    urlMatchString,
+    trafficOption
+  } = props
 
   return (
-    <PanelWrapper >
+    <PanelWrapper>
       <Box direction="column" justify="flex-start">
         <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
-          <ProfilesRow diameter={diameter} updateState={updateState} profile={profile}/>
+          <ProfilesRow diameter={diameter} updateState={updateState} profile={profile} />
         </Box>
         <StyledDivider />
         {locations.map((item: Location, index: number) => {
@@ -70,77 +81,61 @@ const Panel: any = (props : Props) => {
               key={index}
               rowKey={item.name}
               index={index}
-              coords={{lat: item.lat, lng: item.lng}}
+              coords={{ lat: item.lat, lng: item.lng }}
               placeholder={item.placeholder}
-              iconName={item.marker} 
+              iconName={item.marker}
               updatePoint={updatePoint}
               urlMatchString={urlMatchString}
             />
           )
         })}
         <StyledDivider />
-        <Box 
-          direction="row" 
-          justify="space-between" 
-          padding="0 0 0 0" 
-        >
-          <Box 
-            direction="column" 
-            justify="flex-start" 
-            padding="0 0 0 0"
-            width="50%"
-          >
-            <OptionsSwitch 
+        <Box direction="row" justify="space-between" padding="0 0 0 0">
+          <Box direction="column" justify="flex-start" padding="0 0 0 0" width="50%">
+            <OptionsSwitch
               checked={polygonsVisible}
               text={'Covered Areas'}
               id={'polygonsVisible'}
               updateState={updateState}
             />
-            <OptionsSwitch 
+            <OptionsSwitch
               checked={routingGraphVisible}
               text={'Routing Graph'}
               id={'routingGraphVisible'}
               updateState={updateState}
             />
           </Box>
-          <Box 
-            direction="column" 
-            padding="0 0 0 0"
-            width="40%"
-          >
+          <Box direction="column" padding="0 0 0 0" width="40%">
             {routingGraphVisible || polygonsVisible ? (
-              <ProfileToggler 
-                geography={geography} 
-                geographies={geographies} 
+              <ProfileToggler
+                geography={geography}
+                geographies={geographies}
                 updateState={updateState}
+                id='geography'
               />
             ) : (
               <EmptySpace width="40%" position="relative" />
             )}
           </Box>
         </Box>
-        <Box direction='row' justify='space-around'>
-          <OptionsSwitch 
+        <Box direction="row" justify="space-around">
+          <OptionsSwitch
             checked={googleMapsOption}
-            text={'Compare 3rd Party'}
+            text={'Compare Google Maps'}
             id={'googleMapsOption'}
             updateState={updateState}
+            width={'65%'}
           />
           <OptionsSwitch
             checked={trafficOption}
             text={'Traffic'}
             id={'trafficOption'}
             updateState={updateState}
+            width={'35%'}
           />
         </Box>
-        <Box 
-          direction="row"
-          justify="flex-start" 
-          padding="10px 0 10px 0"
-        >
-          <Button onClick={handleShowClick}>
-            See response
-          </Button>
+        <Box direction="row" justify="flex-start" padding="10px 0 10px 0">
+          <Button onClick={handleShowClick}>See response</Button>
         </Box>
       </Box>
     </PanelWrapper>
