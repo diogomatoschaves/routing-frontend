@@ -3,7 +3,7 @@ import mockGoogleResponse from './mockGoogleResponse'
 
 export const routingApi = jest.fn()
   .mockImplementation((profile, authorization, locations) => {
-    return profile === 'car' ? Promise.resolve(mockCarResponse) : Promise.resolve(mockFootResponse) 
+    return profile === 'car' || profile === 'car-traffic' ? Promise.resolve(mockCarResponse) : Promise.resolve(mockFootResponse) 
   })
 
 export const googleDirections = jest.fn()
