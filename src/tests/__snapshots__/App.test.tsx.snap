@@ -425,7 +425,7 @@ exports[`expect to render App component 1`] = `
               <label
                 className="sc-gzVnrw bulIkC"
               >
-                Compare Google Maps
+                Google Maps
               </label>
             </div>
             <div
