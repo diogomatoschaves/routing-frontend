@@ -274,7 +274,7 @@ exports[`expect to render Panel component 1`] = `
         <label
           className="sc-bZQynM bhGoVA"
         >
-          Compare Google Maps
+          Google Maps
         </label>
       </div>
       <div
