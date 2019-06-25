@@ -11,19 +11,6 @@ const locations = [{
   lon: 13.346008562133875
 }] as any
 
-// window.fetch = jest.fn().mockImplementation(() => ({
-//   status: 200,
-//   json: () => Promise.resolve(mockServerResponse)
-// }))
-
-// window.fetch = jest.fn().mockImplementation((geography, authorization, locations) => {
-//   console.log('mock api fetch was called')
-//   return {
-//     status: 200,
-//     json: () => new Promise((resolve, reject) => resolve(mockServerResponse))
-//   }
-// })
-
 describe('Api Calls', () => {
   
   describe('routingApi with car profile', () => {
