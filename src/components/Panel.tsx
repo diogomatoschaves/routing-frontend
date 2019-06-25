@@ -121,7 +121,7 @@ const Panel: any = (props: Props) => {
         <Box direction="row" justify="space-around">
           <OptionsSwitch
             checked={googleMapsOption}
-            text={'Compare Google Maps'}
+            text={'Google Maps'}
             id={'googleMapsOption'}
             updateState={updateState}
             width={'65%'}
