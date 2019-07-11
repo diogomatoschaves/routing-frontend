@@ -26,17 +26,25 @@ const mockEnd = {
 
 const urlMatchString = '/:profile/:start/:end'
 
+const getTestApp = (initialEntries: Array<string> = ['/'], loadedProp: boolean = false)=> TestRenderer.create(
+  <MemoryRouter initialEntries={initialEntries}>
+    <Route render={({ location }) => (
+      <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+        <App 
+          location={location} 
+          history={history} 
+          match={match} 
+          urlMatchString={urlMatchString}
+          loadedProp={loadedProp}
+        />
+      )}/>
+    )}/>
+  </MemoryRouter>
+)
+
 describe('App starting with blank URL', () => {
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp()
 
   const root = testInstance.root
 
@@ -57,15 +65,7 @@ describe('App starting with blank URL', () => {
 
 describe('App starting with invalid URL', () => {
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/car/kdfj/35' ]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp(['/car/kdfj/35'])
 
   const root = testInstance.root
 
@@ -89,21 +89,7 @@ describe('App starting with valid URL', () => {
 
   const mockUrl = `/${mockProfile}/${formatCoords(mockStart)}/${formatCoords(mockEnd)}`
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[mockUrl]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App 
-            location={location} 
-            history={history} 
-            match={match} 
-            urlMatchString={urlMatchString}
-            loadedProp={true}
-          />
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp([mockUrl], true)
 
   const root = testInstance.root
 
@@ -145,21 +131,7 @@ describe('App starting with valid URL, with foot profile', () => {
 
   const mockUrl = `/${mockProfile}/${formatCoords(mockStart)}/${formatCoords(mockEnd)}`
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[mockUrl]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App 
-            location={location} 
-            history={history} 
-            match={match} 
-            urlMatchString={urlMatchString}
-            loadedProp={true}
-          />
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp([mockUrl], true)
 
   const root = testInstance.root
 

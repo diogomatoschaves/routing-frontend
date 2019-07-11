@@ -1,3 +1,4 @@
+
 export const mockCarResponse = {
   code: 'Ok',
   routes: [
@@ -25,8 +26,20 @@ export const mockCarResponse = {
     }
   ],
   locations: [
-    { snapDistance: 0.45025736761464097, location: { lon: 13.389869, lat: 52.510348 } },
-    { snapDistance: 12.073291914193243, location: { lon: 13.39114, lat: 52.510425 } }
+    { 
+      snapDistance: 0.45025736761464097, 
+      location: { 
+        lon: 13.389869, 
+        lat: 52.510348 
+      } 
+    },
+    { 
+      snapDistance: 12.073291914193243, 
+      location: { 
+        lon: 13.39114, 
+        lat: 52.510425 
+      } 
+    }
   ]
 }
 

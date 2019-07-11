@@ -2,11 +2,38 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-chPdSV jYcmlt"
+  className="sc-eNQAEJ uWciK"
 >
   <div
-    className="ui segment pushable sc-kgoBCf iQqiWl"
+    className="ui segment pushable sc-hMqMXs cuYCwh"
   >
+    <div
+      className="sc-bwzfXH sc-kEYyzF brCCzS"
+      direction="row"
+    >
+      <div
+        className="sc-ifAKCX sc-kkGfuU cZBSZz"
+        height="10%"
+        width={0}
+      />
+      <button
+        className="ui icon button options-button sc-iAyFgw fIhOVd"
+        onClick={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+      >
+        <i
+          aria-hidden="true"
+          className="chevron right big icon scale visible transition"
+          onClick={[Function]}
+          style={
+            Object {
+              "animationDuration": undefined,
+            }
+          }
+        />
+      </button>
+    </div>
     <div
       className="ui vertical labeled icon ui overlay left very wide sidebar menu"
     >
@@ -14,12 +41,83 @@ exports[`expect to render App component 1`] = `
         className="sc-bwzfXH dlzeER"
       >
         <div
-          className="sc-bwzfXH hCLfPE"
+          className="sc-bwzfXH tInNM"
           direction="row"
+          height="70px"
         >
           <div
-            className="sc-bwzfXH fiQaAu"
-            width="45%"
+            className="sc-bwzfXH fjnmXX"
+            width="35%"
+          >
+            <div
+              aria-expanded={false}
+              className="ui fluid selection dropdown sc-ckVGcZ fLBywv"
+              id="selectedService"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseDown={[Function]}
+              role="listbox"
+              tabIndex={0}
+            >
+              <div
+                aria-live="polite"
+                className="text"
+                role="alert"
+              >
+                Route
+              </div>
+              <i
+                aria-hidden="true"
+                className="dropdown icon"
+                onClick={[Function]}
+              />
+              <div
+                className="menu transition"
+              >
+                <div
+                  aria-checked={true}
+                  aria-selected={true}
+                  className="active selected item"
+                  onClick={[Function]}
+                  role="option"
+                  style={
+                    Object {
+                      "pointerEvents": "all",
+                    }
+                  }
+                >
+                  <span
+                    className="text"
+                  >
+                    Route
+                  </span>
+                </div>
+                <div
+                  aria-checked={false}
+                  aria-selected={false}
+                  className="item"
+                  onClick={[Function]}
+                  role="option"
+                  style={
+                    Object {
+                      "pointerEvents": "all",
+                    }
+                  }
+                >
+                  <span
+                    className="text"
+                  >
+                    Match
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="sc-bwzfXH cfLeIj"
+            width="35%"
           >
             <div
               className="sc-bwzfXH dfIKGx"
@@ -43,7 +141,6 @@ exports[`expect to render App component 1`] = `
               >
                 <div
                   className="ui large label sc-iwsKbI boLuZU"
-                  inverted={true}
                   onClick={[Function]}
                 >
                   No Traffic
@@ -62,29 +159,19 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
           </div>
-          <button
-            className="ui icon button"
-            onClick={[Function]}
-          >
-            <i
-              aria-hidden="true"
-              className="chevron left big icon"
-              onClick={[Function]}
-            />
-          </button>
         </div>
         <div
           className="sc-bwzfXH kwvKmS"
           width="80%"
         >
           <div
-            className="ui header sc-kAzzGY fwDpBk"
+            className="ui header sc-dxgOiQ hGOPWA"
             overridecolor="#00677f"
           >
             Request Endpoint
           </div>
           <form
-            className="ui form sc-cSHVUG jrcJLi"
+            className="ui form sc-kpOJdX hKgGbp"
             focuscolor="#5097ab"
             onSubmit={[Function]}
           >
@@ -104,23 +191,80 @@ exports[`expect to render App component 1`] = `
           width="80%"
         >
           <div
-            className="ui header sc-kAzzGY fwDpBk"
-            overridecolor="#00677f"
+            className="sc-bwzfXH ewJcDl"
+            direction="row"
           >
-            Request Body
+            <div
+              className="sc-bwzfXH ewJcDl"
+              direction="row"
+            >
+              <div
+                className="ui header sc-dxgOiQ hGOPWA"
+                overridecolor="#00677f"
+              >
+                Request Body
+              </div>
+              <button
+                className="ui button body-textarea sc-jKJlTe hPSlYG"
+                id="bodyEdit"
+                marginleft="10px"
+                onClick={[Function]}
+              >
+                Edit
+              </button>
+            </div>
           </div>
           <form
-            className="ui form sc-cSHVUG jrcJLi"
+            className="ui form sc-kGXeez brHMMD"
+            color="rgb(100, 100, 100)"
             focuscolor="#5097ab"
             onSubmit={[Function]}
           >
-            <textarea
-              id="bodyValue"
-              onChange={[Function]}
-              onInput={[Function]}
-              rows={10}
-              value=""
-            />
+            <div
+              className="sc-kAzzGY iEbsOc"
+            >
+              <div
+                className="sc-cSHVUG bKHqa"
+                onClick={[Function]}
+              >
+                
+                <i
+                  aria-hidden="true"
+                  className="caret up icon"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="sc-kAzzGY iEbsOc"
+              >
+                <div
+                  className="sc-cSHVUG bKHqa"
+                  onClick={[Function]}
+                >
+                  Locations
+                  <i
+                    aria-hidden="true"
+                    className="caret down icon"
+                    onClick={[Function]}
+                  />
+                </div>
+              </div>
+              <div
+                className="sc-kAzzGY DLQYP"
+              >
+                <span
+                  className="sc-chPdSV bJjSsj"
+                >
+                  Report Geometry
+                  : 
+                </span>
+                <span
+                  className="sc-kgoBCf crsEgQ"
+                >
+                  true
+                </span>
+              </div>
+            </div>
           </form>
         </div>
         <div
@@ -128,23 +272,90 @@ exports[`expect to render App component 1`] = `
           width="80%"
         >
           <div
-            className="ui header sc-kAzzGY fwDpBk"
-            overridecolor="#00677f"
+            className="sc-bwzfXH ewJcDl"
+            direction="row"
           >
-            Response
+            <div
+              className="ui header sc-dxgOiQ hGOPWA"
+              overridecolor="#00677f"
+            >
+              Response
+            </div>
+            <button
+              className="ui button response-textarea sc-jKJlTe hPSlYG"
+              id="responseEdit"
+              marginleft="10px"
+              onClick={[Function]}
+            >
+              Edit
+            </button>
           </div>
           <form
-            className="ui form sc-cSHVUG jrcJLi"
+            className="ui form sc-kGXeez brHMMD"
+            color="rgb(100, 100, 100)"
             focuscolor="#5097ab"
             onSubmit={[Function]}
           >
-            <textarea
-              id="responseValue"
-              onChange={[Function]}
-              onInput={[Function]}
-              rows={15}
-              value=""
-            />
+            <div
+              className="sc-kAzzGY iEbsOc"
+            >
+              <div
+                className="sc-cSHVUG bKHqa"
+                onClick={[Function]}
+              >
+                
+                <i
+                  aria-hidden="true"
+                  className="caret up icon"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="sc-kAzzGY iEbsOc"
+              >
+                <span
+                  className="sc-chPdSV bJjSsj"
+                >
+                  Code
+                  : 
+                </span>
+                <span
+                  className="sc-kgoBCf crsEgQ"
+                >
+                  Ok
+                </span>
+              </div>
+              <div
+                className="sc-kAzzGY iEbsOc"
+              >
+                <div
+                  className="sc-cSHVUG bKHqa"
+                  onClick={[Function]}
+                >
+                  Routes
+                  <i
+                    aria-hidden="true"
+                    className="caret down icon"
+                    onClick={[Function]}
+                  />
+                </div>
+              </div>
+              <div
+                className="sc-kAzzGY DLQYP"
+              >
+                <div
+                  className="sc-cSHVUG bKHqa"
+                  onClick={[Function]}
+                >
+                  Locations
+                  <i
+                    aria-hidden="true"
+                    className="caret down icon"
+                    onClick={[Function]}
+                  />
+                </div>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -388,7 +599,7 @@ exports[`expect to render App component 1`] = `
               width="40%"
             >
               <div
-                className="sc-ifAKCX hUGWRE"
+                className="sc-ifAKCX iomsNv"
                 width="40%"
               />
             </div>
@@ -459,17 +670,6 @@ exports[`expect to render App component 1`] = `
                 Traffic
               </label>
             </div>
-          </div>
-          <div
-            className="sc-bwzfXH iiGiMM"
-            direction="row"
-          >
-            <button
-              className="ui button"
-              onClick={[Function]}
-            >
-              See response
-            </button>
           </div>
         </div>
       </div>

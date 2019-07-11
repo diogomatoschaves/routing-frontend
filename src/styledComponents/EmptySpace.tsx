@@ -1,9 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 const EmptySpace: any = styled.div`
-  position: ${(props: any) => props.position && props.position};
   width: ${(props: any) => props.width && props.width};
-  height: ${(props: any) => props.height && props.height};
+  ${(props: any) => props.position && css`position: ${props.position};`}
+  ${(props: any) => props.height && css`height: ${props.height};`}
 ` as any
 
 export default EmptySpace

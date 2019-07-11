@@ -15,7 +15,7 @@ import {
   routeLineSettings,
   emptyLineString,
   speedTilesInput,
-  defaultResponse
+  defaultRouteResponse
 } from '../utils/input'
 import { transformPoints, getSpeedsLayers } from '../utils/functions'
 import { POLYLINE_COLOR, THIRD_PARTY_POLYLINE, TRAFFIC_PARTY_POLYLINE } from '../utils/colours'
@@ -119,7 +119,7 @@ export default class Map extends Component<Props, State> {
 
       if (prevState.markers.length >= 2 && markers.length === 1) {
         this.removeSourceLayer('route', map)
-        updateState('response', defaultResponse)
+        updateState('response', defaultRouteResponse)
       }
     }
 
@@ -290,9 +290,9 @@ export default class Map extends Component<Props, State> {
     }
 
     if (!locations[0].lat || !locations[0].lng) {
-      updatePoint(0, coords)
+      updatePoint([0], [coords])
     } else {
-      updatePoint(locations.length - 1, coords)
+      updatePoint([locations.length - 1], [coords])
     }
   }
 
@@ -319,7 +319,7 @@ export default class Map extends Component<Props, State> {
     marker &&
       marker.on('dragend', () => {
         const coords = marker.getLngLat()
-        updatePoint(index, { lat: coords.lat, lng: coords.lng })
+        updatePoint([index], [{ lat: coords.lat, lng: coords.lng }])
       })
 
     return marker

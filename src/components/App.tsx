@@ -1,24 +1,25 @@
 import React, { Component, createRef } from 'react'
-import styled from 'styled-components'
-import { matchPath, generatePath } from 'react-router-dom'
-import { Menu, Segment, Sidebar } from 'semantic-ui-react'
+import styled, { css } from 'styled-components'
+import { generatePath } from 'react-router-dom'
+import { Menu, Segment, Sidebar, Button, Icon, Transition } from 'semantic-ui-react'
 import Map from './Map'
 import Panel from './Panel'
 import RouteInfo from './RouteInfo'
 import TrafficLegend from './TrafficLegend'
-import RawResponse from './RawResponse'
+import OptionsPanel from './OptionsPanel'
 import '../App.css'
 import {
   UpdatePoint,
   UpdateState,
   Location,
-  Response,
-  Coords2,
+  RouteResponse,
   Geography,
   Route,
-  Body
+  Body,
+  MatchResponse,
+  Coords
 } from '../types'
-import { defaultResponse, defaultRoute } from '../utils/input'
+import { defaultRouteResponse, defaultRoute, defaultMatchResponse, defaultBody } from '../utils/input'
 import { splitCoords, getRequestBody, formatCoords } from '../utils/functions'
 import { Base64 } from 'js-base64'
 import { routingApi, googleDirections } from '../apiCalls'
@@ -31,14 +32,18 @@ import {
   THIRD_PARTY_STATS,
   TRAFFIC_PARTY_COLOR,
   TRAFFIC_PARTY_POLYLINE,
-  TRAFFIC_PARTY_STATS
+  TRAFFIC_PARTY_STATS,
+  PETROL_6
 } from '../utils/colours'
+import { EmptySpace, Box } from '../styledComponents';
 
 interface State {
+  recalculate: boolean
   locations: Array<Location>
   authorization: string
-  response: Response | null
-  trafficResponse: Response
+  response: RouteResponse | null
+  trafficResponse: RouteResponse
+  matchResponse: MatchResponse
   route: Route
   trafficRoute: Route
   message?: string | null
@@ -57,9 +62,12 @@ interface State {
   initialUpdate: boolean
   google?: any
   googleRoute?: Route | null
+  selectedService: number
+  expanded: boolean
 }
 
 const AppWrapper: any = styled.div`
+  position: relative;
   width: 100vw;
   height: 100vh;
 `
@@ -68,10 +76,37 @@ const StyledSegment = styled(Segment)`
   & > .ui.left.visible.sidebar {
     border: none;
     box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);
-    width: calc(32%);
+    width: 32%;
     min-width: 500px;
     max-width: 600px;
     transform: none;
+  }
+`
+
+const StyledDiv = styled(Box)`
+  position: absolute;
+  transition: all 0.5s linear;
+  left: ${(props: any) => (props.left ? props.left : 0)};
+  bottom: 50px;
+  z-index: 10;
+` as any
+
+const StyledEmptyDiv = styled(EmptySpace)`
+  /* transition: all 0.5s linear; */
+  ${props => props.minwidth && css `min-width: 500px;`}
+  ${props => props.maxwidth && css `max-width: 600px;`}
+`
+
+const StyledButton = styled(Button)`
+  &.ui.button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    transition: all 0.5s linear;
+    background-color: ${PETROL_6} !important;
+    color: white !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
 `
 
@@ -80,6 +115,19 @@ declare global {
     google: any
   }
 }
+
+const serviceOptions = [
+  {
+    key: 'Route',
+    text: 'Route',
+    value: 0
+  },
+  {
+    key: 'Match',
+    text: 'Match',
+    value: 1
+  }
+]
 
 class App extends Component<any, State> {
   static defaultProps = {
@@ -114,12 +162,15 @@ class App extends Component<any, State> {
       },
       acceptableProfiles: ['car', 'foot']
     },
-    endpoint: 'https://routing.develop.otonomousmobility.com'
+    endpoint: 'https://routing.develop.otonomousmobility.com',
+    animationDuration: { show: 500, hide: 100 }
   }
 
-  state = {
+  state = { 
+    selectedService: 0,
+    recalculate: true,
     initialUpdate: false,
-    body: undefined,
+    body: defaultBody,
     mapLoaded: false,
     visible: false,
     google: null,
@@ -136,11 +187,13 @@ class App extends Component<any, State> {
     },
     responseOption: 'normal',
     recenter: false,
+    expanded: false,
     authorization: '',
     route: defaultRoute,
     trafficRoute: defaultRoute,
-    response: defaultResponse,
-    trafficResponse: defaultResponse,
+    matchResponse: defaultMatchResponse,
+    response: defaultRouteResponse,
+    trafficResponse: defaultRouteResponse,
     locations: [
       {
         name: 'start',
@@ -204,7 +257,21 @@ class App extends Component<any, State> {
       })
     ) {
       this.waitTillLoaded(loadedProp).then(() => {
-        this.setState(this.getProfileLocations(locations, match.params, requiredParams))
+        const { profile: urlProfile, locations: urlLocations } = this.getProfileLocations(
+          locations,
+          match.params,
+          requiredParams
+        )
+
+        this.getRoute(
+          urlLocations,
+          urlProfile,
+          authorization,
+          false, // googleMapsOption,
+          null, // google,
+          false // trafficOption
+        )
+        this.setState({ profile: urlProfile, locations: urlLocations })
       })
     } else {
       const { profile } = this.state
@@ -222,10 +289,14 @@ class App extends Component<any, State> {
       googleMapsOption,
       google,
       trafficOption,
-      trafficResponse
+      trafficResponse,
+      recalculate,
+      visible
     } = this.state
 
-    const { match, urlMatchString, history } = this.props
+    const { urlMatchString, history } = this.props
+    const { params: prevParams } = prevProps.match
+    const { params } = this.props.match
     const { requiredParams } = this.props.urlParams
 
     if (prevState.locations !== locations || prevState.profile !== profile) {
@@ -268,22 +339,31 @@ class App extends Component<any, State> {
 
     // TODO: Check if there is a callback for back and forward buttons
     if (
-      prevProps.match.params !== match.params &&
-      Object.keys(match.params).length === 3
+      // prevParams !== params &&
+      (Object.keys(params).some(key => params[key] !== prevParams[key]) ||
+        Object.keys(prevParams).some(key => prevParams[key] !== params[key])) &&
+      Object.keys(params).length === 3
     ) {
       const { locations: urlLocations, profile: urlProfile } = this.getProfileLocations(
         locations,
-        match.params,
+        params,
         requiredParams
       )
-      this.getRoute(
-        urlLocations,
-        urlProfile,
-        authorization,
-        googleMapsOption,
-        google,
-        trafficOption
-      )
+
+      if (recalculate) {
+        this.getRoute(
+          urlLocations,
+          urlProfile,
+          authorization,
+          googleMapsOption,
+          google,
+          trafficOption
+        )
+      } else this.updateState('recalculate', true)
+    }
+
+    if (prevState.visible !== visible && visible) {
+      this.setState({ expanded: false })
     }
   }
 
@@ -315,7 +395,7 @@ class App extends Component<any, State> {
       const body = getRequestBody(locations)
 
       routingApi(profile, authorization, body)
-        .then((response: Response) => this.setState({ response, body }))
+        .then((response: RouteResponse) => this.setState({ response, body }))
         .catch(() =>
           this.setState({
             message: 'There was an error fetching the route. Try again later'
@@ -335,7 +415,7 @@ class App extends Component<any, State> {
 
       if (trafficOption && profile === 'car') {
         routingApi('car-traffic', authorization, body)
-          .then((trafficResponse: Response) => this.setState({ trafficResponse }))
+          .then((trafficResponse: RouteResponse) => this.setState({ trafficResponse }))
           .catch(() =>
             this.setState({
               message: 'There was an error fetching the route. Try again later'
@@ -365,21 +445,24 @@ class App extends Component<any, State> {
   }
 
   // TODO: Update app state based on changes
-  updatePoint: UpdatePoint = (index, coords) => {
+  updatePoint: UpdatePoint = (indexes: number[], coords: Array<Coords>) => {
     this.setState(state => {
       return {
         locations: state.locations.reduce(
           (accum: Array<Location>, element: Location, currentIndex: number) => {
-            return index !== currentIndex
-              ? [...accum, element]
-              : [
+            if (!indexes.includes(currentIndex)) {
+              return [...accum, element]
+            } else {
+              const index = indexes.findIndex(el => el === currentIndex)
+              return [
                   ...accum,
                   {
                     ...element,
-                    lat: coords.lat,
-                    lng: coords.lng
+                    lat: coords[index].lat,
+                    lng: coords[index].lng
                   }
                 ]
+            }
           },
           []
         )
@@ -388,15 +471,21 @@ class App extends Component<any, State> {
   }
 
   updateState: UpdateState = (stateKey: string, value: any) => {
-    this.setState(prevState => ({
-      ...prevState,
-      [stateKey]: value
-    }))
+    this.setState(
+      prevState => ({
+        ...prevState,
+        [stateKey]: value
+      }),
+      () => Promise.resolve(true)
+    )
   }
 
   handleShowClick = () => this.setState({ visible: true })
   handleSidebarHide = () => this.setState({ visible: false })
-  handleHideClick = () => this.setState({ visible: false })
+  handleHideClick = (e: any) => {
+    e.stopPropagation()
+    this.setState({ visible: false })
+  }
 
   public render() {
     const {
@@ -406,6 +495,7 @@ class App extends Component<any, State> {
       routingGraphVisible,
       response,
       trafficResponse,
+      matchResponse,
       googleMapsOption,
       trafficOption,
       polygonsVisible,
@@ -416,35 +506,70 @@ class App extends Component<any, State> {
       visible,
       body,
       googleRoute,
-      responseOption
+      responseOption,
+      selectedService,
+      expanded
     } = this.state
     const { geographies, endpoint, urlMatchString } = this.props
+    const { show, hide } = this.props.animationDuration
 
     const showTraffic = trafficRoute && trafficRoute.distance && profile !== 'foot'
 
     return (
       <AppWrapper>
         <Sidebar.Pushable as={StyledSegment}>
+          <StyledDiv 
+            direction="row" 
+          >
+            <StyledEmptyDiv 
+              width={visible ? '32%' : 0} 
+              minwidth={visible && true}
+              maxwidth={visible && true}
+              height={'10%'} 
+              position="relative"
+            />
+            <Transition.Group 
+              as={StyledButton} 
+              duration={{ show, hide }}
+              animation={'scale'}
+              onClick={visible ? (e: any) => this.handleHideClick(e) : this.handleShowClick}
+              onMouseEnter={(e: any) => {e.stopPropagation(); !visible && this.setState({ expanded: true })}}
+              onMouseLeave={(e: any) => {e.stopPropagation(); !visible && this.setState({ expanded: false })}}
+              icon
+              className={'options-button'}
+            >
+              <Icon
+                size="big"
+                name={visible ? 'chevron left' : ('chevron right' as any)}
+              />
+              {expanded && !visible && <span> Inspect </span>}
+            </Transition.Group>            
+          </StyledDiv>
           <Sidebar
             as={Menu}
             animation="overlay"
             icon="labeled"
             vertical
-            onHide={this.handleSidebarHide}
             visible={visible}
             width="very wide"
           >
-            <RawResponse
+            <OptionsPanel
               handleHideClick={this.handleHideClick}
-              response={responseOption === 'normal' ? response : trafficResponse}
+              response={serviceOptions[selectedService].key === 'Route' 
+                ? responseOption === 'normal' ? response : trafficResponse : matchResponse}
               body={body}
               endpoint={endpoint}
+              updatePoint={this.updatePoint}
               updateState={this.updateState}
               responseOption={responseOption}
-            />
+              locations={locations}
+              selectedService={selectedService}
+              serviceOptions={serviceOptions}
+            >
+            </OptionsPanel>
           </Sidebar>
-
           <Sidebar.Pusher>
+            
             {route && route.distance && (
               <RouteInfo
                 statsColor={ROUTING_SERVICE_STATS}

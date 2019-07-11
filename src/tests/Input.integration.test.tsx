@@ -25,20 +25,27 @@ const mockCoords = {
 
 const urlMatchString = '/:profile/:start/:end'
 
+const getTestApp = (initialEntries: Array<string> = ['/']) => TestRenderer.create(
+  <MemoryRouter initialEntries={initialEntries}>
+    <Route render={({ location }) => (
+      <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+        <App 
+          location={location} 
+          history={history} 
+          match={match} 
+          urlMatchString={urlMatchString}
+        />
+      )}/>
+    )}/>
+  </MemoryRouter>
+)
+
 
 describe('Start point Input works as expected on blur', () => {
 
   describe('When an invalid value is inserted', () => {
 
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const input = root.findAllByType(Input);
@@ -76,15 +83,7 @@ describe('Start point Input works as expected on blur', () => {
 
   describe('When a valid value is inserted', () => {
 
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const input = root.findAllByType(Input);
@@ -127,15 +126,7 @@ describe('End point Input works as expected on blur', () => {
 
   describe('When an invalid value is inserted', () => {
 
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const input = root.findAllByType(Input);
@@ -174,15 +165,7 @@ describe('End point Input works as expected on blur', () => {
 
   describe('When a valid value is inserted', () => {
 
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const input = root.findAllByType(Input);
@@ -224,15 +207,7 @@ describe('End point Input works as expected on blur', () => {
 
 describe('Route is shown on map when both inputs have valid coordinates', () => {
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp()
 
   const root = testInstance.root
   const input = root.findAllByType(Input);
@@ -272,15 +247,7 @@ describe('Route is shown on map when both inputs have valid coordinates', () => 
 
 describe('Switching between profiles', () => {
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp()
 
   const root = testInstance.root
 

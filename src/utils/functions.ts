@@ -136,3 +136,7 @@ export const lightenDarkenColor = (col: string, amt: number) => {
 
   return (usePound?"#":"") + (g | (b << 8) | (r << 16)).toString(16);
 }
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

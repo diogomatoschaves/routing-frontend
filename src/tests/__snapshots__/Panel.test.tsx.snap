@@ -237,7 +237,7 @@ exports[`expect to render Panel component 1`] = `
         width="40%"
       >
         <div
-          className="sc-bxivhb edpdVn"
+          className="sc-bxivhb gCMZtn"
           width="40%"
         />
       </div>
@@ -308,17 +308,6 @@ exports[`expect to render Panel component 1`] = `
           Traffic
         </label>
       </div>
-    </div>
-    <div
-      className="sc-bdVaJa iLYYQR"
-      direction="row"
-    >
-      <button
-        className="ui button"
-        onClick={[Function]}
-      >
-        See response
-      </button>
     </div>
   </div>
 </div>
