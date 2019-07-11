@@ -25,23 +25,25 @@ const mockCoords = {
 
 const urlMatchString = '/:profile/:start/:end'
 
+const getTestApp = (initialEntries: Array<string> = ['/'])=> TestRenderer.create(
+  <MemoryRouter initialEntries={initialEntries}>
+    <Route render={({ location }) => (
+      <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+        <App 
+          location={location} 
+          history={history} 
+          match={match} 
+          urlMatchString={urlMatchString}
+          windowProp={true}
+        />
+      )}/>
+    )}/>
+  </MemoryRouter>
+)
+
 describe('When 3rd party option is selected', () => {
 
-  const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
-      <Route render={({ location }) => (
-        <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-          <App 
-            location={location} 
-            history={history} 
-            match={match} 
-            urlMatchString={urlMatchString}
-            windowProp={true}
-          />
-        )}/>
-      )}/>
-    </MemoryRouter>
-  )
+  const testInstance = getTestApp()
 
   const root = testInstance.root
 

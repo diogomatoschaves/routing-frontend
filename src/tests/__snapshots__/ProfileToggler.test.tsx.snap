@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render ProfileToggler component 1`] = `
+<div
+  className="sc-bdVaJa gxFsig"
+  direction="row"
+  height="45px"
+>
+  <div
+    className="sc-bdVaJa clGjkA"
+    onClick={[Function]}
+    width="10%"
+  >
+    <i
+      aria-hidden="true"
+      className="grey angle left large icon sc-EHOje eQYihx"
+      onClick={[Function]}
+    />
+  </div>
+  <div
+    className="sc-bdVaJa gNhOwl"
+    width="60%"
+  >
+    <div
+      className="ui large label sc-bZQynM cRUavP"
+      onClick={[Function]}
+    >
+      Berlin
+    </div>
+  </div>
+  <div
+    className="sc-bdVaJa clGjkA"
+    onClick={[Function]}
+    width="10%"
+  >
+    <i
+      aria-hidden="true"
+      className="grey angle right large icon sc-EHOje eQYihx"
+      onClick={[Function]}
+    />
+  </div>
+</div>
+`;

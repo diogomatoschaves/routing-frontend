@@ -24,7 +24,7 @@ interface Props {
 const StyledHeader = styled(Header)`
   &.ui.header {
     color: ${props => props.overridecolor ? props.overridecolor : 'black'};
-    margin: ${props => props.noMargin ? 0 : props.noMarginBottom ? '10px 0 0 0' : '10px 0'};
+    margin: ${props => props.nomargin ? 0 : props.nomarginbottom ? '10px 0 0 0' : '10px 0'};
   }
 `
 
@@ -50,7 +50,7 @@ const RouteInfo: any = ({ right, top, route, title, textColor, iconColor, statsC
       width="200px"
     >
       <Box direction="column" justify="space-between">
-        <StyledHeader noMarginBottom overridecolor={textColor}>{title}</StyledHeader>
+        <StyledHeader nomarginbottom={1} overridecolor={textColor}>{title}</StyledHeader>
         {subTitle && <StyledHeader size="small" overridecolor={iconColor}>{subTitle}</StyledHeader>}
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
           <Box direction="row" width="40%" justify="center">

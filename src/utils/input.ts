@@ -1,6 +1,11 @@
 import { POLYLINE_COLOR, colors } from './colours'
 
-export const defaultResponse = {
+export const defaultBody = {
+  locations: [],
+  reportGeometry: true,
+}
+
+export const defaultRouteResponse = {
   code: 'Ok',
   routes: [{ 
     legs: [{ 
@@ -10,6 +15,22 @@ export const defaultResponse = {
     }]
   }],
   locations: []
+}
+
+export const defaultMatchResponse = {
+  code: 'Ok',
+  matchings: [{
+    confidence: 0,
+    legs: [{ 
+      geometry: [],
+      duration: 0,
+      distance: 0,
+      nodes: [],
+      traceFromIndex: 0,
+      traceToIndex: 0
+    }]
+  }],
+  tracepoints: []
 }
 
 export const defaultRoute = {
