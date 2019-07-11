@@ -64,13 +64,9 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     const { value } = this.state
     const {
       index,
-      rowKey,
       updatePoint,
       updateColor,
       coords: prevCoords,
-      history,
-      location,
-      urlMatchString
     } = this.props
 
     updateColor()
@@ -78,15 +74,15 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     const coords = splitCoords(value)
 
     if (coords && formatCoords(prevCoords) !== formatCoords(coords)) {
-      updatePoint(index, coords)
+      updatePoint([index], [coords])
     } else if (value === '') {
-      updatePoint(index, { lat: null, lng: null })
+      updatePoint([index], [{ lat: null, lng: null }])
     }
   }
 
   cleanInput = () => {
     const { index, updatePoint } = this.props
-    this.setState({ value: '' }, () => updatePoint(index, { lat: null, lng: null }))
+    this.setState({ value: '' }, () => updatePoint([index], [{ lat: null, lng: null }]))
   }
 
   public render() {

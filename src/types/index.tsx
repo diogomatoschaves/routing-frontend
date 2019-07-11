@@ -1,9 +1,10 @@
 
 
 // Functions
-export type UpdatePoint = (index: number, coords: Coords) => void
+export type UpdatePoint = (index: number[], coords: Array<Coords>) => void
 export type UpdateColor = () => void
 export type UpdateState = (stateKey: string, value: any) => void
+export type HandleChange = ({ id, value }: { id: string, value: any }) => void
 
 //Objects
 export type Location = {
@@ -25,10 +26,16 @@ export type Coords2 = {
   lon: number,
 }
 
-export type Response = {
+export type RouteResponse = {
   code: string,
   routes: Array<any>,
   locations: Array<any>
+}
+
+export type MatchResponse = {
+  code: string,
+  matchings: Array<any>,
+  tracepoints: Array<any>
 }
 
 export type Dict = { [key: string]: string };

@@ -34,19 +34,26 @@ const mockEventEnd = {
 
 const urlMatchString = '/:profile/:start/:end'
 
+const getTestApp = (initialEntries: Array<string> = ['/'])=> TestRenderer.create(
+  <MemoryRouter initialEntries={initialEntries}>
+    <Route render={({ location }) => (
+      <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+        <App 
+          location={location} 
+          history={history} 
+          match={match} 
+          urlMatchString={urlMatchString}
+        />
+      )}/>
+    )}/>
+  </MemoryRouter>
+)
+
 describe('Start and end points work as expected', () => {
 
   describe('When user clicks on map', () => {
 
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
 
@@ -101,15 +108,7 @@ describe('Start and end points work as expected', () => {
 
   describe('When user clicks twice on map', () => {
 
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
 

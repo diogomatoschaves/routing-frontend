@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render OptionsPanel component 1`] = `
+<div
+  className="sc-bdVaJa dbyCSG"
+  direction="row"
+  height="50px"
+  width="65%"
+>
+  <div
+    className="ui fitted toggle checkbox custom-class sc-bZQynM kFxgBV"
+    onChange={[Function]}
+    onClick={[Function]}
+    onMouseDown={[Function]}
+    onMouseUp={[Function]}
+  >
+    <input
+      checked={false}
+      className="hidden"
+      id="googleMapsOption"
+      readOnly={true}
+      tabIndex={0}
+      type="checkbox"
+    />
+    <label
+      htmlFor="googleMapsOption"
+    />
+  </div>
+  <label
+    className="sc-EHOje fLHMgE"
+  >
+    Google Maps
+  </label>
+</div>
+`;

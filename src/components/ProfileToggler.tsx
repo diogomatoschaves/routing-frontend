@@ -70,7 +70,7 @@ const ProfileToggler = ({ geography, geographies, width, updateState, responseOp
         <StyledIcon color="grey" size="large" name={'angle left'} />
       </Box>
       <Box width="60%">
-        <StyledLabel onClick={() => updateState('recenter', true)} inverted size="large">
+        <StyledLabel onClick={() => updateState('recenter', true)} size="large">
           {geography ? geography.name : responseOption ? names[responseOption] : responseOption}
         </StyledLabel>
       </Box>

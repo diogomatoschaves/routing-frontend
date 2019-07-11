@@ -20,6 +20,8 @@ export const GREY_5 = '#e1e1e1'
 export const BLACK = '#000000'
 export const WHITE = '#FFFFFF'
 
+export const VALUE_COLOR = '#5e4fa2'
+
 export const NORMAL_INPUT = PETROL_4
 export const FOCUSED_INPUT = PETROL_5
 export const PROFILE_BACKGROUND = GREY_5
