@@ -134,9 +134,6 @@ const Panel: any = (props: Props) => {
             width={'35%'}
           />
         </Box>
-        <Box direction="row" justify="flex-start" padding="10px 0 10px 0">
-          <Button onClick={handleShowClick}>See response</Button>
-        </Box>
       </Box>
     </PanelWrapper>
   )

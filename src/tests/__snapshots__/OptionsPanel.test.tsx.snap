@@ -1,0 +1,326 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render OptionsPanel component 1`] = `
+<div
+  className="sc-bdVaJa eBppGN"
+>
+  <div
+    className="sc-bdVaJa fdCXKO"
+    direction="row"
+    height="70px"
+  >
+    <div
+      className="sc-bdVaJa jJZREO"
+      width="35%"
+    >
+      <div
+        aria-expanded={false}
+        className="ui fluid selection dropdown sc-jTzLTM ifolny"
+        id="selectedService"
+        onBlur={[Function]}
+        onChange={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onMouseDown={[Function]}
+        role="listbox"
+        tabIndex={0}
+      >
+        <div
+          aria-live="polite"
+          className="text"
+          role="alert"
+        >
+          Route
+        </div>
+        <i
+          aria-hidden="true"
+          className="dropdown icon"
+          onClick={[Function]}
+        />
+        <div
+          className="menu transition"
+        >
+          <div
+            aria-checked={true}
+            aria-selected={true}
+            className="active selected item"
+            onClick={[Function]}
+            role="option"
+            style={
+              Object {
+                "pointerEvents": "all",
+              }
+            }
+          >
+            <span
+              className="text"
+            >
+              Route
+            </span>
+          </div>
+          <div
+            aria-checked={false}
+            aria-selected={false}
+            className="item"
+            onClick={[Function]}
+            role="option"
+            style={
+              Object {
+                "pointerEvents": "all",
+              }
+            }
+          >
+            <span
+              className="text"
+            >
+              Match
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="sc-bdVaJa bJJihJ"
+      width="35%"
+    >
+      <div
+        className="sc-bdVaJa gxFsig"
+        direction="row"
+        height="45px"
+      >
+        <div
+          className="sc-bdVaJa clGjkA"
+          onClick={[Function]}
+          width="10%"
+        >
+          <i
+            aria-hidden="true"
+            className="grey angle left large icon sc-EHOje eQYihx"
+            onClick={[Function]}
+          />
+        </div>
+        <div
+          className="sc-bdVaJa gNhOwl"
+          width="60%"
+        >
+          <div
+            className="ui large label sc-bZQynM cRUavP"
+            onClick={[Function]}
+          >
+            No Traffic
+          </div>
+        </div>
+        <div
+          className="sc-bdVaJa clGjkA"
+          onClick={[Function]}
+          width="10%"
+        >
+          <i
+            aria-hidden="true"
+            className="grey angle right large icon sc-EHOje eQYihx"
+            onClick={[Function]}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="sc-bdVaJa fEcaVD"
+    width="80%"
+  >
+    <div
+      className="ui header sc-VigVT bsqpbk"
+      overridecolor="#00677f"
+    >
+      Request Endpoint
+    </div>
+    <form
+      className="ui form sc-gqjmRU eYaXOi"
+      focuscolor="#5097ab"
+      onSubmit={[Function]}
+    >
+      <textarea
+        disabled={true}
+        id="endpointValue"
+        onChange={[Function]}
+        onInput={[Function]}
+        readOnly={true}
+        rows={1}
+        value="https://routing.develop.otonomousmobility.com"
+      />
+    </form>
+  </div>
+  <div
+    className="sc-bdVaJa fEcaVD"
+    width="80%"
+  >
+    <div
+      className="sc-bdVaJa kRVJAa"
+      direction="row"
+    >
+      <div
+        className="sc-bdVaJa kRVJAa"
+        direction="row"
+      >
+        <div
+          className="ui header sc-VigVT bsqpbk"
+          overridecolor="#00677f"
+        >
+          Request Body
+        </div>
+        <button
+          className="ui button body-textarea sc-fjdhpX dzciwB"
+          id="bodyEdit"
+          marginleft="10px"
+          onClick={[Function]}
+        >
+          Edit
+        </button>
+      </div>
+    </div>
+    <form
+      className="ui form sc-gZMcBi gHfyrx"
+      color="rgb(100, 100, 100)"
+      focuscolor="#5097ab"
+      onSubmit={[Function]}
+    >
+      <div
+        className="sc-htoDjs kekEFw"
+      >
+        <div
+          className="sc-gzVnrw fRPPoF"
+          onClick={[Function]}
+        >
+          
+          <i
+            aria-hidden="true"
+            className="caret up icon"
+            onClick={[Function]}
+          />
+        </div>
+        <div
+          className="sc-htoDjs kekEFw"
+        >
+          <div
+            className="sc-gzVnrw fRPPoF"
+            onClick={[Function]}
+          >
+            Locations
+            <i
+              aria-hidden="true"
+              className="caret down icon"
+              onClick={[Function]}
+            />
+          </div>
+        </div>
+        <div
+          className="sc-htoDjs kGYaTF"
+        >
+          <span
+            className="sc-dnqmqq hVZdIT"
+          >
+            Report Geometry
+            : 
+          </span>
+          <span
+            className="sc-iwsKbI eyqtoY"
+          >
+            true
+          </span>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div
+    className="sc-bdVaJa fEcaVD"
+    width="80%"
+  >
+    <div
+      className="sc-bdVaJa kRVJAa"
+      direction="row"
+    >
+      <div
+        className="ui header sc-VigVT bsqpbk"
+        overridecolor="#00677f"
+      >
+        Response
+      </div>
+      <button
+        className="ui button response-textarea sc-fjdhpX dzciwB"
+        id="responseEdit"
+        marginleft="10px"
+        onClick={[Function]}
+      >
+        Edit
+      </button>
+    </div>
+    <form
+      className="ui form sc-gZMcBi gHfyrx"
+      color="rgb(100, 100, 100)"
+      focuscolor="#5097ab"
+      onSubmit={[Function]}
+    >
+      <div
+        className="sc-htoDjs kekEFw"
+      >
+        <div
+          className="sc-gzVnrw fRPPoF"
+          onClick={[Function]}
+        >
+          
+          <i
+            aria-hidden="true"
+            className="caret up icon"
+            onClick={[Function]}
+          />
+        </div>
+        <div
+          className="sc-htoDjs kekEFw"
+        >
+          <span
+            className="sc-dnqmqq hVZdIT"
+          >
+            Code
+            : 
+          </span>
+          <span
+            className="sc-iwsKbI eyqtoY"
+          >
+            Ok
+          </span>
+        </div>
+        <div
+          className="sc-htoDjs kekEFw"
+        >
+          <div
+            className="sc-gzVnrw fRPPoF"
+            onClick={[Function]}
+          >
+            Routes
+            <i
+              aria-hidden="true"
+              className="caret down icon"
+              onClick={[Function]}
+            />
+          </div>
+        </div>
+        <div
+          className="sc-htoDjs kGYaTF"
+        >
+          <div
+            className="sc-gzVnrw fRPPoF"
+            onClick={[Function]}
+          >
+            Locations
+            <i
+              aria-hidden="true"
+              className="caret down icon"
+              onClick={[Function]}
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+`;

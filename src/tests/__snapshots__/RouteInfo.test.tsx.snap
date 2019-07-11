@@ -1,0 +1,147 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`expect to render ProfileToggler component 1`] = `
+<div
+  className="ui segment sc-ifAKCX huwZIU"
+  position="absolute"
+  right="1px"
+  top="1px"
+  width="200px"
+  zindex={1000}
+>
+  <div
+    className="sc-bdVaJa sCrMI"
+    direction="column"
+  >
+    <div
+      className="ui header sc-EHOje jQJJXy"
+      nomarginbottom={1}
+      overridecolor="#000000"
+    >
+      Routing Service
+    </div>
+    <div
+      className="ui small header sc-EHOje ihmriA"
+      overridecolor="#000000"
+    >
+      With Traffic
+    </div>
+    <div
+      className="sc-bdVaJa bLeABi"
+      direction="row"
+      width="100%"
+    >
+      <div
+        className="sc-bdVaJa hEXywC"
+        direction="row"
+        width="40%"
+      >
+        <div
+          className="sc-bwzfXH hynejD"
+          color="#e1e1e1"
+        >
+          <div
+            className="sc-bdVaJa dbHwHO"
+            height="100%"
+          >
+            <i
+              aria-hidden="true"
+              className="time icon sc-htpNat jxrwEL"
+              fontSize="25px"
+              height="20px"
+              onClick={[Function]}
+              overridecolor="#000000"
+              padding="0 0 0 0"
+              position="absolute"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa bgVkOo"
+        direction="row"
+        width="60%"
+      >
+        <div
+          className="ui small statistic sc-bZQynM erHVf"
+          overridecolor="#000000"
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        >
+          <div
+            className="value"
+          >
+            0
+          </div>
+          <div
+            className="label"
+          >
+            seconds
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="sc-bdVaJa bLeABi"
+      direction="row"
+      width="100%"
+    >
+      <div
+        className="sc-bdVaJa hEXywC"
+        direction="row"
+        width="40%"
+      >
+        <div
+          className="sc-bwzfXH hynejD"
+          color="#e1e1e1"
+        >
+          <div
+            className="sc-bdVaJa dbHwHO"
+            height="100%"
+          >
+            <i
+              aria-hidden="true"
+              className="road icon sc-htpNat jxrwEL"
+              fontSize="25px"
+              height="20px"
+              onClick={[Function]}
+              overridecolor="#000000"
+              padding="0 0 0 0"
+              position="absolute"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        className="sc-bdVaJa bgVkOo"
+        direction="row"
+        width="60%"
+      >
+        <div
+          className="ui small statistic sc-bZQynM erHVf"
+          overridecolor="#000000"
+          style={
+            Object {
+              "margin": 0,
+            }
+          }
+        >
+          <div
+            className="value"
+          >
+            0
+          </div>
+          <div
+            className="label"
+          >
+            meters
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
