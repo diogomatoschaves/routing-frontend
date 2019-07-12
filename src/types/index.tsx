@@ -61,3 +61,13 @@ export type Route = {
   duration: number | null,
   routePath: Array<Coords2> | null
 }
+export type EndpointOption = {
+  key: string,
+  text: string,
+  value: number
+}
+
+export type EndpointHandler = {
+  options: Array<EndpointOption>,
+  activeIdx: number
+}

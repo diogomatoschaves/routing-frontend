@@ -94,7 +94,6 @@ export const routeLineSettings = {
 export const speedTilesInput = [{
     name: 'Routing-Service Graph',
     id: 'speeds',
-    url: process.env.REACT_APP_TILE_URL || '',
     type: 'speeds',
   }]
 

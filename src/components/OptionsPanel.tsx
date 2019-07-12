@@ -2,28 +2,29 @@ import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
 import ProfileToggler from './ProfileToggler'
 import JsonRenderer from './JsonRenderer'
-import { Button, Dropdown, TextArea, Form, Header, Icon } from 'semantic-ui-react'
-import { Box } from '../styledComponents'
+import { Button, Form, Header, Icon } from 'semantic-ui-react'
+import { Box, StyledDropdown } from '../styledComponents'
 import {
   RouteResponse,
   Body,
   UpdateState,
   UpdatePoint,
   Location,
-  MatchResponse
+  MatchResponse,
+  EndpointHandler
 } from '../types'
 import { MAIN_PETROL, PETROL_3 } from '../utils/colours'
 import { capitalize } from '../utils/functions'
 import { Schema } from '../utils/schemas/index'
 import { Validator } from 'jsonschema'
 import JSON5 from 'json5'
-
+import EndpointRow from './EndpointRow'
 
 interface Props {
   handleHideClick: (e: any) => void
   response: RouteResponse | MatchResponse
   body: Body | undefined
-  endpoint: string
+  endpointHandler: EndpointHandler
   updateState: UpdateState
   updatePoint: UpdatePoint
   responseOption: string
@@ -94,14 +95,6 @@ const StyledHeader = styled(Header)`
   }
 `
 
-const StyledDropdown = styled(Dropdown)`
-  &.ui.selection.dropdown {
-    color: rgb(100, 100, 100);
-    border-color: rgb(242, 242, 242);
-    background-color: rgb(242, 242, 242);
-  }
-`
-
 const StyledButton = styled(Button)`
   &.ui.button {
     padding: 7px;
@@ -115,7 +108,7 @@ const StyledButton = styled(Button)`
       color: white;
       padding: 7px;
     }
-    
+
   }
 `
 
@@ -149,10 +142,10 @@ export default class OptionsPanel extends Component<Props, State> {
       })
     })
 
-    this.setState({ 
-      validator, 
+    this.setState({
+      validator,
       bodyValue: JSON5.stringify(body, null, 2),
-      responseValue: JSON5.stringify(response, null, 2), 
+      responseValue: JSON5.stringify(response, null, 2),
     })
   }
 
@@ -325,7 +318,7 @@ export default class OptionsPanel extends Component<Props, State> {
 
   render() {
     const {
-      endpoint,
+      endpointHandler,
       updateState,
       responseOption,
       response,
@@ -374,9 +367,9 @@ export default class OptionsPanel extends Component<Props, State> {
         </Box>
         <Box width="80%" padding="10px 0 10px 0">
           <StyledHeader overridecolor={MAIN_PETROL}>Request Endpoint</StyledHeader>
-          <StyledForm focuscolor={PETROL_3}>
-            <TextArea id={'endpointValue'} rows={1} value={endpoint} readOnly disabled />
-          </StyledForm>
+          <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
+            <EndpointRow updateState={updateState} endpointHandler={endpointHandler}/>
+          </Box>
         </Box>
         <Box width="80%" padding="10px 0 10px 0">
           <Box direction="row" justify="flex-start">

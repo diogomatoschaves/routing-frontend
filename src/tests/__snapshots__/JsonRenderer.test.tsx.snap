@@ -2,7 +2,7 @@
 
 exports[`expect to render JsonRenderer component 1`] = `
 <form
-  className="ui form sc-ifAKCX fmwoHN"
+  className="ui form sc-ifAKCX cFwNVD"
   color="rgb(100, 100, 100)"
   focuscolor="#5097ab"
   onSubmit={[Function]}

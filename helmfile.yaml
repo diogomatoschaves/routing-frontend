@@ -19,4 +19,4 @@ releases:
          base_url: {{ .Environment.Name }}.otonomousmobility.com
          image:
            repository: {{ requiredEnv "IMAGE" }}
-           tag: {{ requiredEnv "VERSION" }}
+           tag: "{{ requiredEnv "VERSION" }}"
