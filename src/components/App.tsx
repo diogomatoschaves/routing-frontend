@@ -16,6 +16,7 @@ import {
   Geography,
   Route,
   Body,
+  EndpointHandler,
   MatchResponse,
   Coords
 } from '../types'
@@ -62,6 +63,7 @@ interface State {
   initialUpdate: boolean
   google?: any
   googleRoute?: Route | null
+  endpointHandler: EndpointHandler
   selectedService: number
   expanded: boolean
 }
@@ -162,11 +164,10 @@ class App extends Component<any, State> {
       },
       acceptableProfiles: ['car', 'foot']
     },
-    endpoint: 'https://routing.develop.otonomousmobility.com',
     animationDuration: { show: 500, hide: 100 }
   }
 
-  state = { 
+  state = {
     selectedService: 0,
     recalculate: true,
     initialUpdate: false,
@@ -211,7 +212,17 @@ class App extends Component<any, State> {
         lat: null,
         lng: null
       }
-    ]
+    ],
+    endpointHandler: {
+      options: [
+        { key: 'develop', text: 'https://routing.develop.otonomousmobility.com/${PROFILE}', value: 0 },
+        { key: 'staging', text: 'https://routing.staging.otonomousmobility.com/${PROFILE}', value: 1 },
+        { key: 'testing', text: 'https://routing.testing.otonomousmobility.com/${PROFILE}', value: 2 },
+        { key: 'localhost', text: 'http://localhost:5000', value: 3 },
+      ],
+      activeIdx: 0
+    }
+
   }
 
   getProfileLocations = (
@@ -228,13 +239,21 @@ class App extends Component<any, State> {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const { windowProp } = this.props
 
-    const username = process.env.REACT_APP_LDAP_USERNAME
-    const password = process.env.REACT_APP_LDAP_PASSWORD
-
-    const authorization = `Basic ${Base64.encode(`${username}:${password}`)}`
+    let authorization : string = '';
+    if (process.env.NODE_ENV !== 'production') {
+      const password = process.env.REACT_APP_LDAP_PASSWORD
+      const username = process.env.REACT_APP_LDAP_USERNAME
+      authorization = `Basic ${Base64.encode(`${username}:${password}`)}`
+    }
+    else {
+      const url = process.env.REACT_APP_URL + '/auth';
+      await fetch(url).then((response) => response.json()).then((jsonifiedResponse) => {
+        authorization = jsonifiedResponse.basicAuth
+      });
+    }
 
     this.addGoogleObject(windowProp)
 
@@ -242,7 +261,7 @@ class App extends Component<any, State> {
 
     const { history, match, loadedProp } = this.props
     const { requiredParams, acceptableProfiles } = this.props.urlParams
-    const { locations } = this.state
+    const { locations, endpointHandler } = this.state
 
     const params = Object.keys(match.params)
 
@@ -269,7 +288,8 @@ class App extends Component<any, State> {
           authorization,
           false, // googleMapsOption,
           null, // google,
-          false // trafficOption
+          false, // trafficOption
+          endpointHandler.options[endpointHandler.activeIdx].text
         )
         this.setState({ profile: urlProfile, locations: urlLocations })
       })
@@ -290,6 +310,7 @@ class App extends Component<any, State> {
       google,
       trafficOption,
       trafficResponse,
+      endpointHandler,
       recalculate,
       visible
     } = this.state
@@ -338,12 +359,10 @@ class App extends Component<any, State> {
     }
 
     // TODO: Check if there is a callback for back and forward buttons
-    if (
-      // prevParams !== params &&
-      (Object.keys(params).some(key => params[key] !== prevParams[key]) ||
-        Object.keys(prevParams).some(key => prevParams[key] !== params[key])) &&
-      Object.keys(params).length === 3
-    ) {
+    // Check if coordinates are given by checking the URL parameters
+    if ( Object.keys(params).length === 3 &&
+         (prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx
+          || (Object.keys(params).some(key => params[key] !== prevParams[key]) || Object.keys(prevParams).some(key => prevParams[key] !== params[key])))) {
       const { locations: urlLocations, profile: urlProfile } = this.getProfileLocations(
         locations,
         params,
@@ -357,7 +376,8 @@ class App extends Component<any, State> {
           authorization,
           googleMapsOption,
           google,
-          trafficOption
+          trafficOption,
+          endpointHandler.options[endpointHandler.activeIdx].text
         )
       } else this.updateState('recalculate', true)
     }
@@ -389,12 +409,13 @@ class App extends Component<any, State> {
     authorization: string,
     googleMapsOption: boolean,
     google: any,
-    trafficOption: boolean
+    trafficOption: boolean,
+    endpointUrl: string
   ) => {
     if (locations.length >= 2 && !locations.some((el: Location) => !el.lat || !el.lng)) {
       const body = getRequestBody(locations)
 
-      routingApi(profile, authorization, body)
+      routingApi(profile, authorization, body, endpointUrl)
         .then((response: RouteResponse) => this.setState({ response, body }))
         .catch(() =>
           this.setState({
@@ -414,7 +435,7 @@ class App extends Component<any, State> {
       }
 
       if (trafficOption && profile === 'car') {
-        routingApi('car-traffic', authorization, body)
+        routingApi('car-traffic', authorization, body, endpointUrl)
           .then((trafficResponse: RouteResponse) => this.setState({ trafficResponse }))
           .catch(() =>
             this.setState({
@@ -507,6 +528,7 @@ class App extends Component<any, State> {
       body,
       googleRoute,
       responseOption,
+      endpointHandler,
       selectedService,
       expanded
     } = this.state
@@ -518,18 +540,18 @@ class App extends Component<any, State> {
     return (
       <AppWrapper>
         <Sidebar.Pushable as={StyledSegment}>
-          <StyledDiv 
-            direction="row" 
+          <StyledDiv
+            direction="row"
           >
-            <StyledEmptyDiv 
-              width={visible ? '32%' : 0} 
+            <StyledEmptyDiv
+              width={visible ? '32%' : 0}
               minwidth={visible && true}
               maxwidth={visible && true}
-              height={'10%'} 
+              height={'10%'}
               position="relative"
             />
-            <Transition.Group 
-              as={StyledButton} 
+            <Transition.Group
+              as={StyledButton}
               duration={{ show, hide }}
               animation={'scale'}
               onClick={visible ? (e: any) => this.handleHideClick(e) : this.handleShowClick}
@@ -543,7 +565,7 @@ class App extends Component<any, State> {
                 name={visible ? 'chevron left' : ('chevron right' as any)}
               />
               {expanded && !visible && <span> Inspect </span>}
-            </Transition.Group>            
+            </Transition.Group>
           </StyledDiv>
           <Sidebar
             as={Menu}
@@ -555,10 +577,10 @@ class App extends Component<any, State> {
           >
             <OptionsPanel
               handleHideClick={this.handleHideClick}
-              response={serviceOptions[selectedService].key === 'Route' 
+              response={serviceOptions[selectedService].key === 'Route'
                 ? responseOption === 'normal' ? response : trafficResponse : matchResponse}
               body={body}
-              endpoint={endpoint}
+              endpointHandler={endpointHandler}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
               responseOption={responseOption}
@@ -569,7 +591,7 @@ class App extends Component<any, State> {
             </OptionsPanel>
           </Sidebar>
           <Sidebar.Pusher>
-            
+
             {route && route.distance && (
               <RouteInfo
                 statsColor={ROUTING_SERVICE_STATS}
@@ -636,6 +658,7 @@ class App extends Component<any, State> {
               recenter={recenter}
               authorization={authorization}
               googleRoute={googleRoute}
+              endpointHandler={endpointHandler}
             />
             {routingGraphVisible && <TrafficLegend />}
           </Sidebar.Pusher>

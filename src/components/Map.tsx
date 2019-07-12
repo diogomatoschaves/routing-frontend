@@ -9,7 +9,8 @@ import {
   Coords2,
   Geography,
   MapboxStyle,
-  Route
+  Route,
+  EndpointHandler
 } from '../types'
 import {
   routeLineSettings,
@@ -52,6 +53,7 @@ interface Props {
   authorization: string
   google?: any
   googleRoute: Route | null
+  endpointHandler: EndpointHandler
 }
 
 export default class Map extends Component<Props, State> {
@@ -96,7 +98,8 @@ export default class Map extends Component<Props, State> {
       geographies,
       recenter,
       updateState,
-      googleRoute
+      googleRoute,
+      endpointHandler
     } = this.props
     const { map, markers, style } = this.state
 
@@ -164,10 +167,18 @@ export default class Map extends Component<Props, State> {
       )
     }
 
-    if (map && prevProps.routingGraphVisible !== routingGraphVisible) {
+    // get new tiles if the endpoint, the traffic option or profile changed
+    if (map && (   (prevProps.endpointHandler.activeIdx !== endpointHandler.activeIdx && routingGraphVisible)
+                || (prevProps.trafficOption !== trafficOption && routingGraphVisible)
+                || (prevProps.profile !== profile && routingGraphVisible)
+                || (prevProps.routingGraphVisible !== routingGraphVisible))) {
+      const tileProfile = trafficOption ? profile + '-traffic' : profile;
+
       if (routingGraphVisible) {
         Promise.resolve(this.removeSourceLayer('speeds', map)).then(() =>
-          this.addSpeedsLayer(map, 'speeds')
+          {
+            return this.addSpeedsLayer(map, 'speeds', tileProfile, endpointHandler.options[endpointHandler.activeIdx].text);
+          }
         )
       } else {
         this.removeSourceLayer('speeds', map)
@@ -237,20 +248,18 @@ export default class Map extends Component<Props, State> {
       minZoom: 1,
       zoom: 4,
       center: [13.4147, 52.502],
-      ...(process.env.NODE_ENV !== 'production' && {
-        transformRequest: (url: any, resourceType: any): any => {
-          if (url.includes('routing')) {
-            return {
-              url,
-              method: 'GET',
-              headers: {
-                Authorization: this.authorization,
-                'Content-Type': 'application/x-protobuf'
-              }
+      transformRequest: (url: any, resourceType: any): any => {
+        if (url.includes('routing')) {
+          return {
+            url,
+            method: 'GET',
+            headers: {
+              Authorization: this.authorization,
+              'Content-Type': 'application/x-protobuf'
             }
           }
         }
-      })
+      }
     })
 
     map.on('load', () => {
@@ -370,6 +379,8 @@ export default class Map extends Component<Props, State> {
   private addSpeedsLayer = (
     map: mapboxgl.Map,
     source: null | string = null,
+    profile: string,
+    endpointUrlString: string,
     datasourceFilter: null | Array<string> = null
   ) => {
     const speedsEntries = source
@@ -379,9 +390,12 @@ export default class Map extends Component<Props, State> {
       .map(input => {
         const sourceName = input.id
 
+        endpointUrlString = endpointUrlString.replace('${PROFILE}', profile);
+        const url = `${endpointUrlString}/v1/tile/{x},{y},{z}`
+
         map.addSource(input.id, {
           type: 'vector',
-          tiles: [input.url],
+          tiles: [url],
           minzoom: 11,
           maxzoom: 18
         })

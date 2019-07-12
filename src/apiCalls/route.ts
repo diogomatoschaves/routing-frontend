@@ -1,16 +1,16 @@
 import { Body } from '../types'
 
-const routingApi = async (profile: string, authorization: string, body: Body) => {
+const routingApi = async (profile: string, authorization: string, body: Body, endpoint: string) => {
+
 
   const headers = new Headers() as any
 
-  // authorization required if not on production env
-  process.env.NODE_ENV !== 'production' && headers.set('Authorization', authorization);
+  headers.set('Authorization', authorization);
   headers.set('Content-Type', 'application/json');
 
-  const baseUrl = process.env.REACT_APP_ROUTE_URL || ''
+  endpoint = endpoint.replace('${PROFILE}', profile);
+  const url = `${endpoint}/v1/route`;
 
-  const url = baseUrl.replace(':profile', profile)
 
   const response = await fetch(url, {
     method: 'POST',

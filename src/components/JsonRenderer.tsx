@@ -18,7 +18,6 @@ interface Props {
 
 const StyledForm = styled(Form)`
   width: 100%;
-  z-index: 1000;
 
   &.ui.form textarea {
     width: 100%;
@@ -52,7 +51,7 @@ const StyledForm = styled(Form)`
   }
 `
 
-export default function JsonRenderer ({ 
+export default function JsonRenderer ({
   value,
   id,
   editJson,
