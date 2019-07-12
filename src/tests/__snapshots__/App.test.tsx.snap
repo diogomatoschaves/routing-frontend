@@ -51,7 +51,7 @@ exports[`expect to render App component 1`] = `
           >
             <div
               aria-expanded={false}
-              className="ui fluid selection dropdown sc-ckVGcZ fLBywv"
+              className="ui fluid selection dropdown sc-bZQynM iKBDWg"
               id="selectedService"
               onBlur={[Function]}
               onChange={[Function]}
@@ -131,7 +131,7 @@ exports[`expect to render App component 1`] = `
               >
                 <i
                   aria-hidden="true"
-                  className="grey angle left large icon sc-dnqmqq bPwZQa"
+                  className="grey angle left large icon sc-iwsKbI jVTAHI"
                   onClick={[Function]}
                 />
               </div>
@@ -140,7 +140,7 @@ exports[`expect to render App component 1`] = `
                 width="60%"
               >
                 <div
-                  className="ui large label sc-iwsKbI boLuZU"
+                  className="ui large label sc-gZMcBi bFgbsv"
                   onClick={[Function]}
                 >
                   No Traffic
@@ -153,7 +153,7 @@ exports[`expect to render App component 1`] = `
               >
                 <i
                   aria-hidden="true"
-                  className="grey angle right large icon sc-dnqmqq bPwZQa"
+                  className="grey angle right large icon sc-iwsKbI jVTAHI"
                   onClick={[Function]}
                 />
               </div>
@@ -165,26 +165,130 @@ exports[`expect to render App component 1`] = `
           width="80%"
         >
           <div
-            className="ui header sc-dxgOiQ hGOPWA"
+            className="ui header sc-ckVGcZ fSUvzU"
             overridecolor="#00677f"
           >
             Request Endpoint
           </div>
-          <form
-            className="ui form sc-kpOJdX hKgGbp"
-            focuscolor="#5097ab"
-            onSubmit={[Function]}
+          <div
+            className="sc-bwzfXH iSONxz"
+            direction="row"
           >
-            <textarea
-              disabled={true}
-              id="endpointValue"
+            <div
+              aria-expanded={false}
+              className="ui fluid search selection dropdown sc-bZQynM iKBDWg"
+              onBlur={[Function]}
               onChange={[Function]}
-              onInput={[Function]}
-              readOnly={true}
-              rows={1}
-              value="https://routing.develop.otonomousmobility.com"
-            />
-          </form>
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseDown={[Function]}
+              role="combobox"
+            >
+              <input
+                aria-autocomplete="list"
+                autoComplete="off"
+                className="search"
+                onChange={[Function]}
+                style={
+                  Object {
+                    "width": undefined,
+                  }
+                }
+                tabIndex={0}
+                type="text"
+                value=""
+              />
+              <div
+                aria-live="polite"
+                className="text"
+                role="alert"
+              >
+                https://routing.develop.otonomousmobility.com/\${PROFILE}
+              </div>
+              <i
+                aria-hidden="true"
+                className="dropdown icon"
+                onClick={[Function]}
+              />
+              <div
+                className="menu transition"
+                role="listbox"
+              >
+                <div
+                  aria-checked={true}
+                  aria-selected={true}
+                  className="active selected item"
+                  onClick={[Function]}
+                  role="option"
+                  style={
+                    Object {
+                      "pointerEvents": "all",
+                    }
+                  }
+                >
+                  <span
+                    className="text"
+                  >
+                    https://routing.develop.otonomousmobility.com/\${PROFILE}
+                  </span>
+                </div>
+                <div
+                  aria-checked={false}
+                  aria-selected={false}
+                  className="item"
+                  onClick={[Function]}
+                  role="option"
+                  style={
+                    Object {
+                      "pointerEvents": "all",
+                    }
+                  }
+                >
+                  <span
+                    className="text"
+                  >
+                    https://routing.staging.otonomousmobility.com/\${PROFILE}
+                  </span>
+                </div>
+                <div
+                  aria-checked={false}
+                  aria-selected={false}
+                  className="item"
+                  onClick={[Function]}
+                  role="option"
+                  style={
+                    Object {
+                      "pointerEvents": "all",
+                    }
+                  }
+                >
+                  <span
+                    className="text"
+                  >
+                    https://routing.testing.otonomousmobility.com/\${PROFILE}
+                  </span>
+                </div>
+                <div
+                  aria-checked={false}
+                  aria-selected={false}
+                  className="item"
+                  onClick={[Function]}
+                  role="option"
+                  style={
+                    Object {
+                      "pointerEvents": "all",
+                    }
+                  }
+                >
+                  <span
+                    className="text"
+                  >
+                    http://localhost:5000
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
           className="sc-bwzfXH kwvKmS"
@@ -199,13 +303,13 @@ exports[`expect to render App component 1`] = `
               direction="row"
             >
               <div
-                className="ui header sc-dxgOiQ hGOPWA"
+                className="ui header sc-ckVGcZ fSUvzU"
                 overridecolor="#00677f"
               >
                 Request Body
               </div>
               <button
-                className="ui button body-textarea sc-jKJlTe hPSlYG"
+                className="ui button body-textarea sc-jKJlTe fMdjwL"
                 id="bodyEdit"
                 marginleft="10px"
                 onClick={[Function]}
@@ -215,16 +319,16 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <form
-            className="ui form sc-kGXeez brHMMD"
+            className="ui form sc-kpOJdX bvpjyo"
             color="rgb(100, 100, 100)"
             focuscolor="#5097ab"
             onSubmit={[Function]}
           >
             <div
-              className="sc-kAzzGY iEbsOc"
+              className="sc-chPdSV WvvwV"
             >
               <div
-                className="sc-cSHVUG bKHqa"
+                className="sc-kAzzGY hUkmXL"
                 onClick={[Function]}
               >
                 
@@ -235,10 +339,10 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-kAzzGY iEbsOc"
+                className="sc-chPdSV WvvwV"
               >
                 <div
-                  className="sc-cSHVUG bKHqa"
+                  className="sc-kAzzGY hUkmXL"
                   onClick={[Function]}
                 >
                   Locations
@@ -250,16 +354,16 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
               <div
-                className="sc-kAzzGY DLQYP"
+                className="sc-chPdSV jbjPGB"
               >
                 <span
-                  className="sc-chPdSV bJjSsj"
+                  className="sc-kgoBCf jDyuzH"
                 >
                   Report Geometry
                   : 
                 </span>
                 <span
-                  className="sc-kgoBCf crsEgQ"
+                  className="sc-kGXeez hOygGA"
                 >
                   true
                 </span>
@@ -276,13 +380,13 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="ui header sc-dxgOiQ hGOPWA"
+              className="ui header sc-ckVGcZ fSUvzU"
               overridecolor="#00677f"
             >
               Response
             </div>
             <button
-              className="ui button response-textarea sc-jKJlTe hPSlYG"
+              className="ui button response-textarea sc-jKJlTe fMdjwL"
               id="responseEdit"
               marginleft="10px"
               onClick={[Function]}
@@ -291,16 +395,16 @@ exports[`expect to render App component 1`] = `
             </button>
           </div>
           <form
-            className="ui form sc-kGXeez brHMMD"
+            className="ui form sc-kpOJdX bvpjyo"
             color="rgb(100, 100, 100)"
             focuscolor="#5097ab"
             onSubmit={[Function]}
           >
             <div
-              className="sc-kAzzGY iEbsOc"
+              className="sc-chPdSV WvvwV"
             >
               <div
-                className="sc-cSHVUG bKHqa"
+                className="sc-kAzzGY hUkmXL"
                 onClick={[Function]}
               >
                 
@@ -311,25 +415,25 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-kAzzGY iEbsOc"
+                className="sc-chPdSV WvvwV"
               >
                 <span
-                  className="sc-chPdSV bJjSsj"
+                  className="sc-kgoBCf jDyuzH"
                 >
                   Code
                   : 
                 </span>
                 <span
-                  className="sc-kgoBCf crsEgQ"
+                  className="sc-kGXeez hOygGA"
                 >
                   Ok
                 </span>
               </div>
               <div
-                className="sc-kAzzGY iEbsOc"
+                className="sc-chPdSV WvvwV"
               >
                 <div
-                  className="sc-cSHVUG bKHqa"
+                  className="sc-kAzzGY hUkmXL"
                   onClick={[Function]}
                 >
                   Routes
@@ -341,10 +445,10 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
               <div
-                className="sc-kAzzGY DLQYP"
+                className="sc-chPdSV jbjPGB"
               >
                 <div
-                  className="sc-cSHVUG bKHqa"
+                  className="sc-kAzzGY hUkmXL"
                   onClick={[Function]}
                 >
                   Locations
@@ -364,7 +468,7 @@ exports[`expect to render App component 1`] = `
       className="pusher"
     >
       <div
-        className="sc-gZMcBi jAREqb"
+        className="sc-gqjmRU gsFrYw"
       >
         <div
           className="sc-bwzfXH islmOK"
@@ -444,7 +548,7 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="ui divider sc-gqjmRU bxMepl"
+            className="ui divider sc-VigVT guBCph"
           />
           <div
             className="sc-bwzfXH fOQsml"
@@ -471,7 +575,7 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
             <div
-              className="ui fluid input sc-bZQynM euAhRA"
+              className="ui fluid input sc-gzVnrw cXaJvH"
             >
               <input
                 onBlur={[Function]}
@@ -508,7 +612,7 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
             <div
-              className="ui fluid input sc-bZQynM euAhRA"
+              className="ui fluid input sc-gzVnrw cXaJvH"
             >
               <input
                 onBlur={[Function]}
@@ -521,7 +625,7 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="ui divider sc-gqjmRU bxMepl"
+            className="ui divider sc-VigVT guBCph"
           />
           <div
             className="sc-bwzfXH jduFbp"
@@ -538,7 +642,7 @@ exports[`expect to render App component 1`] = `
                 height="50px"
               >
                 <div
-                  className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                  className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
                   onChange={[Function]}
                   onClick={[Function]}
                   onMouseDown={[Function]}
@@ -557,7 +661,7 @@ exports[`expect to render App component 1`] = `
                   />
                 </div>
                 <label
-                  className="sc-gzVnrw bulIkC"
+                  className="sc-htoDjs gLpkjK"
                 >
                   Covered Areas
                 </label>
@@ -568,7 +672,7 @@ exports[`expect to render App component 1`] = `
                 height="50px"
               >
                 <div
-                  className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                  className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
                   onChange={[Function]}
                   onClick={[Function]}
                   onMouseDown={[Function]}
@@ -587,7 +691,7 @@ exports[`expect to render App component 1`] = `
                   />
                 </div>
                 <label
-                  className="sc-gzVnrw bulIkC"
+                  className="sc-htoDjs gLpkjK"
                 >
                   Routing Graph
                 </label>
@@ -615,7 +719,7 @@ exports[`expect to render App component 1`] = `
               width="65%"
             >
               <div
-                className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
                 onChange={[Function]}
                 onClick={[Function]}
                 onMouseDown={[Function]}
@@ -634,7 +738,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <label
-                className="sc-gzVnrw bulIkC"
+                className="sc-htoDjs gLpkjK"
               >
                 Google Maps
               </label>
@@ -646,7 +750,7 @@ exports[`expect to render App component 1`] = `
               width="35%"
             >
               <div
-                className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
+                className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
                 onChange={[Function]}
                 onClick={[Function]}
                 onMouseDown={[Function]}
@@ -665,7 +769,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <label
-                className="sc-gzVnrw bulIkC"
+                className="sc-htoDjs gLpkjK"
               >
                 Traffic
               </label>

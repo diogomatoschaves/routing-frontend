@@ -15,7 +15,7 @@ exports[`expect to render OptionsPanel component 1`] = `
     >
       <div
         aria-expanded={false}
-        className="ui fluid selection dropdown sc-jTzLTM ifolny"
+        className="ui fluid selection dropdown sc-EHOje jekteJ"
         id="selectedService"
         onBlur={[Function]}
         onChange={[Function]}
@@ -95,7 +95,7 @@ exports[`expect to render OptionsPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle left large icon sc-EHOje eQYihx"
+            className="grey angle left large icon sc-bZQynM IAXmQ"
             onClick={[Function]}
           />
         </div>
@@ -104,7 +104,7 @@ exports[`expect to render OptionsPanel component 1`] = `
           width="60%"
         >
           <div
-            className="ui large label sc-bZQynM cRUavP"
+            className="ui large label sc-gzVnrw fHkTB"
             onClick={[Function]}
           >
             No Traffic
@@ -117,7 +117,7 @@ exports[`expect to render OptionsPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle right large icon sc-EHOje eQYihx"
+            className="grey angle right large icon sc-bZQynM IAXmQ"
             onClick={[Function]}
           />
         </div>
@@ -129,26 +129,130 @@ exports[`expect to render OptionsPanel component 1`] = `
     width="80%"
   >
     <div
-      className="ui header sc-VigVT bsqpbk"
+      className="ui header sc-jTzLTM itsxkf"
       overridecolor="#00677f"
     >
       Request Endpoint
     </div>
-    <form
-      className="ui form sc-gqjmRU eYaXOi"
-      focuscolor="#5097ab"
-      onSubmit={[Function]}
+    <div
+      className="sc-bdVaJa fuiAsE"
+      direction="row"
     >
-      <textarea
-        disabled={true}
-        id="endpointValue"
+      <div
+        aria-expanded={false}
+        className="ui fluid search selection dropdown sc-EHOje jekteJ"
+        onBlur={[Function]}
         onChange={[Function]}
-        onInput={[Function]}
-        readOnly={true}
-        rows={1}
-        value="https://routing.develop.otonomousmobility.com"
-      />
-    </form>
+        onClick={[Function]}
+        onFocus={[Function]}
+        onMouseDown={[Function]}
+        role="combobox"
+      >
+        <input
+          aria-autocomplete="list"
+          autoComplete="off"
+          className="search"
+          onChange={[Function]}
+          style={
+            Object {
+              "width": undefined,
+            }
+          }
+          tabIndex={0}
+          type="text"
+          value=""
+        />
+        <div
+          aria-live="polite"
+          className="text"
+          role="alert"
+        >
+          https://routing.develop.otonomousmobility.com/\${PROFILE}
+        </div>
+        <i
+          aria-hidden="true"
+          className="dropdown icon"
+          onClick={[Function]}
+        />
+        <div
+          className="menu transition"
+          role="listbox"
+        >
+          <div
+            aria-checked={true}
+            aria-selected={true}
+            className="active selected item"
+            onClick={[Function]}
+            role="option"
+            style={
+              Object {
+                "pointerEvents": "all",
+              }
+            }
+          >
+            <span
+              className="text"
+            >
+              https://routing.develop.otonomousmobility.com/\${PROFILE}
+            </span>
+          </div>
+          <div
+            aria-checked={false}
+            aria-selected={false}
+            className="item"
+            onClick={[Function]}
+            role="option"
+            style={
+              Object {
+                "pointerEvents": "all",
+              }
+            }
+          >
+            <span
+              className="text"
+            >
+              https://routing.staging.otonomousmobility.com/\${PROFILE}
+            </span>
+          </div>
+          <div
+            aria-checked={false}
+            aria-selected={false}
+            className="item"
+            onClick={[Function]}
+            role="option"
+            style={
+              Object {
+                "pointerEvents": "all",
+              }
+            }
+          >
+            <span
+              className="text"
+            >
+              https://routing.testing.otonomousmobility.com/\${PROFILE}
+            </span>
+          </div>
+          <div
+            aria-checked={false}
+            aria-selected={false}
+            className="item"
+            onClick={[Function]}
+            role="option"
+            style={
+              Object {
+                "pointerEvents": "all",
+              }
+            }
+          >
+            <span
+              className="text"
+            >
+              http://localhost:5000
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div
     className="sc-bdVaJa fEcaVD"
@@ -163,13 +267,13 @@ exports[`expect to render OptionsPanel component 1`] = `
         direction="row"
       >
         <div
-          className="ui header sc-VigVT bsqpbk"
+          className="ui header sc-jTzLTM itsxkf"
           overridecolor="#00677f"
         >
           Request Body
         </div>
         <button
-          className="ui button body-textarea sc-fjdhpX dzciwB"
+          className="ui button body-textarea sc-fjdhpX kqDxje"
           id="bodyEdit"
           marginleft="10px"
           onClick={[Function]}
@@ -179,16 +283,16 @@ exports[`expect to render OptionsPanel component 1`] = `
       </div>
     </div>
     <form
-      className="ui form sc-gZMcBi gHfyrx"
+      className="ui form sc-gqjmRU dZmkkW"
       color="rgb(100, 100, 100)"
       focuscolor="#5097ab"
       onSubmit={[Function]}
     >
       <div
-        className="sc-htoDjs kekEFw"
+        className="sc-dnqmqq fNLREc"
       >
         <div
-          className="sc-gzVnrw fRPPoF"
+          className="sc-htoDjs epHUHX"
           onClick={[Function]}
         >
           
@@ -199,10 +303,10 @@ exports[`expect to render OptionsPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-htoDjs kekEFw"
+          className="sc-dnqmqq fNLREc"
         >
           <div
-            className="sc-gzVnrw fRPPoF"
+            className="sc-htoDjs epHUHX"
             onClick={[Function]}
           >
             Locations
@@ -214,16 +318,16 @@ exports[`expect to render OptionsPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-htoDjs kGYaTF"
+          className="sc-dnqmqq dROvRF"
         >
           <span
-            className="sc-dnqmqq hVZdIT"
+            className="sc-iwsKbI daDmXX"
           >
             Report Geometry
             : 
           </span>
           <span
-            className="sc-iwsKbI eyqtoY"
+            className="sc-gZMcBi hbrQes"
           >
             true
           </span>
@@ -240,13 +344,13 @@ exports[`expect to render OptionsPanel component 1`] = `
       direction="row"
     >
       <div
-        className="ui header sc-VigVT bsqpbk"
+        className="ui header sc-jTzLTM itsxkf"
         overridecolor="#00677f"
       >
         Response
       </div>
       <button
-        className="ui button response-textarea sc-fjdhpX dzciwB"
+        className="ui button response-textarea sc-fjdhpX kqDxje"
         id="responseEdit"
         marginleft="10px"
         onClick={[Function]}
@@ -255,16 +359,16 @@ exports[`expect to render OptionsPanel component 1`] = `
       </button>
     </div>
     <form
-      className="ui form sc-gZMcBi gHfyrx"
+      className="ui form sc-gqjmRU dZmkkW"
       color="rgb(100, 100, 100)"
       focuscolor="#5097ab"
       onSubmit={[Function]}
     >
       <div
-        className="sc-htoDjs kekEFw"
+        className="sc-dnqmqq fNLREc"
       >
         <div
-          className="sc-gzVnrw fRPPoF"
+          className="sc-htoDjs epHUHX"
           onClick={[Function]}
         >
           
@@ -275,25 +379,25 @@ exports[`expect to render OptionsPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-htoDjs kekEFw"
+          className="sc-dnqmqq fNLREc"
         >
           <span
-            className="sc-dnqmqq hVZdIT"
+            className="sc-iwsKbI daDmXX"
           >
             Code
             : 
           </span>
           <span
-            className="sc-iwsKbI eyqtoY"
+            className="sc-gZMcBi hbrQes"
           >
             Ok
           </span>
         </div>
         <div
-          className="sc-htoDjs kekEFw"
+          className="sc-dnqmqq fNLREc"
         >
           <div
-            className="sc-gzVnrw fRPPoF"
+            className="sc-htoDjs epHUHX"
             onClick={[Function]}
           >
             Routes
@@ -305,10 +409,10 @@ exports[`expect to render OptionsPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-htoDjs kGYaTF"
+          className="sc-dnqmqq dROvRF"
         >
           <div
-            className="sc-gzVnrw fRPPoF"
+            className="sc-htoDjs epHUHX"
             onClick={[Function]}
           >
             Locations

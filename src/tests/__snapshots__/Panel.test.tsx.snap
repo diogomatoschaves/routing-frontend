@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-iwsKbI dNAtZr"
+  className="sc-gZMcBi jAREqb"
 >
   <div
     className="sc-bdVaJa jsucjq"
@@ -82,7 +82,7 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="ui divider sc-gZMcBi jtBqvE"
+      className="ui divider sc-gqjmRU bxMepl"
     />
     <div
       className="sc-bdVaJa gSlpgJ"
@@ -109,7 +109,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-EHOje egxHjk"
+        className="ui fluid input sc-bZQynM euAhRA"
       >
         <input
           onBlur={[Function]}
@@ -146,7 +146,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-EHOje egxHjk"
+        className="ui fluid input sc-bZQynM euAhRA"
       >
         <input
           onBlur={[Function]}
@@ -159,7 +159,7 @@ exports[`expect to render Panel component 1`] = `
       </div>
     </div>
     <div
-      className="ui divider sc-gZMcBi jtBqvE"
+      className="ui divider sc-gqjmRU bxMepl"
     />
     <div
       className="sc-bdVaJa bSEcKq"
@@ -176,7 +176,7 @@ exports[`expect to render Panel component 1`] = `
           height="50px"
         >
           <div
-            className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+            className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
             onChange={[Function]}
             onClick={[Function]}
             onMouseDown={[Function]}
@@ -195,7 +195,7 @@ exports[`expect to render Panel component 1`] = `
             />
           </div>
           <label
-            className="sc-bZQynM bhGoVA"
+            className="sc-gzVnrw bulIkC"
           >
             Covered Areas
           </label>
@@ -206,7 +206,7 @@ exports[`expect to render Panel component 1`] = `
           height="50px"
         >
           <div
-            className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+            className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
             onChange={[Function]}
             onClick={[Function]}
             onMouseDown={[Function]}
@@ -225,7 +225,7 @@ exports[`expect to render Panel component 1`] = `
             />
           </div>
           <label
-            className="sc-bZQynM bhGoVA"
+            className="sc-gzVnrw bulIkC"
           >
             Routing Graph
           </label>
@@ -253,7 +253,7 @@ exports[`expect to render Panel component 1`] = `
         width="65%"
       >
         <div
-          className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+          className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
           onChange={[Function]}
           onClick={[Function]}
           onMouseDown={[Function]}
@@ -272,7 +272,7 @@ exports[`expect to render Panel component 1`] = `
           />
         </div>
         <label
-          className="sc-bZQynM bhGoVA"
+          className="sc-gzVnrw bulIkC"
         >
           Google Maps
         </label>
@@ -284,7 +284,7 @@ exports[`expect to render Panel component 1`] = `
         width="35%"
       >
         <div
-          className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+          className="ui fitted toggle checkbox custom-class sc-htoDjs jVpSXw"
           onChange={[Function]}
           onClick={[Function]}
           onMouseDown={[Function]}
@@ -303,7 +303,7 @@ exports[`expect to render Panel component 1`] = `
           />
         </div>
         <label
-          className="sc-bZQynM bhGoVA"
+          className="sc-gzVnrw bulIkC"
         >
           Traffic
         </label>
