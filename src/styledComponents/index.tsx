@@ -4,5 +4,4 @@ export { default as ColoredDiv } from './ColoredDiv'
 export { default as StyledIcon } from './StyledIcon'
 export { default as EmptySpace } from './EmptySpace'
 export { default as StyledSegment } from './StyledSegment'
-
-
+export { default as StyledDropdown } from './StyledDropdown'
