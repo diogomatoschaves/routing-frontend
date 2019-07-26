@@ -9,17 +9,23 @@ import {
   Coords2,
   Geography,
   MapboxStyle,
-  Route,
-  EndpointHandler
+  OptionsHandler,
+  RouteProperty,
+  Routes,
+  Route
 } from '../types'
 import {
   routeLineSettings,
   emptyLineString,
   speedTilesInput,
-  defaultRouteResponse
+  defaultRoute
 } from '../utils/input'
 import { transformPoints, getSpeedsLayers } from '../utils/functions'
-import { POLYLINE_COLOR, THIRD_PARTY_POLYLINE, TRAFFIC_PARTY_POLYLINE } from '../utils/colours'
+import {
+  POLYLINE_COLOR,
+  THIRD_PARTY_POLYLINE,
+  TRAFFIC_POLYLINE
+} from '../utils/colours'
 
 const MapWrapper = styled.div`
   position: absolute;
@@ -32,6 +38,8 @@ const MapWrapper = styled.div`
 interface State {
   map?: mapboxgl.Map
   markers: Array<mapboxgl.Marker>
+  addedRoutesMarkers: Array<mapboxgl.Marker>
+  addedRoutesIds: string[]
   style: string
 }
 
@@ -40,8 +48,7 @@ interface Props {
   profile: string
   updatePoint: UpdatePoint
   updateState: UpdateState
-  routePath: Array<Coords2> | null
-  trafficRoutePath: Array<Coords2> | null
+  routes: Routes
   routingGraphVisible: boolean
   polygonsVisible: boolean
   googleMapsOption: boolean
@@ -52,8 +59,11 @@ interface Props {
   mapboxStyle: Array<MapboxStyle>
   authorization: string
   google?: any
-  googleRoute: Route | null
-  endpointHandler: EndpointHandler
+  endpointHandler: OptionsHandler
+  debug: boolean
+  routeProperties: Array<RouteProperty>
+  addedRoutes: Array<Route>
+  routeHighlight: string
 }
 
 export default class Map extends Component<Props, State> {
@@ -67,6 +77,29 @@ export default class Map extends Component<Props, State> {
         type: 'light',
         endpoint: 'mapbox://styles/mapbox/light-v9'
       }
+    ],
+    routeProperties: [
+      {
+        id: 'routeDAS',
+        color: POLYLINE_COLOR,
+        routeId: 'route',
+        width: 6.0,
+        routingGraphVisible: true
+      },
+      {
+        id: 'routeTrafficDAS',
+        color: TRAFFIC_POLYLINE,
+        routeId: 'trafficRoute',
+        width: 5.5,
+        routingGraphVisible: true
+      },
+      {
+        id: 'routeGOOGLE',
+        color: THIRD_PARTY_POLYLINE,
+        routeId: 'googleRoute',
+        width: 6.5,
+        routingGraphVisible: false
+      },
     ]
   }
 
@@ -78,7 +111,9 @@ export default class Map extends Component<Props, State> {
     this.state = {
       ...(process.env.NODE_ENV === 'test' && { map: new mapboxgl.Map() }),
       markers: [],
-      style: 'light'
+      addedRoutesMarkers: [],
+      style: 'light',
+      addedRoutesIds: []
     }
   }
 
@@ -86,8 +121,7 @@ export default class Map extends Component<Props, State> {
     const {
       locations,
       profile,
-      routePath,
-      trafficRoutePath,
+      routes,
       routingGraphVisible,
       updatePoint,
       authorization,
@@ -98,22 +132,17 @@ export default class Map extends Component<Props, State> {
       geographies,
       recenter,
       updateState,
-      googleRoute,
-      endpointHandler
+      endpointHandler,
+      debug,
+      routeProperties,
+      addedRoutes,
+      routeHighlight,
     } = this.props
-    const { map, markers, style } = this.state
+    const { map, markers, addedRoutesIds, addedRoutesMarkers } = this.state
 
     if (map && prevProps.locations !== locations) {
-      this.removeMarkers(markers)
-      const newMarkers = locations.reduce(
-        (accum: Array<mapboxgl.Marker>, location: Location, index: number) => {
-          if (location.lng && location.lat) {
-            return [...accum, this.addMarker(location, map, index, updatePoint)]
-          } else return accum
-        },
-        []
-      )
-      this.setState({ markers: newMarkers })
+      this.removeMarkers(markers, 'markers')
+      this.setState({ markers: this.addLocationMarkers(locations, map, updatePoint) })
     }
 
     if (map && prevState.markers !== markers) {
@@ -122,13 +151,17 @@ export default class Map extends Component<Props, State> {
 
       if (prevState.markers.length >= 2 && markers.length === 1) {
         this.removeSourceLayer('route', map)
-        updateState('response', defaultRouteResponse)
+        updateState('routes', {
+          googleRoute: defaultRoute,
+          route: defaultRoute,
+          trafficRoute: defaultRoute,
+        },)
       }
     }
 
-    if (map && routePath && prevProps.routePath !== routePath) {
+    if (map && routes.route.routePath && prevProps.routes.route.routePath !== routes.route.routePath) {
       this.addPolyline(
-        routePath,
+        routes.route.routePath,
         markers,
         map,
         routingGraphVisible,
@@ -138,29 +171,32 @@ export default class Map extends Component<Props, State> {
       )
     }
 
-    if (map && trafficRoutePath && prevProps.trafficRoutePath !== trafficRoutePath) {
+    if (
+      map &&
+      prevProps.routes.trafficRoute.routePath !== routes.trafficRoute.routePath &&
+      routes.trafficRoute.routePath.length > 1
+    ) {
       this.addPolyline(
-        trafficRoutePath,
+        routes.trafficRoute.routePath,
         markers,
         map,
         routingGraphVisible,
         'routeTrafficDAS',
-        TRAFFIC_PARTY_POLYLINE,
+        TRAFFIC_POLYLINE,
         5.5
       )
     }
 
     if (
       map &&
-      prevProps.googleRoute !== googleRoute &&
-      googleRoute &&
-      googleRoute.routePath
+      prevProps.routes.googleRoute.routePath !== routes.googleRoute.routePath &&
+      routes.googleRoute.routePath.length > 1
     ) {
       this.addPolyline(
-        googleRoute.routePath,
+        routes.googleRoute.routePath,
         markers,
         map,
-        false,
+        routingGraphVisible,
         'routeGOOGLE',
         THIRD_PARTY_POLYLINE,
         6.5
@@ -168,18 +204,25 @@ export default class Map extends Component<Props, State> {
     }
 
     // get new tiles if the endpoint, the traffic option or profile changed
-    if (map && (   (prevProps.endpointHandler.activeIdx !== endpointHandler.activeIdx && routingGraphVisible)
-                || (prevProps.trafficOption !== trafficOption && routingGraphVisible)
-                || (prevProps.profile !== profile && routingGraphVisible)
-                || (prevProps.routingGraphVisible !== routingGraphVisible))) {
-      const tileProfile = trafficOption ? profile + '-traffic' : profile;
+    if (
+      map &&
+      ((prevProps.endpointHandler.activeIdx !== endpointHandler.activeIdx &&
+        routingGraphVisible) ||
+        (prevProps.trafficOption !== trafficOption && routingGraphVisible) ||
+        (prevProps.profile !== profile && routingGraphVisible) ||
+        prevProps.routingGraphVisible !== routingGraphVisible)
+    ) {
+      const tileProfile = trafficOption ? profile + '-traffic' : profile
 
       if (routingGraphVisible) {
-        Promise.resolve(this.removeSourceLayer('speeds', map)).then(() =>
-          {
-            return this.addSpeedsLayer(map, 'speeds', tileProfile, endpointHandler.options[endpointHandler.activeIdx].text);
-          }
-        )
+        Promise.resolve(this.removeSourceLayer('speeds', map)).then(() => {
+          return this.addSpeedsLayer(
+            map,
+            'speeds',
+            tileProfile,
+            endpointHandler.options[endpointHandler.activeIdx].text
+          )
+        })
       } else {
         this.removeSourceLayer('speeds', map)
       }
@@ -212,6 +255,13 @@ export default class Map extends Component<Props, State> {
 
     if (map && prevProps.googleMapsOption !== googleMapsOption && !googleMapsOption) {
       this.removeSourceLayer('routeGOOGLE', map)
+      const points = this.getMarkerCoords(markers)
+      let routeCoords: number[][] = []
+      if (routes.route.routePath.length > 1)
+        routeCoords = [...routeCoords, ...transformPoints(routes.route.routePath)]
+      if (routes.trafficRoute.routePath.length > 1)
+        routeCoords = [...routeCoords, ...transformPoints(routes.trafficRoute.routePath)]
+      this.fitBounds([...points, ...routeCoords], map)
     }
 
     if (
@@ -220,6 +270,132 @@ export default class Map extends Component<Props, State> {
         (prevProps.profile !== profile && profile === 'foot'))
     ) {
       this.removeSourceLayer('routeTrafficDAS', map)
+      const points = this.getMarkerCoords(markers)
+      let routeCoords: number[][] = []
+      if (routes.route.routePath.length > 1)
+        routeCoords = [...routeCoords, ...transformPoints(routes.route.routePath)]
+      if (routes.googleRoute.routePath.length > 1)
+        routeCoords = [...routeCoords, ...transformPoints(routes.googleRoute.routePath)]
+      this.fitBounds([...points, ...routeCoords], map)
+    }
+
+    if (map && prevProps.debug !== debug) {
+      if (debug) {
+        this.removeMarkers(markers, 'markers')
+        this.removeSourceLayer('route', map)
+
+        addedRoutes.forEach(route => {
+          this.addPolyline(
+            route.routePath,
+            [],
+            map,
+            routingGraphVisible,
+            route.id,
+            POLYLINE_COLOR,
+            6.0
+          )
+        })
+
+        const newAddedRoutesMarkers = addedRoutesIds.reduce((accum: Array<mapboxgl.Marker>, routeId: string) => {
+          const addedRoute = addedRoutes.filter(el => el.id === routeId)[0]
+  
+          const startLocation = {
+            name: 'start',
+            marker: 'map marker alternate',
+            markerOffset: [0, 5],
+            placeholder: 'Origin',
+            lat: addedRoute.routePath[0].lat,
+            lng: addedRoute.routePath[0].lon
+          }
+          const endLocation = {
+            name: 'end',
+            marker: 'map marker',
+            markerOffset: [0, 5],
+            placeholder: 'Destination',
+            lat: addedRoute.routePath.slice(-1)[0].lat,
+            lng: addedRoute.routePath.slice(-1)[0].lon
+          }
+          return [...accum, 
+            this.addMarker(startLocation, map, 0, updatePoint, false),
+            this.addMarker(endLocation, map, 0, updatePoint, false)
+          ]
+        }, [])
+
+        this.setState({ 
+          addedRoutesMarkers: newAddedRoutesMarkers
+        })
+        
+      } else {
+        addedRoutesIds.forEach(routeId => this.removeSourceLayer(routeId, map))
+        this.removeMarkers(addedRoutesMarkers, 'addedRoutesMarkers')
+        this.setState({ markers: this.addLocationMarkers(locations, map, updatePoint) })
+
+        routeProperties.forEach(item => {
+          const routePath = routes[item.routeId].routePath
+
+          routePath.length > 1 && this.addPolyline(
+            routes[item.routeId].routePath,
+            markers,
+            map,
+            routingGraphVisible,
+            item.id,
+            item.color,
+            item.width
+          )
+        })
+      }
+    }
+
+    if (map && prevProps.addedRoutes !== addedRoutes) {
+      const newIds = addedRoutes.reduce((accum: string[], route: Route) => {
+        if (!addedRoutesIds.includes(route.id)) {
+          this.addPolyline(
+            route.routePath,
+            [],
+            map,
+            routingGraphVisible,
+            route.id,
+            POLYLINE_COLOR,
+            6.0
+          )
+          return [...accum, route.id]
+        } else return accum
+      }, [])
+
+      const newAddedRoutesMarkers = newIds.reduce((accum: Array<mapboxgl.Marker>, routeId: string) => {
+        const addedRoute = addedRoutes.filter(el => el.id === routeId)[0]
+
+        const startLocation = {
+          name: 'start',
+          marker: 'map marker alternate',
+          markerOffset: [0, 5],
+          placeholder: 'Origin',
+          lat: addedRoute.routePath[0].lat,
+          lng: addedRoute.routePath[0].lon
+        }
+        const endLocation = {
+          name: 'end',
+          marker: 'map marker',
+          markerOffset: [0, 5],
+          placeholder: 'Destination',
+          lat: addedRoute.routePath.slice(-1)[0].lat,
+          lng: addedRoute.routePath.slice(-1)[0].lon
+        }
+        return [...accum, 
+          this.addMarker(startLocation, map, 0, updatePoint, false),
+          this.addMarker(endLocation, map, 0, updatePoint, false)
+        ]
+      }, [])
+
+      this.setState({ 
+        addedRoutesIds: [...addedRoutesIds, ...newIds],
+        addedRoutesMarkers: newAddedRoutesMarkers
+      })
+    }
+
+    if (map && prevProps.routeHighlight !== routeHighlight) {
+      if (routeHighlight == '') map.setPaintProperty(`${prevProps.routeHighlight}-polyline`, 'line-width', 6.0)
+      else map.setPaintProperty(`${routeHighlight}-polyline`, 'line-width', 10)
     }
   }
 
@@ -291,7 +467,9 @@ export default class Map extends Component<Props, State> {
   }
 
   private handleMapClick = (event: any) => {
-    const { updatePoint, locations } = this.props
+    const { updatePoint, locations, debug } = this.props
+
+    if (debug) return
 
     const coords = {
       lat: event.lngLat.lat,
@@ -305,11 +483,23 @@ export default class Map extends Component<Props, State> {
     }
   }
 
+  private addLocationMarkers = (locations: Array<Location>, map: mapboxgl.Map, updatePoint: UpdatePoint) => {
+    return locations.reduce(
+      (accum: Array<mapboxgl.Marker>, location: Location, index: number) => {
+        if (location.lng && location.lat) {
+          return [...accum, this.addMarker(location, map, index, updatePoint, true)]
+        } else return accum
+      },
+      []
+    )
+  }
+
   private addMarker = (
     location: Location,
     map: mapboxgl.Map,
     index: number,
-    updatePoint: UpdatePoint
+    updatePoint: UpdatePoint,
+    draggable: boolean
   ) => {
     const el = document.createElement('i')
     el.className = `${location.marker} icon custom-marker`
@@ -320,12 +510,12 @@ export default class Map extends Component<Props, State> {
       offset:
         location.markerOffset &&
         new mapboxgl.Point(location.markerOffset[0], location.markerOffset[1]),
-      draggable: true
+      draggable
     })
       .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
       .addTo(map)
 
-    marker &&
+    marker && draggable &&
       marker.on('dragend', () => {
         const coords = marker.getLngLat()
         updatePoint([index], [{ lat: coords.lat, lng: coords.lng }])
@@ -334,9 +524,12 @@ export default class Map extends Component<Props, State> {
     return marker
   }
 
-  private removeMarkers = (markers: Array<mapboxgl.Marker>) => {
+  private removeMarkers = (markers: Array<mapboxgl.Marker>, markersName: string) => {
     markers.forEach(marker => marker && marker.remove())
-    this.setState({ markers: [] })
+    this.setState(state => ({ 
+      ...state,
+      [markersName]: []
+    }))
   }
 
   private getMarkerCoords = (markers: Array<mapboxgl.Marker>): number[][] => {
@@ -367,8 +560,8 @@ export default class Map extends Component<Props, State> {
     map.fitBounds(bounds, {
       padding: {
         top: 350,
-        left: 500,
-        right: 200,
+        left: 550,
+        right: 250,
         bottom: 120
       },
       linear: true,
@@ -390,7 +583,7 @@ export default class Map extends Component<Props, State> {
       .map(input => {
         const sourceName = input.id
 
-        endpointUrlString = endpointUrlString.replace('${PROFILE}', profile);
+        endpointUrlString = endpointUrlString.replace('${PROFILE}', profile)
         const url = `${endpointUrlString}/v1/tile/{x},{y},{z}`
 
         map.addSource(input.id, {
@@ -452,7 +645,7 @@ export default class Map extends Component<Props, State> {
     routePath: number[][],
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
-    type: { color: string; id: string, width: number }
+    type: { color: string; id: string; width: number }
   ) => {
     Promise.resolve(this.removeSourceLayer(type.id, map))
       .then(sourceName => {
@@ -479,8 +672,9 @@ export default class Map extends Component<Props, State> {
           source: type.id,
           paint: {
             ...routeLineSettings.paint,
-            'line-color': routingGraphVisible ? 'black' : type.color,
-            'line-width': type.width
+            'line-color': type.color,
+            'line-width': routingGraphVisible ? 2 * type.width : type.width,
+            'line-opacity':  routingGraphVisible ? 0.85 : routeLineSettings.paint['line-opacity']
           }
         })
       })

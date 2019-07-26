@@ -1,7 +1,7 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { Dropdown, Input } from 'semantic-ui-react'
-import {EndpointOption} from '../types'
+import { Option } from '../types'
 import App from '../components/App'
 import EndpointRow from '../components/EndpointRow'
 import { MemoryRouter, Route } from 'react-router-dom'
@@ -39,6 +39,7 @@ const expectGetRouteToUseCorrectEndpoint = (getRouteSpy: any, expectedEndpoint: 
     expect.anything(),
     expect.anything(),
     null,
+    expect.anything(),
     expect.anything(),
     expectedEndpoint);
 }
@@ -104,7 +105,7 @@ describe('On a blank app, use the correct expected endpoint when requesting rout
 
     it('stores the new endpoint and selects it in the endpointHandler', () => {
       const { endpointHandler } = AppComponent.state;
-      const customEndpoint = endpointHandler.options.find((option : EndpointOption) => option.text == mockNewCustomEndpoint);
+      const customEndpoint = endpointHandler.options.find((option : Option) => option.text == mockNewCustomEndpoint);
       expect(customEndpoint).toBeDefined();
       expect(endpointHandler.activeIdx).toBe(customEndpoint.value);
     })

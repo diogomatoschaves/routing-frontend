@@ -1,7 +1,7 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import { MemoryRouter } from 'react-router-dom'
-import JsonRenderer from '../components/JsonRenderer';
+import TextAreaInput from '../components/TextAreaInput';
 
 const mockEventStart = { lng: 13.389869, lat: 52.510348 }
 const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
@@ -21,16 +21,16 @@ const mockBody = {
 }
 
 
-it('expect to render JsonRenderer component', () => {
+it('expect to render TextAreaInput component', () => {
 
   const testInstance = TestRenderer.create(
     <MemoryRouter initialEntries={[ '/' ]}>
-      <JsonRenderer 
+      <TextAreaInput 
         value={mockBody}
         editableValue={JSON.stringify(mockBody)}
         id={'bodyValue'}
         editJson={false}
-        handleBlur={jest.fn()}
+        handleValueUpdate={jest.fn()}
         handleInputChange={jest.fn()}
         rows={10}
         color={'rgb(100, 100, 100)'}

@@ -10,7 +10,7 @@ interface Props {
   geographies?: Array<Geography>
   width?: string
   updateState: UpdateState
-  responseOption?: string,
+  responseOption?: string
   id: string
 }
 
@@ -42,12 +42,36 @@ const getNewProfile = (
     : geographies[index + 1]
 }
 
-const names: any= {
+const handleClick = (
+  geographies: Array<Geography> | undefined,
+  geography: Geography | undefined,
+  updateState: UpdateState,
+  id: string,
+  responseOption: string | undefined
+) => {
+  updateState(
+    id,
+    geographies && geography
+      ? getNewProfile(geographies, geography, true)
+      : responseOption === 'normal'
+      ? 'traffic'
+      : 'normal'
+  )
+}
+
+const names: any = {
   normal: 'No Traffic',
   traffic: 'Traffic'
 }
 
-const ProfileToggler = ({ geography, geographies, width, updateState, responseOption, id }: Props) => {
+const ProfileToggler = ({
+  geography,
+  geographies,
+  width,
+  updateState,
+  responseOption,
+  id
+}: Props) => {
   return (
     <Box
       direction="row"
@@ -58,32 +82,26 @@ const ProfileToggler = ({ geography, geographies, width, updateState, responseOp
     >
       <Box
         width="10%"
-        onClick={() => {
-          updateState(
-            id, 
-            geographies && geography
-              ? getNewProfile(geographies, geography, true) : 
-              responseOption === 'normal' ? 'traffic' : 'normal'
-          )
-        }}
+        onClick={() =>
+          handleClick(geographies, geography, updateState, id, responseOption)
+        }
       >
         <StyledIcon color="grey" size="large" name={'angle left'} />
       </Box>
       <Box width="60%">
-        <StyledLabel onClick={() => updateState('recenter', true)} size="large">
-          {geography ? geography.name : responseOption ? names[responseOption] : responseOption}
+        <StyledLabel onClick={() => geographies && updateState('recenter', true)} size="large">
+          {geography
+            ? geography.name
+            : responseOption
+            ? names[responseOption]
+            : responseOption}
         </StyledLabel>
       </Box>
       <Box
         width="10%"
-        onClick={() => {
-          updateState(
-            id, 
-            geographies && geography
-              ? getNewProfile(geographies, geography, false) : 
-              responseOption === 'normal' ? 'traffic' : 'normal'
-          )
-        }}
+        onClick={() =>
+          handleClick(geographies, geography, updateState, id, responseOption)
+        }
       >
         <StyledIcon color="grey" size="large" name={'angle right'} />
       </Box>

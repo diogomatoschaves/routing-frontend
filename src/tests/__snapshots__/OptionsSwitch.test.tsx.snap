@@ -8,7 +8,7 @@ exports[`expect to render OptionsPanel component 1`] = `
   width="65%"
 >
   <div
-    className="ui fitted toggle checkbox custom-class sc-gzVnrw gEujf"
+    className="ui fitted toggle checkbox custom-class sc-iwsKbI daRDRP"
     onChange={[Function]}
     onClick={[Function]}
     onMouseDown={[Function]}
@@ -27,7 +27,7 @@ exports[`expect to render OptionsPanel component 1`] = `
     />
   </div>
   <label
-    className="sc-bZQynM bhGoVA"
+    className="sc-dnqmqq kCCoEz"
   >
     Google Maps
   </label>
