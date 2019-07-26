@@ -1,9 +1,11 @@
+
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import { Input } from 'semantic-ui-react'
-import { routingApi } from '../apiCalls'
+import { mockCarResponse } from '../apiCalls/__mocks__/mockResponse'
 import App from '../components/App'
 import Map from '../components/Map'
+import InspectPanel from '../components/InspectPanel'
+import { Tab } from '../components/Tabs'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { getPath, formatCoords } from '../utils/functions'
 
@@ -33,7 +35,9 @@ const mockBody = {
   reportGeometry: true,
 }
 
-const getTestApp = (initialEntries: Array<string> = ['/'])=> TestRenderer.create(
+const urlMatchString = '/:profile/:start/:end'
+
+const getTestApp = (initialEntries: Array<string> = ['/']) => TestRenderer.create(
   <MemoryRouter initialEntries={initialEntries}>
     <Route render={({ location }) => (
       <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
@@ -48,46 +52,61 @@ const getTestApp = (initialEntries: Array<string> = ['/'])=> TestRenderer.create
   </MemoryRouter>
 )
 
-const urlMatchString = '/:profile/:start/:end'
+const invalidJson = '{"invalid"}'
 
-describe('Body Textarea works as expected on blur', () => {
+const toggleDebug = (root : any) => {
+  const TabComponent = root.findAllByType(Tab).filter((el: any) => el.props.id === 'debug' )[0]
+  TabComponent.props.onClick()
+}
 
-  describe('When an invalid json format / schema is inserted', () => {
+describe('Behaviour of Changing Body raw data', () => {
 
-    const testInstance = getTestApp()
+  const testInstance = getTestApp()
 
-    const root = testInstance.root
-    const OptionsMenuButton = root.findByProps({ className: 'options-button' })
+  const root = testInstance.root
 
-    OptionsMenuButton.props.onClick()
+  const AppComponent = root.findByType(App).instance
+  const MapComponent = root.findByType(Map).instance
 
-    const AppComponent = root.findByType(App).instance
-    const MapComponent = root.findByType(Map).instance
-    const input = root.findAllByType(Input)
-    const SideBarComponent = root.findByProps({ className: "body-textarea" })
+  const InspectPanelComponent = root.findByType(InspectPanel)
 
-    SideBarComponent.props.onClick('', { id: 'bodyEdit' })
-            
-    const TextAreaInstance = root.findByProps({ id: 'bodyValue', className: 'textarea' })
+  it('the color of the textarea is not red', () => {
+    const { bodyColor } = InspectPanelComponent.props
+    expect(bodyColor).not.toBe('red')
+  })
 
-    TextAreaInstance.props.onChange('', { id: 'bodyValue', value: JSON.stringify({ locations: [] }) })
-    TextAreaInstance.props.onBlur('')
+  describe('Behaviour when input is updated with invalid JSON', () => {
 
-    it('does not update start and end inputs\' value', () => {
-      const { value: valueStartInput } = input[0].props
-      const { value: valueEndInput } = input[1].props
-
-      expect(valueStartInput).toBe("")
-      expect(valueEndInput).toBe("")
+    beforeAll(() => {
+      AppComponent.handleValueUpdate({ id: 'bodyValue', value: invalidJson })
     })
+    
+    it('updates the color of the textarea to red', done => {
+      delay(500)
+      .then(() => {
+        const { bodyColor } = InspectPanelComponent.props
+        expect(bodyColor).toBe('red')
+        done()
+      })
+    })
+  })
 
+  describe('Behaviour when input confirm button is pressed with invalid JSON', () => {
+
+    beforeAll(() => {
+      AppComponent.handleChangeBody(jest.fn(), invalidJson)
+    })
+    
     it('does not update the locations array', () => {
       const { locations } = MapComponent.props
 
       expect(locations.length).toBe(2);
 
       const startPoint = locations.find((el: any) => el.name === 'start')
+      const endPoint = locations.find((el: any) => el.name === 'end')
 
+      expect(endPoint.lat).toBe(null);
+      expect(endPoint.lng).toBe(null);
       expect(startPoint.lat).toBe(null);
       expect(startPoint.lng).toBe(null);
     })
@@ -104,32 +123,31 @@ describe('Body Textarea works as expected on blur', () => {
 
       expect(splitUrl).toHaveLength(2)
     })
-
   })
 
-  describe('When a valid json format / schema is inserted', () => {
+  describe('Behaviour when input is updated with valid JSON', () => {
 
-    const testInstance = getTestApp()
+    beforeAll(() => {
+      AppComponent.handleValueUpdate({ id: 'bodyValue', value: JSON.stringify(mockBody) })
+    })
+    
+    it('does not update the color of the textarea to red', done => {
+      delay(500)
+      .then(() => {
+        const { bodyColor } = InspectPanelComponent.props
+        expect(bodyColor).not.toBe('red')
+        done()
+      })
+    })
+  })
 
-    const root = testInstance.root
-    const OptionsMenuButton = root.findByProps({ className: 'options-button' })
+  describe('Behaviour when input confirm button is pressed with valid JSON', () => {
 
-    OptionsMenuButton.props.onClick()
-
-    const AppComponent = root.findByType(App).instance
-    const MapComponent = root.findByType(Map).instance
-    const input = root.findAllByType(Input)
-    const SideBarComponent = root.findByProps({ className: "body-textarea" })
-
-    SideBarComponent.props.onClick('', { id: 'bodyEdit' })
-            
-    const TextAreaInstance = root.findByProps({ id: 'bodyValue', className: 'textarea' })
-
-    TextAreaInstance.props.onChange('', { id: 'bodyValue', value: JSON.stringify(mockBody) })
-    TextAreaInstance.props.onBlur('')
-
-    it('updates locations object with coordinates ', () => {
-
+    beforeAll(() => {
+      AppComponent.handleChangeBody(jest.fn(), JSON.stringify(mockBody))
+    })
+    
+    it('does update the locations array with the corresponding value', () => {
       const { locations } = MapComponent.props
 
       expect(locations.length).toBe(2);
@@ -143,22 +161,10 @@ describe('Body Textarea works as expected on blur', () => {
       expect(endPoint.lng).toBe(mockEventEnd.lng);
     })
 
-    it('updates start and end inputs\' value', () => {
-      const { value: valueStartInput } = input[0].props
-      const { value: valueEndInput } = input[1].props
-
-      expect(valueStartInput).toBe(formatCoords(mockEventStart))
-      expect(valueEndInput).toBe(formatCoords(mockEventEnd))
-    })
-
-    it('inserts markers on the map', () => {
+    it('inserts a marker on the Map component', () => {
       const { markers } = MapComponent.state
-      expect(markers.length).toBe(2)
-    })
 
-    it('calls the routing API once', (done) => {
-      expect(routingApi).toBeCalledTimes(1)
-      done()
+      expect(markers.length).toBe(2)
     })
 
     it('correctly updates the Url', () => {
@@ -172,3 +178,6 @@ describe('Body Textarea works as expected on blur', () => {
     })
   })
 })
+
+
+

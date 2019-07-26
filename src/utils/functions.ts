@@ -1,6 +1,12 @@
 import round from 'lodash/round'
-import { Coords, Coords2, Location } from '../types'
+import { Coords, Coords2, Location, UpdateState, UpdatePoint, Route } from '../types'
 import { layersArray } from '../utils/input'
+import { Validator } from 'jsonschema'
+import { Schema } from './schemas';
+import JSON5 from 'json5'
+import nanoid from 'nanoid'
+import { defaultRouteResponse, defaultRoute, defaultMatchResponse, defaultBody } from '../utils/input'
+
 
 export const getPath = (pathname: string) => {
   const matching = ['/:profile', '/:start', '/:end']
@@ -139,4 +145,248 @@ export const lightenDarkenColor = (col: string, amt: number) => {
 
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export const validateJSON = (
+  value: any,
+  validator: Validator,
+  service: string,
+  inputType: string,
+  inputId: string,
+  defaultColor: string,
+  setState: any,
+) => {
+  let parsedValue
+  try {
+    parsedValue = JSON5.parse(value)
+  } catch (error) {
+      console.log('Invalid JSON')
+      setState((state: any) => ({
+        ...state,
+        [`${inputId}Color`]: value === '' ? defaultColor : 'red'
+      }))
+      return false
+  }
+  const validation = validator.validate(
+    parsedValue,
+    Schema[service][capitalize(inputType)]
+  )
+  if (validation.valid) {
+    setState((state: any) => ({
+      ...state,
+      [`${inputId}Color`]: defaultColor
+    }))
+
+    return true
+    
+  } else {
+    console.log(validation)
+    setState((state: any) => ({
+      ...state,
+      [`${inputId}Color`]: 'red'
+    }))
+    return false
+  }
+}
+
+export const processValidResponse = (
+  updateState: UpdateState,
+  parsedValue: any,
+  addedRoutes: Array<Route>
+) => {
+
+  const newAddedRoutes = [
+    ...addedRoutes, 
+    { 
+      id: nanoid(),
+      duration: parsedValue.routes[0].totalDuration,
+      distance: parsedValue.routes[0].totalDistance,
+      routePath: parsedValue.routes[0].legs[0].geometry,
+      parsedValue
+    }
+  ]
+
+  updateState(
+    'addedRoutes',
+    newAddedRoutes,
+  )
+} 
+
+const processValidResponse2 = (
+  updateState: UpdateState,
+  updatePoint: UpdatePoint,
+  responseOption: string,
+  locations: Array<Location>,
+  parsedValue: any
+) => {
+  const points: any = {
+    start: parsedValue.locations[0].location,
+    end: parsedValue.locations.slice(-1)[0].location
+  }
+
+  if (
+    [locations[0], locations.slice(-1)[0]].some(el => {
+      return el.lat !== points[el.name].lat || el.lng !== points[el.name].lon
+    })
+  ) {
+    new Promise(resolve => {
+      resolve(updateState('recalculate', false))
+    }).then((value) => {
+      updatePoint([0, 1], [
+        { lat: points.start.lat, lng: points.start.lon },
+        { lat: points.end.lat, lng: points.end.lon }
+      ])
+    })
+
+    updateState(
+      responseOption === 'normal' ? 'response' : 'trafficResponse',
+      parsedValue
+    )
+  }
+}
+
+export const processValidBody = (
+  updatePoint: UpdatePoint,
+  locations: Array<Location>,
+  parsedValue: any
+) => {
+  const points: any = {
+    start: parsedValue.locations[0],
+    end: parsedValue.locations.slice(-1)[0]
+  }
+
+  if (
+    [locations[0], locations.slice(-1)[0]].some(el => {
+      return el.lat !== points[el.name].lat || el.lng !== points[el.name].lon
+    })
+  ) {
+    updatePoint([0, 1], [
+      { lat: points.start.lat, lng: points.start.lon },
+      { lat: points.end.lat, lng: points.end.lon }
+    ])
+  }
+}
+
+export const getAppState = () => {
+  return {
+    validator: new Validator(),
+    debug: false,
+    selectedService: 0,
+    recalculate: true,
+    initialUpdate: false,
+    body: defaultBody,
+    mapLoaded: false,
+    visible: false,
+    routingGraphVisible: false,
+    polygonsVisible: false,
+    googleMapsOption: false,
+    trafficOption: false,
+    profile: 'car',
+    geography: {
+      name: 'Berlin',
+      coords: [13.38408, 52.51721],
+      polygon: 'berlin.geojson'
+    },
+    responseOption: 'normal',
+    recenter: false,
+    expanded: false,
+    authorization: '',
+    google: null,
+    routes: {
+      googleRoute: defaultRoute,
+      route: defaultRoute,
+      trafficRoute: defaultRoute,
+    },
+    matchResponse: defaultMatchResponse,
+    response: defaultRouteResponse,
+    trafficResponse: defaultRouteResponse,
+    locations: [
+      {
+        name: 'start',
+        marker: 'map marker alternate',
+        markerOffset: [0, 5],
+        placeholder: 'Origin',
+        lat: null,
+        lng: null
+      },
+      {
+        name: 'end',
+        marker: 'map marker',
+        markerOffset: [0, 5],
+        placeholder: 'Destination',
+        lat: null,
+        lng: null
+      }
+    ],
+    endpointHandler: {
+      options: [
+        { key: 'develop', text: 'https://routing.develop.otonomousmobility.com/${PROFILE}', value: 0 },
+        { key: 'staging', text: 'https://routing.staging.otonomousmobility.com/${PROFILE}', value: 1 },
+        { key: 'testing', text: 'https://routing.testing.otonomousmobility.com/${PROFILE}', value: 2 },
+        { key: 'localhost', text: 'http://localhost:5000', value: 3 },
+      ],
+      activeIdx: 0
+    },
+    modeTabsHandler: {
+      options: [
+        { key: 'default', text: 'Interactive', value: 0 },
+        { key: 'debug', text: 'Debugging', value: 1 }
+      ],
+      activeIdx: 0
+    },
+    addDataTabsHandler: {
+      options: [
+        { key: 'routingResponse', text: 'Routing Service', value: 0 },
+        // { key: 's3', text: 'Import from S3', value: 1 }
+      ],
+      activeIdx: 0
+    },
+    bodyColor:'rgb(100, 100, 100)',
+    bodyValue: '{}',
+    responseValue: '{}',
+    bodyEdit: false,
+    responseEdit: false,
+    addedRoutes: [],
+    newRoute: '',
+    newRouteColor: 'rgb(100, 100, 100)',
+    routeHighlight: ''
+  }
+}
+
+export const getAppProps = () => {
+  return {
+    geographies: [
+      {
+        name: 'Berlin',
+        coords: [13.38408, 52.51721],
+        polygon: 'berlin.geojson'
+      },
+      {
+        name: 'Stuttgart',
+        coords: [9.033, 48.7111],
+        polygon: 'stuttgart.geojson'
+      },
+      {
+        name: 'Immendingen',
+        coords: [8.7214, 47.912],
+        polygon: 'immendingen.geojson'
+      },
+      {
+        name: 'San José',
+        coords: [-121.97588, 37.34606],
+        polygon: 'sunnyvale.geojson'
+      }
+    ],
+    urlParams: {
+      matching: ['', '/:profile', '/:start', '/:end'],
+      requiredParams: {
+        profile: 'profile',
+        start: 'start',
+        end: 'end'
+      },
+      acceptableProfiles: ['car', 'foot']
+    },
+    animationDuration: { show: 500, hide: 100 },
+    defaultColor: 'rgb(100, 100, 100)'
+  }
 }

@@ -5,3 +5,8 @@ export { default as StyledIcon } from './StyledIcon'
 export { default as EmptySpace } from './EmptySpace'
 export { default as StyledSegment } from './StyledSegment'
 export { default as StyledDropdown } from './StyledDropdown'
+export { default as StyledButton } from './StyledButton'
+export { default as StyledDivider } from './StyledDivider'
+export { default as StyledHeader } from './StyledHeader'
+
+

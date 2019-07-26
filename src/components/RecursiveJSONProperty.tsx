@@ -55,7 +55,7 @@ const RecursiveJSONProperty: React.SFC<Props> = props => {
                 key={index}
                 property={property}
                 propertyName={Object.getOwnPropertyNames(props.property)[index]}
-                excludeBottomBorder={index === length - 1} 
+                excludeBottomBorder={true} //index === length - 1
               />
             ))}
           </ExpandableJSONProperty>
@@ -73,7 +73,8 @@ const RecursiveJSONProperty: React.SFC<Props> = props => {
   );
 };
 
-const camelCaseToNormal = (str: string) => str.replace(/([A-Z])/g, ' $1').replace(/^./, str2 => str2.toUpperCase());
+// const camelCaseToNormal = (str: string) => str.replace(/([A-Z])/g, ' $1').replace(/^./, str2 => str2.toUpperCase());
+const camelCaseToNormal = (str: string) => str;
 
 export default RecursiveJSONProperty
 

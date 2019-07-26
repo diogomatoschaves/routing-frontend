@@ -1,11 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`expect to render OptionsPanel component 1`] = `
+exports[`expect to render InspectPanel component 1`] = `
 <div
   className="sc-bdVaJa eBppGN"
 >
   <div
-    className="sc-bdVaJa fdCXKO"
+    className="sc-bdVaJa dcMlZW"
+    direction="row"
+  >
+    <div
+      className="sc-bdVaJa kygzpb"
+      direction="row"
+    >
+      <div
+        className="sc-bdVaJa sc-ckVGcZ gMQBua"
+        color={true}
+        id="default"
+        onClick={[Function]}
+        width="100px"
+      >
+        Interactive
+      </div>
+      <div
+        className="sc-bdVaJa sc-ckVGcZ hzkxQh"
+        color={false}
+        id="debug"
+        onClick={[Function]}
+        width="100px"
+      >
+        Debugging
+      </div>
+    </div>
+  </div>
+  <div
+    className="ui divider sc-gzVnrw fYaiCA"
+    width="90%"
+  />
+  <div
+    className="sc-bdVaJa eBtfWV"
     direction="row"
     height="70px"
   >
@@ -15,7 +47,7 @@ exports[`expect to render OptionsPanel component 1`] = `
     >
       <div
         aria-expanded={false}
-        className="ui fluid selection dropdown sc-EHOje jekteJ"
+        className="ui fluid selection dropdown sc-EHOje gIMGEB"
         id="selectedService"
         onBlur={[Function]}
         onChange={[Function]}
@@ -95,7 +127,7 @@ exports[`expect to render OptionsPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle left large icon sc-bZQynM IAXmQ"
+            className="grey angle left large icon sc-dnqmqq bPwZQa"
             onClick={[Function]}
           />
         </div>
@@ -104,7 +136,7 @@ exports[`expect to render OptionsPanel component 1`] = `
           width="60%"
         >
           <div
-            className="ui large label sc-gzVnrw fHkTB"
+            className="ui large label sc-iwsKbI boLuZU"
             onClick={[Function]}
           >
             No Traffic
@@ -117,7 +149,7 @@ exports[`expect to render OptionsPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle right large icon sc-bZQynM IAXmQ"
+            className="grey angle right large icon sc-dnqmqq bPwZQa"
             onClick={[Function]}
           />
         </div>
@@ -129,7 +161,7 @@ exports[`expect to render OptionsPanel component 1`] = `
     width="80%"
   >
     <div
-      className="ui header sc-jTzLTM itsxkf"
+      className="ui header sc-htoDjs iGaUEE"
       overridecolor="#00677f"
     >
       Request Endpoint
@@ -140,7 +172,7 @@ exports[`expect to render OptionsPanel component 1`] = `
     >
       <div
         aria-expanded={false}
-        className="ui fluid search selection dropdown sc-EHOje jekteJ"
+        className="ui fluid search selection dropdown sc-EHOje gIMGEB"
         onBlur={[Function]}
         onChange={[Function]}
         onClick={[Function]}
@@ -263,36 +295,30 @@ exports[`expect to render OptionsPanel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bdVaJa kRVJAa"
-        direction="row"
+        className="ui header sc-htoDjs iGaUEE"
+        overridecolor="#00677f"
       >
-        <div
-          className="ui header sc-jTzLTM itsxkf"
-          overridecolor="#00677f"
-        >
-          Request Body
-        </div>
-        <button
-          className="ui button body-textarea sc-fjdhpX kqDxje"
-          id="bodyEdit"
-          marginleft="10px"
-          onClick={[Function]}
-        >
-          Edit
-        </button>
+        Request Body
       </div>
+      <button
+        className="ui button body-textarea sc-chPdSV bfyvDP"
+        id="bodyEdit"
+        marginleft="10px"
+        onClick={[Function]}
+      >
+        Edit
+      </button>
     </div>
-    <form
-      className="ui form sc-gqjmRU dZmkkW"
-      color="rgb(100, 100, 100)"
-      focuscolor="#5097ab"
-      onSubmit={[Function]}
+    <div
+      className="sc-bdVaJa kRVJAa"
+      direction="row"
+      width="100%"
     >
       <div
-        className="sc-dnqmqq fNLREc"
+        className="sc-VigVT iXqfLQ"
       >
         <div
-          className="sc-htoDjs epHUHX"
+          className="sc-gqjmRU iibOKB"
           onClick={[Function]}
         >
           
@@ -303,13 +329,13 @@ exports[`expect to render OptionsPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-dnqmqq fNLREc"
+          className="sc-VigVT iXqfLQ"
         >
           <div
-            className="sc-htoDjs epHUHX"
+            className="sc-gqjmRU iibOKB"
             onClick={[Function]}
           >
-            Locations
+            locations
             <i
               aria-hidden="true"
               className="caret down icon"
@@ -318,22 +344,22 @@ exports[`expect to render OptionsPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-dnqmqq dROvRF"
+          className="sc-VigVT iXqfLQ"
         >
           <span
-            className="sc-iwsKbI daDmXX"
+            className="sc-jTzLTM jtTffz"
           >
-            Report Geometry
+            reportGeometry
             : 
           </span>
           <span
-            className="sc-gZMcBi hbrQes"
+            className="sc-fjdhpX bsQIYx"
           >
             true
           </span>
         </div>
       </div>
-    </form>
+    </div>
   </div>
   <div
     className="sc-bdVaJa fEcaVD"
@@ -344,31 +370,30 @@ exports[`expect to render OptionsPanel component 1`] = `
       direction="row"
     >
       <div
-        className="ui header sc-jTzLTM itsxkf"
+        className="ui header sc-htoDjs iGaUEE"
         overridecolor="#00677f"
       >
         Response
       </div>
       <button
-        className="ui button response-textarea sc-fjdhpX kqDxje"
+        className="ui button response-textarea sc-chPdSV bfyvDP"
         id="responseEdit"
         marginleft="10px"
         onClick={[Function]}
       >
-        Edit
+        View source
       </button>
     </div>
-    <form
-      className="ui form sc-gqjmRU dZmkkW"
-      color="rgb(100, 100, 100)"
-      focuscolor="#5097ab"
-      onSubmit={[Function]}
+    <div
+      className="sc-bdVaJa kRVJAa"
+      direction="row"
+      width="100%"
     >
       <div
-        className="sc-dnqmqq fNLREc"
+        className="sc-VigVT iXqfLQ"
       >
         <div
-          className="sc-htoDjs epHUHX"
+          className="sc-gqjmRU iibOKB"
           onClick={[Function]}
         >
           
@@ -379,28 +404,28 @@ exports[`expect to render OptionsPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-dnqmqq fNLREc"
+          className="sc-VigVT iXqfLQ"
         >
           <span
-            className="sc-iwsKbI daDmXX"
+            className="sc-jTzLTM jtTffz"
           >
-            Code
+            code
             : 
           </span>
           <span
-            className="sc-gZMcBi hbrQes"
+            className="sc-fjdhpX bsQIYx"
           >
             Ok
           </span>
         </div>
         <div
-          className="sc-dnqmqq fNLREc"
+          className="sc-VigVT iXqfLQ"
         >
           <div
-            className="sc-htoDjs epHUHX"
+            className="sc-gqjmRU iibOKB"
             onClick={[Function]}
           >
-            Routes
+            routes
             <i
               aria-hidden="true"
               className="caret down icon"
@@ -409,13 +434,13 @@ exports[`expect to render OptionsPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-dnqmqq dROvRF"
+          className="sc-VigVT iXqfLQ"
         >
           <div
-            className="sc-htoDjs epHUHX"
+            className="sc-gqjmRU iibOKB"
             onClick={[Function]}
           >
-            Locations
+            locations
             <i
               aria-hidden="true"
               className="caret down icon"
@@ -424,7 +449,7 @@ exports[`expect to render OptionsPanel component 1`] = `
           </div>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </div>
 `;
