@@ -1,56 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`expect to render JsonRenderer component 1`] = `
+exports[`expect to render TextAreaInput component 1`] = `
 <form
-  className="ui form sc-ifAKCX cFwNVD"
+  className="ui form sc-bdVaJa krvkEa"
   color="rgb(100, 100, 100)"
   focuscolor="#5097ab"
   onSubmit={[Function]}
 >
-  <div
-    className="sc-bwzfXH pbVzJ"
-  >
-    <div
-      className="sc-bdVaJa Pwmcq"
-      onClick={[Function]}
-    >
-      
-      <i
-        aria-hidden="true"
-        className="caret up icon"
-        onClick={[Function]}
-      />
-    </div>
-    <div
-      className="sc-bwzfXH pbVzJ"
-    >
-      <div
-        className="sc-bdVaJa Pwmcq"
-        onClick={[Function]}
-      >
-        Locations
-        <i
-          aria-hidden="true"
-          className="caret down icon"
-          onClick={[Function]}
-        />
-      </div>
-    </div>
-    <div
-      className="sc-bwzfXH hGrrjl"
-    >
-      <span
-        className="sc-htpNat hCIKUk"
-      >
-        Report Geometry
-        : 
-      </span>
-      <span
-        className="sc-bxivhb bKAtgj"
-      >
-        true
-      </span>
-    </div>
-  </div>
+  <textarea
+    className="textarea"
+    id="bodyValue"
+    onBlur={[Function]}
+    onChange={[Function]}
+    onFocus={[Function]}
+    onInput={[Function]}
+    placeholder=""
+    rows={10}
+    value="{\\"locations\\":[{\\"lat\\":52.510348,\\"lon\\":13.389869},{\\"lat\\":52.510425,\\"lon\\":13.39114}],\\"reportGeometry\\":true}"
+  />
 </form>
 `;

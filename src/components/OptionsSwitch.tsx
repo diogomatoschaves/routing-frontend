@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
-import { Checkbox } from 'semantic-ui-react'
+import { Checkbox, Label } from 'semantic-ui-react'
 import { UpdateState } from '../types'
 
 
@@ -9,8 +9,8 @@ const StyledText = styled.label`
   width: 75%;
   margin: 0;
   padding-left: 15px;
-  font-size: 16px;
-  color: rgb(70, 70, 70);
+  font-size: 14px;
+  color: rgb(110, 110, 110) !important;
   font-weight: 200;
 `
 const StyledCheckbox = styled(Checkbox)`
@@ -22,7 +22,7 @@ const StyledCheckbox = styled(Checkbox)`
 
 interface Props {
   checked: boolean,
-  text: string,
+  text: string | typeof Label,
   id: string,
   updateState: UpdateState,
   width?: string

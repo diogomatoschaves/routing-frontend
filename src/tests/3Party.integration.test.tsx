@@ -7,6 +7,7 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import mockRoute from '../apiCalls/__mocks__/mockRoute'
 import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
 import { getPath } from '../utils/functions'
+import { googleDirections } from '../apiCalls';
 
 
 jest.mock('../apiCalls')
@@ -21,6 +22,14 @@ const delay = (ms: number) =>
 const mockCoords = {
   lat: 53,
   lng: 12
+}
+
+const toggle = (root: any, togglerProps: { text: string, id: string}, checked: boolean) => {
+  const Toggler = root.findAllByType(Checkbox).filter((el: any) => {
+    return el.props.id === togglerProps.id
+  })[0]
+
+  Toggler.props.onChange('', { checked })
 }
 
 const urlMatchString = '/:profile/:start/:end'
@@ -46,36 +55,88 @@ describe('When 3rd party option is selected', () => {
   const testInstance = getTestApp()
 
   const root = testInstance.root
+  const AppComponent = root.findByType(App).instance
+  const MapComponent = root.findByType(Map).instance
 
-  const togglerProps = {
-    text: 'Compare 3rd Party',
-    id: 'googleMapsOption'
-  }
-
-  const Toggler = root.findAllByType(Checkbox).filter((el) => {
-    return el.props.id === togglerProps.id
-  })[0]
-
-  Toggler.props.onChange('', { checked: true })
+  it('has not called the googleDirections API yet', (done) => {
+    expect(googleDirections).toBeCalledTimes(0)
+    done()
+  })
 
   describe('When 2 valid values are inserted on input boxes', () => {
 
-    const input = root.findAllByType(Input);
-
-    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
-    input[0].props.onBlur()
-    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
-    input[1].props.onBlur()
-
-    const MapComponent = root.findByType(Map).instance
+    beforeAll(() => {
+      toggle(root, {
+        text: 'Google',
+        id: 'googleMapsOption'
+      }, true)
     
-    it('correctly fetches both a routing-service and google route, and the Map component receives it', (done) => {
+      const input = root.findAllByType(Input);
+    
+      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[0].props.onBlur()
+      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[1].props.onBlur()
+    })
+
+    it('calls the googleDirections API twice', (done) => {
+      expect(googleDirections).toBeCalledTimes(1)
+      done()
+    })
+    
+    it('correctly fetches a routing-service both with traffic and without, and the Map component receives it', (done) => {
       delay(500)
       .then(() => {
-        const { googleRoute, routePath } = MapComponent.props
+        const { routes } = MapComponent.props
+        expect(routes.googleRoute.routePath).toEqual(mockRoute)
+        expect(routes.route.routePath).toEqual(mockRoute)
+        done()
+      })
+    })
+  })
 
-        expect(googleRoute).toEqual(mockGoogleResponse)
-        expect(routePath).toEqual(mockRoute)
+  describe('When google option is unchecked', () => {
+    beforeAll(() => toggle(root, {
+      text: 'Google',
+      id: 'googleMapsOption'
+    }, false))
+
+    it('the google route is updated to the defaultRoute', (done) => {
+      delay(0)
+      .then(() => {
+        const { routes } = AppComponent.state
+        
+        expect(routes.trafficRoute.duration).toEqual(0)
+        expect(routes.route.routePath).toEqual(mockRoute)
+        done()
+      })
+    })
+
+    it('does not call the googledirections Api', (done) => {
+      expect(googleDirections).toBeCalledTimes(1)
+      done()
+    })
+  })
+
+  describe('When google option is reselected', () => {
+
+    beforeAll(() => {
+      toggle(root, {
+        text: 'Google',
+        id: 'googleMapsOption'
+      }, true)
+    })
+
+    it('calls the googleDirections API once more', (done) => {
+      expect(googleDirections).toBeCalledTimes(2)
+      done()
+    })
+
+    it('the Map component receives the updated Route', (done) => {
+      delay(500)
+      .then(() => {
+        const { routes } = MapComponent.props
+        expect(routes.googleRoute.routePath).toEqual(mockRoute)
         done()
       })
     })

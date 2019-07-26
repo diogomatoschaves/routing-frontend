@@ -36,6 +36,7 @@ const StyledInput: typeof Input = styled(Input as any)`
     height: 43px;
     color: rgb(100, 100, 100);
     background-color: rgb(242, 242, 242);
+    font-family: "BasisGrotesque Medium", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
 
     &:focus {
       background-color: rgb(248, 248, 248);
@@ -46,6 +47,11 @@ const StyledInput: typeof Input = styled(Input as any)`
 class ControlledInput extends Component<Props & RouteComponentProps, State> {
   state = {
     value: ''
+  }
+
+  componentDidMount() {
+    const { coords } = this.props
+    this.setState({ value: formatCoords(coords) })
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {

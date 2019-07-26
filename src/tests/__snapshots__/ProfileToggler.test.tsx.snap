@@ -13,7 +13,7 @@ exports[`expect to render ProfileToggler component 1`] = `
   >
     <i
       aria-hidden="true"
-      className="grey angle left large icon sc-bZQynM IAXmQ"
+      className="grey angle left large icon sc-dnqmqq bPwZQa"
       onClick={[Function]}
     />
   </div>
@@ -22,7 +22,7 @@ exports[`expect to render ProfileToggler component 1`] = `
     width="60%"
   >
     <div
-      className="ui large label sc-gzVnrw fHkTB"
+      className="ui large label sc-iwsKbI boLuZU"
       onClick={[Function]}
     >
       Berlin
@@ -35,7 +35,7 @@ exports[`expect to render ProfileToggler component 1`] = `
   >
     <i
       aria-hidden="true"
-      className="grey angle right large icon sc-bZQynM IAXmQ"
+      className="grey angle right large icon sc-dnqmqq bPwZQa"
       onClick={[Function]}
     />
   </div>

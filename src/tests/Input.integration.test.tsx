@@ -1,11 +1,12 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
-import { Input } from 'semantic-ui-react'
+import TestRenderer, { act } from 'react-test-renderer'
+import { Input, Checkbox } from 'semantic-ui-react'
 import mockRoute from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { getPath, formatCoords } from '../utils/functions'
+import { googleDirections, routingApi } from '../apiCalls';
 
 
 
@@ -23,6 +24,14 @@ const mockCoords = {
   lng: 12
 }
 
+const toggle = (root: any, togglerProps: { text: string, id: string}, checked: boolean) => {
+  const Toggler = root.findAllByType(Checkbox).filter((el: any) => {
+    return el.props.id === togglerProps.id
+  })[0]
+
+  Toggler.props.onChange('', { checked })
+}
+
 const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: Array<string> = ['/']) => TestRenderer.create(
@@ -34,6 +43,7 @@ const getTestApp = (initialEntries: Array<string> = ['/']) => TestRenderer.creat
           history={history} 
           match={match} 
           urlMatchString={urlMatchString}
+          windowProp={true}
         />
       )}/>
     )}/>
@@ -228,8 +238,8 @@ describe('Route is shown on map when both inputs have valid coordinates', () => 
   it('correctly fetches a route and it is shown to the user', (done) => {
     delay(500)
     .then(() => {
-      const { routePath } = MapComponent.props
-      expect(routePath).toEqual(mockRoute)
+      const { route } = MapComponent.props.routes
+      expect(route.routePath).toEqual(mockRoute)
       done()
     })
   })
@@ -277,6 +287,61 @@ describe('Switching between profiles', () => {
     const splitUrl = location.pathname.split('/')
 
     expect(splitUrl[1]).toBe('foot')
+  })
+})
+
+describe('Deleting one of the coordinates', () => {
+
+  const testInstance = getTestApp()
+
+  const root = testInstance.root
+
+  const MapComponent = root.findByType(Map).instance
+  const input = root.findAllByType(Input);
+
+  describe('Behaviour when input is deleted on traffic route', () => {
+
+    toggle(root, {
+      text: 'Traffic',
+      id: 'trafficOption'
+    }, true)
+
+    toggle(root, {
+      text: 'Compare 3rd Party',
+      id: 'googleMapsOption'
+    }, true)
+
+    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+    input[0].props.onBlur()
+    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+    input[1].props.onBlur()
+
+    it('correctly fetches a routing responses, and the Map component receives it', (done) => {  
+      delay(500)
+      .then(() => {
+        const { routes } = MapComponent.props
+
+        expect(routes.trafficRoute.routePath).toEqual(mockRoute)
+        expect(routes.googleRoute.routePath).toEqual(mockRoute)
+        expect(routes.route.routePath).toEqual(mockRoute)
+        done()
+      })
+    })
+
+    it('eliminates all routes when one input is deleted', (done) => {
+      input[0].props.onChange('', { value: '' })
+      input[0].props.onBlur()
+
+      delay(500)
+      .then(() => {
+        const { routes } = MapComponent.props
+
+        expect(routes.trafficRoute.routePath).toEqual([{lat: 0, lon: 0}])
+        expect(routes.route.routePath).toEqual([{lat: 0, lon: 0}])
+        expect(routes.googleRoute.routePath).toEqual([{lat: 0, lon: 0}])
+        done()
+      })
+    })
   })
 })
 

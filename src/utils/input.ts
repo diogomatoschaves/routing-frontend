@@ -34,9 +34,10 @@ export const defaultMatchResponse = {
 }
 
 export const defaultRoute = {
-  duration: null,
-  distance: null,
-  routePath: null
+  id: '',
+  duration: 0,
+  distance: 0,
+  routePath: [{ lat: 0, lon: 0}]
 }
 
 export const exampleLine = [
@@ -86,7 +87,7 @@ export const routeLineSettings = {
   'paint': {
     'line-color': POLYLINE_COLOR,
     'line-width': 6.5,
-    'line-opacity': 0.45
+    'line-opacity': 0.55
   }
 }
 

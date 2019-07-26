@@ -5,8 +5,8 @@ import App from '../components/App'
 import Map from '../components/Map'
 import { Input, Checkbox, Dropdown } from 'semantic-ui-react'
 import EndpointRow from '../components/EndpointRow'
+import { Tab } from '../components/Tabs'
 import { MemoryRouter, Route } from 'react-router-dom'
-import ControlledInput from '../components/ControlledInput'
 import { formatCoords, getPath } from '../utils/functions'
 
 
@@ -49,6 +49,11 @@ const getTestApp = (initialEntries: Array<string> = ['/'])=> TestRenderer.create
     )}/>
   </MemoryRouter>
 )
+
+const toggleDebug = (root : any, debug: boolean) => {
+  const TabComponent = root.findAllByType(Tab).filter((el: any) => debug ? el.props.id === 'default' : el.props.id === 'debug' )[0]
+  TabComponent.props.onClick()
+}
 
 describe('Start and end points work as expected', () => {
 
@@ -153,8 +158,8 @@ describe('Start and end points work as expected', () => {
       
       delay(500)
       .then(() => {
-        const { routePath } = MapComponent.props
-        expect(routePath).toEqual(mockRoute)
+        const { route } = MapComponent.props.routes
+        expect(route.routePath).toEqual(mockRoute)
         done()
       })
     })
@@ -180,18 +185,13 @@ describe('When showing the routing graph, the tiles are requested from the expec
   const mockNewEndpointString = 'https://routing.testing.otonomousmobility.com/${PROFILE}';
 
   describe('When requesting from the blank app', () => {
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const MapComponent = root.findByType(Map).instance;
+
+    toggleDebug(root, MapComponent.props.debug)
+
     const addSpeedsLayerSpy = jest.spyOn(MapComponent, 'addSpeedsLayer');
     const routingGraphToggler = root.findAllByType(Checkbox).filter((el) => {
       return el.props.id === 'routingGraphVisible';
@@ -210,24 +210,24 @@ describe('When showing the routing graph, the tiles are requested from the expec
 
 
   describe('When changing the endpoint the routing graph tiles are requested from the new endpoint', () => {
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const MapComponent = root.findByType(Map).instance;
+
+    toggleDebug(root, MapComponent.props.debug)
+
     const addSpeedsLayerSpy = jest.spyOn(MapComponent, 'addSpeedsLayer');
     const routingGraphToggler = root.findAllByType(Checkbox).filter((el) => {
       return el.props.id === 'routingGraphVisible';
     })[0]
 
     routingGraphToggler.props.onChange('', { checked: true })
+
+    toggleDebug(root, MapComponent.props.debug)
+
+    const OptionsMenuButton = root.findByProps({ className: 'options-button' })
+    OptionsMenuButton.props.onClick()
 
     const endpointRowComponent = root.findByType(EndpointRow).findByType(Dropdown);
     endpointRowComponent.props.onChange({}, {value: mockNewEndpointID});
@@ -244,29 +244,24 @@ describe('When showing the routing graph, the tiles are requested from the expec
 
 
   describe('When changing the endpoint to use traffic data the routing graph tiles are requested from the traffic endpoint', () => {
-    const testInstance = TestRenderer.create(
-      <MemoryRouter initialEntries={[ '/' ]}>
-        <Route render={({ location }) => (
-          <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-            <App location={location} history={history} match={match} urlMatchString={urlMatchString}/>
-          )}/>
-        )}/>
-      </MemoryRouter>
-    )
+    const testInstance = getTestApp()
 
     const root = testInstance.root
     const MapComponent = root.findByType(Map).instance;
-    const addSpeedsLayerSpy = jest.spyOn(MapComponent, 'addSpeedsLayer');
-    const routingGraphToggler = root.findAllByType(Checkbox).filter((el) => {
-      return el.props.id === 'routingGraphVisible';
-    })[0]
+
     const trafficOptionToggler = root.findAllByType(Checkbox).filter((el) => {
       return el.props.id === 'trafficOption';
     })[0]
-
-
-    routingGraphToggler.props.onChange('', { checked: true })
     trafficOptionToggler.props.onChange('', { checked: true })
+
+    toggleDebug(root, MapComponent.props.debug)
+
+    const addSpeedsLayerSpy = jest.spyOn(MapComponent, 'addSpeedsLayer');
+
+    const routingGraphToggler = root.findAllByType(Checkbox).filter((el) => {
+      return el.props.id === 'routingGraphVisible';
+    })[0]
+    routingGraphToggler.props.onChange('', { checked: true })
 
     it('should use the traffic profile', () => {
       expect(addSpeedsLayerSpy).toHaveBeenCalledWith(

@@ -2,7 +2,7 @@
 
 exports[`expect to render ProfileToggler component 1`] = `
 <div
-  className="ui segment sc-ifAKCX huwZIU"
+  className="ui segment sc-ifAKCX jBBTbo"
   position="absolute"
   right="1px"
   top="1px"
@@ -14,14 +14,14 @@ exports[`expect to render ProfileToggler component 1`] = `
     direction="column"
   >
     <div
-      className="ui header sc-bZQynM fZbwln"
+      className="ui header sc-dnqmqq dssQqT"
       nomarginbottom={1}
       overridecolor="#000000"
     >
       Routing Service
     </div>
     <div
-      className="ui small header sc-bZQynM icsxmK"
+      className="ui small header sc-dnqmqq gyebmk"
       overridecolor="#000000"
     >
       With Traffic
@@ -63,7 +63,7 @@ exports[`expect to render ProfileToggler component 1`] = `
         width="60%"
       >
         <div
-          className="ui small statistic sc-gzVnrw bEWRuD"
+          className="ui tiny statistic sc-iwsKbI czPBYM"
           overridecolor="#000000"
           style={
             Object {
@@ -121,7 +121,7 @@ exports[`expect to render ProfileToggler component 1`] = `
         width="60%"
       >
         <div
-          className="ui small statistic sc-gzVnrw bEWRuD"
+          className="ui tiny statistic sc-iwsKbI czPBYM"
           overridecolor="#000000"
           style={
             Object {
