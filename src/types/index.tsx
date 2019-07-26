@@ -4,7 +4,8 @@
 export type UpdatePoint = (index: number[], coords: Array<Coords>) => void
 export type UpdateColor = () => void
 export type UpdateState = (stateKey: string, value: any) => void
-export type HandleChange = ({ id, value }: { id: string, value: any }) => void
+export type HandleChange = ({ id, value }: { id: string, value: any }) => boolean
+export type HandleConfirmButton = (setState: any, value: any ) => void
 
 //Objects
 export type Location = {
@@ -57,17 +58,35 @@ export type Body = {
   reportNodes?: true
 }
 export type Route = {
-  distance: number | null,
-  duration: number | null,
-  routePath: Array<Coords2> | null
+  id: string
+  distance: number
+  duration: number
+  routePath: Array<Coords2>,
+  parsedValue?: any
 }
-export type EndpointOption = {
+
+export type Routes = {
+  route: Route
+  trafficRoute: Route
+  googleRoute: Route
+  [key: string]: Route;
+}
+
+export type Option = {
   key: string,
   text: string,
   value: number
 }
 
-export type EndpointHandler = {
-  options: Array<EndpointOption>,
+export type OptionsHandler = {
+  options: Array<Option>,
   activeIdx: number
+}
+
+export type RouteProperty = {
+  id: string
+  color: string
+  routeId: string
+  width: number
+  routingGraphVisible: boolean
 }

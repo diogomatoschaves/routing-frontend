@@ -2,25 +2,26 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-eNQAEJ uWciK"
+  className="sc-jDwBTQ jyoOXL"
 >
   <div
-    className="ui segment pushable sc-hMqMXs cuYCwh"
+    className="ui segment pushable sc-gPEVay kabQZn"
   >
     <div
-      className="sc-bwzfXH sc-kEYyzF brCCzS"
+      className="sc-bwzfXH sc-iRbamj fWKipS"
       direction="row"
     >
       <div
-        className="sc-ifAKCX sc-kkGfuU cZBSZz"
+        className="sc-ifAKCX sc-jlyJG jxbHSi"
         height="10%"
         width={0}
       />
       <button
-        className="ui icon button options-button sc-iAyFgw fIhOVd"
+        className="ui icon button options-button sc-gipzik joHDQQ"
         onClick={[Function]}
         onMouseEnter={[Function]}
         onMouseLeave={[Function]}
+        padding="10px 4px"
       >
         <i
           aria-hidden="true"
@@ -41,7 +42,39 @@ exports[`expect to render App component 1`] = `
         className="sc-bwzfXH dlzeER"
       >
         <div
-          className="sc-bwzfXH tInNM"
+          className="sc-bwzfXH cwyxvS"
+          direction="row"
+        >
+          <div
+            className="sc-bwzfXH lacXsB"
+            direction="row"
+          >
+            <div
+              className="sc-bwzfXH sc-jzJRlG hoptrx"
+              color={true}
+              id="default"
+              onClick={[Function]}
+              width="100px"
+            >
+              Interactive
+            </div>
+            <div
+              className="sc-bwzfXH sc-jzJRlG Iauxu"
+              color={false}
+              id="debug"
+              onClick={[Function]}
+              width="100px"
+            >
+              Debugging
+            </div>
+          </div>
+        </div>
+        <div
+          className="ui divider sc-htoDjs jHFehN"
+          width="90%"
+        />
+        <div
+          className="sc-bwzfXH bexlLJ"
           direction="row"
           height="70px"
         >
@@ -51,7 +84,7 @@ exports[`expect to render App component 1`] = `
           >
             <div
               aria-expanded={false}
-              className="ui fluid selection dropdown sc-bZQynM iKBDWg"
+              className="ui fluid selection dropdown sc-bZQynM gFXwrf"
               id="selectedService"
               onBlur={[Function]}
               onChange={[Function]}
@@ -131,7 +164,7 @@ exports[`expect to render App component 1`] = `
               >
                 <i
                   aria-hidden="true"
-                  className="grey angle left large icon sc-iwsKbI jVTAHI"
+                  className="grey angle left large icon sc-VigVT eEmFhv"
                   onClick={[Function]}
                 />
               </div>
@@ -140,7 +173,7 @@ exports[`expect to render App component 1`] = `
                 width="60%"
               >
                 <div
-                  className="ui large label sc-gZMcBi bFgbsv"
+                  className="ui large label sc-jTzLTM SULBd"
                   onClick={[Function]}
                 >
                   No Traffic
@@ -153,7 +186,7 @@ exports[`expect to render App component 1`] = `
               >
                 <i
                   aria-hidden="true"
-                  className="grey angle right large icon sc-iwsKbI jVTAHI"
+                  className="grey angle right large icon sc-VigVT eEmFhv"
                   onClick={[Function]}
                 />
               </div>
@@ -165,7 +198,7 @@ exports[`expect to render App component 1`] = `
           width="80%"
         >
           <div
-            className="ui header sc-ckVGcZ fSUvzU"
+            className="ui header sc-dnqmqq eRsqKH"
             overridecolor="#00677f"
           >
             Request Endpoint
@@ -176,7 +209,7 @@ exports[`expect to render App component 1`] = `
           >
             <div
               aria-expanded={false}
-              className="ui fluid search selection dropdown sc-bZQynM iKBDWg"
+              className="ui fluid search selection dropdown sc-bZQynM gFXwrf"
               onBlur={[Function]}
               onChange={[Function]}
               onClick={[Function]}
@@ -299,36 +332,30 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="sc-bwzfXH ewJcDl"
-              direction="row"
+              className="ui header sc-dnqmqq eRsqKH"
+              overridecolor="#00677f"
             >
-              <div
-                className="ui header sc-ckVGcZ fSUvzU"
-                overridecolor="#00677f"
-              >
-                Request Body
-              </div>
-              <button
-                className="ui button body-textarea sc-jKJlTe fMdjwL"
-                id="bodyEdit"
-                marginleft="10px"
-                onClick={[Function]}
-              >
-                Edit
-              </button>
+              Request Body
             </div>
+            <button
+              className="ui button body-textarea sc-eHgmQL gUoXzN"
+              id="bodyEdit"
+              marginleft="10px"
+              onClick={[Function]}
+            >
+              Edit
+            </button>
           </div>
-          <form
-            className="ui form sc-kpOJdX bvpjyo"
-            color="rgb(100, 100, 100)"
-            focuscolor="#5097ab"
-            onSubmit={[Function]}
+          <div
+            className="sc-bwzfXH ewJcDl"
+            direction="row"
+            width="100%"
           >
             <div
-              className="sc-chPdSV WvvwV"
+              className="sc-eNQAEJ cfesWA"
             >
               <div
-                className="sc-kAzzGY hUkmXL"
+                className="sc-jKJlTe cIZyol"
                 onClick={[Function]}
               >
                 
@@ -339,13 +366,13 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-chPdSV WvvwV"
+                className="sc-eNQAEJ cfesWA"
               >
                 <div
-                  className="sc-kAzzGY hUkmXL"
+                  className="sc-jKJlTe cIZyol"
                   onClick={[Function]}
                 >
-                  Locations
+                  locations
                   <i
                     aria-hidden="true"
                     className="caret down icon"
@@ -354,22 +381,22 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-eNQAEJ cfesWA"
               >
                 <span
-                  className="sc-kgoBCf jDyuzH"
+                  className="sc-hMqMXs coMVLP"
                 >
-                  Report Geometry
+                  reportGeometry
                   : 
                 </span>
                 <span
-                  className="sc-kGXeez hOygGA"
+                  className="sc-kEYyzF kIxLiq"
                 >
                   true
                 </span>
               </div>
             </div>
-          </form>
+          </div>
         </div>
         <div
           className="sc-bwzfXH kwvKmS"
@@ -380,31 +407,30 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="ui header sc-ckVGcZ fSUvzU"
+              className="ui header sc-dnqmqq eRsqKH"
               overridecolor="#00677f"
             >
               Response
             </div>
             <button
-              className="ui button response-textarea sc-jKJlTe fMdjwL"
+              className="ui button response-textarea sc-eHgmQL gUoXzN"
               id="responseEdit"
               marginleft="10px"
               onClick={[Function]}
             >
-              Edit
+              View source
             </button>
           </div>
-          <form
-            className="ui form sc-kpOJdX bvpjyo"
-            color="rgb(100, 100, 100)"
-            focuscolor="#5097ab"
-            onSubmit={[Function]}
+          <div
+            className="sc-bwzfXH ewJcDl"
+            direction="row"
+            width="100%"
           >
             <div
-              className="sc-chPdSV WvvwV"
+              className="sc-eNQAEJ cfesWA"
             >
               <div
-                className="sc-kAzzGY hUkmXL"
+                className="sc-jKJlTe cIZyol"
                 onClick={[Function]}
               >
                 
@@ -415,28 +441,28 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-chPdSV WvvwV"
+                className="sc-eNQAEJ cfesWA"
               >
                 <span
-                  className="sc-kgoBCf jDyuzH"
+                  className="sc-hMqMXs coMVLP"
                 >
-                  Code
+                  code
                   : 
                 </span>
                 <span
-                  className="sc-kGXeez hOygGA"
+                  className="sc-kEYyzF kIxLiq"
                 >
                   Ok
                 </span>
               </div>
               <div
-                className="sc-chPdSV WvvwV"
+                className="sc-eNQAEJ cfesWA"
               >
                 <div
-                  className="sc-kAzzGY hUkmXL"
+                  className="sc-jKJlTe cIZyol"
                   onClick={[Function]}
                 >
-                  Routes
+                  routes
                   <i
                     aria-hidden="true"
                     className="caret down icon"
@@ -445,13 +471,13 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-eNQAEJ cfesWA"
               >
                 <div
-                  className="sc-kAzzGY hUkmXL"
+                  className="sc-jKJlTe cIZyol"
                   onClick={[Function]}
                 >
-                  Locations
+                  locations
                   <i
                     aria-hidden="true"
                     className="caret down icon"
@@ -460,16 +486,51 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
     <div
       className="pusher"
     >
+      0
       <div
-        className="sc-gqjmRU gsFrYw"
+        className="sc-bwzfXH sc-kgoBCf dAMhti"
+        direction="column"
       >
+        <div
+          className="scale visible transition sc-bwzfXH jzxLsv"
+          direction="row"
+          style={
+            Object {
+              "animationDuration": undefined,
+            }
+          }
+        >
+          <div
+            className="sc-bwzfXH ewJcDl"
+            direction="row"
+          >
+            <div
+              className="sc-bwzfXH sc-jzJRlG hoptrx"
+              color={true}
+              id="default"
+              onClick={[Function]}
+              width="100px"
+            >
+              Interactive
+            </div>
+            <div
+              className="sc-bwzfXH sc-jzJRlG Iauxu"
+              color={false}
+              id="debug"
+              onClick={[Function]}
+              width="100px"
+            >
+              Debugging
+            </div>
+          </div>
+        </div>
         <div
           className="sc-bwzfXH islmOK"
           direction="column"
@@ -548,9 +609,6 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="ui divider sc-VigVT guBCph"
-          />
-          <div
             className="sc-bwzfXH fOQsml"
             direction="row"
           >
@@ -575,7 +633,7 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
             <div
-              className="ui fluid input sc-gzVnrw cXaJvH"
+              className="ui fluid input sc-iwsKbI jkqONi"
             >
               <input
                 onBlur={[Function]}
@@ -612,7 +670,7 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
             <div
-              className="ui fluid input sc-gzVnrw cXaJvH"
+              className="ui fluid input sc-iwsKbI jkqONi"
             >
               <input
                 onBlur={[Function]}
@@ -625,91 +683,7 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="ui divider sc-VigVT guBCph"
-          />
-          <div
-            className="sc-bwzfXH jduFbp"
-            direction="row"
-          >
-            <div
-              className="sc-bwzfXH bYbhoh"
-              direction="column"
-              width="50%"
-            >
-              <div
-                className="sc-bwzfXH cUgWoN"
-                direction="row"
-                height="50px"
-              >
-                <div
-                  className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
-                  onChange={[Function]}
-                  onClick={[Function]}
-                  onMouseDown={[Function]}
-                  onMouseUp={[Function]}
-                >
-                  <input
-                    checked={false}
-                    className="hidden"
-                    id="polygonsVisible"
-                    readOnly={true}
-                    tabIndex={0}
-                    type="checkbox"
-                  />
-                  <label
-                    htmlFor="polygonsVisible"
-                  />
-                </div>
-                <label
-                  className="sc-htoDjs gLpkjK"
-                >
-                  Covered Areas
-                </label>
-              </div>
-              <div
-                className="sc-bwzfXH cUgWoN"
-                direction="row"
-                height="50px"
-              >
-                <div
-                  className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
-                  onChange={[Function]}
-                  onClick={[Function]}
-                  onMouseDown={[Function]}
-                  onMouseUp={[Function]}
-                >
-                  <input
-                    checked={false}
-                    className="hidden"
-                    id="routingGraphVisible"
-                    readOnly={true}
-                    tabIndex={0}
-                    type="checkbox"
-                  />
-                  <label
-                    htmlFor="routingGraphVisible"
-                  />
-                </div>
-                <label
-                  className="sc-htoDjs gLpkjK"
-                >
-                  Routing Graph
-                </label>
-              </div>
-            </div>
-            <div
-              className="sc-bwzfXH jZLqJu"
-              direction="column"
-              width="40%"
-            >
-              <div
-                className="sc-ifAKCX iomsNv"
-                width="40%"
-              />
-            </div>
-          </div>
-          <div
-            className="sc-bwzfXH JRVD"
+            className="sc-bwzfXH fOQsml"
             direction="row"
           >
             <div
@@ -719,7 +693,7 @@ exports[`expect to render App component 1`] = `
               width="65%"
             >
               <div
-                className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
+                className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
                 onChange={[Function]}
                 onClick={[Function]}
                 onMouseDown={[Function]}
@@ -738,7 +712,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <label
-                className="sc-htoDjs gLpkjK"
+                className="sc-gZMcBi eCHFCo"
               >
                 Google Maps
               </label>
@@ -750,7 +724,7 @@ exports[`expect to render App component 1`] = `
               width="35%"
             >
               <div
-                className="ui fitted toggle checkbox custom-class sc-dnqmqq cBhzZs"
+                className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
                 onChange={[Function]}
                 onClick={[Function]}
                 onMouseDown={[Function]}
@@ -769,7 +743,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <label
-                className="sc-htoDjs gLpkjK"
+                className="sc-gZMcBi eCHFCo"
               >
                 Traffic
               </label>

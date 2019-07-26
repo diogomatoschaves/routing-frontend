@@ -1,4 +1,4 @@
-import React, { Component, createRef } from 'react'
+import React, { Component, Fragment } from 'react'
 import styled, { css } from 'styled-components'
 import { generatePath } from 'react-router-dom'
 import { Menu, Segment, Sidebar, Button, Icon, Transition } from 'semantic-ui-react'
@@ -6,8 +6,9 @@ import Map from './Map'
 import Panel from './Panel'
 import RouteInfo from './RouteInfo'
 import TrafficLegend from './TrafficLegend'
-import OptionsPanel from './OptionsPanel'
+import InspectPanel from './InspectPanel'
 import '../App.css'
+import { Validator } from 'jsonschema'
 import {
   UpdatePoint,
   UpdateState,
@@ -15,13 +16,24 @@ import {
   RouteResponse,
   Geography,
   Route,
+  Routes,
   Body,
-  EndpointHandler,
+  OptionsHandler,
   MatchResponse,
-  Coords
+  Coords,
+  HandleChange,
+  HandleConfirmButton
 } from '../types'
-import { defaultRouteResponse, defaultRoute, defaultMatchResponse, defaultBody } from '../utils/input'
-import { splitCoords, getRequestBody, formatCoords } from '../utils/functions'
+import {
+  splitCoords,
+  getRequestBody,
+  formatCoords,
+  validateJSON,
+  processValidResponse,
+  getAppState,
+  getAppProps,
+  processValidBody
+} from '../utils/functions'
 import { Base64 } from 'js-base64'
 import { routingApi, googleDirections } from '../apiCalls'
 import {
@@ -32,21 +44,25 @@ import {
   THIRD_PARTY_POLYLINE,
   THIRD_PARTY_STATS,
   TRAFFIC_PARTY_COLOR,
-  TRAFFIC_PARTY_POLYLINE,
+  TRAFFIC_POLYLINE,
   TRAFFIC_PARTY_STATS,
   PETROL_6
 } from '../utils/colours'
-import { EmptySpace, Box } from '../styledComponents';
+import { EmptySpace, Box } from '../styledComponents'
+import JSON5 from 'json5'
+import { Schema } from '../utils/schemas/index'
+import { defaultRoute, defaultRouteResponse } from '../utils/input';
 
 interface State {
+  validator?: Validator
+  bodyColor: string
   recalculate: boolean
   locations: Array<Location>
   authorization: string
   response: RouteResponse | null
   trafficResponse: RouteResponse
   matchResponse: MatchResponse
-  route: Route
-  trafficRoute: Route
+  routes: Routes
   message?: string | null
   googleMessage?: string | null
   routingGraphVisible?: boolean
@@ -58,14 +74,22 @@ interface State {
   recenter: boolean
   profile: string
   visible: boolean
-  body?: Body | undefined
+  body: Body
   mapLoaded: boolean
   initialUpdate: boolean
   google?: any
-  googleRoute?: Route | null
-  endpointHandler: EndpointHandler
+  endpointHandler: OptionsHandler
+  modeTabsHandler: OptionsHandler
   selectedService: number
   expanded: boolean
+  debug: boolean
+  bodyValue: string
+  responseValue: string
+  responseEdit: boolean
+  bodyEdit: boolean,
+  addedRoutes: Array<Route>
+  newRoute: string
+  routeHighlight: string
 }
 
 const AppWrapper: any = styled.div`
@@ -78,9 +102,9 @@ const StyledSegment = styled(Segment)`
   & > .ui.left.visible.sidebar {
     border: none;
     box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);
-    width: 32%;
-    min-width: 500px;
-    max-width: 600px;
+    width: 30%;
+    min-width: 450px;
+    max-width: 550px;
     transform: none;
   }
 `
@@ -95,23 +119,32 @@ const StyledDiv = styled(Box)`
 
 const StyledEmptyDiv = styled(EmptySpace)`
   /* transition: all 0.5s linear; */
-  ${props => props.minwidth && css `min-width: 500px;`}
-  ${props => props.maxwidth && css `max-width: 600px;`}
+  ${props =>
+    props.minwidth &&
+    css`
+      min-width: 450px;
+    `}
+  ${props =>
+    props.maxwidth &&
+    css`
+      max-width: 550px;
+    `}
 `
 
 const StyledButton = styled(Button)`
-  &.ui.button {
+  &.ui.icon.button {
+    padding: ${props => props.padding};
+    border-radius: 5px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    transition: all 0.5s linear;
-    background-color: ${PETROL_6} !important;
-    color: white !important;
+    transition: all 0.3s ease;
+    background-color: ${PETROL_6};
+    color: white;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 `
-
 declare global {
   interface Window {
     google: any
@@ -132,98 +165,9 @@ const serviceOptions = [
 ]
 
 class App extends Component<any, State> {
-  static defaultProps = {
-    geographies: [
-      {
-        name: 'Berlin',
-        coords: [13.38408, 52.51721],
-        polygon: 'berlin.geojson'
-      },
-      {
-        name: 'Stuttgart',
-        coords: [9.033, 48.7111],
-        polygon: 'stuttgart.geojson'
-      },
-      {
-        name: 'Immendingen',
-        coords: [8.7214, 47.912],
-        polygon: 'immendingen.geojson'
-      },
-      {
-        name: 'San José',
-        coords: [-121.97588, 37.34606],
-        polygon: 'sunnyvale.geojson'
-      }
-    ],
-    urlParams: {
-      matching: ['', '/:profile', '/:start', '/:end'],
-      requiredParams: {
-        profile: 'profile',
-        start: 'start',
-        end: 'end'
-      },
-      acceptableProfiles: ['car', 'foot']
-    },
-    animationDuration: { show: 500, hide: 100 }
-  }
+  static defaultProps = getAppProps()
 
-  state = {
-    selectedService: 0,
-    recalculate: true,
-    initialUpdate: false,
-    body: defaultBody,
-    mapLoaded: false,
-    visible: false,
-    google: null,
-    googleRoute: null,
-    routingGraphVisible: false,
-    polygonsVisible: false,
-    googleMapsOption: false,
-    trafficOption: false,
-    profile: 'car',
-    geography: {
-      name: 'Berlin',
-      coords: [13.38408, 52.51721],
-      polygon: 'berlin.geojson'
-    },
-    responseOption: 'normal',
-    recenter: false,
-    expanded: false,
-    authorization: '',
-    route: defaultRoute,
-    trafficRoute: defaultRoute,
-    matchResponse: defaultMatchResponse,
-    response: defaultRouteResponse,
-    trafficResponse: defaultRouteResponse,
-    locations: [
-      {
-        name: 'start',
-        marker: 'map marker alternate',
-        markerOffset: [0, 5],
-        placeholder: 'Origin',
-        lat: null,
-        lng: null
-      },
-      {
-        name: 'end',
-        marker: 'map marker',
-        markerOffset: [0, 5],
-        placeholder: 'Destination',
-        lat: null,
-        lng: null
-      }
-    ],
-    endpointHandler: {
-      options: [
-        { key: 'develop', text: 'https://routing.develop.otonomousmobility.com/${PROFILE}', value: 0 },
-        { key: 'staging', text: 'https://routing.staging.otonomousmobility.com/${PROFILE}', value: 1 },
-        { key: 'testing', text: 'https://routing.testing.otonomousmobility.com/${PROFILE}', value: 2 },
-        { key: 'localhost', text: 'http://localhost:5000', value: 3 },
-      ],
-      activeIdx: 0
-    }
-
-  }
+  state = getAppState()
 
   getProfileLocations = (
     locations: Array<Location>,
@@ -240,28 +184,43 @@ class App extends Component<any, State> {
   }
 
   async componentDidMount() {
-    const { windowProp } = this.props
+    const { windowProp, history, match, loadedProp } = this.props
+    const { validator, response, body, locations, endpointHandler } = this.state
+    const { requiredParams, acceptableProfiles } = this.props.urlParams
 
-    let authorization : string = '';
+    let authorization: string = ''
     if (process.env.NODE_ENV !== 'production') {
       const password = process.env.REACT_APP_LDAP_PASSWORD
       const username = process.env.REACT_APP_LDAP_USERNAME
       authorization = `Basic ${Base64.encode(`${username}:${password}`)}`
-    }
-    else {
-      const url = process.env.REACT_APP_URL + '/auth';
-      await fetch(url).then((response) => response.json()).then((jsonifiedResponse) => {
-        authorization = jsonifiedResponse.basicAuth
-      });
+    } else {
+      const url = process.env.REACT_APP_URL + '/auth'
+      await fetch(url)
+        .then(response => response.json())
+        .then(jsonifiedResponse => {
+          authorization = jsonifiedResponse.basicAuth
+        })
     }
 
     this.addGoogleObject(windowProp)
 
     this.setState({ authorization })
 
-    const { history, match, loadedProp } = this.props
-    const { requiredParams, acceptableProfiles } = this.props.urlParams
-    const { locations, endpointHandler } = this.state
+    Promise.resolve(
+      Object.keys(Schema.Route).forEach((obj: any) => {
+        validator.addSchema(Schema.Route[obj], `/${obj}`)
+      })
+    ).then(() => {
+      Object.keys(Schema.Match).forEach((obj: any) => {
+        validator.addSchema(Schema.Match[obj], `/${obj}`)
+      })
+    })
+
+    this.setState({
+      validator,
+      bodyValue: JSON5.stringify(body, null, 2),
+      responseValue: JSON5.stringify(response, null, 2)
+    })
 
     const params = Object.keys(match.params)
 
@@ -289,6 +248,7 @@ class App extends Component<any, State> {
           false, // googleMapsOption,
           null, // google,
           false, // trafficOption
+          true,
           endpointHandler.options[endpointHandler.activeIdx].text
         )
         this.setState({ profile: urlProfile, locations: urlLocations })
@@ -312,10 +272,14 @@ class App extends Component<any, State> {
       trafficResponse,
       endpointHandler,
       recalculate,
-      visible
+      visible,
+      modeTabsHandler,
+      body,
+      responseEdit,
+      bodyEdit
     } = this.state
 
-    const { urlMatchString, history } = this.props
+    const { urlMatchString, history, defaultColor } = this.props
     const { params: prevParams } = prevProps.match
     const { params } = this.props.match
     const { requiredParams } = this.props.urlParams
@@ -338,31 +302,49 @@ class App extends Component<any, State> {
       if (Object.keys(response).includes('code') && response.code == 'Ok') {
         const leg = response.routes[0].legs[0]
         const route = {
+          id: 'routing-service',
           routePath: leg.geometry,
           duration: leg.duration,
           distance: leg.distance
         }
-        this.setState({ route })
+        this.setState(state => ({ 
+          ...state,
+          routes: {
+            ...state.routes,
+            route
+          }
+        }))
       }
     }
 
     if (prevState.trafficResponse !== trafficResponse) {
-      if (Object.keys(trafficResponse).includes('code') && response.code == 'Ok') {
+      if (Object.keys(trafficResponse).includes('code') && trafficResponse.code == 'Ok') {
         const leg = trafficResponse.routes[0].legs[0]
         const trafficRoute = {
+          id: 'routing-service-traffic',
           routePath: leg.geometry,
           duration: leg.duration,
           distance: leg.distance
         }
-        this.setState({ trafficRoute })
+        
+        this.setState(state => ({ 
+          ...state,
+          routes: {
+            ...state.routes,
+            trafficRoute
+          }
+        }))
       }
     }
 
     // TODO: Check if there is a callback for back and forward buttons
     // Check if coordinates are given by checking the URL parameters
-    if ( Object.keys(params).length === 3 &&
-         (prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx
-          || (Object.keys(params).some(key => params[key] !== prevParams[key]) || Object.keys(prevParams).some(key => prevParams[key] !== params[key])))) {
+    if (
+      Object.keys(params).length === 3 &&
+      (prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
+        (Object.keys(params).some(key => params[key] !== prevParams[key]) ||
+          Object.keys(prevParams).some(key => prevParams[key] !== params[key])))
+    ) {
       const { locations: urlLocations, profile: urlProfile } = this.getProfileLocations(
         locations,
         params,
@@ -374,9 +356,10 @@ class App extends Component<any, State> {
           urlLocations,
           urlProfile,
           authorization,
-          googleMapsOption,
+          googleMapsOption && prevState.endpointHandler.activeIdx === endpointHandler.activeIdx,
           google,
           trafficOption,
+          true,
           endpointHandler.options[endpointHandler.activeIdx].text
         )
       } else this.updateState('recalculate', true)
@@ -384,6 +367,76 @@ class App extends Component<any, State> {
 
     if (prevState.visible !== visible && visible) {
       this.setState({ expanded: false })
+    }
+
+    if (prevState.modeTabsHandler.activeIdx !== modeTabsHandler.activeIdx) {
+      this.setState({
+        debug:
+          modeTabsHandler.activeIdx ===
+          modeTabsHandler.options.filter(el => el.key === 'debug')[0].value
+      })
+    }
+
+    if (prevState.body !== body || (prevState.bodyEdit !== bodyEdit && !bodyEdit)) {
+      this.setState({
+        bodyValue: JSON5.stringify(body, null, 2),
+        bodyColor: defaultColor
+      })
+    }
+
+    if (
+      prevState.response !== response ||
+      (prevState.responseEdit !== responseEdit && !responseEdit)
+    ) {
+      this.setState({
+        responseValue: JSON5.stringify(response, null, 2),
+      })
+    }
+
+    if (prevState.trafficOption !== trafficOption) {
+      if (!trafficOption) {
+        this.setState(state => ({ 
+          ...state,
+          routes: {
+            ...state.routes,
+            trafficRoute: defaultRoute
+          },
+          trafficResponse: defaultRouteResponse
+        }))
+      } else {
+        this.getRoute(
+          locations,
+          profile,
+          authorization,
+          false,
+          google,
+          trafficOption,
+          false,
+          endpointHandler.options[endpointHandler.activeIdx].text
+        )
+      }
+    }
+    if (prevState.googleMapsOption !== googleMapsOption) {
+      if (!googleMapsOption) {
+        this.setState(state => ({ 
+          ...state,
+          routes: {
+            ...state.routes,
+            googleRoute: defaultRoute
+          }
+        }))
+      } else {
+        this.getRoute(
+          locations,
+          profile,
+          authorization,
+          googleMapsOption,
+          google,
+          false,
+          false,
+          endpointHandler.options[endpointHandler.activeIdx].text
+        )
+      }
     }
   }
 
@@ -410,22 +463,33 @@ class App extends Component<any, State> {
     googleMapsOption: boolean,
     google: any,
     trafficOption: boolean,
+    defaultOption: boolean,
     endpointUrl: string
   ) => {
     if (locations.length >= 2 && !locations.some((el: Location) => !el.lat || !el.lng)) {
       const body = getRequestBody(locations)
 
-      routingApi(profile, authorization, body, endpointUrl)
+      if (defaultOption) {
+        routingApi(profile, authorization, body, endpointUrl)
         .then((response: RouteResponse) => this.setState({ response, body }))
         .catch(() =>
           this.setState({
             message: 'There was an error fetching the route. Try again later'
           })
         )
+      }
 
       if (googleMapsOption && google) {
         googleDirections(google, profile, locations)
-          .then((googleRoute: Route) => this.setState({ googleRoute }))
+          .then((googleRoute: Route) => {
+            this.setState(state => ({ 
+              ...state,
+              routes: {
+                ...state.routes,
+                googleRoute
+              }
+            }))
+          })
           .catch(() =>
             this.setState({
               googleMessage:
@@ -436,7 +500,9 @@ class App extends Component<any, State> {
 
       if (trafficOption && profile === 'car') {
         routingApi('car-traffic', authorization, body, endpointUrl)
-          .then((trafficResponse: RouteResponse) => this.setState({ trafficResponse }))
+          .then((trafficResponse: RouteResponse) => {
+            this.setState({ trafficResponse })
+          })
           .catch(() =>
             this.setState({
               message: 'There was an error fetching the route. Try again later'
@@ -457,7 +523,6 @@ class App extends Component<any, State> {
       head.appendChild(script)
 
       script.addEventListener('load', e => {
-        console.log('google was loaded')
         this.setState({ google: window.google })
       })
     } else {
@@ -476,13 +541,13 @@ class App extends Component<any, State> {
             } else {
               const index = indexes.findIndex(el => el === currentIndex)
               return [
-                  ...accum,
-                  {
-                    ...element,
-                    lat: coords[index].lat,
-                    lng: coords[index].lng
-                  }
-                ]
+                ...accum,
+                {
+                  ...element,
+                  lat: coords[index].lat,
+                  lng: coords[index].lng
+                }
+              ]
             }
           },
           []
@@ -497,8 +562,51 @@ class App extends Component<any, State> {
         ...prevState,
         [stateKey]: value
       }),
-      () => Promise.resolve(true)
+      () => { return Promise.resolve(true) }
     )
+  }
+
+  handleValueUpdate: HandleChange = ({ id, value }) => {
+    const { validator, selectedService } = this.state
+    const { defaultColor } = this.props
+
+    const service = serviceOptions[selectedService].key
+    return validateJSON(
+      value,
+      validator,
+      service,
+      id.includes('body') ? 'body' : 'response',
+      id.includes('body') ? 'body' : id.includes('response') ? 'response' : 'newRoute',
+      defaultColor,
+      this.updateStateCallback,
+    )
+  }
+
+  handleAddRoute: HandleConfirmButton = (setState, value) => {
+    if (this.handleValueUpdate({ id: 'response', value })) {
+      const { addedRoutes } = this.state
+      const parsedValue = JSON5.parse(value)
+      processValidResponse(this.updateState, parsedValue, addedRoutes)
+      setState(false)
+      this.setState({ newRoute: '' })
+    }
+  }
+
+  handleChangeBody: HandleConfirmButton = (setState, value) => {
+    if (this.handleValueUpdate({ id: 'body', value })) {
+      const { locations } = this.state
+      const parsedValue = JSON5.parse(value)
+      processValidBody(this.updatePoint, locations, parsedValue)
+      setState(false)
+    }
+  }
+
+  handleCloseModal: HandleConfirmButton = (setState, value) => {
+    setState(false)
+  }
+
+  updateStateCallback = (callback: any) => {
+    this.setState(callback)
   }
 
   handleShowClick = () => this.setState({ visible: true })
@@ -511,8 +619,7 @@ class App extends Component<any, State> {
   public render() {
     const {
       locations,
-      route,
-      trafficRoute,
+      routes,
       routingGraphVisible,
       response,
       trafficResponse,
@@ -526,25 +633,35 @@ class App extends Component<any, State> {
       authorization,
       visible,
       body,
-      googleRoute,
       responseOption,
       endpointHandler,
+      modeTabsHandler,
       selectedService,
-      expanded
+      expanded,
+      debug,
+      bodyColor,
+      bodyValue,
+      bodyEdit,
+      responseValue,
+      responseEdit,
+      addedRoutes,
+      newRoute,
+      newRouteColor,
+      addDataTabsHandler,
+      routeHighlight
     } = this.state
-    const { geographies, endpoint, urlMatchString } = this.props
+    const { geographies, urlMatchString } = this.props
     const { show, hide } = this.props.animationDuration
 
-    const showTraffic = trafficRoute && trafficRoute.distance && profile !== 'foot'
+    const showTraffic =
+      trafficOption && routes.trafficRoute.distance && profile !== 'foot'
 
     return (
       <AppWrapper>
         <Sidebar.Pushable as={StyledSegment}>
-          <StyledDiv
-            direction="row"
-          >
+          <StyledDiv direction="row">
             <StyledEmptyDiv
-              width={visible ? '32%' : 0}
+              width={visible ? '30%' : 0}
               minwidth={visible && true}
               maxwidth={visible && true}
               height={'10%'}
@@ -552,11 +669,14 @@ class App extends Component<any, State> {
             />
             <Transition.Group
               as={StyledButton}
+              padding={expanded ? '10px' : '10px 4px'}
               duration={{ show, hide }}
               animation={'scale'}
-              onClick={visible ? (e: any) => this.handleHideClick(e) : this.handleShowClick}
-              onMouseEnter={(e: any) => {e.stopPropagation(); !visible && this.setState({ expanded: true })}}
-              onMouseLeave={(e: any) => {e.stopPropagation(); !visible && this.setState({ expanded: false })}}
+              onClick={
+                visible ? (e: any) => this.handleHideClick(e) : this.handleShowClick
+              }
+              onMouseEnter={(e: any) => this.setState({ expanded: true })}
+              onMouseLeave={(e: any) => this.setState({ expanded: false })}
               icon
               className={'options-button'}
             >
@@ -575,80 +695,107 @@ class App extends Component<any, State> {
             visible={visible}
             width="very wide"
           >
-            <OptionsPanel
+            <InspectPanel
               handleHideClick={this.handleHideClick}
-              response={serviceOptions[selectedService].key === 'Route'
-                ? responseOption === 'normal' ? response : trafficResponse : matchResponse}
+              response={
+                serviceOptions[selectedService].key === 'Route'
+                  ? responseOption === 'normal'
+                    ? response
+                    : trafficResponse
+                  : matchResponse
+              }
               body={body}
               endpointHandler={endpointHandler}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
+              handleValueUpdate={this.handleValueUpdate}
               responseOption={responseOption}
               locations={locations}
               selectedService={selectedService}
               serviceOptions={serviceOptions}
-            >
-            </OptionsPanel>
+              bodyValue={bodyValue}
+              bodyColor={bodyColor}
+              bodyEdit={bodyEdit}
+              responseValue={responseValue}
+              responseEdit={responseEdit}
+              debug={debug}
+              addedRoutes={addedRoutes}
+              newRoute={newRoute}
+              newRouteColor={newRouteColor}
+              addDataTabsHandler={addDataTabsHandler}
+              modeTabsHandler={modeTabsHandler}
+              handleAddRoute={this.handleAddRoute}
+              handleChangeBody={this.handleChangeBody}
+              handleCloseModal={this.handleCloseModal}
+            />
           </Sidebar>
           <Sidebar.Pusher>
-
-            {route && route.distance && (
-              <RouteInfo
-                statsColor={ROUTING_SERVICE_STATS}
-                textColor={ROUTING_SERVICE}
-                iconColor={POLYLINE_COLOR}
-                title={'Routing Service'}
-                subTitle={'No Traffic'}
-                route={route}
-                top={'40px'}
-                right={'50px'}
-              />
-            )}
-            {showTraffic && (
-              <RouteInfo
-                statsColor={TRAFFIC_PARTY_STATS}
-                textColor={TRAFFIC_PARTY_COLOR}
-                iconColor={TRAFFIC_PARTY_POLYLINE}
-                title={'Routing Service'}
-                subTitle={'With Traffic'}
-                route={trafficRoute}
-                top={'270px'}
-                right={'50px'}
-              />
-            )}
-            {googleRoute && (
-              <RouteInfo
-                statsColor={THIRD_PARTY_STATS}
-                textColor={THIRD_PARTY_COLOR}
-                iconColor={THIRD_PARTY_POLYLINE}
-                title={'Google Maps'}
-                route={googleRoute}
-                top={showTraffic ? '515px' : '270px'}
-                right={'50px'}
-              />
+            {!debug && (
+              <Fragment>
+                {routes.route.distance && (
+                  <RouteInfo
+                    statsColor={ROUTING_SERVICE_STATS}
+                    textColor={ROUTING_SERVICE}
+                    iconColor={POLYLINE_COLOR}
+                    title={'Routing Service'}
+                    subTitle={'No Traffic'}
+                    route={routes.route}
+                    top={'40px'}
+                    right={'50px'}
+                  />
+                )}
+                {showTraffic && (
+                  <RouteInfo
+                    statsColor={TRAFFIC_PARTY_STATS}
+                    textColor={TRAFFIC_PARTY_COLOR}
+                    iconColor={TRAFFIC_POLYLINE}
+                    title={'Routing Service'}
+                    subTitle={'With Traffic'}
+                    route={routes.trafficRoute}
+                    top={'270px'}
+                    right={'50px'}
+                  />
+                )}
+                {googleMapsOption && routes.googleRoute.distance && (
+                  <RouteInfo
+                    statsColor={THIRD_PARTY_STATS}
+                    textColor={THIRD_PARTY_COLOR}
+                    iconColor={THIRD_PARTY_POLYLINE}
+                    title={'Google Maps'}
+                    route={routes.googleRoute}
+                    top={showTraffic ? '515px' : '270px'}
+                    right={'50px'}
+                  />
+                )}
+              </Fragment>
             )}
             <Panel
               locations={locations}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
+              handleConfirmButton={this.handleAddRoute}
+              handleValueUpdate={this.handleValueUpdate}
               handleShowClick={this.handleShowClick}
               routingGraphVisible={routingGraphVisible}
               polygonsVisible={polygonsVisible}
               geography={geography}
               geographies={geographies}
               profile={profile}
-              route={route}
               urlMatchString={urlMatchString}
               googleMapsOption={googleMapsOption}
-              googleRoute={googleRoute}
+              trafficOption={trafficOption}
+              debug={debug}
+              modeTabsHandler={modeTabsHandler}
+              newRoute={newRoute}
+              newRouteColor={newRouteColor}
+              addDataTabsHandler={addDataTabsHandler}
             />
             <Map
               locations={locations}
               profile={profile}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
-              routePath={route.routePath}
-              trafficRoutePath={trafficRoute.routePath}
+              routes={routes}
               routingGraphVisible={routingGraphVisible}
               polygonsVisible={polygonsVisible}
               googleMapsOption={googleMapsOption}
@@ -657,8 +804,10 @@ class App extends Component<any, State> {
               geographies={geographies}
               recenter={recenter}
               authorization={authorization}
-              googleRoute={googleRoute}
               endpointHandler={endpointHandler}
+              debug={debug}
+              addedRoutes={addedRoutes}
+              routeHighlight={routeHighlight}
             />
             {routingGraphVisible && <TrafficLegend />}
           </Sidebar.Pusher>

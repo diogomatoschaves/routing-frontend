@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { StyledDropdown } from '../styledComponents'
-import { UpdateState, EndpointHandler } from '../types'
+import { UpdateState, OptionsHandler } from '../types'
 
 interface Props {
   updateState: UpdateState
-  endpointHandler: EndpointHandler
+  endpointHandler: OptionsHandler
 }
 
 export default class EndpointRow extends Component<Props> {

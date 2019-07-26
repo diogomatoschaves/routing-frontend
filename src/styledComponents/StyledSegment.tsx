@@ -26,6 +26,7 @@ const StyledSegment: any = styled(Segment as any)`
     background: rgba(255, 255, 255, 0.92);
     box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.5);
   }
+  font-family: "BasisGrotesque Medium", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
 
 ` as any
 

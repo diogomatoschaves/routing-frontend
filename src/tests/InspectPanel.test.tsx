@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import OptionsPanel from '../components/OptionsPanel'
+import InspectPanel from '../components/InspectPanel'
 import { MemoryRouter } from 'react-router-dom'
 import { mockCarResponse } from '../apiCalls/__mocks__/mockResponse'
 
@@ -60,12 +60,42 @@ const mockEndpointHandler = {
   activeIdx: 0
 }
 
-it('expect to render OptionsPanel component', () => {
+const mockAddDataTabsHandler = {
+  options: [
+    { key: 'routingResponse', text: 'Routing Service', value: 0 },
+    { key: 's3', text: 'Import from S3', value: 1 }
+  ],
+  activeIdx: 0
+}
 
+const mockModeTabsHandler = {
+  options: [
+    { key: 'default', text: 'Interactive', value: 0 },
+    { key: 'debug', text: 'Debugging', value: 1 }
+  ],
+  activeIdx: 0
+}
+
+it('expect to render InspectPanel component', () => {
   const testInstance = TestRenderer.create(
     <MemoryRouter initialEntries={[ '/' ]}>
-      <OptionsPanel
+      <InspectPanel
+        bodyValue=''
+        responseValue=''
+        bodyColor=''
+        responseEdit={false}
+        bodyEdit={false}
+        debug={false}
+        addedRoutes={[]}
+        newRouteColor=''
+        newRoute=''
+        addDataTabsHandler={mockAddDataTabsHandler}
+        modeTabsHandler={mockModeTabsHandler}
         handleHideClick={jest.fn()}
+        handleAddRoute={jest.fn()}
+        handleChangeBody={jest.fn()}
+        handleCloseModal={jest.fn()}
+        handleValueUpdate={jest.fn()}
         response={mockCarResponse}
         body={mockBody}
         endpointHandler={mockEndpointHandler}
