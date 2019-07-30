@@ -302,7 +302,7 @@ class App extends Component<any, State> {
       if (Object.keys(response).includes('code') && response.code == 'Ok') {
         const leg = response.routes[0].legs[0]
         const route = {
-          id: 'routing-service',
+          id: 'routeDAS',
           routePath: leg.geometry,
           duration: leg.duration,
           distance: leg.distance
@@ -321,7 +321,7 @@ class App extends Component<any, State> {
       if (Object.keys(trafficResponse).includes('code') && trafficResponse.code == 'Ok') {
         const leg = trafficResponse.routes[0].legs[0]
         const trafficRoute = {
-          id: 'routing-service-traffic',
+          id: 'routeTrafficDAS',
           routePath: leg.geometry,
           duration: leg.duration,
           distance: leg.distance
