@@ -1,6 +1,7 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import App from '../components/App'
+import Map from '../components/Map'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { formatCoords, getPath } from '../utils/functions'
 
@@ -94,6 +95,7 @@ describe('App starting with valid URL', () => {
   const root = testInstance.root
 
   const AppComponent = root.findByType(App).instance
+  const MapComponent = root.findByType(Map).instance
 
   it('URL stays the same', () => {
     
@@ -122,6 +124,12 @@ describe('App starting with valid URL', () => {
     expect(startPoint.lng).toBe(mockStart.lng);
     expect(endPoint.lat).toBe(mockEnd.lat);
     expect(endPoint.lng).toBe(mockEnd.lng);
+  })
+
+  it('correctly adds markers to the map', () => {
+    const { markers } = MapComponent.state
+
+    expect(markers).toHaveLength(2)
   })
 })
 

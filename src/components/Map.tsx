@@ -254,14 +254,12 @@ export default class Map extends Component<Props, State> {
     }
 
     if (map && prevProps.googleMapsOption !== googleMapsOption && !googleMapsOption) {
-      this.removeSourceLayer('routeGOOGLE', map)
-      const points = this.getMarkerCoords(markers)
-      let routeCoords: number[][] = []
-      if (routes.route.routePath.length > 1)
-        routeCoords = [...routeCoords, ...transformPoints(routes.route.routePath)]
-      if (routes.trafficRoute.routePath.length > 1)
-        routeCoords = [...routeCoords, ...transformPoints(routes.trafficRoute.routePath)]
-      this.fitBounds([...points, ...routeCoords], map)
+      const routeName = 'routeGOOGLE'
+
+      this.removeSourceLayer(routeName, map)
+      const routesArray = Object.keys(routes).map(route => routes[route])
+      const bounds = this.createBounds(markers, routeName, routesArray)
+      this.fitBounds(bounds, map)
     }
 
     if (
@@ -269,14 +267,12 @@ export default class Map extends Component<Props, State> {
       ((prevProps.trafficOption !== trafficOption && !trafficOption) ||
         (prevProps.profile !== profile && profile === 'foot'))
     ) {
-      this.removeSourceLayer('routeTrafficDAS', map)
-      const points = this.getMarkerCoords(markers)
-      let routeCoords: number[][] = []
-      if (routes.route.routePath.length > 1)
-        routeCoords = [...routeCoords, ...transformPoints(routes.route.routePath)]
-      if (routes.googleRoute.routePath.length > 1)
-        routeCoords = [...routeCoords, ...transformPoints(routes.googleRoute.routePath)]
-      this.fitBounds([...points, ...routeCoords], map)
+      const routeName = 'routeTrafficDAS'
+
+      this.removeSourceLayer(routeName, map)
+      const routesArray = Object.keys(routes).map(route => routes[route])
+      const bounds = this.createBounds(markers, routeName, routesArray)
+      this.fitBounds(bounds, map)
     }
 
     if (map && prevProps.debug !== debug) {
@@ -284,46 +280,14 @@ export default class Map extends Component<Props, State> {
         this.removeMarkers(markers, 'markers')
         this.removeSourceLayer('route', map)
 
-        addedRoutes.forEach(route => {
-          this.addPolyline(
-            route.routePath,
-            [],
-            map,
-            routingGraphVisible,
-            route.id,
-            POLYLINE_COLOR,
-            6.0
-          )
-        })
-
-        const newAddedRoutesMarkers = addedRoutesIds.reduce((accum: Array<mapboxgl.Marker>, routeId: string) => {
-          const addedRoute = addedRoutes.filter(el => el.id === routeId)[0]
-  
-          const startLocation = {
-            name: 'start',
-            marker: 'map marker alternate',
-            markerOffset: [0, 5],
-            placeholder: 'Origin',
-            lat: addedRoute.routePath[0].lat,
-            lng: addedRoute.routePath[0].lon
-          }
-          const endLocation = {
-            name: 'end',
-            marker: 'map marker',
-            markerOffset: [0, 5],
-            placeholder: 'Destination',
-            lat: addedRoute.routePath.slice(-1)[0].lat,
-            lng: addedRoute.routePath.slice(-1)[0].lon
-          }
-          return [...accum, 
-            this.addMarker(startLocation, map, 0, updatePoint, false),
-            this.addMarker(endLocation, map, 0, updatePoint, false)
-          ]
-        }, [])
-
-        this.setState({ 
-          addedRoutesMarkers: newAddedRoutesMarkers
-        })
+        this.addAddedRoutes(
+          addedRoutes, 
+          [],
+          addedRoutesMarkers,
+          map, 
+          routingGraphVisible,
+          updatePoint
+        )
         
       } else {
         addedRoutesIds.forEach(routeId => this.removeSourceLayer(routeId, map))
@@ -347,50 +311,14 @@ export default class Map extends Component<Props, State> {
     }
 
     if (map && prevProps.addedRoutes !== addedRoutes) {
-      const newIds = addedRoutes.reduce((accum: string[], route: Route) => {
-        if (!addedRoutesIds.includes(route.id)) {
-          this.addPolyline(
-            route.routePath,
-            [],
-            map,
-            routingGraphVisible,
-            route.id,
-            POLYLINE_COLOR,
-            6.0
-          )
-          return [...accum, route.id]
-        } else return accum
-      }, [])
-
-      const newAddedRoutesMarkers = newIds.reduce((accum: Array<mapboxgl.Marker>, routeId: string) => {
-        const addedRoute = addedRoutes.filter(el => el.id === routeId)[0]
-
-        const startLocation = {
-          name: 'start',
-          marker: 'map marker alternate',
-          markerOffset: [0, 5],
-          placeholder: 'Origin',
-          lat: addedRoute.routePath[0].lat,
-          lng: addedRoute.routePath[0].lon
-        }
-        const endLocation = {
-          name: 'end',
-          marker: 'map marker',
-          markerOffset: [0, 5],
-          placeholder: 'Destination',
-          lat: addedRoute.routePath.slice(-1)[0].lat,
-          lng: addedRoute.routePath.slice(-1)[0].lon
-        }
-        return [...accum, 
-          this.addMarker(startLocation, map, 0, updatePoint, false),
-          this.addMarker(endLocation, map, 0, updatePoint, false)
-        ]
-      }, [])
-
-      this.setState({ 
-        addedRoutesIds: [...addedRoutesIds, ...newIds],
-        addedRoutesMarkers: newAddedRoutesMarkers
-      })
+      this.addAddedRoutes(
+        addedRoutes, 
+        addedRoutesIds,
+        addedRoutesMarkers,
+        map, 
+        routingGraphVisible,
+        updatePoint
+      )
     }
 
     if (map && prevProps.routeHighlight !== routeHighlight) {
@@ -448,6 +376,63 @@ export default class Map extends Component<Props, State> {
     )
 
     map.on('click', event => this.handleMapClick(event))
+  }
+
+  private addAddedRoutes = (
+    addedRoutes: Array<Route>,
+    addedRoutesIds: Array<string>,
+    addedRoutesMarkers: Array<mapboxgl.Marker>,
+    map: mapboxgl.Map,
+    routingGraphVisible: boolean,
+    updatePoint: UpdatePoint
+  ) => {
+
+    let newAddedRoutesMarkers: Array<mapboxgl.Marker> = [...addedRoutesMarkers]
+
+    const newAddedRoutesIds = addedRoutes.reduce((accum: string[], route: Route) => {
+      if (!addedRoutesIds.includes(route.id)) {
+        this.addPolyline(
+          route.routePath,
+          [],
+          map,
+          routingGraphVisible,
+          route.id,
+          POLYLINE_COLOR,
+          6.0
+        )
+
+        const startLocation = {
+          name: 'start',
+          marker: 'map marker alternate',
+          markerOffset: [0, 5],
+          placeholder: 'Origin',
+          lat: route.routePath[0].lat,
+          lng: route.routePath[0].lon
+        }
+        const endLocation = {
+          name: 'end',
+          marker: 'map marker',
+          markerOffset: [0, 5],
+          placeholder: 'Destination',
+          lat: route.routePath.slice(-1)[0].lat,
+          lng: route.routePath.slice(-1)[0].lon
+        }
+
+        newAddedRoutesMarkers = [...newAddedRoutesMarkers, 
+          this.addMarker(startLocation, map, 0, updatePoint, false),
+          this.addMarker(endLocation, map, 0, updatePoint, false)
+        ]
+      }
+      return [...accum, route.id]
+    }, [])
+
+    const bounds = this.createBounds(newAddedRoutesMarkers, '', addedRoutes)
+    this.fitBounds(bounds, map)
+  
+    this.setState({ 
+      addedRoutesIds: newAddedRoutesIds,
+      addedRoutesMarkers: newAddedRoutesMarkers
+    })
   }
 
   private addGeojson = (geography: Geography, map: mapboxgl.Map) => {
@@ -543,8 +528,26 @@ export default class Map extends Component<Props, State> {
     map.flyTo({ center, speed })
   }
 
+  private createBounds = (
+    markers: Array<mapboxgl.Marker>, 
+    exemptRoute: string, 
+    routes: Array<Route>, 
+  ) => {
+    const routeCoords = routes.reduce((accum: number[][], route: Route) => {
+      if (route.id !== exemptRoute && route.routePath.length > 1) {
+        return [...accum, ...transformPoints(route.routePath)]
+      } else return [...accum]
+    }, [])
+
+    const points = this.getMarkerCoords(markers)
+  
+    return [...points, ...routeCoords]
+  }
+
   private fitBounds = (coords: number[][], map: mapboxgl.Map) => {
     let bounds = new mapboxgl.LngLatBounds()
+
+    if (coords.length === 0) return
 
     if (coords.length === 1) {
       const center = new mapboxgl.LngLat(coords[0][0], coords[0][1])
