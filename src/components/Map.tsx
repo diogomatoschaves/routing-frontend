@@ -254,9 +254,11 @@ export default class Map extends Component<Props, State> {
     }
 
     if (map && prevProps.googleMapsOption !== googleMapsOption && !googleMapsOption) {
-      this.removeSourceLayer('routeGOOGLE', map)
+      const routeName = 'routeGOOGLE'
+
+      this.removeSourceLayer(routeName, map)
       const routesArray = Object.keys(routes).map(route => routes[route])
-      const bounds = this.createBounds(markers, 'routeGOOGLE', routesArray)
+      const bounds = this.createBounds(markers, routeName, routesArray)
       this.fitBounds(bounds, map)
     }
 
@@ -265,9 +267,11 @@ export default class Map extends Component<Props, State> {
       ((prevProps.trafficOption !== trafficOption && !trafficOption) ||
         (prevProps.profile !== profile && profile === 'foot'))
     ) {
-      this.removeSourceLayer('routeTrafficDAS', map)
+      const routeName = 'routeTrafficDAS'
+
+      this.removeSourceLayer(routeName, map)
       const routesArray = Object.keys(routes).map(route => routes[route])
-      const bounds = this.createBounds(markers, 'routeTrafficDAS', routesArray)
+      const bounds = this.createBounds(markers, routeName, routesArray)
       this.fitBounds(bounds, map)
     }
 
