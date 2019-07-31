@@ -28,7 +28,7 @@ const googleDirections = (google: any, profile: any, locations: any): Promise<Ro
         const routePath = polyline.decode(tripPolyline).map(coord => ({ lat: coord[0], lon: coord[1] }))
 
         resolve({
-          id: 'google-maps',
+          id: 'routeGOOGLE',
           duration,
           distance,
           routePath,
