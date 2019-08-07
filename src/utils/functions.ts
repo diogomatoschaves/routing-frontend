@@ -372,9 +372,9 @@ export const getAppProps = () => {
         polygon: 'immendingen.geojson'
       },
       {
-        name: 'San José',
+        name: 'South Bay',
         coords: [-121.97588, 37.34606],
-        polygon: 'sunnyvale.geojson'
+        polygon: 'south_bay.geojson'
       }
     ],
     urlParams: {
