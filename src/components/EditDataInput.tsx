@@ -15,7 +15,7 @@ interface Props {
   color: string
   updateState: UpdateState
   handleValueUpdate?: HandleChange
-  handleConfirmButton: HandleConfirmButton
+  handleAddRoute: HandleConfirmButton
   setInputRef?: (ref: any) => void
   editable: boolean
   buttonText: string
@@ -47,7 +47,7 @@ function EditDataInput (props: Props) {
       setInputRef,
       color,
       handleValueUpdate,
-      handleConfirmButton,
+      handleAddRoute,
       updateState,
       editable,
       buttonText,
@@ -76,7 +76,7 @@ function EditDataInput (props: Props) {
             <StyledButton
               backgroundcolor={COLOR}
               alignend
-              onClick={() => handleConfirmButton(setState, value)}
+              onClick={() => handleAddRoute(setState, value)}
             >
               {buttonText}
             </StyledButton>

@@ -8,7 +8,10 @@ import {
   Geography,
   HandleChange,
   HandleConfirmButton,
-  OptionsHandler
+  OptionsHandler,
+  HandleAddRoute,
+  HandleDeleteRoute,
+  Route
 } from '../types'
 import { Icon } from 'semantic-ui-react'
 
@@ -19,10 +22,13 @@ interface Props {
   geography: Geography
   geographies: Array<Geography>
   handleValueUpdate: HandleChange
-  handleConfirmButton: HandleConfirmButton
+  handleAddRoute: HandleConfirmButton
+  handleDeleteRoute: HandleDeleteRoute
+  handleClickRoute: HandleConfirmButton
   newRouteColor: string
   newRoute: string
   addDataTabsHandler: OptionsHandler
+  addedRoutes: Array<Route>
 }
 
 export default function DebugPanel(props: Props) {
@@ -33,10 +39,13 @@ export default function DebugPanel(props: Props) {
     geography,
     geographies,
     handleValueUpdate,
-    handleConfirmButton,
+    handleAddRoute,
+    handleDeleteRoute,
+    handleClickRoute,
     newRouteColor,
     newRoute,
-    addDataTabsHandler
+    addDataTabsHandler,
+    addedRoutes
   } = props
 
   const [modalOpen, setState] = useState(false)
@@ -84,10 +93,13 @@ export default function DebugPanel(props: Props) {
         setState={setState}
         updateState={updateState}
         handleValueUpdate={handleValueUpdate}
-        handleConfirmButton={handleConfirmButton}
+        handleAddRoute={handleAddRoute}
+        handleDeleteRoute={handleDeleteRoute}
+        handleClickRoute={handleClickRoute}
         color={newRouteColor}
         value={newRoute}
         addDataTabsHandler={addDataTabsHandler}
+        addedRoutes={addedRoutes}
       />
     </Box>
   )

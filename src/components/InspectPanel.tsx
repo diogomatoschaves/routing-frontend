@@ -13,7 +13,8 @@ import {
   OptionsHandler,
   HandleChange,
   Route,
-  HandleConfirmButton
+  HandleConfirmButton,
+  HandleDeleteRoute
 } from '../types'
 import { MAIN_PETROL } from '../utils/colours'
 import EndpointRow from './EndpointRow'
@@ -39,6 +40,8 @@ interface Props {
   debug: boolean
   addedRoutes: Array<Route>
 	handleAddRoute: HandleConfirmButton
+	handleClickRoute: HandleConfirmButton
+	handleDeleteRoute: HandleDeleteRoute
 	handleChangeBody: HandleConfirmButton
 	handleCloseModal: HandleConfirmButton
 	newRouteColor: string
@@ -65,6 +68,8 @@ export default function InspectPanel(props: Props) {
     debug,
     addedRoutes,
     handleAddRoute,
+    handleClickRoute,
+    handleDeleteRoute,
     handleChangeBody,
     handleCloseModal,
 		newRouteColor, 
@@ -91,7 +96,9 @@ export default function InspectPanel(props: Props) {
           newRoute={newRoute}
           newRouteColor={newRouteColor}
           addDataTabsHandler={addDataTabsHandler}
-          handleConfirmButton={handleAddRoute}
+          handleAddRoute={handleAddRoute}
+          handleClickRoute={handleClickRoute}
+          handleDeleteRoute={handleDeleteRoute}
           handleValueUpdate={handleValueUpdate}
           updateState={updateState}
         />

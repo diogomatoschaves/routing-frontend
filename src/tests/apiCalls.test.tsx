@@ -1,5 +1,6 @@
 import { mockCarResponse, mockFootResponse } from '../apiCalls/__mocks__/mockResponse'
-import { routingApi } from '../apiCalls'
+import { mockValidDBResponse, mockInvalidDBResponse } from '../apiCalls/__mocks__/mockDBResponse'
+import { routingApi, fetchRouteDB } from '../apiCalls'
 
 jest.mock('../apiCalls')
 
@@ -37,6 +38,30 @@ describe('Api Calls', () => {
       routingApi(mockProfile, 'Basic MOCKAUTH', locations, mockEndpoint).then(
         response => {
           expect(response).toEqual(mockFootResponse)
+          done()
+        }
+      )
+    })
+  })
+
+  describe('fetchRoutesDB behaviour', () => {
+    
+    const mockValidRouteId = 'AAA'
+    const mockInvalidRouteId = ''
+
+    it('returns a response if route is found', done => {
+      fetchRouteDB(mockValidRouteId).then(
+        response => {
+          expect(response).toEqual(mockValidDBResponse)
+          done()
+        }
+      )
+    })
+
+    it('returns a response if route is not found', done => {
+      fetchRouteDB(mockInvalidRouteId).then(
+        response => {
+          expect(response).toEqual(mockInvalidDBResponse)
           done()
         }
       )

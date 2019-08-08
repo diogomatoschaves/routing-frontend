@@ -1,18 +1,13 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
-import { Input } from 'semantic-ui-react'
-import {
-  generatePath,
-  matchPath,
-  withRouter,
-  RouteComponentProps
-} from 'react-router-dom'
-import { UpdatePoint, UpdateColor, Coords } from '../types'
-import { formatCoords, splitCoords, getPath } from '../utils/functions'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { UpdatePoint, Coords } from '../types'
+import { formatCoords, splitCoords } from '../utils/functions'
+import { StyledInput } from '../styledComponents'
+import { NORMAL_INPUT, FOCUSED_INPUT } from '../utils/colours';
 
 interface Props {
   updatePoint: UpdatePoint
-  updateColor: UpdateColor
+  updateColor: any
   rowKey: string
   index: number
   coords: Coords
@@ -20,33 +15,16 @@ interface Props {
   history?: any
   location?: any
   urlMatchString: string
+  color: string
 }
 
 interface State {
   value: string
 }
 
-const StyledInput: typeof Input = styled(Input as any)`
-  width: 100%;
-
-  &.ui.input > input {
-    font-size: 16px;
-    border-radius: 7px;
-    border: none;
-    height: 43px;
-    color: rgb(100, 100, 100);
-    background-color: rgb(242, 242, 242);
-    font-family: "BasisGrotesque Medium", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-
-    &:focus {
-      background-color: rgb(248, 248, 248);
-    }
-  }
-` as any
-
 class ControlledInput extends Component<Props & RouteComponentProps, State> {
-  state = {
-    value: ''
+  state = { 
+    value: '',
   }
 
   componentDidMount() {
@@ -68,14 +46,9 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
   handleBlur = (): void => {
     const { value } = this.state
-    const {
-      index,
-      updatePoint,
-      updateColor,
-      coords: prevCoords,
-    } = this.props
+    const { index, updatePoint, coords: prevCoords, updateColor, color } = this.props
 
-    updateColor()
+    updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT )
 
     const coords = splitCoords(value)
 
@@ -93,7 +66,7 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
   public render() {
     const { value } = this.state
-    const { placeholder, updateColor } = this.props
+    const { placeholder, updateColor, color } = this.props
 
     return (
       <StyledInput
@@ -101,7 +74,7 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
         value={value}
         onChange={(e, { value }) => this.handleChange(value)}
         onBlur={this.handleBlur}
-        onFocus={updateColor}
+        onFocus={() => updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT )}
         placeholder={placeholder}
         icon={
           value !== ''

@@ -1,6 +1,6 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
-import mockRoute from '../apiCalls/__mocks__/mockRoute'
+import { mockRoute, mockGoogleRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
 import { Input, Checkbox, Dropdown } from 'semantic-ui-react'

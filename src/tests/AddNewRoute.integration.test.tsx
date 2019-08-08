@@ -4,11 +4,20 @@ import { mockCarResponse } from '../apiCalls/__mocks__/mockResponse'
 import App from '../components/App'
 import Map from '../components/Map'
 import DebugPanel from '../components/DebugPanel'
+import RoutesFromDB from '../components/RoutesFromDB'
+import Route from '../components/Route'
+import StyledInput from '../styledComponents/StyledInput'
 import { Tab } from '../components/Tabs'
-import { MemoryRouter, Route } from 'react-router-dom'
+import { fetchRouteDB } from '../apiCalls'
+import { MemoryRouter, Route as RouteURL } from 'react-router-dom'
 import { getPath, formatCoords } from '../utils/functions'
+import AddDataInput from '../components/AddDataInput';
+import { StyledButton } from '../styledComponents';
 
 jest.mock('../apiCalls')
+// jest.mock('../components/AddDataInput', () => {
+
+// })
 
 const delay = (ms: number) =>
   new Promise(resolve => {
@@ -21,8 +30,8 @@ const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: Array<string> = ['/'], loadedProp: boolean = false)=> TestRenderer.create(
   <MemoryRouter initialEntries={initialEntries}>
-    <Route render={({ location }) => (
-      <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
+    <RouteURL render={({ location }) => (
+      <RouteURL path={getPath(location.pathname)} render={({ location, history, match }) => (
         <App 
           location={location} 
           history={history} 
@@ -37,8 +46,8 @@ const getTestApp = (initialEntries: Array<string> = ['/'], loadedProp: boolean =
 
 const invalidJson = '{"invalid"}'
 
-const toggleDebug = (root : any, debug: boolean) => {
-  const TabComponent = root.findAllByType(Tab).filter((el: any) => debug ? el.props.id === 'debug' : el.props.id === 'default' )[0]
+const selectTab = (root : any, key: string) => {
+  const TabComponent = root.findAllByType(Tab).filter((el: any) => el.props.id === key)[0]
   TabComponent.props.onClick()
 }
 
@@ -73,7 +82,7 @@ describe('Behaviour of textarea to add new routes', () => {
 
   describe('Behaviour when debug mode is selected', () => {
     beforeAll(() => {
-      toggleDebug(root, true)
+      selectTab(root, 'debug')
       DebugPanelComponent = root.findByType(DebugPanel)
     })    
 
@@ -203,7 +212,7 @@ describe('Behaviour of textarea to add new routes', () => {
   describe('Behaviour when switching back to interactive mode', () => {
 
     beforeAll(() => {
-      toggleDebug(root, false)
+      selectTab(root, 'default')
     })
     
     it('adds route markers', () => { 
@@ -219,5 +228,99 @@ describe('Behaviour of textarea to add new routes', () => {
   })
 })
 
+describe('Behaviour of option to load routes from DB', () => {
 
+  const testInstance = getTestApp()
 
+  const root = testInstance.root
+
+  const AppComponent = root.findByType(App).instance
+
+  let DebugPanelComponent: any
+  let RoutesFromDBComponent: any
+  let SearchInputComponent: any
+  let AddDataInputComponent: any
+  let AddButton: any
+
+  selectTab(root, 'debug')
+  DebugPanelComponent = root.findByType(DebugPanel)
+  AddDataInputComponent = DebugPanelComponent.findByType(AddDataInput)
+  selectTab(root, 'db')
+  RoutesFromDBComponent = AddDataInputComponent.findByType(RoutesFromDB)
+  SearchInputComponent = AddDataInputComponent.findByType(StyledInput)
+
+  describe('When user types something in search box with an unretrievable id', () => {
+    beforeAll(() => {
+      SearchInputComponent.props.onChange('', { value: '1' })
+    })
+
+    it('correctly calls the fetch route from db endpoint', (done) => {
+      delay(500)
+      .then(() => {
+        expect(fetchRouteDB).toBeCalledTimes(1)
+        done()
+      })
+    })
+
+    it('does not show any results', () => {
+      const { routes } = RoutesFromDBComponent.instance.state
+      expect(routes.length).toBe(0)
+    })
+  })
+
+  describe('When user types a retrievable value in search box', () => {
+    beforeAll(() => {
+      SearchInputComponent.props.onChange('', { value: 'AAA' })
+    })
+
+    it('correctly calls the fetch route from db endpoint', (done) => {
+      delay(500)
+      .then(() => {
+        expect(fetchRouteDB).toBeCalledTimes(2)
+        done()
+      })
+    })
+
+    it('shows 1 route result and added routes is still 0', () => {
+      const { routes } = RoutesFromDBComponent.instance.state
+      const { addedRoutes } = AppComponent.state
+
+      expect(routes.length).toBe(1)
+      expect(addedRoutes.length).toBe(0)
+    })
+  })
+
+  describe('When user presses Add Button', () => {
+    beforeAll(() => {
+      AddButton = RoutesFromDBComponent.findByType(Route).findByType(StyledButton)
+      AddButton.props.onClick()
+    })
+
+    it('correctly adds a route to addedRoutes', () => {
+      const { addedRoutes } = AppComponent.state
+      expect(addedRoutes.length).toBe(1)
+    })
+
+    it('changes the color of button to red', () => {
+      const { color } = AddButton.props
+      expect(color).toBe('red')
+    })
+  })
+
+  describe('When user presses Remove Button', () => {
+    beforeAll(() => {
+      AddButton = RoutesFromDBComponent.findByType(Route).findByType(StyledButton)
+      AddButton.props.onClick()
+    })
+
+    it('correctly removes a route from addedRoutes', () => {
+      const { addedRoutes } = AppComponent.state
+      expect(addedRoutes.length).toBe(0)
+    })
+
+    it('changes the color of button back to green', () => {
+      const { color } = AddButton.props
+      expect(color).toBe('green')
+    })
+  })
+})

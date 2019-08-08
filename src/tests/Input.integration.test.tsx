@@ -1,7 +1,7 @@
 import React from 'react'
 import TestRenderer, { act } from 'react-test-renderer'
 import { Input, Checkbox } from 'semantic-ui-react'
-import mockRoute from '../apiCalls/__mocks__/mockRoute'
+import { mockRoute, mockGoogleRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
 import { MemoryRouter, Route } from 'react-router-dom'
@@ -297,41 +297,47 @@ describe('Deleting one of the coordinates', () => {
   const root = testInstance.root
 
   const MapComponent = root.findByType(Map).instance
-  const input = root.findAllByType(Input);
 
-  describe('Behaviour when input is deleted on traffic route', () => {
+  toggle(root, {
+    text: 'Traffic',
+    id: 'trafficOption'
+  }, true)
 
-    toggle(root, {
-      text: 'Traffic',
-      id: 'trafficOption'
-    }, true)
+  toggle(root, {
+    text: 'Compare 3rd Party',
+    id: 'googleMapsOption'
+  }, true)
 
-    toggle(root, {
-      text: 'Compare 3rd Party',
-      id: 'googleMapsOption'
-    }, true)
-
-    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
-    input[0].props.onBlur()
-    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
-    input[1].props.onBlur()
+  describe('Behaviour when input is deleted', () => {
+    beforeAll(() => {
+      const input = root.findAllByType(Input);
+      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[0].props.onBlur()
+      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[1].props.onBlur()
+    })
 
     it('correctly fetches a routing responses, and the Map component receives it', (done) => {  
-      delay(500)
+      delay(1000)
       .then(() => {
         const { routes } = MapComponent.props
 
         expect(routes.trafficRoute.routePath).toEqual(mockRoute)
-        expect(routes.googleRoute.routePath).toEqual(mockRoute)
+        expect(routes.googleRoute.routePath).toEqual(mockGoogleRoute)
         expect(routes.route.routePath).toEqual(mockRoute)
         done()
       })
     })
+  })
 
-    it('eliminates all routes when one input is deleted', (done) => {
+  describe('Behaviour when input is deleted', () => {
+    beforeAll(() => {
+      const input = root.findAllByType(Input);
       input[0].props.onChange('', { value: '' })
       input[0].props.onBlur()
+    })
 
+    it('eliminates all routes', (done) => {
       delay(500)
       .then(() => {
         const { routes } = MapComponent.props
