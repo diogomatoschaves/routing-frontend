@@ -30,9 +30,9 @@ export default class ExpandableJSONProperty extends React.Component<Props, State
         <PropertyName onClick={() => this.setState({ isOpen: !this.state.isOpen })}>
           {this.props.title}
           {this.state.isOpen ? (
-            <Icon name="caret up"/> 
+            <Icon name="caret down"/> 
             ) : (
-            <Icon name="caret down"/>
+            <Icon name="caret right"/>
           )}
         </PropertyName>
         {this.state.isOpen ? this.props.children : null}

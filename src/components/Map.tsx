@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import mapboxgl from 'mapbox-gl'
+import mapboxgl, { Marker } from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import styled from 'styled-components'
 import {
@@ -20,12 +20,9 @@ import {
   speedTilesInput,
   defaultRoute
 } from '../utils/input'
-import { transformPoints, getSpeedsLayers } from '../utils/functions'
-import {
-  POLYLINE_COLOR,
-  THIRD_PARTY_POLYLINE,
-  TRAFFIC_POLYLINE
-} from '../utils/colours'
+import { transformPoints, getSpeedsLayers, checkNested } from '../utils/functions'
+import { POLYLINE_COLOR, THIRD_PARTY_POLYLINE, TRAFFIC_POLYLINE } from '../utils/colours'
+import route from '../utils/schemas/route'
 
 const MapWrapper = styled.div`
   position: absolute;
@@ -37,10 +34,11 @@ const MapWrapper = styled.div`
 
 interface State {
   map?: mapboxgl.Map
-  markers: Array<mapboxgl.Marker>
-  addedRoutesMarkers: Array<mapboxgl.Marker>
+  markers: Array<MarkerObject>
+  addedRoutesMarkers: Array<MarkerObject>
   addedRoutesIds: string[]
   style: string
+  [key: string]: string | mapboxgl.Map | Array<MarkerObject> | string[] | undefined
 }
 
 interface Props {
@@ -64,6 +62,11 @@ interface Props {
   routeProperties: Array<RouteProperty>
   addedRoutes: Array<Route>
   routeHighlight: string
+}
+
+type MarkerObject = {
+  id: string
+  marker: mapboxgl.Marker
 }
 
 export default class Map extends Component<Props, State> {
@@ -99,7 +102,7 @@ export default class Map extends Component<Props, State> {
         routeId: 'googleRoute',
         width: 6.5,
         routingGraphVisible: false
-      },
+      }
     ]
   }
 
@@ -136,13 +139,15 @@ export default class Map extends Component<Props, State> {
       debug,
       routeProperties,
       addedRoutes,
-      routeHighlight,
+      routeHighlight
     } = this.props
     const { map, markers, addedRoutesIds, addedRoutesMarkers } = this.state
 
     if (map && prevProps.locations !== locations) {
       this.removeMarkers(markers, 'markers')
-      this.setState({ markers: this.addLocationMarkers(locations, map, updatePoint) })
+      this.setState({
+        markers: this.addLocationMarkers(locations, map, updatePoint, 'route')
+      })
     }
 
     if (map && prevState.markers !== markers) {
@@ -154,12 +159,17 @@ export default class Map extends Component<Props, State> {
         updateState('routes', {
           googleRoute: defaultRoute,
           route: defaultRoute,
-          trafficRoute: defaultRoute,
-        },)
+          trafficRoute: defaultRoute
+        })
       }
     }
 
-    if (map && routes.route.routePath && prevProps.routes.route.routePath !== routes.route.routePath) {
+    if (
+      map &&
+      routes.route.routePath &&
+      prevProps.routes.route.routePath !== routes.route.routePath &&
+      routes.route.routePath.length > 1
+    ) {
       this.addPolyline(
         routes.route.routePath,
         markers,
@@ -281,48 +291,54 @@ export default class Map extends Component<Props, State> {
         this.removeSourceLayer('route', map)
 
         this.addAddedRoutes(
-          addedRoutes, 
+          addedRoutes,
           [],
           addedRoutesMarkers,
-          map, 
+          map,
           routingGraphVisible,
           updatePoint
         )
-        
       } else {
         addedRoutesIds.forEach(routeId => this.removeSourceLayer(routeId, map))
         this.removeMarkers(addedRoutesMarkers, 'addedRoutesMarkers')
-        this.setState({ markers: this.addLocationMarkers(locations, map, updatePoint) })
+        this.setState({
+          markers: this.addLocationMarkers(locations, map, updatePoint, 'route')
+        })
 
         routeProperties.forEach(item => {
           const routePath = routes[item.routeId].routePath
-
-          routePath.length > 1 && this.addPolyline(
-            routes[item.routeId].routePath,
-            markers,
-            map,
-            routingGraphVisible,
-            item.id,
-            item.color,
-            item.width
-          )
+          routePath.length > 1 &&
+            this.addPolyline(
+              routes[item.routeId].routePath,
+              markers,
+              map,
+              routingGraphVisible,
+              item.id,
+              item.color,
+              item.width
+            )
         })
       }
     }
 
     if (map && prevProps.addedRoutes !== addedRoutes) {
-      this.addAddedRoutes(
-        addedRoutes, 
-        addedRoutesIds,
-        addedRoutesMarkers,
-        map, 
-        routingGraphVisible,
-        updatePoint
-      )
+      if (prevProps.addedRoutes.length < addedRoutes.length) {
+        this.addAddedRoutes(
+          addedRoutes,
+          addedRoutesIds,
+          addedRoutesMarkers,
+          map,
+          routingGraphVisible,
+          updatePoint
+        )
+      } else if (prevProps.addedRoutes.length > addedRoutes.length) {
+        this.removeAddedRoutes(addedRoutesIds, addedRoutes, map, addedRoutesMarkers)
+      }
     }
 
     if (map && prevProps.routeHighlight !== routeHighlight) {
-      if (routeHighlight == '') map.setPaintProperty(`${prevProps.routeHighlight}-polyline`, 'line-width', 6.0)
+      if (routeHighlight === '')
+        map.setPaintProperty(`${prevProps.routeHighlight}-polyline`, 'line-width', 6.0)
       else map.setPaintProperty(`${routeHighlight}-polyline`, 'line-width', 10)
     }
   }
@@ -381,13 +397,12 @@ export default class Map extends Component<Props, State> {
   private addAddedRoutes = (
     addedRoutes: Array<Route>,
     addedRoutesIds: Array<string>,
-    addedRoutesMarkers: Array<mapboxgl.Marker>,
+    addedRoutesMarkers: Array<MarkerObject>,
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
     updatePoint: UpdatePoint
   ) => {
-
-    let newAddedRoutesMarkers: Array<mapboxgl.Marker> = [...addedRoutesMarkers]
+    let newAddedRoutesMarkers: Array<MarkerObject> = [...addedRoutesMarkers]
 
     const newAddedRoutesIds = addedRoutes.reduce((accum: string[], route: Route) => {
       if (!addedRoutesIds.includes(route.id)) {
@@ -397,7 +412,9 @@ export default class Map extends Component<Props, State> {
           map,
           routingGraphVisible,
           route.id,
-          POLYLINE_COLOR,
+          checkNested(route, 'parsedValue', 'provider', 'name') && route.parsedValue.provider.name === 'Google'
+            ? THIRD_PARTY_POLYLINE
+            : POLYLINE_COLOR,
           6.0
         )
 
@@ -418,9 +435,10 @@ export default class Map extends Component<Props, State> {
           lng: route.routePath.slice(-1)[0].lon
         }
 
-        newAddedRoutesMarkers = [...newAddedRoutesMarkers, 
-          this.addMarker(startLocation, map, 0, updatePoint, false),
-          this.addMarker(endLocation, map, 0, updatePoint, false)
+        newAddedRoutesMarkers = [
+          ...newAddedRoutesMarkers,
+          this.addMarker(startLocation, map, 0, updatePoint, false, route.id),
+          this.addMarker(endLocation, map, 0, updatePoint, false, route.id)
         ]
       }
       return [...accum, route.id]
@@ -428,11 +446,51 @@ export default class Map extends Component<Props, State> {
 
     const bounds = this.createBounds(newAddedRoutesMarkers, '', addedRoutes)
     this.fitBounds(bounds, map)
-  
-    this.setState({ 
+
+    this.setState({
       addedRoutesIds: newAddedRoutesIds,
       addedRoutesMarkers: newAddedRoutesMarkers
     })
+  }
+
+  private removeAddedRoutes = (
+    addedRoutesIds: Array<string>,
+    addedRoutes: Array<Route>,
+    map: mapboxgl.Map,
+    addedRoutesMarkers: Array<MarkerObject>
+  ) => {
+    let markerIds: Array<string> = []
+    const presentIds = addedRoutes.map(route => route.id)
+    const newAddedRoutesIds = addedRoutesIds.reduce(
+      (accum: Array<string>, routeId: string) => {
+        if (!presentIds.includes(routeId)) {
+          this.removeSourceLayer(routeId, map)
+          markerIds = [...markerIds, routeId]
+          return accum
+        } else return [...accum, routeId]
+      },
+      []
+    )
+
+    const markersToRemove = addedRoutesMarkers.filter(marker =>
+      markerIds.includes(marker.id)
+    )
+    const markersToRemain = addedRoutesMarkers.filter(
+      marker => !markerIds.includes(marker.id)
+    )
+    this.removeMarkers(markersToRemove, 'addedRoutesMarkers')
+
+    this.setState(
+      {
+        addedRoutesIds: newAddedRoutesIds,
+        addedRoutesMarkers: markersToRemain
+      },
+      () => {
+        const { addedRoutesMarkers } = this.state
+        const bounds = this.createBounds(addedRoutesMarkers, '', addedRoutes)
+        this.fitBounds(bounds, map)
+      }
+    )
   }
 
   private addGeojson = (geography: Geography, map: mapboxgl.Map) => {
@@ -468,11 +526,16 @@ export default class Map extends Component<Props, State> {
     }
   }
 
-  private addLocationMarkers = (locations: Array<Location>, map: mapboxgl.Map, updatePoint: UpdatePoint) => {
+  private addLocationMarkers = (
+    locations: Array<Location>,
+    map: mapboxgl.Map,
+    updatePoint: UpdatePoint,
+    id: string
+  ) => {
     return locations.reduce(
-      (accum: Array<mapboxgl.Marker>, location: Location, index: number) => {
+      (accum: Array<MarkerObject>, location: Location, index: number) => {
         if (location.lng && location.lat) {
-          return [...accum, this.addMarker(location, map, index, updatePoint, true)]
+          return [...accum, this.addMarker(location, map, index, updatePoint, true, id)]
         } else return accum
       },
       []
@@ -484,7 +547,8 @@ export default class Map extends Component<Props, State> {
     map: mapboxgl.Map,
     index: number,
     updatePoint: UpdatePoint,
-    draggable: boolean
+    draggable: boolean,
+    id: string
   ) => {
     const el = document.createElement('i')
     el.className = `${location.marker} icon custom-marker`
@@ -500,28 +564,44 @@ export default class Map extends Component<Props, State> {
       .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
       .addTo(map)
 
-    marker && draggable &&
+    marker &&
+      draggable &&
       marker.on('dragend', () => {
         const coords = marker.getLngLat()
         updatePoint([index], [{ lat: coords.lat, lng: coords.lng }])
       })
 
-    return marker
+    return {
+      marker,
+      id
+    }
   }
 
-  private removeMarkers = (markers: Array<mapboxgl.Marker>, markersName: string) => {
-    markers.forEach(marker => marker && marker.remove())
-    this.setState(state => ({ 
-      ...state,
-      [markersName]: []
+  private removeMarkers = (markers: Array<MarkerObject>, markersName: string) => {
+    const markerIdsSet: Set<string> = new Set(markers.map(el => el.id))
+    const markerIds: Array<string> = Array.from(markerIdsSet)
+
+    this.setState((prevState: any) => ({
+      ...prevState,
+      [markersName]: prevState[markersName]
+        ? prevState[markersName].reduce(
+            (accum: Array<MarkerObject>, marker: MarkerObject) => {
+              if (markerIds.includes(marker.id)) {
+                marker.marker && marker.marker.remove && marker.marker.remove()
+                return accum
+              } else return [...accum, marker]
+            },
+            []
+          )
+        : []
     }))
   }
 
-  private getMarkerCoords = (markers: Array<mapboxgl.Marker>): number[][] => {
-    return markers.map((marker: mapboxgl.Marker) => {
-      const coords = marker && marker.getLngLat()
+  private getMarkerCoords = (markers: Array<MarkerObject>): number[][] => {
+    return markers.map((marker: MarkerObject) => {
+      const coords = marker.marker && marker.marker.getLngLat && marker.marker.getLngLat()
       return coords ? [coords.lng, coords.lat] : []
-    })
+    }).filter(el => el.length > 0)
   }
 
   private flyTo = (center: mapboxgl.LngLat, map: mapboxgl.Map, speed: number) => {
@@ -529,9 +609,9 @@ export default class Map extends Component<Props, State> {
   }
 
   private createBounds = (
-    markers: Array<mapboxgl.Marker>, 
-    exemptRoute: string, 
-    routes: Array<Route>, 
+    markers: Array<MarkerObject>,
+    exemptRoute: string,
+    routes: Array<Route>
   ) => {
     const routeCoords = routes.reduce((accum: number[][], route: Route) => {
       if (route.id !== exemptRoute && route.routePath.length > 1) {
@@ -540,7 +620,7 @@ export default class Map extends Component<Props, State> {
     }, [])
 
     const points = this.getMarkerCoords(markers)
-  
+
     return [...points, ...routeCoords]
   }
 
@@ -626,7 +706,7 @@ export default class Map extends Component<Props, State> {
 
   private addPolyline = (
     routePath: Array<Coords2>,
-    markers: Array<mapboxgl.Marker>,
+    markers: Array<MarkerObject>,
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
     id: string,
@@ -677,7 +757,9 @@ export default class Map extends Component<Props, State> {
             ...routeLineSettings.paint,
             'line-color': type.color,
             'line-width': routingGraphVisible ? 2 * type.width : type.width,
-            'line-opacity':  routingGraphVisible ? 0.85 : routeLineSettings.paint['line-opacity']
+            'line-opacity': routingGraphVisible
+              ? 0.85
+              : routeLineSettings.paint['line-opacity']
           }
         })
       })

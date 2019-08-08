@@ -2,12 +2,12 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="ui fluid icon input sc-bdVaJa dkhQnl"
+  className="ui fluid icon input sc-dnqmqq jwbNvq"
 >
   <input
     onBlur={[Function]}
     onChange={[Function]}
-    onFocus={[MockFunction]}
+    onFocus={[Function]}
     placeholder="Origin"
     type="text"
     value="52, 12"

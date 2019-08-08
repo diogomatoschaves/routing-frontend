@@ -1,6 +1,6 @@
 import round from 'lodash/round'
 import { Coords, Coords2, Location, UpdateState, UpdatePoint, Route } from '../types'
-import { layersArray } from '../utils/input'
+import { layersArray, defaultGoogleResponse } from '../utils/input'
 import { Validator } from 'jsonschema'
 import { Schema } from './schemas';
 import JSON5 from 'json5'
@@ -38,6 +38,13 @@ export const splitCoords = (value: string): Coords | null => {
 
 export const transformPoints = (array: Array<Coords2>) => {
   return array.map(point => [point.lon, point.lat])
+}
+
+export const transformToObject = (array: number[][]): Array<Coords2> => {
+  return array.map(point => ({
+    lat: point[1],
+    lon: point[0]
+  }))
 }
 
 export const getRequestBody = (locations: Array<Location>) => {
@@ -191,19 +198,13 @@ export const validateJSON = (
 
 export const processValidResponse = (
   updateState: UpdateState,
-  parsedValue: any,
+  route: Route,
   addedRoutes: Array<Route>
 ) => {
 
   const newAddedRoutes = [
     ...addedRoutes, 
-    { 
-      id: nanoid(),
-      duration: parsedValue.routes[0].totalDuration,
-      distance: parsedValue.routes[0].totalDistance,
-      routePath: parsedValue.routes[0].legs[0].geometry,
-      parsedValue
-    }
+    route
   ]
 
   updateState(
@@ -267,6 +268,12 @@ export const processValidBody = (
   }
 }
 
+export function checkNested(obj: any, ...rest: any): boolean {
+  if (obj === undefined) return false
+  if (rest.length === 1 && obj.hasOwnProperty(rest[0])) return true
+  return checkNested(obj[rest[0]], rest.slice(1))
+}
+
 export const getAppState = () => {
   return {
     validator: new Validator(),
@@ -300,6 +307,7 @@ export const getAppState = () => {
     matchResponse: defaultMatchResponse,
     response: defaultRouteResponse,
     trafficResponse: defaultRouteResponse,
+    googleResponse: defaultGoogleResponse,
     locations: [
       {
         name: 'start',
@@ -337,7 +345,7 @@ export const getAppState = () => {
     addDataTabsHandler: {
       options: [
         { key: 'routingResponse', text: 'Routing Service', value: 0 },
-        // { key: 's3', text: 'Import from S3', value: 1 }
+        { key: 'db', text: 'Load from DB', value: 1 }
       ],
       activeIdx: 0
     },

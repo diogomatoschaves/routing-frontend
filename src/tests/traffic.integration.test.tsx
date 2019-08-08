@@ -4,7 +4,7 @@ import { Checkbox, Input } from 'semantic-ui-react'
 import App from '../components/App'
 import Map from '../components/Map'
 import { MemoryRouter, Route } from 'react-router-dom'
-import mockRoute from '../apiCalls/__mocks__/mockRoute'
+import { mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import { getPath } from '../utils/functions'
 import { routingApi } from '../apiCalls';
 

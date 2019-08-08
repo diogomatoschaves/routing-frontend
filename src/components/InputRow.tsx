@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { Box } from '../styledComponents'
 import ControlledInput from './ControlledInput'
 import BackgroundIcon from './BackgroundIcon'
 import { UpdatePoint, Coords } from '../types'
-import { NORMAL_INPUT, FOCUSED_INPUT } from '../utils/colours'
+import { NORMAL_INPUT } from '../utils/colours'
 
 
 interface Props {
@@ -18,46 +18,34 @@ interface Props {
 
 const diameter = 38
 
-class InputRow extends Component<Props, any> {
+const InputRow = (props: Props) => {
 
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      color: NORMAL_INPUT
-    }
-  }
+  const [color, setColor] = useState(NORMAL_INPUT)
 
-  updateColor = () => {
-    this.setState((state: any) => ({ color: state.color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT }))
-  }
+  const { iconName, rowKey, index, coords, updatePoint, placeholder, urlMatchString } = props
 
-  public render() {
-
-    const { iconName, rowKey, index, coords, updatePoint, placeholder, urlMatchString } = this.props
-    const { color } = this.state
-
-    return (
-      <Box direction="row" justify="space-around" padding="10px 0">
-        <BackgroundIcon 
-          diameter={diameter}
-          color={color}
-          iconColor={'white'}
-          circle={true}
-          iconName={iconName}
-          margin={"0 10px 0 0"}
-        />
-        <ControlledInput 
-          rowKey={rowKey}
-          index={index}
-          coords={coords}
-          updatePoint={updatePoint}
-          updateColor={this.updateColor}
-          placeholder={placeholder}
-          urlMatchString={urlMatchString}
-        />
-      </Box>
-    )
-  }
+  return (
+    <Box direction="row" justify="space-around" padding="10px 0">
+      <BackgroundIcon 
+        diameter={diameter}
+        color={color}
+        iconColor={'white'}
+        circle={true}
+        iconName={iconName}
+        margin={"0 10px 0 0"}
+      />
+      <ControlledInput 
+        rowKey={rowKey}
+        index={index}
+        coords={coords}
+        updatePoint={updatePoint}
+        updateColor={setColor}
+        placeholder={placeholder}
+        urlMatchString={urlMatchString}
+        color={color}
+      />
+    </Box>
+  )
 }
 
 export default InputRow

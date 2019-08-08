@@ -7,7 +7,9 @@ export const defaultBody = {
 
 export const defaultRouteResponse = {
   code: 'Ok',
-  routes: [{ 
+  routes: [{
+    totalDuration: 0,
+    totalDistance: 0,
     legs: [{ 
       geometry: [],
       duration: 0,
@@ -15,6 +17,17 @@ export const defaultRouteResponse = {
     }]
   }],
   locations: []
+}
+
+export const defaultGoogleResponse = {
+  geocoded_waypoints: [],
+  routes: [{
+    legs: [{
+      duration: { value: 0 },
+      distance: { value: 0 }
+    }],
+    overview_polyline: ''
+  }]
 }
 
 export const defaultMatchResponse = {

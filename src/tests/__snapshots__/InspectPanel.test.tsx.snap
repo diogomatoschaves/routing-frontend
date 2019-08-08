@@ -13,7 +13,7 @@ exports[`expect to render InspectPanel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bdVaJa sc-ckVGcZ gMQBua"
+        className="sc-bdVaJa sc-eNQAEJ ibiofc"
         color={true}
         id="default"
         onClick={[Function]}
@@ -22,7 +22,7 @@ exports[`expect to render InspectPanel component 1`] = `
         Interactive
       </div>
       <div
-        className="sc-bdVaJa sc-ckVGcZ hzkxQh"
+        className="sc-bdVaJa sc-eNQAEJ fTBrZq"
         color={false}
         id="debug"
         onClick={[Function]}
@@ -127,7 +127,7 @@ exports[`expect to render InspectPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle left large icon sc-dnqmqq bPwZQa"
+            className="grey angle left large icon sc-gZMcBi Qfbta"
             onClick={[Function]}
           />
         </div>
@@ -136,7 +136,7 @@ exports[`expect to render InspectPanel component 1`] = `
           width="60%"
         >
           <div
-            className="ui large label sc-iwsKbI boLuZU"
+            className="ui large label sc-gqjmRU cYcDOp"
             onClick={[Function]}
           >
             No Traffic
@@ -149,7 +149,7 @@ exports[`expect to render InspectPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle right large icon sc-dnqmqq bPwZQa"
+            className="grey angle right large icon sc-gZMcBi Qfbta"
             onClick={[Function]}
           />
         </div>
@@ -301,7 +301,7 @@ exports[`expect to render InspectPanel component 1`] = `
         Request Body
       </div>
       <button
-        className="ui button body-textarea sc-chPdSV bfyvDP"
+        className="ui button body-textarea sc-kGXeez fwkDyc"
         id="bodyEdit"
         marginleft="10px"
         onClick={[Function]}
@@ -315,45 +315,45 @@ exports[`expect to render InspectPanel component 1`] = `
       width="100%"
     >
       <div
-        className="sc-VigVT iXqfLQ"
+        className="sc-fjdhpX jCbsHU"
       >
         <div
-          className="sc-gqjmRU iibOKB"
+          className="sc-jTzLTM dRHfmO"
           onClick={[Function]}
         >
           
           <i
             aria-hidden="true"
-            className="caret up icon"
+            className="caret down icon"
             onClick={[Function]}
           />
         </div>
         <div
-          className="sc-VigVT iXqfLQ"
+          className="sc-fjdhpX jCbsHU"
         >
           <div
-            className="sc-gqjmRU iibOKB"
+            className="sc-jTzLTM dRHfmO"
             onClick={[Function]}
           >
             locations
             <i
               aria-hidden="true"
-              className="caret down icon"
+              className="caret right icon"
               onClick={[Function]}
             />
           </div>
         </div>
         <div
-          className="sc-VigVT iXqfLQ"
+          className="sc-fjdhpX jCbsHU"
         >
           <span
-            className="sc-jTzLTM jtTffz"
+            className="sc-jzJRlG goTWxH"
           >
             reportGeometry
             : 
           </span>
           <span
-            className="sc-fjdhpX bsQIYx"
+            className="sc-cSHVUG dqUeWy"
           >
             true
           </span>
@@ -376,7 +376,7 @@ exports[`expect to render InspectPanel component 1`] = `
         Response
       </div>
       <button
-        className="ui button response-textarea sc-chPdSV bfyvDP"
+        className="ui button response-textarea sc-kGXeez fwkDyc"
         id="responseEdit"
         marginleft="10px"
         onClick={[Function]}
@@ -390,60 +390,60 @@ exports[`expect to render InspectPanel component 1`] = `
       width="100%"
     >
       <div
-        className="sc-VigVT iXqfLQ"
+        className="sc-fjdhpX jCbsHU"
       >
         <div
-          className="sc-gqjmRU iibOKB"
+          className="sc-jTzLTM dRHfmO"
           onClick={[Function]}
         >
           
           <i
             aria-hidden="true"
-            className="caret up icon"
+            className="caret down icon"
             onClick={[Function]}
           />
         </div>
         <div
-          className="sc-VigVT iXqfLQ"
+          className="sc-fjdhpX jCbsHU"
         >
           <span
-            className="sc-jTzLTM jtTffz"
+            className="sc-jzJRlG goTWxH"
           >
             code
             : 
           </span>
           <span
-            className="sc-fjdhpX bsQIYx"
+            className="sc-cSHVUG dqUeWy"
           >
             Ok
           </span>
         </div>
         <div
-          className="sc-VigVT iXqfLQ"
+          className="sc-fjdhpX jCbsHU"
         >
           <div
-            className="sc-gqjmRU iibOKB"
+            className="sc-jTzLTM dRHfmO"
             onClick={[Function]}
           >
             routes
             <i
               aria-hidden="true"
-              className="caret down icon"
+              className="caret right icon"
               onClick={[Function]}
             />
           </div>
         </div>
         <div
-          className="sc-VigVT iXqfLQ"
+          className="sc-fjdhpX jCbsHU"
         >
           <div
-            className="sc-gqjmRU iibOKB"
+            className="sc-jTzLTM dRHfmO"
             onClick={[Function]}
           >
             locations
             <i
               aria-hidden="true"
-              className="caret down icon"
+              className="caret right icon"
               onClick={[Function]}
             />
           </div>

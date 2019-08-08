@@ -4,7 +4,7 @@ import { Checkbox, Input } from 'semantic-ui-react'
 import App from '../components/App'
 import Map from '../components/Map'
 import { MemoryRouter, Route } from 'react-router-dom'
-import mockRoute from '../apiCalls/__mocks__/mockRoute'
+import { mockRoute, mockGoogleRoute } from '../apiCalls/__mocks__/mockRoute'
 import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
 import { getPath } from '../utils/functions'
 import { googleDirections } from '../apiCalls';
@@ -79,7 +79,7 @@ describe('When 3rd party option is selected', () => {
       input[1].props.onBlur()
     })
 
-    it('calls the googleDirections API twice', (done) => {
+    it('calls the googleDirections API once', (done) => {
       expect(googleDirections).toBeCalledTimes(1)
       done()
     })
@@ -88,7 +88,7 @@ describe('When 3rd party option is selected', () => {
       delay(500)
       .then(() => {
         const { routes } = MapComponent.props
-        expect(routes.googleRoute.routePath).toEqual(mockRoute)
+        expect(routes.googleRoute.routePath).toEqual(mockGoogleRoute)
         expect(routes.route.routePath).toEqual(mockRoute)
         done()
       })
@@ -136,7 +136,7 @@ describe('When 3rd party option is selected', () => {
       delay(500)
       .then(() => {
         const { routes } = MapComponent.props
-        expect(routes.googleRoute.routePath).toEqual(mockRoute)
+        expect(routes.googleRoute.routePath).toEqual(mockGoogleRoute)
         done()
       })
     })

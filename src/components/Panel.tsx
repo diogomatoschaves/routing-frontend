@@ -12,13 +12,17 @@ import {
   Geography,
   OptionsHandler,
   HandleChange,
-  HandleConfirmButton
+  HandleConfirmButton,
+  HandleDeleteRoute,
+  Route,
 } from '../types'
 
 interface Props {
   updatePoint: UpdatePoint
   handleValueUpdate: HandleChange
-  handleConfirmButton: HandleConfirmButton
+  handleAddRoute: HandleConfirmButton
+  handleClickRoute: HandleConfirmButton
+  handleDeleteRoute: HandleDeleteRoute
   handleShowClick: () => void
   locations: Array<Location>
   routingGraphVisible: boolean
@@ -36,6 +40,7 @@ interface Props {
   addDataTabsHandler: OptionsHandler
   newRouteColor: string
   newRoute: string
+  addedRoutes: Array<Route>
 }
 
 const PanelWrapper: any = styled(Box)`
@@ -57,7 +62,9 @@ const PanelWrapper: any = styled(Box)`
 const Panel: any = (props: Props) => {
   const {
     updatePoint,
-    handleConfirmButton,
+    handleAddRoute,
+    handleDeleteRoute,
+    handleClickRoute,
     locations,
     routingGraphVisible,
     polygonsVisible,
@@ -73,11 +80,12 @@ const Panel: any = (props: Props) => {
     handleValueUpdate,
     newRouteColor,
     newRoute,
-    addDataTabsHandler
+    addDataTabsHandler,
+    addedRoutes
   } = props
 
   return (
-    <Transition.Group
+    <PanelWrapper
       as={PanelWrapper}
       direction="column"
       justify="flex-start"
@@ -102,10 +110,13 @@ const Panel: any = (props: Props) => {
           geography={geography}
           geographies={geographies}
           handleValueUpdate={handleValueUpdate}
-          handleConfirmButton={handleConfirmButton}
+          handleAddRoute={handleAddRoute}
+          handleDeleteRoute={handleDeleteRoute}
+          handleClickRoute={handleClickRoute}
           newRouteColor={newRouteColor}
           newRoute={newRoute}
           addDataTabsHandler={addDataTabsHandler}
+          addedRoutes={addedRoutes}
         />
       ) : (
         <DefaultPanel
@@ -122,7 +133,7 @@ const Panel: any = (props: Props) => {
           trafficOption={trafficOption}
         />
       )}
-    </Transition.Group>
+    </PanelWrapper>
   )
 }
 
