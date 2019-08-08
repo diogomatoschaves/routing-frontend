@@ -2,24 +2,19 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-bdVaJa sc-chPdSV VEVzz"
+  className="sc-bdVaJa sc-bdVaJa sc-kEYyzF fusQp sc-kEYyzF fusQp"
   direction="column"
 >
   <div
-    className="scale visible transition sc-bdVaJa pqpqB"
+    className="sc-bdVaJa pqpqB"
     direction="row"
-    style={
-      Object {
-        "animationDuration": undefined,
-      }
-    }
   >
     <div
       className="sc-bdVaJa kRVJAa"
       direction="row"
     >
       <div
-        className="sc-bdVaJa sc-fjdhpX TpKDF"
+        className="sc-bdVaJa sc-jzJRlG hoptrx"
         color={true}
         id="default"
         onClick={[Function]}
@@ -28,7 +23,7 @@ exports[`expect to render Panel component 1`] = `
         Interactive
       </div>
       <div
-        className="sc-bdVaJa sc-fjdhpX jAZwpU"
+        className="sc-bdVaJa sc-jzJRlG Iauxu"
         color={false}
         id="debug"
         onClick={[Function]}
@@ -140,7 +135,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-dnqmqq bSXmIE"
+        className="ui fluid input sc-dnqmqq jwbNvq"
       >
         <input
           onBlur={[Function]}
@@ -177,7 +172,7 @@ exports[`expect to render Panel component 1`] = `
         </div>
       </div>
       <div
-        className="ui fluid input sc-dnqmqq bSXmIE"
+        className="ui fluid input sc-dnqmqq jwbNvq"
       >
         <input
           onBlur={[Function]}
@@ -200,7 +195,7 @@ exports[`expect to render Panel component 1`] = `
         width="65%"
       >
         <div
-          className="ui fitted toggle checkbox custom-class sc-gZMcBi hupRmQ"
+          className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
           onChange={[Function]}
           onClick={[Function]}
           onMouseDown={[Function]}
@@ -219,7 +214,7 @@ exports[`expect to render Panel component 1`] = `
           />
         </div>
         <label
-          className="sc-iwsKbI lpcEmi"
+          className="sc-gZMcBi eCHFCo"
         >
           Google Maps
         </label>
@@ -231,7 +226,7 @@ exports[`expect to render Panel component 1`] = `
         width="35%"
       >
         <div
-          className="ui fitted toggle checkbox custom-class sc-gZMcBi hupRmQ"
+          className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
           onChange={[Function]}
           onClick={[Function]}
           onMouseDown={[Function]}
@@ -250,7 +245,7 @@ exports[`expect to render Panel component 1`] = `
           />
         </div>
         <label
-          className="sc-iwsKbI lpcEmi"
+          className="sc-gZMcBi eCHFCo"
         >
           Traffic
         </label>

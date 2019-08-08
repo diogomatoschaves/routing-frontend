@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Modal } from 'semantic-ui-react'
-import { UpdateState, HandleChange, HandleConfirmButton, OptionsHandler } from '../types'
+import { UpdateState, HandleChange, HandleConfirmButton, OptionsHandler, HandleDeleteRoute, Route } from '../types'
 
 interface Props {
   id: string
@@ -11,12 +11,15 @@ interface Props {
   value: string
   color?: string
   handleValueUpdate?: HandleChange
-  handleConfirmButton?: HandleConfirmButton
+  handleAddRoute?: HandleConfirmButton
+  handleDeleteRoute?: HandleDeleteRoute
+  handleClickRoute?: HandleConfirmButton
   updateState: UpdateState
   addDataTabsHandler?: OptionsHandler
   editable?: boolean
   buttonText?: string
   title?: string
+  addedRoutes?: Array<Route>
 }
 
 const ModalHOC = (ChildComponent: any) => {
@@ -40,7 +43,7 @@ const ModalHOC = (ChildComponent: any) => {
           resolve(id === 'newRoute' && updateState(id, ''))
         }).then(() => updateState(colorId, 'rgb(100, 100, 100)'))
 
-        this.inputRef.focus()
+        this.inputRef && this.inputRef.focus()
       }
     }
 

@@ -26,7 +26,7 @@ exports[`expect to render Panel component 1`] = `
     </div>
   </div>
   <div
-    className="ui fluid icon input sc-dnqmqq bSXmIE"
+    className="ui fluid icon input sc-dnqmqq jwbNvq"
   >
     <input
       onBlur={[Function]}

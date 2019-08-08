@@ -1,8 +1,6 @@
 import { Body } from '../types'
 
 const routingApi = async (profile: string, authorization: string, body: Body, endpoint: string) => {
-
-
   const headers = new Headers() as any
 
   headers.set('Authorization', authorization);

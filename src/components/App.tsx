@@ -22,7 +22,10 @@ import {
   MatchResponse,
   Coords,
   HandleChange,
-  HandleConfirmButton
+  HandleConfirmButton,
+  HandleDeleteRoute,
+  GoogleResponse,
+  RoutingServiceResponse
 } from '../types'
 import {
   splitCoords,
@@ -51,7 +54,8 @@ import {
 import { EmptySpace, Box } from '../styledComponents'
 import JSON5 from 'json5'
 import { Schema } from '../utils/schemas/index'
-import { defaultRoute, defaultRouteResponse } from '../utils/input';
+import { defaultRoute, defaultRouteResponse, defaultGoogleResponse } from '../utils/input';
+import { routeConverterFromRoutingService, routeConverterFromGoogle } from '../utils/routeAdapter';
 
 interface State {
   validator?: Validator
@@ -59,8 +63,9 @@ interface State {
   recalculate: boolean
   locations: Array<Location>
   authorization: string
-  response: RouteResponse | null
-  trafficResponse: RouteResponse
+  response: RoutingServiceResponse
+  trafficResponse: RoutingServiceResponse
+  googleResponse: GoogleResponse
   matchResponse: MatchResponse
   routes: Routes
   message?: string | null
@@ -270,6 +275,7 @@ class App extends Component<any, State> {
       google,
       trafficOption,
       trafficResponse,
+      googleResponse,
       endpointHandler,
       recalculate,
       visible,
@@ -300,13 +306,7 @@ class App extends Component<any, State> {
 
     if (prevState.response !== response) {
       if (Object.keys(response).includes('code') && response.code == 'Ok') {
-        const leg = response.routes[0].legs[0]
-        const route = {
-          id: 'routeDAS',
-          routePath: leg.geometry,
-          duration: leg.duration,
-          distance: leg.distance
-        }
+        const route = routeConverterFromRoutingService(response, 'routeDAS')
         this.setState(state => ({ 
           ...state,
           routes: {
@@ -319,14 +319,7 @@ class App extends Component<any, State> {
 
     if (prevState.trafficResponse !== trafficResponse) {
       if (Object.keys(trafficResponse).includes('code') && trafficResponse.code == 'Ok') {
-        const leg = trafficResponse.routes[0].legs[0]
-        const trafficRoute = {
-          id: 'routeTrafficDAS',
-          routePath: leg.geometry,
-          duration: leg.duration,
-          distance: leg.distance
-        }
-        
+        const trafficRoute = routeConverterFromRoutingService(trafficResponse, 'routeTrafficDAS')
         this.setState(state => ({ 
           ...state,
           routes: {
@@ -335,6 +328,17 @@ class App extends Component<any, State> {
           }
         }))
       }
+    }
+
+    if (prevState.googleResponse !== googleResponse) {
+      const googleRoute = routeConverterFromGoogle(googleResponse)
+      this.setState(state => ({ 
+        ...state,
+        routes: {
+          ...state.routes,
+          googleRoute
+        }
+      })) 
     }
 
     // TODO: Check if there is a callback for back and forward buttons
@@ -395,14 +399,7 @@ class App extends Component<any, State> {
 
     if (prevState.trafficOption !== trafficOption) {
       if (!trafficOption) {
-        this.setState(state => ({ 
-          ...state,
-          routes: {
-            ...state.routes,
-            trafficRoute: defaultRoute
-          },
-          trafficResponse: defaultRouteResponse
-        }))
+        this.setState(state => ({ trafficResponse: defaultRouteResponse }))
       } else {
         this.getRoute(
           locations,
@@ -418,13 +415,7 @@ class App extends Component<any, State> {
     }
     if (prevState.googleMapsOption !== googleMapsOption) {
       if (!googleMapsOption) {
-        this.setState(state => ({ 
-          ...state,
-          routes: {
-            ...state.routes,
-            googleRoute: defaultRoute
-          }
-        }))
+        this.setState(state => ({ googleResponse: defaultGoogleResponse }))
       } else {
         this.getRoute(
           locations,
@@ -471,7 +462,7 @@ class App extends Component<any, State> {
 
       if (defaultOption) {
         routingApi(profile, authorization, body, endpointUrl)
-        .then((response: RouteResponse) => this.setState({ response, body }))
+        .then((response: RoutingServiceResponse) => this.setState({ response, body }))
         .catch(() =>
           this.setState({
             message: 'There was an error fetching the route. Try again later'
@@ -481,26 +472,20 @@ class App extends Component<any, State> {
 
       if (googleMapsOption && google) {
         googleDirections(google, profile, locations)
-          .then((googleRoute: Route) => {
-            this.setState(state => ({ 
-              ...state,
-              routes: {
-                ...state.routes,
-                googleRoute
-              }
-            }))
+          .then((googleResponse: GoogleResponse) => {
+            this.setState({ googleResponse })
           })
-          .catch(() =>
+          .catch(() => {
             this.setState({
               googleMessage:
                 'There was an error fetching the google route. Try again later'
             })
-          )
+          })
       }
 
       if (trafficOption && profile === 'car') {
         routingApi('car-traffic', authorization, body, endpointUrl)
-          .then((trafficResponse: RouteResponse) => {
+          .then((trafficResponse: RoutingServiceResponse) => {
             this.setState({ trafficResponse })
           })
           .catch(() =>
@@ -586,7 +571,8 @@ class App extends Component<any, State> {
     if (this.handleValueUpdate({ id: 'response', value })) {
       const { addedRoutes } = this.state
       const parsedValue = JSON5.parse(value)
-      processValidResponse(this.updateState, parsedValue, addedRoutes)
+      const route = routeConverterFromRoutingService(parsedValue)
+      processValidResponse(this.updateState, route, addedRoutes)
       setState(false)
       this.setState({ newRoute: '' })
     }
@@ -601,12 +587,24 @@ class App extends Component<any, State> {
     }
   }
 
+  handleAddRouteFromDB: HandleConfirmButton = (setState, route) => {
+    const { addedRoutes } = this.state
+    processValidResponse(this.updateState, route, addedRoutes)
+  }
+
   handleCloseModal: HandleConfirmButton = (setState, value) => {
     setState(false)
   }
 
   updateStateCallback = (callback: any) => {
     this.setState(callback)
+  }
+
+  handleDeleteRoute: HandleDeleteRoute = (id: string) => {
+    this.setState(prevState => ({
+      ...prevState,
+      addedRoutes: prevState.addedRoutes.filter(route => route.id !== id)
+    }))
   }
 
   handleShowClick = () => this.setState({ visible: true })
@@ -725,6 +723,8 @@ class App extends Component<any, State> {
               addDataTabsHandler={addDataTabsHandler}
               modeTabsHandler={modeTabsHandler}
               handleAddRoute={this.handleAddRoute}
+              handleDeleteRoute={this.handleDeleteRoute}
+              handleClickRoute={this.handleAddRouteFromDB}
               handleChangeBody={this.handleChangeBody}
               handleCloseModal={this.handleCloseModal}
             />
@@ -773,7 +773,9 @@ class App extends Component<any, State> {
               locations={locations}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
-              handleConfirmButton={this.handleAddRoute}
+              handleAddRoute={this.handleAddRoute}
+              handleDeleteRoute={this.handleDeleteRoute}
+              handleClickRoute={this.handleAddRouteFromDB}
               handleValueUpdate={this.handleValueUpdate}
               handleShowClick={this.handleShowClick}
               routingGraphVisible={routingGraphVisible}
@@ -789,6 +791,7 @@ class App extends Component<any, State> {
               newRoute={newRoute}
               newRouteColor={newRouteColor}
               addDataTabsHandler={addDataTabsHandler}
+              addedRoutes={addedRoutes}
             />
             <Map
               locations={locations}

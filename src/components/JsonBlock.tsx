@@ -89,7 +89,7 @@ export default function JsonBlock({
         setState={(value: boolean) => updateState(buttonId, value)}
         updateState={updateState}
         handleValueUpdate={handleValueUpdate}
-        handleConfirmButton={handleConfirmButton}
+        handleAddRoute={handleConfirmButton}
         value={editableValue}
         editable={editable}
         color={color}
