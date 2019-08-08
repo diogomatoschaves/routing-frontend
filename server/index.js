@@ -1,3 +1,4 @@
+require('dotenv').config()
 /* eslint-disable func-names */
 const createError = require('http-errors')
 const express = require('express')
