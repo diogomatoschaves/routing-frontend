@@ -1,4 +1,10 @@
-# Routing Service API playground
+# Routing Service Frontend
+
+## Web App
+
+The App can be opened with your LDAP credentials at the following url:
+
+https://routing-frontend.develop.otonomousmobility.com/car
 
 ## Usage
 
