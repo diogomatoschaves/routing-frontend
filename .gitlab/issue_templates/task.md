@@ -1,37 +1,15 @@
-## Task description
-<!--
-Describe the task that needs to be done. Try to answer:
-- Why does this need to be done?  What is the problem? How does it currently work?
-- What will change? What needs to be done?
-- Why will this task solve the problem?
--->
-
 ## Background
-<!---
-Provide some background to doing the task.
-This section is optional and its content depends on the task.
-Possible questions are:
-- What other services or projects will someone need to know about?
-- What existing work has already been started?
-- What is the use-case or business reason?
--->
 
-## Acceptance criteria for closing
-<!---
-This ticket is ready to close when:
-- [Fill in acceptance criteria]
-- [...]
+<!-- related projects, existing work, use-case, business reasons etc. -->
 
-see https://gitlab.mobilityservices.io/am/roam/routing/blob/master/team_agreements/definition_of_ready.md#acceptance-criteria for more info
--->
+## Task description
 
-<!---
-Issue is ready when:
+<!-- why + what, problem description, current behaviour -->
 
-- All fields above are filled out
-- Has weight estimation
+## Acceptance criteria
 
-see https://gitlab.mobilityservices.io/am/roam/routing/blob/master/team_agreements/definition_of_ready.md for more info
--->
+/label ~ROAM ~"Routing & HD Maps" ~"visualisation tools"
 
-~ROAM ~"Routing & HD Maps"
+<!-- if applicable: /label ~Story -->
+
+<!-- see https://gitlab.mobilityservices.io/am/roam/routing/blob/definition_of_ready.md for more info on how to write tickets -->
