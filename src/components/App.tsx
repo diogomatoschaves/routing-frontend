@@ -223,8 +223,8 @@ class App extends Component<any, State> {
 
     this.setState({
       validator,
-      bodyValue: JSON5.stringify(body, null, 2),
-      responseValue: JSON5.stringify(response, null, 2)
+      bodyValue: JSON.stringify(body, null, 2),
+      responseValue: JSON.stringify(response, null, 2)
     })
 
     const params = Object.keys(match.params)
@@ -383,7 +383,7 @@ class App extends Component<any, State> {
 
     if (prevState.body !== body || (prevState.bodyEdit !== bodyEdit && !bodyEdit)) {
       this.setState({
-        bodyValue: JSON5.stringify(body, null, 2),
+        bodyValue: JSON.stringify(body, null, 2),
         bodyColor: defaultColor
       })
     }
@@ -393,7 +393,7 @@ class App extends Component<any, State> {
       (prevState.responseEdit !== responseEdit && !responseEdit)
     ) {
       this.setState({
-        responseValue: JSON5.stringify(response, null, 2),
+        responseValue: JSON.stringify(response, null, 2),
       })
     }
 
