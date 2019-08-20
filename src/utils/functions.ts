@@ -357,7 +357,14 @@ export const getAppState = () => {
     addedRoutes: [],
     newRoute: '',
     newRouteColor: 'rgb(100, 100, 100)',
-    routeHighlight: ''
+    routeHighlight: '',
+    showMessage: false,
+    messages: {
+      routeMessage: null,
+      trafficMessage: null,
+      googleMessage: null
+    },
+    messageBottomProp: -300
   }
 }
 

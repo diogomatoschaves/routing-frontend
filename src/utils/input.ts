@@ -27,7 +27,8 @@ export const defaultGoogleResponse = {
       distance: { value: 0 }
     }],
     overview_polyline: ''
-  }]
+  }],
+  status: 'OK'
 }
 
 export const defaultMatchResponse = {
