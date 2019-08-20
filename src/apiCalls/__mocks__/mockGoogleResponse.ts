@@ -9,6 +9,7 @@ const mockGoogleResponse = {
   }],
   duration: 10,
   distance: 1000,
+  status: 'OK'
 }
 
 export default mockGoogleResponse

@@ -21,11 +21,7 @@ const googleDirections = (google: any, profile: any, locations: any): Promise<Go
           departureTime: new Date(),
         }
       }, (response: GoogleResponse, status: any) => {
-      if (status === 'OK') {
-        resolve(response)
-      } else {
-        reject()
-      }
+      resolve(response)
     })
   })
 }
