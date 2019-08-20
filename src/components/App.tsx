@@ -7,6 +7,7 @@ import Panel from './Panel'
 import RouteInfo from './RouteInfo'
 import TrafficLegend from './TrafficLegend'
 import InspectPanel from './InspectPanel'
+import Message from './Message'
 import '../App.css'
 import { Validator } from 'jsonschema'
 import {
@@ -46,10 +47,11 @@ import {
   THIRD_PARTY_COLOR,
   THIRD_PARTY_POLYLINE,
   THIRD_PARTY_STATS,
-  TRAFFIC_PARTY_COLOR,
+  TRAFFIC_COLOR,
   TRAFFIC_POLYLINE,
-  TRAFFIC_PARTY_STATS,
-  PETROL_6
+  TRAFFIC_STATS,
+  PETROL_6,
+  MAIN_PETROL
 } from '../utils/colours'
 import { EmptySpace, Box } from '../styledComponents'
 import JSON5 from 'json5'
@@ -68,8 +70,13 @@ interface State {
   googleResponse: GoogleResponse
   matchResponse: MatchResponse
   routes: Routes
-  message?: string | null
-  googleMessage?: string | null
+  showMessage: boolean
+  messages: {
+    routeMessage: React.ReactNode | null
+    trafficMessage: React.ReactNode | null
+    googleMessage: React.ReactNode | null
+  }
+  messageBottomProp: number
   routingGraphVisible?: boolean
   googleMapsOption?: boolean
   trafficOption?: boolean
@@ -107,7 +114,7 @@ const StyledSegment = styled(Segment)`
   & > .ui.left.visible.sidebar {
     border: none;
     box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);
-    width: 30%;
+    width: 28.8%;
     min-width: 450px;
     max-width: 550px;
     transform: none;
@@ -150,6 +157,17 @@ const StyledButton = styled(Button)`
     border-bottom-left-radius: 0;
   }
 `
+
+const StyledContainer = styled.div`
+  transition: bottom 1s ease;
+  position: fixed;
+  z-index: 0;
+  text-align: center;
+  left: 50%;
+  transform: translateX(-50%);
+  ${(props: any) => props.bottom && css`bottom: ${props.bottom}px;`}
+` as any
+
 declare global {
   interface Window {
     google: any
@@ -171,6 +189,8 @@ const serviceOptions = [
 
 class App extends Component<any, State> {
   static defaultProps = getAppProps()
+
+  messageTimeout: any
 
   state = getAppState()
 
@@ -282,7 +302,8 @@ class App extends Component<any, State> {
       modeTabsHandler,
       body,
       responseEdit,
-      bodyEdit
+      bodyEdit,
+      showMessage
     } = this.state
 
     const { urlMatchString, history, defaultColor } = this.props
@@ -305,40 +326,15 @@ class App extends Component<any, State> {
     }
 
     if (prevState.response !== response) {
-      if (Object.keys(response).includes('code') && response.code == 'Ok') {
-        const route = routeConverterFromRoutingService(response, 'routeDAS')
-        this.setState(state => ({ 
-          ...state,
-          routes: {
-            ...state.routes,
-            route
-          }
-        }))
-      }
+      this.updateRoute(response, 'routeDAS', 'route')
     }
 
     if (prevState.trafficResponse !== trafficResponse) {
-      if (Object.keys(trafficResponse).includes('code') && trafficResponse.code == 'Ok') {
-        const trafficRoute = routeConverterFromRoutingService(trafficResponse, 'routeTrafficDAS')
-        this.setState(state => ({ 
-          ...state,
-          routes: {
-            ...state.routes,
-            trafficRoute
-          }
-        }))
-      }
+      this.updateRoute(trafficResponse, 'routeTrafficDAS', 'trafficRoute')
     }
 
     if (prevState.googleResponse !== googleResponse) {
-      const googleRoute = routeConverterFromGoogle(googleResponse)
-      this.setState(state => ({ 
-        ...state,
-        routes: {
-          ...state.routes,
-          googleRoute
-        }
-      })) 
+      this.updateGoogleRoute(googleResponse)
     }
 
     // TODO: Check if there is a callback for back and forward buttons
@@ -381,7 +377,10 @@ class App extends Component<any, State> {
       })
     }
 
-    if (prevState.body !== body || (prevState.bodyEdit !== bodyEdit && !bodyEdit)) {
+    if (
+      prevState.body !== body || 
+      (prevState.bodyEdit !== bodyEdit && !bodyEdit)
+    ) {
       this.setState({
         bodyValue: JSON.stringify(body, null, 2),
         bodyColor: defaultColor
@@ -399,7 +398,7 @@ class App extends Component<any, State> {
 
     if (prevState.trafficOption !== trafficOption) {
       if (!trafficOption) {
-        this.setState(state => ({ trafficResponse: defaultRouteResponse }))
+        this.setState({ trafficResponse: defaultRouteResponse })
       } else {
         this.getRoute(
           locations,
@@ -415,7 +414,7 @@ class App extends Component<any, State> {
     }
     if (prevState.googleMapsOption !== googleMapsOption) {
       if (!googleMapsOption) {
-        this.setState(state => ({ googleResponse: defaultGoogleResponse }))
+        this.setState({ googleResponse: defaultGoogleResponse })
       } else {
         this.getRoute(
           locations,
@@ -428,6 +427,28 @@ class App extends Component<any, State> {
           endpointHandler.options[endpointHandler.activeIdx].text
         )
       }
+    }
+
+    if (prevState.showMessage !== showMessage && showMessage) {
+      this.setState({ messageBottomProp: 40, showMessage: false })
+
+      if (this.messageTimeout) clearTimeout(this.messageTimeout)
+      this.messageTimeout = setTimeout(() => {
+        this.setState({ 
+          messageBottomProp: -300,
+        }, () => {
+          if (this.messageTimeout) clearTimeout(this.messageTimeout)
+          this.messageTimeout = setTimeout(() => {
+            this.setState({ 
+              messages: {
+                routeMessage: null,
+                trafficMessage: null,
+                googleMessage: null
+              }
+            })
+          }, 1000)
+        })
+      }, 4200)
     }
   }
 
@@ -462,36 +483,71 @@ class App extends Component<any, State> {
 
       if (defaultOption) {
         routingApi(profile, authorization, body, endpointUrl)
-        .then((response: RoutingServiceResponse) => this.setState({ response, body }))
+        .then((response: RoutingServiceResponse) => {
+          this.setState(state => ({ 
+            response, 
+            body, 
+            messages: {
+              ...state.messages,
+              routeMessage: null
+            } 
+          }))
+        })
         .catch(() =>
-          this.setState({
-            message: 'There was an error fetching the route. Try again later'
-          })
+          this.setState(state => ({
+            response: defaultRouteResponse,
+            messages: {
+              ...state.messages,
+              routeMessage: <span style={{ color: 'red' }}>There was an error fetching the route.</span>
+            },
+            showMessage: true
+          }))
         )
       }
 
       if (googleMapsOption && google) {
         googleDirections(google, profile, locations)
           .then((googleResponse: GoogleResponse) => {
-            this.setState({ googleResponse })
+            this.setState(state => ({ 
+              googleResponse, 
+              messages: {
+                ...state.messages,
+                googleMessage: null
+              }  
+            }))
           })
           .catch(() => {
-            this.setState({
-              googleMessage:
-                'There was an error fetching the google route. Try again later'
-            })
+            this.setState(state => ({
+              googleResponse: defaultGoogleResponse,
+              messages: {
+                ...state.messages,
+                googleMessage: <span style={{ color: 'red' }}>There was an error fetching a route from google.</span>
+              },
+              showMessage: true
+            }))
           })
       }
 
       if (trafficOption && profile === 'car') {
         routingApi('car-traffic', authorization, body, endpointUrl)
           .then((trafficResponse: RoutingServiceResponse) => {
-            this.setState({ trafficResponse })
+            this.setState(state => ({ 
+              trafficResponse, 
+              messages: {
+                ...state.messages,
+                trafficMessage: null
+              } 
+            }))
           })
           .catch(() =>
-            this.setState({
-              message: 'There was an error fetching the route. Try again later'
-            })
+            this.setState(state => ({
+              trafficResponse: defaultRouteResponse,
+              messages: {
+                ...state.messages,
+                routeMessage: <span style={{ color: 'red' }}>There was an error fetching the route.</span>
+              },
+              showMessage: true
+            }))
           )
       }
     }
@@ -539,6 +595,69 @@ class App extends Component<any, State> {
         )
       }
     })
+  }
+
+  updateRoute = (response: RouteResponse, key: string, routeName: string) => {
+    if (Object.keys(response).includes('code') && response.code == 'Ok') {
+      const trafficRoute = routeConverterFromRoutingService(response, key)
+      this.setState(state => ({ 
+        ...state,
+        routes: {
+          ...state.routes,
+          [routeName]: trafficRoute
+        }
+      }))
+    } else {
+      const traffic = routeName.includes('traffic')
+      this.setState(state => ({ 
+        ...state,
+        routes: {
+          ...state.routes,
+          [routeName]: defaultRoute,
+        },
+        messages: {
+          ...state.messages,
+          [traffic ? 'trafficMessage' : 'routeMessage']: 
+            <span>
+              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR}}>Routing Service{traffic ? ' - traffic' : ''}:</span>
+              <span> {response.code}. </span>
+              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR}}>{response.message}</span>
+            </span>
+        },
+        showMessage: true
+      }))
+    }
+  }
+
+  updateGoogleRoute = (googleResponse: GoogleResponse) => {
+    if (googleResponse.status === 'OK') {
+      const googleRoute = routeConverterFromGoogle(googleResponse)
+      this.setState(state => ({ 
+        ...state,
+        routes: {
+          ...state.routes,
+          googleRoute,
+        },
+      })) 
+    } else {
+      this.setState(state => ({ 
+        ...state,
+        routes: {
+          ...state.routes,
+          googleRoute: defaultRoute,
+        },
+        messages: {
+          ...state.messages,
+          googleMessage: 
+            <span>
+              <span style={{ color: THIRD_PARTY_POLYLINE}}>Google: </span>
+              <span>{googleResponse.status}.</span> 
+              <span style={{ color: THIRD_PARTY_POLYLINE}}> Failed to provide a route.</span>
+            </span>
+        },
+        showMessage: true
+      })) 
+    }
   }
 
   updateState: UpdateState = (stateKey: string, value: any) => {
@@ -646,10 +765,14 @@ class App extends Component<any, State> {
       newRoute,
       newRouteColor,
       addDataTabsHandler,
-      routeHighlight
+      routeHighlight,
+      messages,
+      messageBottomProp
     } = this.state
     const { geographies, urlMatchString } = this.props
     const { show, hide } = this.props.animationDuration
+
+    const { routeMessage, trafficMessage, googleMessage } = messages
 
     const showTraffic =
       trafficOption && routes.trafficRoute.distance && profile !== 'foot'
@@ -657,9 +780,9 @@ class App extends Component<any, State> {
     return (
       <AppWrapper>
         <Sidebar.Pushable as={StyledSegment}>
-          <StyledDiv direction="row">
+          <StyledDiv direction="row" width="31%">
             <StyledEmptyDiv
-              width={visible ? '30%' : 0}
+              width={visible ? '100%' : 0}
               minwidth={visible && true}
               maxwidth={visible && true}
               height={'10%'}
@@ -746,8 +869,8 @@ class App extends Component<any, State> {
                 )}
                 {showTraffic && (
                   <RouteInfo
-                    statsColor={TRAFFIC_PARTY_STATS}
-                    textColor={TRAFFIC_PARTY_COLOR}
+                    statsColor={TRAFFIC_STATS}
+                    textColor={TRAFFIC_COLOR}
                     iconColor={TRAFFIC_POLYLINE}
                     title={'Routing Service'}
                     subTitle={'With Traffic'}
@@ -815,6 +938,13 @@ class App extends Component<any, State> {
             {routingGraphVisible && <TrafficLegend />}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
+        {(routeMessage || googleMessage || trafficMessage) && (
+          <StyledContainer bottom={messageBottomProp}>
+            {routeMessage && <Message message={routeMessage}/>}
+            {trafficMessage && <Message message={trafficMessage}/>}
+            {googleMessage && <Message message={googleMessage}/>}
+          </StyledContainer>
+        )}
       </AppWrapper>
     )
   }

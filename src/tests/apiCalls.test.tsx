@@ -15,6 +15,11 @@ const locations = [
   }
 ] as any
 
+const body = {
+  locations,
+  reportGeometry: true
+}
+
 const mockEndpoint = 'https://routing.develop.otonomousmobility.com'
 
 describe('Api Calls', () => {
@@ -22,7 +27,7 @@ describe('Api Calls', () => {
     const mockProfile = 'car'
 
     it('returns an object if status code is ok', done => {
-      routingApi(mockProfile, 'Basic MOCKAUTH', locations, mockEndpoint).then(
+      routingApi(mockProfile, 'Basic MOCKAUTH', body, mockEndpoint).then(
         response => {
           expect(response).toEqual(mockCarResponse)
           done()
@@ -35,7 +40,7 @@ describe('Api Calls', () => {
     const mockProfile = 'foot'
 
     it('returns an object if status code is ok', done => {
-      routingApi(mockProfile, 'Basic MOCKAUTH', locations, mockEndpoint).then(
+      routingApi(mockProfile, 'Basic MOCKAUTH', body, mockEndpoint).then(
         response => {
           expect(response).toEqual(mockFootResponse)
           done()
