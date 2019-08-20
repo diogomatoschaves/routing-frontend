@@ -2,22 +2,23 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-jDwBTQ jyoOXL"
+  className="sc-gPEVay bJvjiw"
 >
   <div
-    className="ui segment pushable sc-gPEVay kabQZn"
+    className="ui segment pushable sc-iRbamj gOGLLM"
   >
     <div
-      className="sc-bwzfXH sc-iRbamj fWKipS"
+      className="sc-bwzfXH sc-jlyJG hRSjkk"
       direction="row"
+      width="31%"
     >
       <div
-        className="sc-ifAKCX sc-jlyJG jxbHSi"
+        className="sc-ifAKCX sc-gipzik dvMpeQ"
         height="10%"
         width={0}
       />
       <button
-        className="ui icon button options-button sc-gipzik joHDQQ"
+        className="ui icon button options-button sc-csuQGl dIyLUF"
         onClick={[Function]}
         onMouseEnter={[Function]}
         onMouseLeave={[Function]}

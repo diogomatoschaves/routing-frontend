@@ -42,8 +42,8 @@ export const THIRD_PARTY_STATS = '#B84843'
 export const THIRD_PARTY_COLOR = '#C2292A'
 export const THIRD_PARTY_POLYLINE = '#FF8E8E'
 
-export const TRAFFIC_PARTY_STATS = '#007841'
-export const TRAFFIC_PARTY_COLOR = '#004525'
+export const TRAFFIC_STATS = '#007841'
+export const TRAFFIC_COLOR = '#004525'
 export const TRAFFIC_POLYLINE = '#00C469'
 
 

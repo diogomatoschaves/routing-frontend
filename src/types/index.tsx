@@ -32,12 +32,14 @@ export type Coords2 = {
 export type RouteResponse = {
   code: string,
   routes: Array<any>,
-  locations: Array<any>
+  locations: Array<any>,
+  message?: string
 }
 
 export type GoogleResponse = {
   geocoded_waypoints?: Array<any>,
   routes: Array<any>,
+  status: string
 }
 
 export type MatchResponse = {

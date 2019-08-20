@@ -166,51 +166,62 @@ export default class Map extends Component<Props, State> {
 
     if (
       map &&
-      routes.route.routePath &&
-      prevProps.routes.route.routePath !== routes.route.routePath &&
-      routes.route.routePath.length > 1
+      prevProps.routes.route.routePath !== routes.route.routePath
     ) {
-      this.addPolyline(
-        routes.route.routePath,
-        markers,
-        map,
-        routingGraphVisible,
-        'routeDAS',
-        POLYLINE_COLOR,
-        6.0
-      )
+      const routeName = 'routeDAS'
+      if (routes.route.routePath.length > 1) {
+        this.addPolyline(
+          routes.route.routePath,
+          markers,
+          map,
+          routingGraphVisible,
+          routeName,
+          POLYLINE_COLOR,
+          6.0
+        )
+      } else {
+        this.removeSourceLayer(routeName, map)
+      }
     }
 
     if (
       map &&
-      prevProps.routes.trafficRoute.routePath !== routes.trafficRoute.routePath &&
-      routes.trafficRoute.routePath.length > 1
+      prevProps.routes.trafficRoute.routePath !== routes.trafficRoute.routePath
     ) {
-      this.addPolyline(
-        routes.trafficRoute.routePath,
-        markers,
-        map,
-        routingGraphVisible,
-        'routeTrafficDAS',
-        TRAFFIC_POLYLINE,
-        5.5
-      )
+      const routeName = 'routeTrafficDAS'
+      if (routes.trafficRoute.routePath.length > 1) {
+        this.addPolyline(
+          routes.trafficRoute.routePath,
+          markers,
+          map,
+          routingGraphVisible,
+          routeName,
+          TRAFFIC_POLYLINE,
+          5.5
+        )
+      } else {
+        this.removeSourceLayer(routeName, map)
+      }
     }
 
     if (
       map &&
-      prevProps.routes.googleRoute.routePath !== routes.googleRoute.routePath &&
-      routes.googleRoute.routePath.length > 1
+      prevProps.routes.googleRoute.routePath !== routes.googleRoute.routePath
     ) {
-      this.addPolyline(
-        routes.googleRoute.routePath,
-        markers,
-        map,
-        routingGraphVisible,
-        'routeGOOGLE',
-        THIRD_PARTY_POLYLINE,
-        6.5
-      )
+      const routeName = 'routeGOOGLE'
+      if (routes.googleRoute.routePath.length > 1) {
+        this.addPolyline(
+          routes.googleRoute.routePath,
+          markers,
+          map,
+          routingGraphVisible,
+          routeName,
+          THIRD_PARTY_POLYLINE,
+          6.5
+        )
+      } else {
+        this.removeSourceLayer(routeName, map)
+      }
     }
 
     // get new tiles if the endpoint, the traffic option or profile changed

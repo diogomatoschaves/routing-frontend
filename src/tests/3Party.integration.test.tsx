@@ -1,5 +1,5 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
+import TestRenderer, { act } from 'react-test-renderer'
 import { Checkbox, Input } from 'semantic-ui-react'
 import App from '../components/App'
 import Map from '../components/Map'
@@ -54,10 +54,6 @@ describe('When 3rd party option is selected', () => {
 
   const testInstance = getTestApp()
 
-  const root = testInstance.root
-  const AppComponent = root.findByType(App).instance
-  const MapComponent = root.findByType(Map).instance
-
   it('has not called the googleDirections API yet', (done) => {
     expect(googleDirections).toBeCalledTimes(0)
     done()
@@ -65,18 +61,23 @@ describe('When 3rd party option is selected', () => {
 
   describe('When 2 valid values are inserted on input boxes', () => {
 
+    const root = testInstance.root
+    const MapComponent = root.findByType(Map).instance
+
     beforeAll(() => {
-      toggle(root, {
-        text: 'Google',
-        id: 'googleMapsOption'
-      }, true)
-    
-      const input = root.findAllByType(Input);
-    
-      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
-      input[0].props.onBlur()
-      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
-      input[1].props.onBlur()
+        toggle(root, {
+          text: 'Google',
+          id: 'googleMapsOption'
+        }, true)
+
+        const input = root.findAllByType(Input);
+
+        // act(() => {
+        input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+        input[0].props.onBlur()
+        input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+        input[1].props.onBlur()
+        // })
     })
 
     it('calls the googleDirections API once', (done) => {
@@ -84,7 +85,7 @@ describe('When 3rd party option is selected', () => {
       done()
     })
     
-    it('correctly fetches a routing-service both with traffic and without, and the Map component receives it', (done) => {
+    it('The Map component receives a routing-service and google maps route', (done) => {
       delay(500)
       .then(() => {
         const { routes } = MapComponent.props
@@ -96,10 +97,16 @@ describe('When 3rd party option is selected', () => {
   })
 
   describe('When google option is unchecked', () => {
-    beforeAll(() => toggle(root, {
-      text: 'Google',
-      id: 'googleMapsOption'
-    }, false))
+
+    const root = testInstance.root
+    const AppComponent = root.findByType(App).instance
+
+    beforeAll(() => {
+      toggle(root, {
+        text: 'Google',
+        id: 'googleMapsOption'
+      }, false)
+    })
 
     it('the google route is updated to the defaultRoute', (done) => {
       delay(0)
@@ -119,6 +126,9 @@ describe('When 3rd party option is selected', () => {
   })
 
   describe('When google option is reselected', () => {
+
+    const root = testInstance.root
+    const MapComponent = root.findByType(Map).instance
 
     beforeAll(() => {
       toggle(root, {
