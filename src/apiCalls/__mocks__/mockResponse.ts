@@ -133,3 +133,63 @@ export const mockFootResponse = {
     { snapDistance: 1.0574398354756074, location: { lon: 13.395811, lat: 52.526839 } }
   ]
 }
+
+export const mockMatchResponse = {
+  code: 'Ok',
+  matchings: [
+    {
+      confidence: 0.0000758067430938203,
+      legs: [
+        {
+          traceFromIndex: 0,
+          traceToIndex: 1,
+          duration: 15.7,
+          distance: 61.4,
+          nodes: [3702215766, 4988889182, 3284701967, 3284701968, 4988889210, 1899166276],
+          geometry: [
+            {
+              lon: -121.939153,
+              lat: 37.323071
+            },
+            {
+              lon: -121.939153,
+              lat: 37.32308
+            },
+            {
+              lon: -121.939186,
+              lat: 37.323185
+            },
+            {
+              lon: -121.939216,
+              lat: 37.323323
+            },
+            {
+              lon: -121.939371,
+              lat: 37.323309
+            },
+            {
+              lon: -121.939584,
+              lat: 37.323291
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  tracepoints: [
+    {
+      snapDistance: 0.2659007253251622,
+      location: {
+        lon: -121.939153,
+        lat: 37.323071
+      }
+    },
+    {
+      snapDistance: 4.240507147325359,
+      location: {
+        lon: -121.939584,
+        lat: 37.323291
+      }
+    }
+  ]
+}

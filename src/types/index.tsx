@@ -5,7 +5,8 @@ export type UpdatePoint = (index: number[], coords: Array<Coords>) => void
 export type UpdateColor = () => void
 export type UpdateState = (stateKey: string, value: any) => void
 export type HandleChange = ({ id, value }: { id: string, value: any }) => boolean
-export type HandleConfirmButton = (setState: any, value: any ) => void
+export type HandleValueUpdate = ({ id, value }: { id: string, value: any }) => boolean
+export type HandleConfirmButton = (setState: any, value: any, id: string) => void
 export type HandleAddRoute = (route: Route) => void 
 export type HandleDeleteRoute = (id: string) => void 
 
@@ -48,17 +49,19 @@ export type RouteResponse = {
   routes: Array<{
     totalDistance: number
     totalDuration: number
-    legs: Array<{
-      duration: number
-      distance: number
-      geometry: Array<Coords2>
-    }>
+    legs: Array<RouteLeg>
   }>
   locations?: Array<{
     snapDistance?: number
     location: Coords2
   }>
   message?: string
+}
+
+export type RouteLeg = {
+  duration: number
+  distance: number
+  geometry: Array<Coords2>
 }
 
 export type GoogleResponse = {
@@ -69,8 +72,27 @@ export type GoogleResponse = {
 
 export type MatchResponse = {
   code: string,
-  matchings: Array<any>,
-  tracepoints: Array<any>
+  matchings: Array<Matching>,
+  tracepoints: Array<Tracepoint>
+}
+
+export type Tracepoint = {
+  snapDistance: number,
+  location: Coords2
+}
+
+export type Matching = {
+  confidence?: number
+  legs: Array<MatchLeg>
+}
+
+export type MatchLeg = {
+  traceFromIndex: number
+  traceToIndex: number
+  duration: number
+  distance: number
+  nodes?: Array<number>
+  geometry: Array<Coords2>
 }
 
 export type Dict = { [key: string]: string };
@@ -96,7 +118,8 @@ export type Route = {
   id: string
   distance: number
   duration: number
-  routePath: Array<Coords2>,
+  routePath: Array<Coords2>
+  type?: string
   parsedValue?: any
 }
 
@@ -168,4 +191,19 @@ export type RouteSchema = {
   ata: number,
   confidence: number,
   date: string
+}
+
+export type InputValues = {
+  route: string
+  match: string
+  response: string
+  body: string
+  [key: string]: string
+}
+
+export type InputColors = {
+  route: string
+  match: string
+  body: string
+  [key: string]: string
 }

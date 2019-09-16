@@ -20,7 +20,7 @@ import {
   OptionsHandler,
   MatchResponse,
   Coords,
-  HandleChange,
+  HandleValueUpdate,
   HandleConfirmButton,
   HandleDeleteRoute,
   GoogleResponse,
@@ -28,7 +28,9 @@ import {
   GeographiesHandler,
   Messages,
   Responses,
-  ResponseOptionsHandler
+  ResponseOptionsHandler,
+  InputColors,
+  InputValues
 } from '../types'
 import {
   splitCoords,
@@ -38,7 +40,8 @@ import {
   processValidResponse,
   getAppState,
   getAppProps,
-  processValidBody
+  processValidBody,
+  capitalize
 } from '../utils/functions'
 import { Base64 } from 'js-base64'
 import { routingApi, googleDirections } from '../apiCalls'
@@ -53,17 +56,15 @@ import {
   TRAFFIC_POLYLINE,
   TRAFFIC_STATS,
   PETROL_6,
-  MAIN_PETROL
 } from '../utils/colours'
 import { EmptySpace, Box } from '../styledComponents'
 import JSON5 from 'json5'
 import { Schema } from '../utils/schemas/index'
 import { defaultRoute, defaultRouteResponse, defaultGoogleResponse } from '../utils/input';
-import { routeConverterFromRoutingService, routeConverterFromGoogle } from '../utils/routeAdapter';
+import { routeConverterFromRouteService, routeConverterFromGoogle, routeConverterFromMatchService } from '../utils/routeAdapter';
 
 interface State {
   validator?: Validator
-  bodyColor: string
   recalculate: boolean
   locations: Array<Location>
   authorization: string
@@ -90,12 +91,11 @@ interface State {
   selectedService: number
   expanded: boolean
   debug: boolean
-  bodyValue: string
-  responseValue: string
   responseEdit: boolean
   bodyEdit: boolean,
   addedRoutes: Array<Route>
-  newRoute: string
+  inputValues: InputValues
+  inputColors: InputColors
   routeHighlight: string
 }
 
@@ -236,11 +236,15 @@ class App extends Component<any, State> {
       })
     })
 
-    this.setState({
+    this.setState(state => ({
+      ...state,
       validator,
-      bodyValue: JSON.stringify(body, null, 2),
-      responseValue: JSON.stringify(responses.routeResponse, null, 2)
-    })
+      inputValues: {
+        ...state.inputValues,
+        body: JSON.stringify(body, null, 2),
+        response: JSON.stringify(responses.routeResponse, null, 2)
+      }
+    }))
 
     const params = Object.keys(match.params)
 
@@ -376,10 +380,17 @@ class App extends Component<any, State> {
       prevState.body !== body || 
       (prevState.bodyEdit !== bodyEdit && !bodyEdit)
     ) {
-      this.setState({
-        bodyValue: JSON.stringify(body, null, 2),
-        bodyColor: defaultColor
-      })
+      this.setState(state => ({
+        ...state,
+        inputValues: {
+          ...state.inputValues,
+          body: JSON.stringify(body, null, 2)
+        },
+        inputColors: {
+          ...state.inputColors,
+          body: defaultColor
+        }
+      }))
     }
 
     if (
@@ -389,9 +400,13 @@ class App extends Component<any, State> {
       const responseKey = responseOption.key
       const response = hasKey(responses, responseKey) ? responses[responseKey] : responses.routeResponse
 
-      this.setState({
-        responseValue: JSON.stringify(response, null, 2),
-      })
+      this.setState(state => ({
+        ...state,
+        inputValues: {
+          ...state.inputValues,
+          response: JSON.stringify(response, null, 2)
+        }
+      }))
     }
 
     if (prevState.trafficOption !== trafficOption) {
@@ -616,7 +631,7 @@ class App extends Component<any, State> {
 
   updateRoute = (response: RouteResponse, key: string, routeName: string) => {
     if (Object.keys(response).includes('code') && response.code == 'Ok') {
-      const trafficRoute = routeConverterFromRoutingService(response, key)
+      const trafficRoute = routeConverterFromRouteService(response, key)
       this.setState(state => ({ 
         ...state,
         routes: {
@@ -687,34 +702,45 @@ class App extends Component<any, State> {
     )
   }
 
-  handleValueUpdate: HandleChange = ({ id, value }) => {
-    const { validator, selectedService } = this.state
+  handleValueUpdate: HandleValueUpdate = ({ id, value }) => {
+    const { validator, addDataTabsHandler } = this.state
     const { defaultColor } = this.props
 
-    const service = serviceOptions[selectedService].key
+    const body = id === 'body'
+    const service = body ? 'Route' : capitalize(addDataTabsHandler.options[addDataTabsHandler.activeIdx].key)
+
     return validateJSON(
       value,
       validator,
       service,
-      id.includes('body') ? 'body' : 'response',
-      id.includes('body') ? 'body' : id.includes('response') ? 'response' : 'newRoute',
+      body ? 'Body' : 'Response',
+      id,
       defaultColor,
       this.updateStateCallback,
     )
   }
 
-  handleAddRoute: HandleConfirmButton = (setState, value) => {
-    if (this.handleValueUpdate({ id: 'response', value })) {
-      const { addedRoutes } = this.state
+  handleAddRoute: HandleConfirmButton = (setState, value, id)=> {
+    if (this.handleValueUpdate({ id, value })) {
+      const { addedRoutes, addDataTabsHandler } = this.state
+
+      const service = capitalize(addDataTabsHandler.options[addDataTabsHandler.activeIdx].key)
+
       const parsedValue = JSON5.parse(value)
-      const route = routeConverterFromRoutingService(parsedValue)
+      const route = service === 'Match' ? routeConverterFromMatchService(parsedValue) : routeConverterFromRouteService(parsedValue)
       processValidResponse(this.updateState, route, addedRoutes)
       setState(false)
-      this.setState({ newRoute: '' })
+      this.setState(state => ({
+        ...state,
+        inputValues: {
+          ...state.inputValues,
+          [id]: ''
+        }
+      }))
     }
   }
 
-  handleChangeBody: HandleConfirmButton = (setState, value) => {
+  handleChangeBody: HandleConfirmButton = (setState, value, id) => {
     if (this.handleValueUpdate({ id: 'body', value })) {
       const { locations } = this.state
       const parsedValue = JSON5.parse(value)
@@ -771,18 +797,15 @@ class App extends Component<any, State> {
       selectedService,
       expanded,
       debug,
-      bodyColor,
-      bodyValue,
       bodyEdit,
-      responseValue,
       responseEdit,
       addedRoutes,
-      newRoute,
-      newRouteColor,
       addDataTabsHandler,
       routeHighlight,
       messages,
-      messageBottomProp
+      messageBottomProp,
+      inputValues,
+      inputColors
     } = this.state
     const { urlMatchString } = this.props
     const { show, hide } = this.props.animationDuration
@@ -851,15 +874,12 @@ class App extends Component<any, State> {
               locations={locations}
               selectedService={selectedService}
               serviceOptions={serviceOptions}
-              bodyValue={bodyValue}
-              bodyColor={bodyColor}
               bodyEdit={bodyEdit}
-              responseValue={responseValue}
               responseEdit={responseEdit}
               debug={debug}
               addedRoutes={addedRoutes}
-              newRoute={newRoute}
-              newRouteColor={newRouteColor}
+              inputValues={inputValues}
+              inputColors={inputColors}
               addDataTabsHandler={addDataTabsHandler}
               modeTabsHandler={modeTabsHandler}
               handleAddRoute={this.handleAddRoute}
@@ -927,8 +947,8 @@ class App extends Component<any, State> {
               trafficOption={trafficOption}
               debug={debug}
               modeTabsHandler={modeTabsHandler}
-              newRoute={newRoute}
-              newRouteColor={newRouteColor}
+              inputValues={inputValues}
+              inputColors={inputColors}
               addDataTabsHandler={addDataTabsHandler}
               addedRoutes={addedRoutes}
             />

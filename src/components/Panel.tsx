@@ -11,16 +11,18 @@ import {
   Location,
   Geography,
   OptionsHandler,
-  HandleChange,
+  HandleValueUpdate,
   HandleConfirmButton,
   HandleDeleteRoute,
   Route,
   GeographiesHandler,
+  InputValues,
+  InputColors,
 } from '../types'
 
 interface Props {
   updatePoint: UpdatePoint
-  handleValueUpdate: HandleChange
+  handleValueUpdate: HandleValueUpdate
   handleAddRoute: HandleConfirmButton
   handleClickRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
@@ -38,8 +40,8 @@ interface Props {
   debug: boolean
   modeTabsHandler: OptionsHandler
   addDataTabsHandler: OptionsHandler
-  newRouteColor: string
-  newRoute: string
+  inputValues: InputValues
+  inputColors: InputColors
   addedRoutes: Array<Route>
 }
 
@@ -77,8 +79,8 @@ const Panel: any = (props: Props) => {
     debug,
     modeTabsHandler,
     handleValueUpdate,
-    newRouteColor,
-    newRoute,
+    inputValues,
+    inputColors,
     addDataTabsHandler,
     addedRoutes
   } = props
@@ -111,8 +113,8 @@ const Panel: any = (props: Props) => {
           handleAddRoute={handleAddRoute}
           handleDeleteRoute={handleDeleteRoute}
           handleClickRoute={handleClickRoute}
-          newRouteColor={newRouteColor}
-          newRoute={newRoute}
+          inputValues={inputValues}
+          inputColors={inputColors}
           addDataTabsHandler={addDataTabsHandler}
           addedRoutes={addedRoutes}
         />

@@ -8,7 +8,7 @@ const fetchRouteDB = async (routeId: string) => {
   // headers.set('Authorization', authorization)
   headers.set('Content-Type', 'application/json')
 
-  const url = `${baseUrl}/searchJson?id=${routeId}`
+  const url = `${baseUrl}/search?id=${routeId}`
 
   const response = await fetch(url, {
     method: 'GET',

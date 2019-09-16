@@ -36,7 +36,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --verbose",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint --fix . && echo 'Lint complete.'"
   },

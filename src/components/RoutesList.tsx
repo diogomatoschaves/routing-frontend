@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import {
   Route as RouteType,
-  HandleChange,
+  HandleValueUpdate,
   HandleConfirmButton,
   OptionsHandler,
   UpdateState,
-  HandleDeleteRoute
+  HandleDeleteRoute,
+  InputValues,
+  InputColors
 } from '../types'
 import { Box, StyledHeader, StyledButton, StyledText } from '../styledComponents'
 import { MAIN_PETROL } from '../utils/colours'
@@ -16,12 +18,12 @@ import { Icon } from 'semantic-ui-react'
 
 interface Props {
   addedRoutes: Array<RouteType>
-  handleValueUpdate: HandleChange
+  handleValueUpdate: HandleValueUpdate
   handleAddRoute: HandleConfirmButton
   handleClickRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
-  newRouteColor: string
-  newRoute: string
+  inputValues: InputValues
+  inputColors: InputColors
   addDataTabsHandler: OptionsHandler
   updateState: UpdateState
 }
@@ -33,8 +35,8 @@ export default function RoutesList(props: Props) {
     handleAddRoute,
     handleClickRoute,
     handleDeleteRoute,
-    newRouteColor,
-    newRoute,
+    inputValues,
+    inputColors,
     addDataTabsHandler,
     updateState,
   } = props
@@ -56,7 +58,7 @@ export default function RoutesList(props: Props) {
             key={route.id} 
             route={route} 
             updateState={updateState} 
-            json={true}
+            extraInfo={true}
             deleteRoute={handleDeleteRoute}
             buttonText={'Remove'}
             buttonColor={'red'}
@@ -66,8 +68,6 @@ export default function RoutesList(props: Props) {
         <StyledText>No Routes to show.</StyledText>
       )}
       <AddDataInput
-        id={'newRoute'}
-        colorId={'newRouteColor'}
         open={modalOpen}
         setState={setState}
         updateState={updateState}
@@ -75,8 +75,8 @@ export default function RoutesList(props: Props) {
         handleAddRoute={handleAddRoute}
         handleDeleteRoute={handleDeleteRoute}
         handleClickRoute={handleClickRoute}
-        color={newRouteColor}
-        value={newRoute}
+        inputValues={inputValues}
+        inputColors={inputColors}
         addDataTabsHandler={addDataTabsHandler}
         addedRoutes={addedRoutes}
       />

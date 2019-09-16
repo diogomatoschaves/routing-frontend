@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import SearchInput from './SearchInput'
 import Route from './Route'
 import { Transition } from 'semantic-ui-react'
-import { Box, StyledButton, StyledText } from '../styledComponents'
-import { MAIN_PETROL as COLOR } from '../utils/colours'
+import { Box, StyledText } from '../styledComponents'
 import { debounce } from 'lodash'
 import { fetchRouteDB } from '../apiCalls'
-import { Route as RouteType, ResponseDB, HandleConfirmButton, HandleChange, HandleDeleteRoute } from '../types'
+import { Route as RouteType, ResponseDB, HandleConfirmButton, HandleDeleteRoute } from '../types'
 import { routeConverter } from '../utils/routeAdapter'
 
 interface State {
@@ -79,7 +78,7 @@ export default class RoutesFromDB extends Component<Props, State> {
 
   handleClick = (route: RouteType) => {
     const { handleClickRoute, setState } = this.props
-    handleClickRoute(setState, route)
+    handleClickRoute(setState, route, '')
   }
 
   render() {
@@ -118,7 +117,6 @@ export default class RoutesFromDB extends Component<Props, State> {
                 <Route
                   key={route.id}
                   route={route}
-                  json={false}
                   addRoute={!added ? this.handleClick : undefined}
                   deleteRoute={added ?handleDeleteRoute : undefined}
                   buttonText={added ? 'Remove' : 'Add'}

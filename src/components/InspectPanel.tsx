@@ -11,12 +11,14 @@ import {
   Location,
   MatchResponse,
   OptionsHandler,
-  HandleChange,
+  HandleValueUpdate,
   Route,
   HandleConfirmButton,
   HandleDeleteRoute,
   Option,
-  GoogleResponse
+  GoogleResponse,
+  InputValues,
+  InputColors
 } from '../types'
 import { MAIN_PETROL } from '../utils/colours'
 import EndpointRow from './EndpointRow'
@@ -31,24 +33,21 @@ interface Props {
   endpointHandler: OptionsHandler
   updateState: UpdateState
   updatePoint: UpdatePoint
-  handleValueUpdate: HandleChange
+  handleValueUpdate: HandleValueUpdate
   locations: Array<Location>
   selectedService: number
   serviceOptions: any
-  bodyValue: string
-  bodyColor: string
   bodyEdit: boolean
-  responseValue: string
   responseEdit: boolean
   debug: boolean
+  inputValues: InputValues
+  inputColors: InputColors
   addedRoutes: Array<Route>
 	handleAddRoute: HandleConfirmButton
 	handleClickRoute: HandleConfirmButton
 	handleDeleteRoute: HandleDeleteRoute
 	handleChangeBody: HandleConfirmButton
 	handleCloseModal: HandleConfirmButton
-	newRouteColor: string
-	newRoute: string
 	addDataTabsHandler: OptionsHandler
 	modeTabsHandler: OptionsHandler
 }
@@ -63,9 +62,6 @@ export default function InspectPanel(props: Props) {
     body,
     selectedService,
     serviceOptions,
-    bodyValue,
-    responseValue,
-    bodyColor,
     responseEdit,
     bodyEdit,
     debug,
@@ -75,11 +71,11 @@ export default function InspectPanel(props: Props) {
     handleDeleteRoute,
     handleChangeBody,
     handleCloseModal,
-		newRouteColor, 
-		newRoute, 
     addDataTabsHandler,
     modeTabsHandler,
-    responseOptionsHandler
+    responseOptionsHandler,
+    inputValues,
+    inputColors
   } = props
 
   return (
@@ -97,8 +93,8 @@ export default function InspectPanel(props: Props) {
       {debug ? (
         <RoutesList 
           addedRoutes={addedRoutes}
-          newRoute={newRoute}
-          newRouteColor={newRouteColor}
+          inputValues={inputValues}
+          inputColors={inputColors}
           addDataTabsHandler={addDataTabsHandler}
           handleAddRoute={handleAddRoute}
           handleClickRoute={handleClickRoute}
@@ -108,19 +104,8 @@ export default function InspectPanel(props: Props) {
         />
       ) : (
         <Fragment>
-          <Box padding="10px 10px 0 0" height={'70px'} direction="row" justify="space-around">
-            <Box width="35%" padding="0 0 0 3%">
-              <StyledDropdown
-                placeholder="Select Service"
-                id={'selectedService'}
-                fluid
-                selection
-                options={serviceOptions}
-                value={selectedService}
-                onChange={(e: any, { id, value }: any) => updateState(id, value)}
-              />
-            </Box>
-            <Box width="35%">
+          <Box padding="10px 10px 0 40px" height={'70px'} direction="row" justify="flex-start">
+            <Box width="40%">
               {serviceOptions[selectedService].key === 'Route' && (
                 <ProfileToggler
                   optionsArray={responseOptionsHandler.options}
@@ -139,12 +124,12 @@ export default function InspectPanel(props: Props) {
           </Box>
           <Box width="80%" padding="10px 0 10px 0">
             <JsonBlock
-              id={'bodyValue'}
-              colorId={'bodyColor'}
+              id={'body'}
               buttonId={'bodyEdit'}
               buttonText={'Confirm'}
               value={body}
-              editableValue={bodyValue}
+              inputValues={inputValues}
+              inputColors={inputColors}
               updateState={updateState}
               handleValueUpdate={handleValueUpdate}
               handleConfirmButton={handleChangeBody}
@@ -152,18 +137,17 @@ export default function InspectPanel(props: Props) {
               text={'Request Body'}
               edit={bodyEdit}
               editable={true}
-              color={bodyColor}
               title={'Edit Request Body'}
             />
           </Box>
           <Box width="80%" padding="10px 0 10px 0">
             <JsonBlock
-              id={'responseValue'}
-              colorId={'responseColor'}
+              id={'response'}
               buttonId={'responseEdit'}
               buttonText={'Close'}
               value={response}
-              editableValue={responseValue}
+              inputValues={inputValues}
+              inputColors={inputColors}
               updateState={updateState}
               handleConfirmButton={handleCloseModal}
               className="response-textarea"
