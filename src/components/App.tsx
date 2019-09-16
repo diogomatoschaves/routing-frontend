@@ -14,8 +14,6 @@ import {
   UpdatePoint,
   UpdateState,
   Location,
-  RouteResponse,
-  Geography,
   Route,
   Routes,
   Body,
@@ -26,7 +24,11 @@ import {
   HandleConfirmButton,
   HandleDeleteRoute,
   GoogleResponse,
-  RoutingServiceResponse
+  RouteResponse,
+  GeographiesHandler,
+  Messages,
+  Responses,
+  ResponseOptionsHandler
 } from '../types'
 import {
   splitCoords,
@@ -65,24 +67,17 @@ interface State {
   recalculate: boolean
   locations: Array<Location>
   authorization: string
-  response: RoutingServiceResponse
-  trafficResponse: RoutingServiceResponse
-  googleResponse: GoogleResponse
-  matchResponse: MatchResponse
+  responses: Responses
   routes: Routes
   showMessage: boolean
-  messages: {
-    routeMessage: React.ReactNode | null
-    trafficMessage: React.ReactNode | null
-    googleMessage: React.ReactNode | null
-  }
+  messages: Messages
   messageBottomProp: number
   routingGraphVisible?: boolean
   googleMapsOption?: boolean
   trafficOption?: boolean
   polygonsVisible?: boolean
-  responseOption: string
-  geography: Geography
+  responseOptionsHandler: ResponseOptionsHandler
+  geographies: GeographiesHandler
   recenter: boolean
   profile: string
   visible: boolean
@@ -158,15 +153,11 @@ const StyledButton = styled(Button)`
   }
 `
 
-const StyledContainer = styled.div`
+const StyledBox = styled(Box)`
   transition: bottom 1s ease;
   position: fixed;
-  z-index: 0;
-  text-align: center;
-  left: 50%;
-  transform: translateX(-50%);
   ${(props: any) => props.bottom && css`bottom: ${props.bottom}px;`}
-` as any
+`
 
 declare global {
   interface Window {
@@ -186,6 +177,10 @@ const serviceOptions = [
     value: 1
   }
 ]
+
+function hasKey<O>(obj: O, key: keyof any): key is keyof O {
+  return key in obj
+}
 
 class App extends Component<any, State> {
   static defaultProps = getAppProps()
@@ -210,7 +205,7 @@ class App extends Component<any, State> {
 
   async componentDidMount() {
     const { windowProp, history, match, loadedProp } = this.props
-    const { validator, response, body, locations, endpointHandler } = this.state
+    const { validator, responses, body, locations, endpointHandler } = this.state
     const { requiredParams, acceptableProfiles } = this.props.urlParams
 
     let authorization: string = ''
@@ -221,7 +216,7 @@ class App extends Component<any, State> {
     } else {
       const url = process.env.REACT_APP_URL + '/auth'
       await fetch(url)
-        .then(response => response.json())
+        .then(routeResponse => routeResponse.json())
         .then(jsonifiedResponse => {
           authorization = jsonifiedResponse.basicAuth
         })
@@ -244,7 +239,7 @@ class App extends Component<any, State> {
     this.setState({
       validator,
       bodyValue: JSON.stringify(body, null, 2),
-      responseValue: JSON.stringify(response, null, 2)
+      responseValue: JSON.stringify(responses.routeResponse, null, 2)
     })
 
     const params = Object.keys(match.params)
@@ -252,6 +247,7 @@ class App extends Component<any, State> {
     if (
       params.length === 3 &&
       params.every((el: string) => {
+
         return (
           ([requiredParams.start, requiredParams.end].includes(el) &&
             Boolean(splitCoords(match.params[el]))) ||
@@ -289,13 +285,10 @@ class App extends Component<any, State> {
     const {
       locations,
       authorization,
-      response,
       profile,
       googleMapsOption,
       google,
       trafficOption,
-      trafficResponse,
-      googleResponse,
       endpointHandler,
       recalculate,
       visible,
@@ -303,7 +296,9 @@ class App extends Component<any, State> {
       body,
       responseEdit,
       bodyEdit,
-      showMessage
+      showMessage,
+      responseOptionsHandler,
+      responses
     } = this.state
 
     const { urlMatchString, history, defaultColor } = this.props
@@ -325,16 +320,16 @@ class App extends Component<any, State> {
       history.push(path)
     }
 
-    if (prevState.response !== response) {
-      this.updateRoute(response, 'routeDAS', 'route')
+    if (prevState.responses.routeResponse !== responses.routeResponse) {
+      this.updateRoute(responses.routeResponse, 'routeDAS', 'route')
     }
 
-    if (prevState.trafficResponse !== trafficResponse) {
-      this.updateRoute(trafficResponse, 'routeTrafficDAS', 'trafficRoute')
+    if (prevState.responses.trafficResponse !== responses.trafficResponse) {
+      this.updateRoute(responses.trafficResponse, 'routeTrafficDAS', 'trafficRoute')
     }
 
-    if (prevState.googleResponse !== googleResponse) {
-      this.updateGoogleRoute(googleResponse)
+    if (prevState.responses.googleResponse !== responses.googleResponse) {
+      this.updateGoogleRoute(responses.googleResponse)
     }
 
     // TODO: Check if there is a callback for back and forward buttons
@@ -388,9 +383,12 @@ class App extends Component<any, State> {
     }
 
     if (
-      prevState.response !== response ||
-      (prevState.responseEdit !== responseEdit && !responseEdit)
+      (prevState.responseEdit !== responseEdit)
     ) {
+      const responseOption = responseOptionsHandler.options[responseOptionsHandler.activeIdx]
+      const responseKey = responseOption.key
+      const response = hasKey(responses, responseKey) ? responses[responseKey] : responses.routeResponse
+
       this.setState({
         responseValue: JSON.stringify(response, null, 2),
       })
@@ -398,7 +396,13 @@ class App extends Component<any, State> {
 
     if (prevState.trafficOption !== trafficOption) {
       if (!trafficOption) {
-        this.setState({ trafficResponse: defaultRouteResponse })
+        this.setState(state => ({
+          ...state,
+          responses: {
+            ...state.responses,
+            trafficResponse: defaultRouteResponse
+          }
+        }))
       } else {
         this.getRoute(
           locations,
@@ -414,7 +418,13 @@ class App extends Component<any, State> {
     }
     if (prevState.googleMapsOption !== googleMapsOption) {
       if (!googleMapsOption) {
-        this.setState({ googleResponse: defaultGoogleResponse })
+        this.setState(state => ({
+          ...state,
+          responses: {
+            ...state.responses,
+            googleResponse: defaultGoogleResponse
+          }
+        }))
       } else {
         this.getRoute(
           locations,
@@ -482,34 +492,17 @@ class App extends Component<any, State> {
       const body = getRequestBody(locations)
 
       if (defaultOption) {
-        routingApi(profile, authorization, body, endpointUrl)
-        .then((response: RoutingServiceResponse) => {
-          this.setState(state => ({ 
-            response, 
-            body, 
-            messages: {
-              ...state.messages,
-              routeMessage: null
-            } 
-          }))
-        })
-        .catch(() =>
-          this.setState(state => ({
-            response: defaultRouteResponse,
-            messages: {
-              ...state.messages,
-              routeMessage: <span style={{ color: 'red' }}>There was an error fetching the route.</span>
-            },
-            showMessage: true
-          }))
-        )
+        this.handleResponse(profile, authorization, body, endpointUrl, 'route')
       }
 
       if (googleMapsOption && google) {
         googleDirections(google, profile, locations)
           .then((googleResponse: GoogleResponse) => {
             this.setState(state => ({ 
-              googleResponse, 
+              responses: {
+                ...state.responses,
+                googleResponse
+              },
               messages: {
                 ...state.messages,
                 googleMessage: null
@@ -518,7 +511,10 @@ class App extends Component<any, State> {
           })
           .catch(() => {
             this.setState(state => ({
-              googleResponse: defaultGoogleResponse,
+              responses: {
+                ...state.responses,
+                googleResponse: defaultGoogleResponse
+              },
               messages: {
                 ...state.messages,
                 googleMessage: <span style={{ color: 'red' }}>There was an error fetching a route from google.</span>
@@ -529,28 +525,49 @@ class App extends Component<any, State> {
       }
 
       if (trafficOption && profile === 'car') {
-        routingApi('car-traffic', authorization, body, endpointUrl)
-          .then((trafficResponse: RoutingServiceResponse) => {
-            this.setState(state => ({ 
-              trafficResponse, 
-              messages: {
-                ...state.messages,
-                trafficMessage: null
-              } 
-            }))
-          })
-          .catch(() =>
-            this.setState(state => ({
-              trafficResponse: defaultRouteResponse,
-              messages: {
-                ...state.messages,
-                routeMessage: <span style={{ color: 'red' }}>There was an error fetching the route.</span>
-              },
-              showMessage: true
-            }))
-          )
+        this.handleResponse('car-traffic', authorization, body, endpointUrl, 'traffic')
       }
     }
+  }
+
+  handleResponse = (
+    profile: string, 
+    authorization: string, 
+    body: Body, 
+    endpointUrl: string, 
+    routeName: string
+  ) => {
+
+    const response = `${routeName}Response`
+    const message = `${routeName}Message`
+
+    routingApi(profile, authorization, body, endpointUrl)
+    .then((routeResponse: RouteResponse) => {
+      this.setState(state => ({ 
+        responses: {
+          ...state.responses,
+          [response]: routeResponse
+        }, 
+        body, 
+        messages: {
+          ...state.messages,
+          [message]: null
+        } 
+      }))
+    })
+    .catch(() =>
+      this.setState(state => ({
+        responses: {
+          ...state.responses,
+          [response]: defaultRouteResponse
+        },
+        messages: {
+          ...state.messages,
+          [message]: <span style={{ color: 'red' }}>There was an error fetching the route.</span>
+        },
+        showMessage: true
+      }))
+    )
   }
 
   addGoogleObject = (windowProp: boolean) => {
@@ -738,19 +755,17 @@ class App extends Component<any, State> {
       locations,
       routes,
       routingGraphVisible,
-      response,
-      trafficResponse,
-      matchResponse,
+      responses,
       googleMapsOption,
       trafficOption,
       polygonsVisible,
-      geography,
+      geographies,
       recenter,
       profile,
       authorization,
       visible,
       body,
-      responseOption,
+      responseOptionsHandler,
       endpointHandler,
       modeTabsHandler,
       selectedService,
@@ -769,10 +784,13 @@ class App extends Component<any, State> {
       messages,
       messageBottomProp
     } = this.state
-    const { geographies, urlMatchString } = this.props
+    const { urlMatchString } = this.props
     const { show, hide } = this.props.animationDuration
 
     const { routeMessage, trafficMessage, googleMessage } = messages
+
+    const responseOption = responseOptionsHandler.options[responseOptionsHandler.activeIdx]
+    const responseKey = responseOption.key
 
     const showTraffic =
       trafficOption && routes.trafficRoute.distance && profile !== 'foot'
@@ -820,17 +838,16 @@ class App extends Component<any, State> {
               handleHideClick={this.handleHideClick}
               response={
                 serviceOptions[selectedService].key === 'Route'
-                  ? responseOption === 'normal'
-                    ? response
-                    : trafficResponse
-                  : matchResponse
+                  ? hasKey(responses, responseKey) ? responses[responseKey] : responses.routeResponse
+                  : responses.matchResponse
               }
+              responseOptionsHandler={responseOptionsHandler}
+              responseOption={responseOption}
               body={body}
               endpointHandler={endpointHandler}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
               handleValueUpdate={this.handleValueUpdate}
-              responseOption={responseOption}
               locations={locations}
               selectedService={selectedService}
               serviceOptions={serviceOptions}
@@ -903,7 +920,6 @@ class App extends Component<any, State> {
               handleShowClick={this.handleShowClick}
               routingGraphVisible={routingGraphVisible}
               polygonsVisible={polygonsVisible}
-              geography={geography}
               geographies={geographies}
               profile={profile}
               urlMatchString={urlMatchString}
@@ -926,7 +942,6 @@ class App extends Component<any, State> {
               polygonsVisible={polygonsVisible}
               googleMapsOption={googleMapsOption}
               trafficOption={trafficOption}
-              geography={geography}
               geographies={geographies}
               recenter={recenter}
               authorization={authorization}
@@ -939,11 +954,11 @@ class App extends Component<any, State> {
           </Sidebar.Pusher>
         </Sidebar.Pushable>
         {(routeMessage || googleMessage || trafficMessage) && (
-          <StyledContainer bottom={messageBottomProp}>
+          <StyledBox align="center" bottom={messageBottomProp}>
             {routeMessage && <Message message={routeMessage}/>}
             {trafficMessage && <Message message={trafficMessage}/>}
             {googleMessage && <Message message={googleMessage}/>}
-          </StyledContainer>
+          </StyledBox>
         )}
       </AppWrapper>
     )

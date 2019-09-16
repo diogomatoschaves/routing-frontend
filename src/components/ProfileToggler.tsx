@@ -2,15 +2,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
 import { Icon, Label } from 'semantic-ui-react'
-import { UpdateState, Geography } from '../types'
+import { UpdateState, Geography, Option } from '../types'
 import { PETROL_5 } from '../utils/colours'
 
 interface Props {
-  geography?: Geography
-  geographies?: Array<Geography>
+  selectedOption: Geography | Option
+  optionsArray: Array<Geography> | Array<Option>
   width?: string
   updateState: UpdateState
-  responseOption?: string
   id: string
 }
 
@@ -27,49 +26,45 @@ const StyledLabel = styled(Label)`
 `
 
 const getNewProfile = (
-  geographies: Array<Geography>,
-  geography: Geography,
+  optionsArray: Array<Geography> | Array<Option>,
+  option: Geography | Option,
   left: boolean
 ) => {
-  const index = geographies.findIndex(el => el.name === geography.name)
-  const lastIndex = geographies.length - 1
+  const index = optionsArray.findIndex((el: Geography | Option) => el.value === option.value)
+  const lastIndex = optionsArray.length - 1
   return left
     ? index === 0
-      ? geographies[lastIndex]
-      : geographies[index - 1]
+      ? optionsArray[lastIndex]
+      : optionsArray[index - 1]
     : index === lastIndex
-    ? geographies[0]
-    : geographies[index + 1]
+    ? optionsArray[0]
+    : optionsArray[index + 1]
 }
 
 const handleClick = (
-  geographies: Array<Geography> | undefined,
-  geography: Geography | undefined,
+  optionsArray: Array<Geography> | Array<Option>,
+  selectedOption: Geography | Option,
   updateState: UpdateState,
   id: string,
-  responseOption: string | undefined
+  left: boolean
 ) => {
+
+  const newOptionsArray = {
+    options: optionsArray,
+    activeIdx: getNewProfile(optionsArray, selectedOption, left).value
+  }
+
   updateState(
     id,
-    geographies && geography
-      ? getNewProfile(geographies, geography, true)
-      : responseOption === 'normal'
-      ? 'traffic'
-      : 'normal'
+    newOptionsArray
   )
 }
 
-const names: any = {
-  normal: 'No Traffic',
-  traffic: 'Traffic'
-}
-
 const ProfileToggler = ({
-  geography,
-  geographies,
+  selectedOption,
+  optionsArray,
   width,
   updateState,
-  responseOption,
   id
 }: Props) => {
   return (
@@ -82,25 +77,23 @@ const ProfileToggler = ({
     >
       <Box
         width="10%"
+        left
         onClick={() =>
-          handleClick(geographies, geography, updateState, id, responseOption)
+          handleClick(optionsArray, selectedOption, updateState, id, true)
         }
       >
         <StyledIcon color="grey" size="large" name={'angle left'} />
       </Box>
       <Box width="60%">
-        <StyledLabel onClick={() => geographies && updateState('recenter', true)} size="large">
-          {geography
-            ? geography.name
-            : responseOption
-            ? names[responseOption]
-            : responseOption}
+        <StyledLabel onClick={() => optionsArray && updateState('recenter', true)} size="large">
+          {selectedOption.text}
         </StyledLabel>
       </Box>
       <Box
         width="10%"
+        right
         onClick={() =>
-          handleClick(geographies, geography, updateState, id, responseOption)
+          handleClick(optionsArray, selectedOption, updateState, id, false)
         }
       >
         <StyledIcon color="grey" size="large" name={'angle right'} />
