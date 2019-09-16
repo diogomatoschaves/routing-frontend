@@ -430,28 +430,30 @@ export default class Map extends Component<Props, State> {
           6.0
         )
 
-        const startLocation = {
-          name: 'start',
-          marker: 'map marker alternate',
-          markerOffset: [0, 5],
-          placeholder: 'Origin',
-          lat: route.routePath[0].lat,
-          lng: route.routePath[0].lon
-        }
-        const endLocation = {
-          name: 'end',
-          marker: 'map marker',
-          markerOffset: [0, 5],
-          placeholder: 'Destination',
-          lat: route.routePath.slice(-1)[0].lat,
-          lng: route.routePath.slice(-1)[0].lon
-        }
+        if (route.routePath.length >= 2) {
+          const startLocation = {
+            name: 'start',
+            marker: 'map marker alternate',
+            markerOffset: [0, 5],
+            placeholder: 'Origin',
+            lat: route.routePath[0].lat,
+            lng: route.routePath[0].lon
+          }
+          const endLocation = {
+            name: 'end',
+            marker: 'map marker',
+            markerOffset: [0, 5],
+            placeholder: 'Destination',
+            lat: route.routePath.slice(-1)[0].lat,
+            lng: route.routePath.slice(-1)[0].lon
+          }
 
-        newAddedRoutesMarkers = [
-          ...newAddedRoutesMarkers,
-          this.addMarker(startLocation, map, 0, updatePoint, false, route.id),
-          this.addMarker(endLocation, map, 0, updatePoint, false, route.id)
-        ]
+          newAddedRoutesMarkers = [
+            ...newAddedRoutesMarkers,
+            this.addMarker(startLocation, map, 0, updatePoint, false, route.id),
+            this.addMarker(endLocation, map, 0, updatePoint, false, route.id)
+          ]
+        }
       }
       return [...accum, route.id]
     }, [])

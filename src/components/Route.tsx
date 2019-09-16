@@ -11,7 +11,7 @@ interface Props {
   updateState?: UpdateState
   addRoute?: HandleAddRoute
   deleteRoute?: HandleDeleteRoute
-  json?: boolean
+  extraInfo?: boolean
   buttonText: string
   buttonColor: string
 }
@@ -51,7 +51,7 @@ const StyledStatistic = styled(Statistic)`
 `
 
 export default function Route(props: Props) {
-  const { route, updateState, json, addRoute, deleteRoute, buttonText, buttonColor } = props
+  const { route, updateState, extraInfo, addRoute, deleteRoute, buttonText, buttonColor } = props
 
   const [expanded, setState] = useState(false)
 
@@ -77,6 +77,12 @@ export default function Route(props: Props) {
               <InfoTitle>Id:</InfoTitle>
               <InfoDescription>{route.id}</InfoDescription>
             </Box>
+            {extraInfo && (
+              <Box direction="row">
+                <InfoTitle>Type:</InfoTitle>
+                <InfoDescription>{route.type || 'Route'}</InfoDescription>
+              </Box>
+            )}
             <Box direction="row">
               <InfoTitle>Duration:</InfoTitle>
               <StyledStatistic
@@ -112,13 +118,13 @@ export default function Route(props: Props) {
           </Box>
         </Box>
         <Box direction="row" justify="flex-start">
-          {json && (
+          {extraInfo && (
             <RecursiveJSONProperty
               property={route.parsedValue}
               propertyName=""
               excludeBottomBorder={true}
               rootProperty={false}
-              expanded={true}
+              expanded={false}
             />
           )}
         </Box>

@@ -8,6 +8,9 @@ import InspectPanel from '../components/InspectPanel'
 import { Tab } from '../components/Tabs'
 import { MemoryRouter, Route } from 'react-router-dom'
 import { getPath, formatCoords } from '../utils/functions'
+import TextAreaInput from '../components/TextAreaInput';
+import { TextArea, Button } from 'semantic-ui-react';
+import EditDataInput from '../components/EditDataInput';
 
 jest.mock('../apiCalls')
 
@@ -69,32 +72,39 @@ describe('Behaviour of Changing Body raw data', () => {
   const MapComponent = root.findByType(Map).instance
 
   const InspectPanelComponent = root.findByType(InspectPanel)
+  
+
+  const TextAreaInputComponent = root.findAllByType(TextAreaInput).filter(el => el.props.id === 'body')[0]
+  const TextAreaComponent = TextAreaInputComponent.findByType(TextArea)
+
+  const EditDataInputComponent = root.findAllByType(EditDataInput).filter(el => el.props.id === 'body')[0]
+  const ConfirmButton = EditDataInputComponent.findByType(Button)
+
 
   it('the color of the textarea is not red', () => {
-    const { bodyColor } = InspectPanelComponent.props
-    expect(bodyColor).not.toBe('red')
+    const { color } = TextAreaInputComponent.props
+    expect(color).not.toBe('red')
   })
 
   describe('Behaviour when input is updated with invalid JSON', () => {
-
     beforeAll(() => {
-      AppComponent.handleValueUpdate({ id: 'bodyValue', value: invalidJson })
+      TextAreaComponent.props.onChange('', { id: 'body', value: invalidJson })
+      TextAreaComponent.props.onBlur()
     })
     
     it('updates the color of the textarea to red', done => {
       delay(500)
       .then(() => {
-        const { bodyColor } = InspectPanelComponent.props
-        expect(bodyColor).toBe('red')
+        const { color } = TextAreaInputComponent.props
+        expect(color).toBe('red')
         done()
       })
     })
   })
 
   describe('Behaviour when input confirm button is pressed with invalid JSON', () => {
-
     beforeAll(() => {
-      AppComponent.handleChangeBody(jest.fn(), invalidJson)
+      ConfirmButton.props.onClick()
     })
     
     it('does not update the locations array', () => {
@@ -144,7 +154,9 @@ describe('Behaviour of Changing Body raw data', () => {
   describe('Behaviour when input confirm button is pressed with valid JSON', () => {
 
     beforeAll(() => {
-      AppComponent.handleChangeBody(jest.fn(), JSON.stringify(mockBody))
+      TextAreaComponent.props.onChange('', { id: 'body', value: JSON.stringify(mockBody) })
+      TextAreaComponent.props.onBlur()
+      ConfirmButton.props.onClick()
     })
     
     it('does update the locations array with the corresponding value', () => {

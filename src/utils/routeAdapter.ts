@@ -1,15 +1,20 @@
-import { RouteSchema, Route, RouteResponse, GoogleResponse, Coords2 } from '../types' 
+import {
+  RouteSchema,
+  Route,
+  RouteResponse,
+  GoogleResponse,
+  Coords2,
+  MatchResponse,
+  MatchLeg,
+  RouteLeg
+} from '../types'
 import { transformToObject } from '../utils/functions'
 import nanoid from 'nanoid'
-import polyline from '@mapbox/polyline';
-
+import polyline from '@mapbox/polyline'
 
 export const routeConverter = (routes: Array<RouteSchema>): Array<Route> => {
   return routes.map((route: RouteSchema) => {
-    
-    const routePath = [
-      ...transformToObject(route.geometry.coordinates), 
-    ]
+    const routePath = [...transformToObject(route.geometry.coordinates)]
 
     return {
       id: route.id,
@@ -21,21 +26,53 @@ export const routeConverter = (routes: Array<RouteSchema>): Array<Route> => {
   })
 }
 
-export const routeConverterFromRoutingService = (response: RouteResponse, id = nanoid()) => {
-  return { 
+export const routeConverterFromRouteService = (
+  response: RouteResponse,
+  id = nanoid()
+) => {
+  return {
     id,
     duration: response.routes[0].totalDuration,
     distance: response.routes[0].totalDistance,
-    routePath: response.routes[0].legs.reduce((accum: Array<Coords2>, leg) => {
-      return [...accum, ...leg.geometry]
+    routePath: response.routes[0].legs.reduce((accum: Array<Coords2>, leg: RouteLeg) => {
+      return [...accum, ...(leg.geometry ? leg.geometry : [])]
     }, []),
+    type: 'Route',
+    parsedValue: response
+  }
+}
+
+export const routeConverterFromMatchService = (
+  response: MatchResponse,
+  id = nanoid()
+) => {
+  return {
+    id,
+    ...response.matchings[0].legs.reduce(
+      (
+        accum: { duration: number; distance: number; routePath: Array<Coords2> },
+        leg: MatchLeg
+      ) => {
+        return {
+          duration: accum.duration + leg.duration,
+          distance: accum.distance + leg.distance,
+          routePath: [...accum.routePath, ...(leg.geometry ? leg.geometry : [])]
+        }
+      },
+      {
+        duration: 0,
+        distance: 0,
+        routePath: []
+      }
+    ),
+    type: 'Match',
     parsedValue: response
   }
 }
 
 export const routeConverterFromGoogle = (response: GoogleResponse) => {
   const tripPolyline = response.routes[0].overview_polyline
-  return { 
+  return {
     id: 'routeGOOGLE',
     duration: response.routes[0].legs.reduce((accum: number, leg: any) => {
       return accum + leg.duration.value
@@ -43,7 +80,9 @@ export const routeConverterFromGoogle = (response: GoogleResponse) => {
     distance: response.routes[0].legs.reduce((accum: number, leg: any) => {
       return accum + leg.distance.value
     }, 0),
-    routePath: polyline.decode(tripPolyline).map(coord => ({ lat: coord[0], lon: coord[1] })),
+    routePath: polyline
+      .decode(tripPolyline)
+      .map(coord => ({ lat: coord[0], lon: coord[1] })),
     parsedValue: response
   }
 }

@@ -37,83 +37,13 @@ exports[`expect to render InspectPanel component 1`] = `
     width="90%"
   />
   <div
-    className="sc-bdVaJa eBtfWV"
+    className="sc-bdVaJa dNMDiv"
     direction="row"
     height="70px"
   >
     <div
-      className="sc-bdVaJa jJZREO"
-      width="35%"
-    >
-      <div
-        aria-expanded={false}
-        className="ui fluid selection dropdown sc-EHOje gIMGEB"
-        id="selectedService"
-        onBlur={[Function]}
-        onChange={[Function]}
-        onClick={[Function]}
-        onFocus={[Function]}
-        onMouseDown={[Function]}
-        role="listbox"
-        tabIndex={0}
-      >
-        <div
-          aria-live="polite"
-          className="text"
-          role="alert"
-        >
-          Route
-        </div>
-        <i
-          aria-hidden="true"
-          className="dropdown icon"
-          onClick={[Function]}
-        />
-        <div
-          className="menu transition"
-        >
-          <div
-            aria-checked={true}
-            aria-selected={true}
-            className="active selected item"
-            onClick={[Function]}
-            role="option"
-            style={
-              Object {
-                "pointerEvents": "all",
-              }
-            }
-          >
-            <span
-              className="text"
-            >
-              Route
-            </span>
-          </div>
-          <div
-            aria-checked={false}
-            aria-selected={false}
-            className="item"
-            onClick={[Function]}
-            role="option"
-            style={
-              Object {
-                "pointerEvents": "all",
-              }
-            }
-          >
-            <span
-              className="text"
-            >
-              Match
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="sc-bdVaJa bJJihJ"
-      width="35%"
+      className="sc-bdVaJa gOaCBL"
+      width="40%"
     >
       <div
         className="sc-bdVaJa gxFsig"
@@ -450,6 +380,50 @@ exports[`expect to render InspectPanel component 1`] = `
         </div>
       </div>
     </div>
+    <div
+      className="sc-chPdSV afVhS header"
+    >
+      Edit Request Body
+    </div>
+    <div
+      className="sc-kgoBCf gxBOZX content"
+    >
+      <form
+        className="ui form sc-cSHVUG hdbCon"
+        color="rgb(100, 100, 100)"
+        focuscolor="#5097ab"
+        onSubmit={[Function]}
+      >
+        <textarea
+          className="textarea"
+          id="body"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onInput={[Function]}
+          placeholder=""
+          rows={15}
+          value=""
+        />
+      </form>
+    </div>
+    <div
+      className="actions"
+    >
+      <div
+        className="sc-bdVaJa fXWXpp"
+        direction="row"
+      >
+        <button
+          alignend={true}
+          backgroundcolor="#00677f"
+          className="ui button sc-bZQynM gFTDLx"
+          onClick={[Function]}
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
   </div>
   <div
     className="sc-bdVaJa fEcaVD"
@@ -748,6 +722,50 @@ exports[`expect to render InspectPanel component 1`] = `
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div
+      className="sc-chPdSV afVhS header"
+    >
+      View Response
+    </div>
+    <div
+      className="sc-kgoBCf gxBOZX content"
+    >
+      <form
+        className="ui form sc-cSHVUG hdbCon"
+        color="rgb(100, 100, 100)"
+        focuscolor="#5097ab"
+        onSubmit={[Function]}
+      >
+        <textarea
+          className="textarea"
+          id="response"
+          onBlur={[Function]}
+          onChange={[Function]}
+          onFocus={[Function]}
+          onInput={[Function]}
+          placeholder=""
+          rows={15}
+          value=""
+        />
+      </form>
+    </div>
+    <div
+      className="actions"
+    >
+      <div
+        className="sc-bdVaJa fXWXpp"
+        direction="row"
+      >
+        <button
+          alignend={true}
+          backgroundcolor="#00677f"
+          className="ui button sc-bZQynM gFTDLx"
+          onClick={[Function]}
+        >
+          Close
+        </button>
       </div>
     </div>
   </div>

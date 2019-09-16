@@ -184,26 +184,34 @@ export const validateJSON = (
     console.log('Invalid JSON')
     setState((state: any) => ({
       ...state,
-      [`${inputId}Color`]: value === '' ? defaultColor : 'red'
+      inputColors: {
+        ...state.inputColors,
+        [inputId]: value === '' ? defaultColor : 'red'
+      }
     }))
     return false
   }
   const validation = validator.validate(
     parsedValue,
-    Schema[service][capitalize(inputType)]
+    Schema[service][inputType]
   )
   if (validation.valid) {
     setState((state: any) => ({
       ...state,
-      [`${inputId}Color`]: defaultColor
+      inputColors: {
+        ...state.inputColors,
+        [inputId]: defaultColor
+      }
     }))
-
     return true
   } else {
-    console.log(validation)
+    process.env.NODE_ENV !== 'test' && console.log(validation)
     setState((state: any) => ({
       ...state,
-      [`${inputId}Color`]: 'red'
+      inputColors: {
+        ...state.inputColors,
+        [inputId]: 'red'
+      }
     }))
     return false
   }
@@ -367,8 +375,9 @@ export const getAppState = () => {
     },
     addDataTabsHandler: {
       options: [
-        { key: 'routingResponse', text: 'Routing Service', value: 0 },
-        { key: 'db', text: 'Load from DB', value: 1 }
+        { key: 'route', text: 'Route Response', value: 0 },
+        { key: 'match', text: 'Match Response', value: 1 },
+        { key: 'db', text: 'Load from DB', value: 2 }
       ],
       activeIdx: 0
     },
@@ -389,14 +398,20 @@ export const getAppState = () => {
       ],
       activeIdx: 0
     },
-    bodyColor: 'rgb(100, 100, 100)',
-    bodyValue: '{}',
-    responseValue: '{}',
     bodyEdit: false,
     responseEdit: false,
     addedRoutes: [],
-    newRoute: '',
-    newRouteColor: 'rgb(100, 100, 100)',
+    inputValues: {
+      route: '',
+      match: '',
+      body: '',
+      response: ''
+    },
+    inputColors: {
+      route: 'rgb(100, 100, 100)',
+      match:  'rgb(100, 100, 100)',
+      body: 'rgb(100, 100, 100)'
+    },
     routeHighlight: '',
     showMessage: false,
     messages: {
