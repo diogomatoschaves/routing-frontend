@@ -376,10 +376,11 @@ exports[`expect to render App component 1`] = `
                   locations
                   <i
                     aria-hidden="true"
-                    className="caret right icon"
+                    className="caret down icon"
                     onClick={[Function]}
                   />
                 </div>
+                empty array
               </div>
               <div
                 className="sc-chPdSV jbjPGB"
@@ -466,9 +467,130 @@ exports[`expect to render App component 1`] = `
                   routes
                   <i
                     aria-hidden="true"
-                    className="caret right icon"
+                    className="caret down icon"
                     onClick={[Function]}
                   />
+                </div>
+                <div
+                  className="sc-chPdSV jbjPGB"
+                >
+                  <div
+                    className="sc-kAzzGY hUkmXL"
+                    onClick={[Function]}
+                  >
+                    0
+                    <i
+                      aria-hidden="true"
+                      className="caret down icon"
+                      onClick={[Function]}
+                    />
+                  </div>
+                  <div
+                    className="sc-chPdSV jbjPGB"
+                  >
+                    <span
+                      className="sc-kgoBCf jDyuzH"
+                    >
+                      totalDuration
+                      : 
+                    </span>
+                    <span
+                      className="sc-kGXeez hOygGA"
+                    >
+                      0
+                    </span>
+                  </div>
+                  <div
+                    className="sc-chPdSV jbjPGB"
+                  >
+                    <span
+                      className="sc-kgoBCf jDyuzH"
+                    >
+                      totalDistance
+                      : 
+                    </span>
+                    <span
+                      className="sc-kGXeez hOygGA"
+                    >
+                      0
+                    </span>
+                  </div>
+                  <div
+                    className="sc-chPdSV jbjPGB"
+                  >
+                    <div
+                      className="sc-kAzzGY hUkmXL"
+                      onClick={[Function]}
+                    >
+                      legs
+                      <i
+                        aria-hidden="true"
+                        className="caret down icon"
+                        onClick={[Function]}
+                      />
+                    </div>
+                    <div
+                      className="sc-chPdSV jbjPGB"
+                    >
+                      <div
+                        className="sc-kAzzGY hUkmXL"
+                        onClick={[Function]}
+                      >
+                        0
+                        <i
+                          aria-hidden="true"
+                          className="caret down icon"
+                          onClick={[Function]}
+                        />
+                      </div>
+                      <div
+                        className="sc-chPdSV jbjPGB"
+                      >
+                        <div
+                          className="sc-kAzzGY hUkmXL"
+                          onClick={[Function]}
+                        >
+                          geometry
+                          <i
+                            aria-hidden="true"
+                            className="caret down icon"
+                            onClick={[Function]}
+                          />
+                        </div>
+                        empty array
+                      </div>
+                      <div
+                        className="sc-chPdSV jbjPGB"
+                      >
+                        <span
+                          className="sc-kgoBCf jDyuzH"
+                        >
+                          duration
+                          : 
+                        </span>
+                        <span
+                          className="sc-kGXeez hOygGA"
+                        >
+                          0
+                        </span>
+                      </div>
+                      <div
+                        className="sc-chPdSV jbjPGB"
+                      >
+                        <span
+                          className="sc-kgoBCf jDyuzH"
+                        >
+                          distance
+                          : 
+                        </span>
+                        <span
+                          className="sc-kGXeez hOygGA"
+                        >
+                          0
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div
@@ -481,10 +603,11 @@ exports[`expect to render App component 1`] = `
                   locations
                   <i
                     aria-hidden="true"
-                    className="caret right icon"
+                    className="caret down icon"
                     onClick={[Function]}
                   />
                 </div>
+                empty array
               </div>
             </div>
           </div>

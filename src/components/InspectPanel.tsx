@@ -14,7 +14,9 @@ import {
   HandleChange,
   Route,
   HandleConfirmButton,
-  HandleDeleteRoute
+  HandleDeleteRoute,
+  Option,
+  GoogleResponse
 } from '../types'
 import { MAIN_PETROL } from '../utils/colours'
 import EndpointRow from './EndpointRow'
@@ -22,13 +24,14 @@ import Tabs from './Tabs';
 
 interface Props {
   handleHideClick: (e: any) => void
-  response: RouteResponse | MatchResponse
+  response: RouteResponse | GoogleResponse | MatchResponse
+  responseOptionsHandler: OptionsHandler
+  responseOption: Option
   body: Body
   endpointHandler: OptionsHandler
   updateState: UpdateState
   updatePoint: UpdatePoint
   handleValueUpdate: HandleChange
-  responseOption: string
   locations: Array<Location>
   selectedService: number
   serviceOptions: any
@@ -75,7 +78,8 @@ export default function InspectPanel(props: Props) {
 		newRouteColor, 
 		newRoute, 
     addDataTabsHandler,
-    modeTabsHandler
+    modeTabsHandler,
+    responseOptionsHandler
   } = props
 
   return (
@@ -119,9 +123,10 @@ export default function InspectPanel(props: Props) {
             <Box width="35%">
               {serviceOptions[selectedService].key === 'Route' && (
                 <ProfileToggler
+                  optionsArray={responseOptionsHandler.options}
+                  selectedOption={responseOption}
                   updateState={updateState}
-                  id={'responseOption'}
-                  responseOption={responseOption}
+                  id={'responseOptionsHandler'}
                 />
               )}
             </Box>

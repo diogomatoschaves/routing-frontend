@@ -118,6 +118,7 @@ export default function Route(props: Props) {
               propertyName=""
               excludeBottomBorder={true}
               rootProperty={false}
+              expanded={true}
             />
           )}
         </Box>

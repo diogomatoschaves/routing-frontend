@@ -12,6 +12,7 @@ interface Props {
   propertyName: string;
   rootProperty?: boolean;
   excludeBottomBorder: boolean;
+  expanded: boolean
 }
 
 const RecursivePropertyContainer = styled.div`
@@ -38,33 +39,42 @@ export const PropertyValue = styled.span`
 `
 
 const RecursiveJSONProperty: React.SFC<Props> = props => {
+
+  const { property, expanded, rootProperty, propertyName } = props
+
+  const expand = property instanceof Array && property.length <= 5
+
   return (
     <RecursivePropertyContainer excludeBottomBorder={props.excludeBottomBorder}>
-      {props.property ? (
-        typeof props.property === 'number' ||
-        typeof props.property === 'string' ||
-        typeof props.property === 'boolean' ? (
+      {property ? (
+        typeof property === 'number' ||
+        typeof property === 'string' ||
+        typeof property === 'boolean' ? (
           <React.Fragment>
-            <PropertyName>{camelCaseToNormal(props.propertyName)}: </PropertyName>
-            <PropertyValue>{props.property.toString()}</PropertyValue>
+            <PropertyName>{camelCaseToNormal(propertyName)}: </PropertyName>
+            <PropertyValue>{property.toString()}</PropertyValue>
           </React.Fragment>
         ) : (
-          <ExpandableJSONProperty title={camelCaseToNormal(props.propertyName)} expanded={!!props.rootProperty}>
-            {Object.values(props.property).map((property, index, { length }) => (
+          <ExpandableJSONProperty 
+            title={camelCaseToNormal(propertyName)} 
+            expanded={rootProperty || expand || expanded}
+          >
+            {Object.values(property).map((innerProperty, index, { length }) => (
               <RecursiveJSONProperty
                 key={index}
-                property={property}
-                propertyName={Object.getOwnPropertyNames(props.property)[index]}
+                property={innerProperty}
+                propertyName={Object.getOwnPropertyNames(property)[index]}
                 excludeBottomBorder={true} //index === length - 1
+                expanded={expand}
               />
             ))}
           </ExpandableJSONProperty>
         )
-      ) : props.property === 0 ? 
+      ) : property === 0 ? 
       (
         <React.Fragment>
-          <PropertyName>{camelCaseToNormal(props.propertyName)}: </PropertyName>
-          <PropertyValue>{props.property.toString()}</PropertyValue>
+          <PropertyName>{camelCaseToNormal(propertyName)}: </PropertyName>
+          <PropertyValue>{property.toString()}</PropertyValue>
         </React.Fragment>
       ) : (
         'Empty Object'
