@@ -1,18 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 import { PETROL_3 } from '../utils/colours'
-import { HandleChange, UpdateState } from '../types'
+import { HandleValueUpdate, UpdateState, InputValues, InputColors } from '../types'
 import { TextArea, Form } from 'semantic-ui-react'
 
 interface Props {
   id: string
-  handleValueUpdate?: HandleChange
+  handleValueUpdate?: HandleValueUpdate
   handleInputChange?: UpdateState
   rows: number
   color?: string,
   editableValue: string
   placeholder?: string
-  setInputRef?: (ref: any) => void 
+  setInputRef?: (ref: any) => void
+  inputValues: InputValues
 }
 
 const StyledForm = styled(Form)`
@@ -58,7 +59,8 @@ export default function TextAreaInput ({
   color,
   editableValue,
   placeholder,
-  setInputRef
+  setInputRef,
+  inputValues,
 }: Props) {
 
   return (
@@ -70,7 +72,10 @@ export default function TextAreaInput ({
         placeholder={placeholder ? placeholder : ''}
         rows={rows}
         value={editableValue}
-        onChange={(e, { id, value }) => handleInputChange && handleInputChange(id, value)}
+        onChange={(e, { id, value }) => handleInputChange && handleInputChange('inputValues', {
+          ...inputValues,
+          [id]: value
+        })}
         onFocus={(e: any) => !handleInputChange && e.target.select()}
         onBlur={() => handleValueUpdate && handleValueUpdate({ id, value: editableValue })}
       />
