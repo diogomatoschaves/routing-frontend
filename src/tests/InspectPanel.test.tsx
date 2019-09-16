@@ -85,19 +85,30 @@ const mockResponseOptionsHandler = {
   activeIdx: 0
 }
 
+const inputValues = {
+  route: '',
+  match: '',
+  body: '',
+  response: ''
+}
+
+
+const inputColors = {
+  route: 'rgb(100, 100, 100)',
+  match:  'rgb(100, 100, 100)',
+  body: 'rgb(100, 100, 100)'
+}
+
 it('expect to render InspectPanel component', () => {
   const testInstance = TestRenderer.create(
     <MemoryRouter initialEntries={[ '/' ]}>
       <InspectPanel
-        bodyValue=''
-        responseValue=''
-        bodyColor=''
+        inputValues={inputValues}
+        inputColors={inputColors}
         responseEdit={false}
         bodyEdit={false}
         debug={false}
         addedRoutes={[]}
-        newRouteColor=''
-        newRoute=''
         addDataTabsHandler={mockAddDataTabsHandler}
         modeTabsHandler={mockModeTabsHandler}
         handleHideClick={jest.fn()}
@@ -105,6 +116,8 @@ it('expect to render InspectPanel component', () => {
         handleChangeBody={jest.fn()}
         handleCloseModal={jest.fn()}
         handleValueUpdate={jest.fn()}
+        handleDeleteRoute={jest.fn()}
+        handleClickRoute={jest.fn()}
         response={mockCarResponse}
         body={mockBody}
         endpointHandler={mockEndpointHandler}

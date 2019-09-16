@@ -7,24 +7,23 @@ import TextAreaInput from './TextAreaInput'
 import ModalHOC from './ModalHOC'
 import Tabs from './Tabs'
 import {
-  HandleChange,
   UpdateState,
   HandleConfirmButton,
   OptionsHandler,
-  HandleAddRoute,
   HandleDeleteRoute,
-  Route
+  Route,
+  HandleValueUpdate,
+  InputValues,
+  InputColors
 } from '../types'
 import RoutesFromDB from './RoutesFromDB'
 
 interface Props {
-  id: string
-  colorId: string
   open: boolean
   setState: any
-  value: string
-  color: string
-  handleValueUpdate: HandleChange
+  inputValues: InputValues
+  inputColors: InputColors
+  handleValueUpdate: HandleValueUpdate
   handleAddRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
   handleClickRoute: HandleConfirmButton
@@ -54,8 +53,8 @@ const StyledModalContents = styled(Modal.Content)`
 function AddDataInput(props: Props) {
   const {
     setState,
-    value,
-    color,
+    inputValues,
+    inputColors,
     handleValueUpdate,
     handleAddRoute,
     handleDeleteRoute,
@@ -66,7 +65,8 @@ function AddDataInput(props: Props) {
     addedRoutes
   } = props
 
-  const loadFromDB = addDataTabsHandler.options[addDataTabsHandler.activeIdx].key === 'db'
+  const key = addDataTabsHandler.options[addDataTabsHandler.activeIdx].key
+  const loadFromDB = key === 'db'
 
   return (
     <Fragment>
@@ -81,14 +81,15 @@ function AddDataInput(props: Props) {
         />
         {!loadFromDB ? (
           <TextAreaInput
-            id={'newRoute'}
-            placeholder="Paste a valid routing-service response"
-            editableValue={value}
+            id={key}
+            placeholder={`Paste a valid ${key} response`}
+            editableValue={inputValues[key]}
             rows={15}
             handleValueUpdate={handleValueUpdate}
             handleInputChange={updateState}
-            color={color}
+            color={inputColors[key]}
             setInputRef={setInputRef}
+            inputValues={inputValues}
           />
         ) : (
           <RoutesFromDB
@@ -101,14 +102,14 @@ function AddDataInput(props: Props) {
       </StyledModalContents>
       <Modal.Actions>
         <Box padding={'10px 20px'} direction="row" justify="flex-end">
-          {color === 'red' && (
+          {inputColors[key] === 'red' && (
             <StyledLabel color="red">Invalid route response!</StyledLabel>
           )}
           <StyledButton
             backgroundcolor={COLOR}
             alignend
             onClick={() =>
-              !loadFromDB ? handleAddRoute(setState, value) : setState(false)
+              !loadFromDB ? handleAddRoute(setState, inputValues[key], key) : setState(false)
             }
           >
             {!loadFromDB ? 'Confirm' : 'Close'}

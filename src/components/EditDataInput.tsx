@@ -5,21 +5,21 @@ import { StyledButton, Box } from '../styledComponents'
 import { MAIN_PETROL as COLOR } from '../utils/colours'
 import TextAreaInput from './TextAreaInput'
 import ModalHOC from './ModalHOC'
-import { UpdateState, HandleChange, HandleConfirmButton } from '../types'
+import { UpdateState, HandleValueUpdate, HandleConfirmButton, InputValues, InputColors } from '../types'
 
 interface Props {
   id: string
   open: boolean
   setState: any
-  value: string
-  color: string
   updateState: UpdateState
-  handleValueUpdate?: HandleChange
-  handleAddRoute: HandleConfirmButton
+  handleValueUpdate?: HandleValueUpdate
+  handleConfirmButton?: HandleConfirmButton
   setInputRef?: (ref: any) => void
   editable: boolean
   buttonText: string
   title: string
+  inputValues: InputValues,
+  inputColors: InputColors
 }
 
 const StyledLabel = styled(Label)`
@@ -43,15 +43,15 @@ function EditDataInput (props: Props) {
     const {
       id,
       setState,
-      value,
       setInputRef,
-      color,
       handleValueUpdate,
-      handleAddRoute,
+      handleConfirmButton,
       updateState,
       editable,
       buttonText,
-      title
+      title,
+      inputValues,
+      inputColors
     } = props
 
     return (
@@ -60,23 +60,24 @@ function EditDataInput (props: Props) {
         <StyledModalContents>
           <TextAreaInput
             id={id}
-            editableValue={value}
+            editableValue={inputValues[id]}
             rows={15}
             setInputRef={setInputRef}
             handleValueUpdate={handleValueUpdate}
             handleInputChange={editable ? updateState : undefined}
-            color={color}
+            color={inputColors[id] || 'rgb(100, 100, 100)'}
+            inputValues={inputValues}
           />
         </StyledModalContents>
         <Modal.Actions>
           <Box padding={'10px 20px'} direction="row" justify="flex-end">
-            {color === 'red' && (
-              <StyledLabel color="red">Invalid route response!</StyledLabel>
+            {inputColors[id] === 'red' && (
+              <StyledLabel color="red">Invalid request body!</StyledLabel>
             )}
             <StyledButton
               backgroundcolor={COLOR}
               alignend
-              onClick={() => handleAddRoute(setState, value)}
+              onClick={() => handleConfirmButton && handleConfirmButton(setState, inputValues[id], '')}
             >
               {buttonText}
             </StyledButton>
@@ -86,4 +87,4 @@ function EditDataInput (props: Props) {
     )
 }
 
-export default ModalHOC(EditDataInput)
+export default process.env.NODE_ENV === 'test' ? EditDataInput : ModalHOC(EditDataInput)

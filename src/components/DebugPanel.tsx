@@ -5,14 +5,14 @@ import ProfileToggler from './ProfileToggler'
 import AddDataInput from './AddDataInput'
 import {
   UpdateState,
-  Geography,
-  HandleChange,
+  HandleValueUpdate,
   HandleConfirmButton,
   OptionsHandler,
-  HandleAddRoute,
   HandleDeleteRoute,
   Route,
-  GeographiesHandler
+  GeographiesHandler,
+  InputValues,
+  InputColors
 } from '../types'
 import { Icon } from 'semantic-ui-react'
 
@@ -21,12 +21,12 @@ interface Props {
   polygonsVisible: boolean
   updateState: UpdateState
   geographies: GeographiesHandler
-  handleValueUpdate: HandleChange
+  handleValueUpdate: HandleValueUpdate
   handleAddRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
   handleClickRoute: HandleConfirmButton
-  newRouteColor: string
-  newRoute: string
+  inputValues: InputValues
+  inputColors: InputColors
   addDataTabsHandler: OptionsHandler
   addedRoutes: Array<Route>
 }
@@ -41,8 +41,8 @@ export default function DebugPanel(props: Props) {
     handleAddRoute,
     handleDeleteRoute,
     handleClickRoute,
-    newRouteColor,
-    newRoute,
+    inputValues,
+    inputColors,
     addDataTabsHandler,
     addedRoutes
   } = props
@@ -88,8 +88,6 @@ export default function DebugPanel(props: Props) {
         </Box>
       </Box>
       <AddDataInput
-        id={'newRoute'}
-        colorId={'newRouteColor'}
         open={modalOpen}
         setState={setState}
         updateState={updateState}
@@ -97,8 +95,8 @@ export default function DebugPanel(props: Props) {
         handleAddRoute={handleAddRoute}
         handleDeleteRoute={handleDeleteRoute}
         handleClickRoute={handleClickRoute}
-        color={newRouteColor}
-        value={newRoute}
+        inputValues={inputValues}
+        inputColors={inputColors}
         addDataTabsHandler={addDataTabsHandler}
         addedRoutes={addedRoutes}
       />

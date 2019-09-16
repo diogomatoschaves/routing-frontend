@@ -5,10 +5,10 @@ exports[`expect to render App component 1`] = `
   className="sc-gPEVay bJvjiw"
 >
   <div
-    className="ui segment pushable sc-iRbamj gOGLLM"
+    className="ui segment pushable sc-iRbamj injbWF"
   >
     <div
-      className="sc-bwzfXH sc-jlyJG hRSjkk"
+      className="sc-bwzfXH sc-jlyJG grRSQN"
       direction="row"
       width="31%"
     >
@@ -75,83 +75,13 @@ exports[`expect to render App component 1`] = `
           width="90%"
         />
         <div
-          className="sc-bwzfXH bexlLJ"
+          className="sc-bwzfXH dpPFld"
           direction="row"
           height="70px"
         >
           <div
-            className="sc-bwzfXH fjnmXX"
-            width="35%"
-          >
-            <div
-              aria-expanded={false}
-              className="ui fluid selection dropdown sc-bZQynM gFXwrf"
-              id="selectedService"
-              onBlur={[Function]}
-              onChange={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onMouseDown={[Function]}
-              role="listbox"
-              tabIndex={0}
-            >
-              <div
-                aria-live="polite"
-                className="text"
-                role="alert"
-              >
-                Route
-              </div>
-              <i
-                aria-hidden="true"
-                className="dropdown icon"
-                onClick={[Function]}
-              />
-              <div
-                className="menu transition"
-              >
-                <div
-                  aria-checked={true}
-                  aria-selected={true}
-                  className="active selected item"
-                  onClick={[Function]}
-                  role="option"
-                  style={
-                    Object {
-                      "pointerEvents": "all",
-                    }
-                  }
-                >
-                  <span
-                    className="text"
-                  >
-                    Route
-                  </span>
-                </div>
-                <div
-                  aria-checked={false}
-                  aria-selected={false}
-                  className="item"
-                  onClick={[Function]}
-                  role="option"
-                  style={
-                    Object {
-                      "pointerEvents": "all",
-                    }
-                  }
-                >
-                  <span
-                    className="text"
-                  >
-                    Match
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="sc-bwzfXH cfLeIj"
-            width="35%"
+            className="sc-bwzfXH jzFvfk"
+            width="40%"
           >
             <div
               className="sc-bwzfXH dfIKGx"
@@ -399,6 +329,53 @@ exports[`expect to render App component 1`] = `
               </div>
             </div>
           </div>
+          <div
+            className="sc-brqgnP izYMgW header"
+          >
+            Edit Request Body
+          </div>
+          <div
+            className="sc-cMljjf hjreQu content"
+          >
+            <form
+              className="ui form sc-jzJRlG kEUzBi"
+              color="rgb(100, 100, 100)"
+              focuscolor="#5097ab"
+              onSubmit={[Function]}
+            >
+              <textarea
+                className="textarea"
+                id="body"
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                onInput={[Function]}
+                placeholder=""
+                rows={15}
+                value="{
+  \\"locations\\": [],
+  \\"reportGeometry\\": true
+}"
+              />
+            </form>
+          </div>
+          <div
+            className="actions"
+          >
+            <div
+              className="sc-bwzfXH fcyEOL"
+              direction="row"
+            >
+              <button
+                alignend={true}
+                backgroundcolor="#00677f"
+                className="ui button sc-gzVnrw cpzMIe"
+                onClick={[Function]}
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
         </div>
         <div
           className="sc-bwzfXH kwvKmS"
@@ -609,6 +586,66 @@ exports[`expect to render App component 1`] = `
                 </div>
                 empty array
               </div>
+            </div>
+          </div>
+          <div
+            className="sc-brqgnP izYMgW header"
+          >
+            View Response
+          </div>
+          <div
+            className="sc-cMljjf hjreQu content"
+          >
+            <form
+              className="ui form sc-jzJRlG kEUzBi"
+              color="rgb(100, 100, 100)"
+              focuscolor="#5097ab"
+              onSubmit={[Function]}
+            >
+              <textarea
+                className="textarea"
+                id="response"
+                onBlur={[Function]}
+                onChange={[Function]}
+                onFocus={[Function]}
+                onInput={[Function]}
+                placeholder=""
+                rows={15}
+                value="{
+  \\"code\\": \\"Ok\\",
+  \\"routes\\": [
+    {
+      \\"totalDuration\\": 0,
+      \\"totalDistance\\": 0,
+      \\"legs\\": [
+        {
+          \\"geometry\\": [],
+          \\"duration\\": 0,
+          \\"distance\\": 0
+        }
+      ]
+    }
+  ],
+  \\"locations\\": []
+}"
+              />
+            </form>
+          </div>
+          <div
+            className="actions"
+          >
+            <div
+              className="sc-bwzfXH fcyEOL"
+              direction="row"
+            >
+              <button
+                alignend={true}
+                backgroundcolor="#00677f"
+                className="ui button sc-gzVnrw cpzMIe"
+                onClick={[Function]}
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

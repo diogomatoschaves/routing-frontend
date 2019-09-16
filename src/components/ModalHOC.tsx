@@ -1,17 +1,26 @@
 import React, { Component } from 'react'
 import { Modal } from 'semantic-ui-react'
-import { UpdateState, HandleChange, HandleConfirmButton, OptionsHandler, HandleDeleteRoute, Route } from '../types'
+import {
+  UpdateState,
+  HandleValueUpdate,
+  HandleConfirmButton,
+  OptionsHandler,
+  HandleDeleteRoute,
+  Route,
+  InputValues,
+  InputColors
+} from '../types'
 
 interface Props {
-  id: string
-  colorId: string
+  id?: string
   open: boolean
   setState: any
   children?: any
-  value: string
-  color?: string
-  handleValueUpdate?: HandleChange
+  inputValues: InputValues
+  inputColors: InputColors
+  handleValueUpdate?: HandleValueUpdate
   handleAddRoute?: HandleConfirmButton
+  handleConfirmButton?: HandleConfirmButton
   handleDeleteRoute?: HandleDeleteRoute
   handleClickRoute?: HandleConfirmButton
   updateState: UpdateState
@@ -36,12 +45,25 @@ const ModalHOC = (ChildComponent: any) => {
     }
 
     componentDidUpdate(prevProps: Props) {
-      const { open, updateState, id, colorId } = this.props
+      const { open, updateState, inputValues, inputColors, id } = this.props
 
       if (prevProps.open !== open && open) {
         new Promise(resolve => {
-          resolve(id === 'newRoute' && updateState(id, ''))
-        }).then(() => updateState(colorId, 'rgb(100, 100, 100)'))
+          const newInputValues = {
+            ...inputValues,
+            route: '',
+            match: ''
+          }
+          resolve(id !== 'body' && updateState('inputValues', newInputValues))
+        }).then(() => {
+          const newInputColors = {
+            ...inputColors,
+            route: 'rgb(100, 100, 100)',
+            match: 'rgb(100, 100, 100)',
+            body: 'rgb(100, 100, 100)'
+          }
+          updateState('inputColors', newInputColors)
+        })
 
         this.inputRef && this.inputRef.focus()
       }
