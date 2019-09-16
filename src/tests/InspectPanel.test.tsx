@@ -76,6 +76,15 @@ const mockModeTabsHandler = {
   activeIdx: 0
 }
 
+const mockResponseOptionsHandler = {
+  options: [
+    { key: 'routeResponse', text: 'No Traffic', value: 0 },
+    { key: 'trafficResponse', text: 'w/ Traffic', value: 1 },
+    { key: 'googleResponse', text: 'Google', value: 2 }
+  ],
+  activeIdx: 0
+}
+
 it('expect to render InspectPanel component', () => {
   const testInstance = TestRenderer.create(
     <MemoryRouter initialEntries={[ '/' ]}>
@@ -101,7 +110,8 @@ it('expect to render InspectPanel component', () => {
         endpointHandler={mockEndpointHandler}
         updatePoint={jest.fn()}
         updateState={jest.fn()}
-        responseOption={'normal'}
+        responseOptionsHandler={mockResponseOptionsHandler}
+        responseOption={mockResponseOptionsHandler.options[mockResponseOptionsHandler.activeIdx]}
         locations={mockLocations}
         selectedService={0}
         serviceOptions={serviceOptions}

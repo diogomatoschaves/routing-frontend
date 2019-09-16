@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { MAIN_PETROL } from '../utils/colours'
 import { Button, Icon } from 'semantic-ui-react'
-import { Body, RouteResponse, MatchResponse, HandleChange, UpdateState, HandleConfirmButton } from '../types'
+import { Body, RouteResponse, MatchResponse, HandleChange, UpdateState, HandleConfirmButton, GoogleResponse } from '../types'
 import TextAreaInput from './TextAreaInput'
 import { Box, StyledHeader } from '../styledComponents'
 import RecursiveJSONProperty from './RecursiveJSONProperty';
@@ -13,7 +13,7 @@ interface Props {
   colorId: string
   buttonId: string
   buttonText: string
-  value: RouteResponse | MatchResponse | Body
+  value: RouteResponse | MatchResponse | GoogleResponse | Body
   editableValue: string
   updateState: UpdateState
   handleValueUpdate?: HandleChange
@@ -80,6 +80,7 @@ export default function JsonBlock({
           propertyName=""
           excludeBottomBorder={true}
           rootProperty={true}
+          expanded={true}
         />
       </Box>
       <EditDataInput
@@ -99,4 +100,3 @@ export default function JsonBlock({
     </Fragment>
   )
 }
-TextAreaInput

@@ -8,11 +8,13 @@ import {
   Location,
   Coords2,
   Geography,
+  Option,
   MapboxStyle,
   OptionsHandler,
   RouteProperty,
   Routes,
-  Route
+  Route,
+  GeographiesHandler
 } from '../types'
 import {
   routeLineSettings,
@@ -51,8 +53,7 @@ interface Props {
   polygonsVisible: boolean
   googleMapsOption: boolean
   trafficOption: boolean
-  geography: Geography
-  geographies: Array<Geography>
+  geographies: GeographiesHandler
   recenter: boolean
   mapboxStyle: Array<MapboxStyle>
   authorization: string
@@ -131,7 +132,6 @@ export default class Map extends Component<Props, State> {
       googleMapsOption,
       trafficOption,
       polygonsVisible,
-      geography,
       geographies,
       recenter,
       updateState,
@@ -142,6 +142,7 @@ export default class Map extends Component<Props, State> {
       routeHighlight
     } = this.props
     const { map, markers, addedRoutesIds, addedRoutesMarkers } = this.state
+    const geography = geographies.options[geographies.activeIdx]
 
     if (map && prevProps.locations !== locations) {
       this.removeMarkers(markers, 'markers')
@@ -250,20 +251,20 @@ export default class Map extends Component<Props, State> {
     }
 
     if (map && prevProps.polygonsVisible !== polygonsVisible) {
-      geographies.forEach(geography => {
+      geographies.options.forEach((geography: Geography) => {
         if (polygonsVisible) {
-          Promise.resolve(this.removeSourceLayer(geography.name, map)).then(() =>
+          Promise.resolve(this.removeSourceLayer(geography.text, map)).then(() =>
             this.addGeojson(geography, map)
           )
         } else {
-          this.removeSourceLayer(geography.name, map)
+          this.removeSourceLayer(geography.text, map)
         }
       })
     }
 
     if (
       map &&
-      (prevProps.geography !== geography || (recenter && prevProps.recenter !== recenter))
+      (prevProps.geographies.activeIdx !== geographies.activeIdx || (recenter && prevProps.recenter !== recenter))
     ) {
       const center = new mapboxgl.LngLat(geography.coords[0], geography.coords[1])
       this.flyTo(center, map, 1)
@@ -506,7 +507,7 @@ export default class Map extends Component<Props, State> {
 
   private addGeojson = (geography: Geography, map: mapboxgl.Map) => {
     map.addLayer({
-      id: geography.name,
+      id: geography.text,
       type: 'fill',
       source: {
         type: 'geojson',
