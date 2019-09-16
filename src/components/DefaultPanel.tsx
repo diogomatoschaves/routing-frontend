@@ -3,7 +3,7 @@ import { Box } from '../styledComponents'
 import InputRow from './InputRow'
 import OptionsSwitch from './OptionsSwitch'
 import ProfilesRow from './ProfilesRow'
-import { UpdatePoint, UpdateState, Location, Geography } from '../types'
+import { UpdatePoint, UpdateState, Location, Geography, GeographiesHandler } from '../types'
 
 
 interface Props {
@@ -14,8 +14,7 @@ interface Props {
   googleMapsOption: boolean
   trafficOption: boolean
   updateState: UpdateState
-  geography: Geography
-  geographies: Array<Geography>
+  geographies: GeographiesHandler
   profile: string
   urlMatchString: string
 }

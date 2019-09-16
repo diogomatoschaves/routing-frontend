@@ -1,4 +1,4 @@
-import { RouteSchema, Route, RoutingServiceResponse, GoogleResponse, Coords2 } from '../types' 
+import { RouteSchema, Route, RouteResponse, GoogleResponse, Coords2 } from '../types' 
 import { transformToObject } from '../utils/functions'
 import nanoid from 'nanoid'
 import polyline from '@mapbox/polyline';
@@ -21,7 +21,7 @@ export const routeConverter = (routes: Array<RouteSchema>): Array<Route> => {
   })
 }
 
-export const routeConverterFromRoutingService = (response: RoutingServiceResponse, id = nanoid()) => {
+export const routeConverterFromRoutingService = (response: RouteResponse, id = nanoid()) => {
   return { 
     id,
     duration: response.routes[0].totalDuration,

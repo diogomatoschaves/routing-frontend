@@ -29,10 +29,35 @@ export type Coords2 = {
   lon: number,
 }
 
+export type Responses = {
+  routeResponse: RouteResponse
+  trafficResponse: RouteResponse
+  googleResponse: GoogleResponse
+  matchResponse: MatchResponse
+  [key: string]: RouteResponse | GoogleResponse | MatchResponse | undefined
+}
+
+export type Messages = {
+  routeMessage: React.ReactNode | null
+  trafficMessage: React.ReactNode | null
+  googleMessage: React.ReactNode | null
+}
+
 export type RouteResponse = {
   code: string,
-  routes: Array<any>,
-  locations: Array<any>,
+  routes: Array<{
+    totalDistance: number
+    totalDuration: number
+    legs: Array<{
+      duration: number
+      distance: number
+      geometry: Array<Coords2>
+    }>
+  }>
+  locations?: Array<{
+    snapDistance?: number
+    location: Coords2
+  }>
   message?: string
 }
 
@@ -51,9 +76,10 @@ export type MatchResponse = {
 export type Dict = { [key: string]: string };
 
 export type Geography = {
-  name: string,
+  text: string,
   coords: Array<number>,
-  polygon: string
+  polygon: string,
+  value: number
 }
 
 export type MapboxStyle = { 
@@ -87,8 +113,22 @@ export type Option = {
   value: number
 }
 
+export type GeographiesHandler = {
+  options: Array<Geography>,
+  activeIdx: number
+}
+
 export type OptionsHandler = {
   options: Array<Option>,
+  activeIdx: number
+}
+
+export type ResponseOptionsHandler = {
+  options: Array<{
+    key: string
+    text: string
+    value: number
+  }>,
   activeIdx: number
 }
 
@@ -128,21 +168,4 @@ export type RouteSchema = {
   ata: number,
   confidence: number,
   date: string
-}
-
-export type RoutingServiceResponse = {
-  code: string,
-  routes: Array<{
-    totalDistance: number
-    totalDuration: number
-    legs: Array<{
-      duration: number
-      distance: number
-      geometry: Array<Coords2>
-    }>
-  }>
-  locations?: Array<{
-    snapDistance?: number
-    location: Coords2
-  }>
 }

@@ -11,7 +11,8 @@ import {
   OptionsHandler,
   HandleAddRoute,
   HandleDeleteRoute,
-  Route
+  Route,
+  GeographiesHandler
 } from '../types'
 import { Icon } from 'semantic-ui-react'
 
@@ -19,8 +20,7 @@ interface Props {
   routingGraphVisible: boolean
   polygonsVisible: boolean
   updateState: UpdateState
-  geography: Geography
-  geographies: Array<Geography>
+  geographies: GeographiesHandler
   handleValueUpdate: HandleChange
   handleAddRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
@@ -36,7 +36,6 @@ export default function DebugPanel(props: Props) {
     routingGraphVisible,
     polygonsVisible,
     updateState,
-    geography,
     geographies,
     handleValueUpdate,
     handleAddRoute,
@@ -49,6 +48,8 @@ export default function DebugPanel(props: Props) {
   } = props
 
   const [modalOpen, setState] = useState(false)
+
+  const geography = geographies.options[geographies.activeIdx]
 
   return (
     <Box direction="column">
@@ -76,10 +77,10 @@ export default function DebugPanel(props: Props) {
         <Box direction="column" padding="0 0 0 0" width="35%">
           {routingGraphVisible || polygonsVisible ? (
             <ProfileToggler
-              geography={geography}
-              geographies={geographies}
+              selectedOption={geography}
+              optionsArray={geographies.options}
               updateState={updateState}
-              id="geography"
+              id="geographies"
             />
           ) : (
             <EmptySpace width="40%" position="relative" />

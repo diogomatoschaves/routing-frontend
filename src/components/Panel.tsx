@@ -15,6 +15,7 @@ import {
   HandleConfirmButton,
   HandleDeleteRoute,
   Route,
+  GeographiesHandler,
 } from '../types'
 
 interface Props {
@@ -30,8 +31,7 @@ interface Props {
   googleMapsOption: boolean
   trafficOption: boolean
   updateState: UpdateState
-  geography: Geography
-  geographies: Array<Geography>
+  geographies: GeographiesHandler
   profile: string
   duration: number
   urlMatchString: string
@@ -70,7 +70,6 @@ const Panel: any = (props: Props) => {
     polygonsVisible,
     googleMapsOption,
     updateState,
-    geography,
     geographies,
     profile,
     urlMatchString,
@@ -107,7 +106,6 @@ const Panel: any = (props: Props) => {
           routingGraphVisible={routingGraphVisible}
           polygonsVisible={polygonsVisible}
           updateState={updateState}
-          geography={geography}
           geographies={geographies}
           handleValueUpdate={handleValueUpdate}
           handleAddRoute={handleAddRoute}
@@ -126,7 +124,6 @@ const Panel: any = (props: Props) => {
           polygonsVisible={polygonsVisible}
           googleMapsOption={googleMapsOption}
           updateState={updateState}
-          geography={geography}
           geographies={geographies}
           profile={profile}
           urlMatchString={urlMatchString}

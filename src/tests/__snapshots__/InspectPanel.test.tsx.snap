@@ -315,10 +315,10 @@ exports[`expect to render InspectPanel component 1`] = `
       width="100%"
     >
       <div
-        className="sc-fjdhpX jCbsHU"
+        className="sc-jTzLTM hKXGNz"
       >
         <div
-          className="sc-jTzLTM dRHfmO"
+          className="sc-VigVT kghjnk"
           onClick={[Function]}
         >
           
@@ -329,31 +329,121 @@ exports[`expect to render InspectPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-fjdhpX jCbsHU"
+          className="sc-jTzLTM hKXGNz"
         >
           <div
-            className="sc-jTzLTM dRHfmO"
+            className="sc-VigVT kghjnk"
             onClick={[Function]}
           >
             locations
             <i
               aria-hidden="true"
-              className="caret right icon"
+              className="caret down icon"
               onClick={[Function]}
             />
           </div>
+          <div
+            className="sc-jTzLTM hKXGNz"
+          >
+            <div
+              className="sc-VigVT kghjnk"
+              onClick={[Function]}
+            >
+              0
+              <i
+                aria-hidden="true"
+                className="caret down icon"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                lat
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                52.510348
+              </span>
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                lon
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                13.389869
+              </span>
+            </div>
+          </div>
+          <div
+            className="sc-jTzLTM hKXGNz"
+          >
+            <div
+              className="sc-VigVT kghjnk"
+              onClick={[Function]}
+            >
+              1
+              <i
+                aria-hidden="true"
+                className="caret down icon"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                lat
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                52.510425
+              </span>
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                lon
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                13.39114
+              </span>
+            </div>
+          </div>
         </div>
         <div
-          className="sc-fjdhpX jCbsHU"
+          className="sc-jTzLTM hKXGNz"
         >
           <span
-            className="sc-jzJRlG goTWxH"
+            className="sc-fjdhpX gkBxan"
           >
             reportGeometry
             : 
           </span>
           <span
-            className="sc-cSHVUG dqUeWy"
+            className="sc-jzJRlG kHJXki"
           >
             true
           </span>
@@ -390,10 +480,10 @@ exports[`expect to render InspectPanel component 1`] = `
       width="100%"
     >
       <div
-        className="sc-fjdhpX jCbsHU"
+        className="sc-jTzLTM hKXGNz"
       >
         <div
-          className="sc-jTzLTM dRHfmO"
+          className="sc-VigVT kghjnk"
           onClick={[Function]}
         >
           
@@ -404,48 +494,258 @@ exports[`expect to render InspectPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-fjdhpX jCbsHU"
+          className="sc-jTzLTM hKXGNz"
         >
           <span
-            className="sc-jzJRlG goTWxH"
+            className="sc-fjdhpX gkBxan"
           >
             code
             : 
           </span>
           <span
-            className="sc-cSHVUG dqUeWy"
+            className="sc-jzJRlG kHJXki"
           >
             Ok
           </span>
         </div>
         <div
-          className="sc-fjdhpX jCbsHU"
+          className="sc-jTzLTM hKXGNz"
         >
           <div
-            className="sc-jTzLTM dRHfmO"
+            className="sc-VigVT kghjnk"
             onClick={[Function]}
           >
             routes
             <i
               aria-hidden="true"
-              className="caret right icon"
+              className="caret down icon"
               onClick={[Function]}
             />
           </div>
+          <div
+            className="sc-jTzLTM hKXGNz"
+          >
+            <div
+              className="sc-VigVT kghjnk"
+              onClick={[Function]}
+            >
+              0
+              <i
+                aria-hidden="true"
+                className="caret down icon"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                totalDistance
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                86.5
+              </span>
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                totalDuration
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                15.1
+              </span>
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <div
+                className="sc-VigVT kghjnk"
+                onClick={[Function]}
+              >
+                legs
+                <i
+                  aria-hidden="true"
+                  className="caret down icon"
+                  onClick={[Function]}
+                />
+              </div>
+              <div
+                className="sc-jTzLTM hKXGNz"
+              >
+                <div
+                  className="sc-VigVT kghjnk"
+                  onClick={[Function]}
+                >
+                  0
+                  <i
+                    aria-hidden="true"
+                    className="caret down icon"
+                    onClick={[Function]}
+                  />
+                </div>
+                <div
+                  className="sc-jTzLTM hKXGNz"
+                >
+                  <span
+                    className="sc-fjdhpX gkBxan"
+                  >
+                    duration
+                    : 
+                  </span>
+                  <span
+                    className="sc-jzJRlG kHJXki"
+                  >
+                    15.1
+                  </span>
+                </div>
+                <div
+                  className="sc-jTzLTM hKXGNz"
+                >
+                  <span
+                    className="sc-fjdhpX gkBxan"
+                  >
+                    distance
+                    : 
+                  </span>
+                  <span
+                    className="sc-jzJRlG kHJXki"
+                  >
+                    86.5
+                  </span>
+                </div>
+                <div
+                  className="sc-jTzLTM hKXGNz"
+                >
+                  <div
+                    className="sc-VigVT kghjnk"
+                    onClick={[Function]}
+                  >
+                    geometry
+                    <i
+                      aria-hidden="true"
+                      className="caret right icon"
+                      onClick={[Function]}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div
-          className="sc-fjdhpX jCbsHU"
+          className="sc-jTzLTM hKXGNz"
         >
           <div
-            className="sc-jTzLTM dRHfmO"
+            className="sc-VigVT kghjnk"
             onClick={[Function]}
           >
             locations
             <i
               aria-hidden="true"
-              className="caret right icon"
+              className="caret down icon"
               onClick={[Function]}
             />
+          </div>
+          <div
+            className="sc-jTzLTM hKXGNz"
+          >
+            <div
+              className="sc-VigVT kghjnk"
+              onClick={[Function]}
+            >
+              0
+              <i
+                aria-hidden="true"
+                className="caret down icon"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                snapDistance
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                0.45025736761464097
+              </span>
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <div
+                className="sc-VigVT kghjnk"
+                onClick={[Function]}
+              >
+                location
+                <i
+                  aria-hidden="true"
+                  className="caret right icon"
+                  onClick={[Function]}
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            className="sc-jTzLTM hKXGNz"
+          >
+            <div
+              className="sc-VigVT kghjnk"
+              onClick={[Function]}
+            >
+              1
+              <i
+                aria-hidden="true"
+                className="caret down icon"
+                onClick={[Function]}
+              />
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <span
+                className="sc-fjdhpX gkBxan"
+              >
+                snapDistance
+                : 
+              </span>
+              <span
+                className="sc-jzJRlG kHJXki"
+              >
+                12.073291914193243
+              </span>
+            </div>
+            <div
+              className="sc-jTzLTM hKXGNz"
+            >
+              <div
+                className="sc-VigVT kghjnk"
+                onClick={[Function]}
+              >
+                location
+                <i
+                  aria-hidden="true"
+                  className="caret right icon"
+                  onClick={[Function]}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
