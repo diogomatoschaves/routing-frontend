@@ -5,10 +5,10 @@ exports[`expect to render App component 1`] = `
   className="sc-gPEVay bJvjiw"
 >
   <div
-    className="ui segment pushable sc-iRbamj injbWF"
+    className="ui segment pushable sc-iRbamj gOGLLM"
   >
     <div
-      className="sc-bwzfXH sc-jlyJG grRSQN"
+      className="sc-bwzfXH sc-jlyJG hRSjkk"
       direction="row"
       width="31%"
     >
