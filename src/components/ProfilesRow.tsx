@@ -14,6 +14,9 @@ const profiles = [{
 }, { 
   name: 'foot', 
   iconName: 'male'
+},{
+  name: 'pilot',
+  iconName: 'rocket'
 }]
 
 export default function ProfilesRow({ diameter, updateState, profile }: Props) {

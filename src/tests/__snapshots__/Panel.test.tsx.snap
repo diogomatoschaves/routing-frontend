@@ -109,6 +109,40 @@ exports[`expect to render Panel component 1`] = `
           </div>
         </div>
       </div>
+      <div
+        id="pilot-profile"
+        onClick={[Function]}
+      >
+        <div
+          onBlur={[Function]}
+          onClick={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <div
+            className="sc-bwzfXH deebee"
+            color="transparent"
+            cursor="pointer"
+          >
+            <div
+              className="sc-bdVaJa dbHwHO"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="rocket icon sc-htpNat bxTmCt"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#a6cad8"
+                padding="0 0 0 0"
+                position="absolute"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       className="sc-bdVaJa gSlpgJ"
