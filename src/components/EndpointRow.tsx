@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyledDropdown } from '../styledComponents'
-import { UpdateState, OptionsHandler } from '../types'
+import { OptionsHandler, UpdateState } from '../types'
 
 interface Props {
   updateState: UpdateState
@@ -8,27 +8,30 @@ interface Props {
 }
 
 export default class EndpointRow extends Component<Props> {
-  state = { searchQuery: '' }
+  public state = { searchQuery: '' }
 
-  render() {
+  public render() {
     const { updateState, endpointHandler } = this.props
     const { searchQuery } = this.state
 
     return (
       <StyledDropdown
-        options={ endpointHandler.options }
+        options={endpointHandler.options}
         placeholder="Choose endpoint"
-        search={(_: any) => {
-          return endpointHandler.options.filter((el: any, index) => index === 0 || !el['data-additional'])
+        search={() => {
+          return endpointHandler.options.filter(
+            (el: any, index) => index === 0 || !el['data-additional']
+          )
         }}
-        searchQuery={ searchQuery }
-        selection
-        fluid
-        allowAdditions
-        value={ endpointHandler.activeIdx }
+        searchQuery={searchQuery}
+        selection={true}
+        fluid={true}
+        allowAdditions={true}
+        value={endpointHandler.activeIdx}
         onAddItem={(_: any, { value }: any) => {
-          const newEndpointId = endpointHandler.options.length;
+          const newEndpointId = endpointHandler.options.length
           const newEndpointHandler = {
+            activeIdx: newEndpointId,
             options: [
               ...endpointHandler.options,
               {
@@ -36,16 +39,22 @@ export default class EndpointRow extends Component<Props> {
                 text: value,
                 value: newEndpointId
               }
-            ],
-            activeIdx: newEndpointId
+            ]
           }
-          updateState('endpointHandler', newEndpointHandler);
+          updateState('endpointHandler', newEndpointHandler)
         }}
-        onFocus={() => this.setState({ searchQuery: endpointHandler.options[endpointHandler.activeIdx].text})}
-        onSearchChange={(_: any, { searchQuery }: any) => this.setState({ searchQuery }) }
+        onFocus={() =>
+          this.setState({
+            searchQuery: endpointHandler.options[endpointHandler.activeIdx].text
+          })
+        }
+        onSearchChange={(_: any, { searchQuery: newSearchQuery }: any) =>
+          this.setState({ searchQuery: newSearchQuery })
+        }
         onChange={(_: any, { value }: any) => {
-          if (typeof value == 'number' && value < endpointHandler.options.length) { // if an existing option is selected
-            updateState('endpointHandler', { ...endpointHandler, activeIdx: value });
+          if (typeof value === 'number' && value < endpointHandler.options.length) {
+            // if an existing option is selected
+            updateState('endpointHandler', { ...endpointHandler, activeIdx: value })
             this.setState({ searchQuery: endpointHandler.options[value].text })
           }
         }}

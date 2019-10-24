@@ -1,31 +1,37 @@
-
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
-import { mockCarResponse, mockCarTrafficResponse } from '../apiCalls/__mocks__/mockResponse'
-import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
-import App from '../components/App'
-import Map from '../components/Map'
-import InspectPanel from '../components/InspectPanel'
 import { MemoryRouter, Route } from 'react-router-dom'
-import { getPath, formatCoords } from '../utils/functions'
-import { Box } from '../styledComponents';
-import { Checkbox } from 'semantic-ui-react';
+import TestRenderer from 'react-test-renderer'
+import { Checkbox } from 'semantic-ui-react'
+import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
+import {
+  mockCarResponse,
+  mockCarTrafficResponse
+} from '../apiCalls/__mocks__/mockResponse'
+import App from '../components/App'
+import InspectPanel from '../components/InspectPanel'
+import Map from '../components/Map'
+import { Box } from '../styledComponents'
+import { formatCoords, getPath } from '../utils/functions'
 
 jest.mock('../apiCalls')
 
 const delay = (ms: number) =>
   new Promise(resolve => {
     setTimeout(() => {
-      resolve();
-    }, ms);
-  });
+      resolve()
+    }, ms)
+  })
 
 const mockEventStart = { lng: 13.389869, lat: 52.510348 }
 const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
 
 const urlMatchString = '/:profile/:start/:end'
 
-const toggle = (root: any, togglerProps: { text: string, id: string }, checked: boolean) => {
+const toggle = (
+  root: any,
+  togglerProps: { text: string; id: string },
+  checked: boolean
+) => {
   const Toggler = root.findAllByType(Checkbox).filter((el: any) => {
     return el.props.id === togglerProps.id
   })[0]
@@ -41,27 +47,34 @@ const selectNext = (root: any) => {
   NextProfile.props.onClick()
 }
 
-const getTestApp = (initialEntries: Array<string> = ['/']) => TestRenderer.create(
-  <MemoryRouter initialEntries={initialEntries}>
-    <Route render={({ location }) => (
-      <Route path={getPath(location.pathname)} render={({ location, history, match }) => (
-        <App 
-          location={location} 
-          history={history} 
-          match={match} 
-          urlMatchString={urlMatchString}
-          loadedProp={true}
-        />
-      )}/>
-    )}/>
-  </MemoryRouter>
-)
+const getTestApp = (initialEntries: string[] = ['/']) =>
+  TestRenderer.create(
+    <MemoryRouter initialEntries={initialEntries}>
+      <Route
+        render={({ location }) => (
+          <Route
+            path={getPath(location.pathname)}
+            render={({ location: newLocation, history, match }) => (
+              <App
+                location={newLocation}
+                history={history}
+                match={match}
+                urlMatchString={urlMatchString}
+                loadedProp={true}
+              />
+            )}
+          />
+        )}
+      />
+    </MemoryRouter>
+  )
 
 describe('Behaviour of Responses Toggler', () => {
-
   const mockProfile = 'car'
 
-  const testInstance = getTestApp([`/${mockProfile}/${formatCoords(mockEventStart)}/${formatCoords(mockEventEnd)}`])
+  const testInstance = getTestApp([
+    `/${mockProfile}/${formatCoords(mockEventStart)}/${formatCoords(mockEventEnd)}`
+  ])
 
   const root = testInstance.root
 
@@ -72,20 +85,28 @@ describe('Behaviour of Responses Toggler', () => {
 
   describe('Initial state', () => {
     beforeAll(() => {
-      toggle(root, {
-        text: 'Traffic',
-        id: 'trafficOption'
-      }, true)
-    
-      toggle(root, {
-        text: 'Compare 3rd Party',
-        id: 'googleMapsOption'
-      }, true)  
+      toggle(
+        root,
+        {
+          id: 'trafficOption',
+          text: 'Traffic'
+        },
+        true
+      )
+
+      toggle(
+        root,
+        {
+          id: 'googleMapsOption',
+          text: 'Compare 3rd Party'
+        },
+        true
+      )
     })
 
     it('Default response is routing service without traffic', () => {
       const { response } = InspectPanelComponent.props
-      
+
       const duration = response.routes[0].totalDuration
       const mockDuration = mockCarResponse.routes[0].totalDuration
 
@@ -94,11 +115,10 @@ describe('Behaviour of Responses Toggler', () => {
   })
 
   describe('Behaviour when next button is pressed', () => {
-
     beforeAll(() => {
       selectNext(root)
     })
-    
+
     it('updates the response to the trafficResponse', () => {
       const { response } = InspectPanelComponent.props
 
@@ -110,11 +130,10 @@ describe('Behaviour of Responses Toggler', () => {
   })
 
   describe('Behaviour when input is updated with valid JSON', () => {
-
     beforeAll(() => {
       selectNext(root)
     })
-    
+
     it('updates the response to the trafficResponse', () => {
       const { response } = InspectPanelComponent.props
 
@@ -122,6 +141,3 @@ describe('Behaviour of Responses Toggler', () => {
     })
   })
 })
-
-
-

@@ -1,6 +1,9 @@
+import { fetchRouteDB, routingApi } from '../apiCalls'
+import {
+  mockInvalidDBResponse,
+  mockValidDBResponse
+} from '../apiCalls/__mocks__/mockDBResponse'
 import { mockCarResponse, mockFootResponse } from '../apiCalls/__mocks__/mockResponse'
-import { mockValidDBResponse, mockInvalidDBResponse } from '../apiCalls/__mocks__/mockDBResponse'
-import { routingApi, fetchRouteDB } from '../apiCalls'
 
 jest.mock('../apiCalls')
 
@@ -27,12 +30,10 @@ describe('Api Calls', () => {
     const mockProfile = 'car'
 
     it('returns an object if status code is ok', done => {
-      routingApi(mockProfile, 'Basic MOCKAUTH', body, mockEndpoint).then(
-        response => {
-          expect(response).toEqual(mockCarResponse)
-          done()
-        }
-      )
+      routingApi(mockProfile, 'Basic MOCKAUTH', body, mockEndpoint).then(response => {
+        expect(response).toEqual(mockCarResponse)
+        done()
+      })
     })
   })
 
@@ -40,36 +41,29 @@ describe('Api Calls', () => {
     const mockProfile = 'foot'
 
     it('returns an object if status code is ok', done => {
-      routingApi(mockProfile, 'Basic MOCKAUTH', body, mockEndpoint).then(
-        response => {
-          expect(response).toEqual(mockFootResponse)
-          done()
-        }
-      )
+      routingApi(mockProfile, 'Basic MOCKAUTH', body, mockEndpoint).then(response => {
+        expect(response).toEqual(mockFootResponse)
+        done()
+      })
     })
   })
 
   describe('fetchRoutesDB behaviour', () => {
-    
     const mockValidRouteId = 'AAA'
     const mockInvalidRouteId = ''
 
     it('returns a response if route is found', done => {
-      fetchRouteDB(mockValidRouteId).then(
-        response => {
-          expect(response).toEqual(mockValidDBResponse)
-          done()
-        }
-      )
+      fetchRouteDB(mockValidRouteId).then(response => {
+        expect(response).toEqual(mockValidDBResponse)
+        done()
+      })
     })
 
     it('returns a response if route is not found', done => {
-      fetchRouteDB(mockInvalidRouteId).then(
-        response => {
-          expect(response).toEqual(mockInvalidDBResponse)
-          done()
-        }
-      )
+      fetchRouteDB(mockInvalidRouteId).then(response => {
+        expect(response).toEqual(mockInvalidDBResponse)
+        done()
+      })
     })
   })
 })

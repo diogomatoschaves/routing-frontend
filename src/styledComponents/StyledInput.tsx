@@ -1,7 +1,6 @@
 import { Input } from 'semantic-ui-react'
 import styled from 'styled-components'
 
-
 const StyledInput: typeof Input = styled(Input as any)`
   width: 100%;
 

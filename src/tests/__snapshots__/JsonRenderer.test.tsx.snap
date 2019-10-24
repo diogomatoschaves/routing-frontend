@@ -2,7 +2,7 @@
 
 exports[`expect to render TextAreaInput component 1`] = `
 <form
-  className="ui form sc-bdVaJa krvkEa"
+  className="ui form sc-bdVaJa jVVtoZ"
   color="rgb(100, 100, 100)"
   focuscolor="#5097ab"
   onSubmit={[Function]}

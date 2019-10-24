@@ -1,11 +1,11 @@
 import React from 'react'
-import { Box, StyledSegment } from '../styledComponents'
+import { Header, Statistic } from 'semantic-ui-react'
 import styled from 'styled-components'
-import { Statistic, Header } from 'semantic-ui-react'
-import BackgroundIcon from './BackgroundIcon'
+import { Box, StyledSegment } from '../styledComponents'
+import { Route } from '../types'
 import { PROFILE_BACKGROUND } from '../utils/colours'
-import { computeDuration, computeDistance } from '../utils/functions'
-import { Route } from '../types';
+import { computeDistance, computeDuration } from '../utils/functions'
+import BackgroundIcon from './BackgroundIcon'
 
 interface Props {
   route: Route
@@ -38,7 +38,7 @@ const StyledStatistic = styled(Statistic)`
 
 const diameter = 50
 
-export default function RouteInfo ({
+export default function RouteInfo({
   right,
   top,
   route,
@@ -116,4 +116,3 @@ export default function RouteInfo ({
     </StyledSegment>
   )
 }
-

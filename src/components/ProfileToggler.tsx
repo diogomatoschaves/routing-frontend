@@ -1,13 +1,13 @@
 import React from 'react'
+import { Icon, Label } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
-import { Icon, Label } from 'semantic-ui-react'
-import { UpdateState, Geography, Option } from '../types'
+import { Geography, Option, UpdateState } from '../types'
 import { PETROL_5 } from '../utils/colours'
 
 interface Props {
   selectedOption: Geography | Option
-  optionsArray: Array<Geography> | Array<Option>
+  optionsArray: Geography[] | Option[]
   width?: string
   updateState: UpdateState
   id: string
@@ -26,11 +26,13 @@ const StyledLabel = styled(Label)`
 `
 
 const getNewProfile = (
-  optionsArray: Array<Geography> | Array<Option>,
+  optionsArray: Geography[] | Option[],
   option: Geography | Option,
   left: boolean
 ) => {
-  const index = optionsArray.findIndex((el: Geography | Option) => el.value === option.value)
+  const index = optionsArray.findIndex(
+    (el: Geography | Option) => el.value === option.value
+  )
   const lastIndex = optionsArray.length - 1
   return left
     ? index === 0
@@ -42,22 +44,18 @@ const getNewProfile = (
 }
 
 const handleClick = (
-  optionsArray: Array<Geography> | Array<Option>,
+  optionsArray: Geography[] | Option[],
   selectedOption: Geography | Option,
   updateState: UpdateState,
   id: string,
   left: boolean
 ) => {
-
   const newOptionsArray = {
-    options: optionsArray,
-    activeIdx: getNewProfile(optionsArray, selectedOption, left).value
+    activeIdx: getNewProfile(optionsArray, selectedOption, left).value,
+    options: optionsArray
   }
 
-  updateState(
-    id,
-    newOptionsArray
-  )
+  updateState(id, newOptionsArray)
 }
 
 const ProfileToggler = ({
@@ -77,24 +75,23 @@ const ProfileToggler = ({
     >
       <Box
         width="10%"
-        left
-        onClick={() =>
-          handleClick(optionsArray, selectedOption, updateState, id, true)
-        }
+        left={true}
+        onClick={() => handleClick(optionsArray, selectedOption, updateState, id, true)}
       >
         <StyledIcon color="grey" size="large" name={'angle left'} />
       </Box>
       <Box width="60%">
-        <StyledLabel onClick={() => optionsArray && updateState('recenter', true)} size="large">
+        <StyledLabel
+          onClick={() => optionsArray && updateState('recenter', true)}
+          size="large"
+        >
           {selectedOption.text}
         </StyledLabel>
       </Box>
       <Box
         width="10%"
-        right
-        onClick={() =>
-          handleClick(optionsArray, selectedOption, updateState, id, false)
-        }
+        right={true}
+        onClick={() => handleClick(optionsArray, selectedOption, updateState, id, false)}
       >
         <StyledIcon color="grey" size="large" name={'angle right'} />
       </Box>

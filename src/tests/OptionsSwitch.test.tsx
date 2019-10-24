@@ -1,12 +1,11 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import TestRenderer from 'react-test-renderer'
 import OptionsSwitch from '../components/OptionsSwitch'
-import { MemoryRouter } from 'react-router-dom'
 
 it('expect to render OptionsPanel component', () => {
-
   const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
+    <MemoryRouter initialEntries={['/']}>
       <OptionsSwitch
         checked={false}
         text={'Google Maps'}
@@ -17,4 +16,4 @@ it('expect to render OptionsPanel component', () => {
     </MemoryRouter>
   )
   expect(testInstance.toJSON()).toMatchSnapshot()
-}) 
+})

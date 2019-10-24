@@ -1,11 +1,21 @@
-import React, { Fragment, useState } from 'react'
-import styled, { css } from 'styled-components'
-import { MAIN_PETROL } from '../utils/colours'
+import React, { Fragment } from 'react'
 import { Button, Icon } from 'semantic-ui-react'
-import { Body, RouteResponse, MatchResponse, HandleValueUpdate, UpdateState, HandleConfirmButton, GoogleResponse, InputValues, InputColors } from '../types'
+import styled, { css } from 'styled-components'
 import { Box, StyledHeader } from '../styledComponents'
-import RecursiveJSONProperty from './RecursiveJSONProperty';
-import EditDataInput from './EditDataInput';
+import {
+  Body,
+  GoogleResponse,
+  HandleConfirmButton,
+  HandleValueUpdate,
+  InputColors,
+  InputValues,
+  MatchResponse,
+  RouteResponse,
+  UpdateState
+} from '../types'
+import { MAIN_PETROL } from '../utils/colours'
+import EditDataInput from './EditDataInput'
+import RecursiveJSONProperty from './RecursiveJSONProperty'
 
 interface Props {
   id: string
@@ -56,14 +66,13 @@ export default function JsonBlock({
   editable,
   title
 }: Props) {
-
   return (
     <Fragment>
       <Box direction="row" justify="flex-start">
         <StyledHeader overridecolor={MAIN_PETROL}>{text}</StyledHeader>
         <StyledButton
           id={buttonId}
-          onClick={(e: any, { id }: { id: string }) => updateState(buttonId, !edit)}
+          onClick={() => updateState(buttonId, !edit)}
           marginleft={'10px'}
           icon={edit}
           className={className}
@@ -83,7 +92,7 @@ export default function JsonBlock({
       <EditDataInput
         id={id}
         open={edit}
-        setState={(value: boolean) => updateState(buttonId, value)}
+        setState={(newValue: boolean) => updateState(buttonId, newValue)}
         updateState={updateState}
         handleValueUpdate={handleValueUpdate}
         handleConfirmButton={handleConfirmButton}

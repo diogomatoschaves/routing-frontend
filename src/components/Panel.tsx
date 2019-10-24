@@ -1,24 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Transition } from 'semantic-ui-react'
 import { Box } from '../styledComponents'
-import DefaultPanel from './DefaultPanel'
-import DebugPanel from './DebugPanel'
-import Tabs from './Tabs'
 import {
-  UpdatePoint,
-  UpdateState,
-  Location,
-  Geography,
-  OptionsHandler,
-  HandleValueUpdate,
+  GeographiesHandler,
   HandleConfirmButton,
   HandleDeleteRoute,
-  Route,
-  GeographiesHandler,
-  InputValues,
+  HandleValueUpdate,
   InputColors,
+  InputValues,
+  Location,
+  OptionsHandler,
+  Route,
+  UpdatePoint,
+  UpdateState
 } from '../types'
+import DebugPanel from './DebugPanel'
+import DefaultPanel from './DefaultPanel'
+import Tabs from './Tabs'
 
 interface Props {
   updatePoint: UpdatePoint
@@ -27,7 +25,7 @@ interface Props {
   handleClickRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
   handleShowClick: () => void
-  locations: Array<Location>
+  locations: Location[]
   routingGraphVisible: boolean
   polygonsVisible: boolean
   googleMapsOption: boolean
@@ -42,7 +40,7 @@ interface Props {
   addDataTabsHandler: OptionsHandler
   inputValues: InputValues
   inputColors: InputColors
-  addedRoutes: Array<Route>
+  addedRoutes: Route[]
 }
 
 const PanelWrapper: any = styled(Box)`

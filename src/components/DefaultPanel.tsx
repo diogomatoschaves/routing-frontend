@@ -1,14 +1,13 @@
 import React from 'react'
 import { Box } from '../styledComponents'
+import { GeographiesHandler, Location, UpdatePoint, UpdateState } from '../types'
 import InputRow from './InputRow'
 import OptionsSwitch from './OptionsSwitch'
 import ProfilesRow from './ProfilesRow'
-import { UpdatePoint, UpdateState, Location, Geography, GeographiesHandler } from '../types'
-
 
 interface Props {
   updatePoint: UpdatePoint
-  locations: Array<Location>
+  locations: Location[]
   routingGraphVisible: boolean
   polygonsVisible: boolean
   googleMapsOption: boolean
@@ -22,7 +21,6 @@ interface Props {
 const diameter = 50
 
 export default function DefaultPanel(props: Props) {
-
   const {
     updatePoint,
     locations,
@@ -30,7 +28,7 @@ export default function DefaultPanel(props: Props) {
     updateState,
     profile,
     urlMatchString,
-    trafficOption,
+    trafficOption
   } = props
 
   return (

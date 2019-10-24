@@ -1,11 +1,12 @@
-import styled, { css } from 'styled-components'
 import { Header } from 'semantic-ui-react'
+import styled, { css } from 'styled-components'
 
 const StyledHeader = styled(Header)`
   &.ui.header {
     margin-top: 10px;
     align-self: flex-start;
-    font-family: "BasisGrotesque Medium", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    font-family: 'BasisGrotesque Medium', Lato, 'Helvetica Neue', Arial, Helvetica,
+      sans-serif;
     ${(props: any) =>
       props.overridecolor &&
       css`

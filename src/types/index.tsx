@@ -1,36 +1,33 @@
-
-
 // Functions
-export type UpdatePoint = (index: number[], coords: Array<Coords>) => void
-export type UpdateColor = () => void
+export type UpdatePoint = (index: number[], coords: Coords[]) => void
 export type UpdateState = (stateKey: string, value: any) => void
-export type HandleChange = ({ id, value }: { id: string, value: any }) => boolean
-export type HandleValueUpdate = ({ id, value }: { id: string, value: any }) => boolean
+export type HandleChange = ({ id, value }: { id: string; value: any }) => boolean
+export type HandleValueUpdate = ({ id, value }: { id: string; value: any }) => boolean
 export type HandleConfirmButton = (setState: any, value: any, id: string) => void
-export type HandleAddRoute = (route: Route) => void 
-export type HandleDeleteRoute = (id: string) => void 
+export type HandleAddRoute = (route: Route) => void
+export type HandleDeleteRoute = (id: string) => void
 
-//Objects
-export type Location = {
-  name: string, 
-  marker: string,
-  markerOffset?: Array<number>
-  placeholder: string,
+// Objects
+export interface Location {
+  name: string
+  marker: string
+  markerOffset?: number[]
+  placeholder: string
   lat: null | number
   lng: null | number
 }
 
-export type Coords = {
-  lat: null | number,
-  lng: null | number,
+export interface Coords {
+  lat: null | number
+  lng: null | number
 }
 
-export type Coords2 = {
-  lat: number,
-  lon: number,
+export interface Coords2 {
+  lat: number
+  lon: number
 }
 
-export type Responses = {
+export interface Responses {
   routeResponse: RouteResponse
   trafficResponse: RouteResponse
   googleResponse: GoogleResponse
@@ -38,18 +35,18 @@ export type Responses = {
   [key: string]: RouteResponse | GoogleResponse | MatchResponse | undefined
 }
 
-export type Messages = {
+export interface Messages {
   routeMessage: React.ReactNode | null
   trafficMessage: React.ReactNode | null
   googleMessage: React.ReactNode | null
 }
 
-export type RouteResponse = {
-  code: string,
+export interface RouteResponse {
+  code: string
   routes: Array<{
     totalDistance: number
     totalDuration: number
-    legs: Array<RouteLeg>
+    legs: RouteLeg[]
   }>
   locations?: Array<{
     snapDistance?: number
@@ -58,104 +55,106 @@ export type RouteResponse = {
   message?: string
 }
 
-export type RouteLeg = {
+export interface RouteLeg {
   duration: number
   distance: number
-  geometry: Array<Coords2>
+  geometry: Coords2[]
 }
 
-export type GoogleResponse = {
-  geocoded_waypoints?: Array<any>,
-  routes: Array<any>,
+export interface GoogleResponse {
+  geocoded_waypoints?: any[]
+  routes: any[]
   status: string
 }
 
-export type MatchResponse = {
-  code: string,
-  matchings: Array<Matching>,
-  tracepoints: Array<Tracepoint>
+export interface MatchResponse {
+  code: string
+  matchings: Matching[]
+  tracepoints: Tracepoint[]
 }
 
-export type Tracepoint = {
-  snapDistance: number,
+export interface Tracepoint {
+  snapDistance: number
   location: Coords2
 }
 
-export type Matching = {
+export interface Matching {
   confidence?: number
-  legs: Array<MatchLeg>
+  legs: MatchLeg[]
 }
 
-export type MatchLeg = {
+export interface MatchLeg {
   traceFromIndex: number
   traceToIndex: number
   duration: number
   distance: number
-  nodes?: Array<number>
-  geometry: Array<Coords2>
+  nodes?: number[]
+  geometry: Coords2[]
 }
 
-export type Dict = { [key: string]: string };
+export interface Dict {
+  [key: string]: string
+}
 
-export type Geography = {
-  text: string,
-  coords: Array<number>,
-  polygon: string,
+export interface Geography {
+  text: string
+  coords: number[]
+  polygon: string
   value: number
 }
 
-export type MapboxStyle = { 
-  type: string, 
+export interface MapboxStyle {
+  type: string
   endpoint: string
 }
 
-export type Body = {
-  locations: Array<Coords2>,
-  reportGeometry: boolean,
+export interface Body {
+  locations: Coords2[]
+  reportGeometry: boolean
   reportNodes?: true
 }
-export type Route = {
+export interface Route {
   id: string
   distance: number
   duration: number
-  routePath: Array<Coords2>
+  routePath: Coords2[]
   type?: string
   parsedValue?: any
 }
 
-export type Routes = {
+export interface Routes {
   route: Route
   trafficRoute: Route
   googleRoute: Route
-  [key: string]: Route;
+  [key: string]: Route
 }
 
-export type Option = {
-  key: string,
-  text: string,
+export interface Option {
+  key: string
+  text: string
   value: number
 }
 
-export type GeographiesHandler = {
-  options: Array<Geography>,
+export interface GeographiesHandler {
+  options: Geography[]
   activeIdx: number
 }
 
-export type OptionsHandler = {
-  options: Array<Option>,
+export interface OptionsHandler {
+  options: Option[]
   activeIdx: number
 }
 
-export type ResponseOptionsHandler = {
+export interface ResponseOptionsHandler {
   options: Array<{
     key: string
     text: string
     value: number
-  }>,
+  }>
   activeIdx: number
 }
 
-export type RouteProperty = {
+export interface RouteProperty {
   id: string
   color: string
   routeId: string
@@ -163,37 +162,38 @@ export type RouteProperty = {
   routingGraphVisible: boolean
 }
 
-export type ResponseDB = {
+export interface ResponseDB {
   exists: boolean
-  routes: Array<RouteSchema>
+  routes: RouteSchema[]
 }
 
-export type RouteSchema = { 
-  id: string, 
-  eta: number,
+export interface RouteSchema {
+  id: string
+  eta: number
   distance: number
   provider: {
-    name : string,
-    type : string,
-    url: string,
-  },
+    name: string
+    type: string
+    url: string
+  }
   source: {
-    name : string,
-  },
+    name: string
+  }
   waypoints: {
-    origin: number[],
-    destination: number[],
-    middlePoints : number[][]
-  },
+    origin: number[]
+    destination: number[]
+    middlePoints: number[][]
+  }
   geometry: {
-    type: string, 
-    coordinates: number[][]},
-  ata: number,
-  confidence: number,
+    type: string
+    coordinates: number[][]
+  }
+  ata: number
+  confidence: number
   date: string
 }
 
-export type InputValues = {
+export interface InputValues {
   route: string
   match: string
   response: string
@@ -201,7 +201,7 @@ export type InputValues = {
   [key: string]: string
 }
 
-export type InputColors = {
+export interface InputColors {
   route: string
   match: string
   body: string

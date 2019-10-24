@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
-import { UpdatePoint, Coords } from '../types'
-import { formatCoords, splitCoords } from '../utils/functions'
+import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { StyledInput } from '../styledComponents'
-import { NORMAL_INPUT, FOCUSED_INPUT } from '../utils/colours';
+import { Coords, UpdatePoint } from '../types'
+import { FOCUSED_INPUT, NORMAL_INPUT } from '../utils/colours'
+import { formatCoords, splitCoords } from '../utils/functions'
 
 interface Props {
   updatePoint: UpdatePoint
@@ -23,16 +23,16 @@ interface State {
 }
 
 class ControlledInput extends Component<Props & RouteComponentProps, State> {
-  state = { 
-    value: '',
+  public state = {
+    value: ''
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     const { coords } = this.props
     this.setState({ value: formatCoords(coords) })
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  public componentDidUpdate(prevProps: Props, prevState: State) {
     const { coords } = this.props
 
     if (prevProps.coords !== coords && coords.lat && coords.lng) {
@@ -40,15 +40,15 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     }
   }
 
-  handleChange = (value: string): void => {
+  public handleChange = (value: string): void => {
     this.setState({ value })
   }
 
-  handleBlur = (): void => {
+  public handleBlur = (): void => {
     const { value } = this.state
     const { index, updatePoint, coords: prevCoords, updateColor, color } = this.props
 
-    updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT )
+    updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT)
 
     const coords = splitCoords(value)
 
@@ -59,7 +59,7 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     }
   }
 
-  cleanInput = () => {
+  public cleanInput = () => {
     const { index, updatePoint } = this.props
     this.setState({ value: '' }, () => updatePoint([index], [{ lat: null, lng: null }]))
   }
@@ -70,11 +70,11 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
     return (
       <StyledInput
-        fluid
+        fluid={true}
         value={value}
-        onChange={(e, { value }) => this.handleChange(value)}
+        onChange={(e, { value: newValue }) => this.handleChange(newValue)}
         onBlur={this.handleBlur}
-        onFocus={() => updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT )}
+        onFocus={() => updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT)}
         placeholder={placeholder}
         icon={
           value !== ''

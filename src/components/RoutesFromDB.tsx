@@ -1,17 +1,22 @@
-import React, { Component } from 'react'
-import SearchInput from './SearchInput'
-import Route from './Route'
-import { Transition } from 'semantic-ui-react'
-import { Box, StyledText } from '../styledComponents'
 import { debounce } from 'lodash'
+import React, { Component } from 'react'
+import { Transition } from 'semantic-ui-react'
 import { fetchRouteDB } from '../apiCalls'
-import { Route as RouteType, ResponseDB, HandleConfirmButton, HandleDeleteRoute } from '../types'
+import { Box, StyledText } from '../styledComponents'
+import {
+  HandleConfirmButton,
+  HandleDeleteRoute,
+  ResponseDB,
+  Route as RouteType
+} from '../types'
 import { routeConverter } from '../utils/routeAdapter'
+import Route from './Route'
+import SearchInput from './SearchInput'
 
 interface State {
   value: string
   message: string
-  routes: Array<RouteType>
+  routes: RouteType[]
   addedRouteIds: string[]
 }
 
@@ -19,47 +24,50 @@ interface Props {
   handleClickRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
   setState: any
-  addedRoutes: Array<RouteType>
+  addedRoutes: RouteType[]
 }
 
 export default class RoutesFromDB extends Component<Props, State> {
-
-  inputRef: any
+  public inputRef: any
 
   constructor(props: Props) {
     super(props)
     this.state = {
-      value: '',
+      addedRouteIds: [],
       message: '',
       routes: [],
-      addedRouteIds: []
+      value: ''
     }
     this.fetchResults = debounce(this.fetchResults, 400)
     this.setInputRef = this.setInputRef.bind(this)
   }
 
-  componentDidMount() {
-    if (process.env.NODE_ENV === 'test') return
+  public componentDidMount() {
+    if (process.env.NODE_ENV === 'test') {
+      return
+    }
     this.inputRef && this.inputRef.focus()
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  public componentDidUpdate(prevProps: Props, prevState: State) {
     const { addedRoutes } = this.props
     if (prevProps.addedRoutes !== addedRoutes) {
       this.setState({ addedRouteIds: addedRoutes.map(route => route.id) })
     }
   }
 
-  setInputRef(ref: any) {
+  public setInputRef(ref: any) {
     this.inputRef = ref
   }
 
-  setValue = (value: string) => {
+  public setValue = (value: string) => {
     this.setState({ value })
-    if (value === '') this.setState({ routes: [] })
+    if (value === '') {
+      this.setState({ routes: [] })
+    }
   }
 
-  fetchResults = (value: string) => {
+  public fetchResults = (value: string) => {
     if (value !== '') {
       fetchRouteDB(value)
         .then((response: ResponseDB) => {
@@ -73,15 +81,17 @@ export default class RoutesFromDB extends Component<Props, State> {
         .catch(() =>
           this.setState({ message: 'There was a problem fetching the route.' })
         )
-    } else this.setState({ routes: [] })
+    } else {
+      this.setState({ routes: [] })
+    }
   }
 
-  handleClick = (route: RouteType) => {
+  public handleClick = (route: RouteType) => {
     const { handleClickRoute, setState } = this.props
     handleClickRoute(setState, route, '')
   }
 
-  render() {
+  public render() {
     const { value, routes, message, addedRouteIds } = this.state
     const { handleDeleteRoute } = this.props
 
@@ -118,7 +128,7 @@ export default class RoutesFromDB extends Component<Props, State> {
                   key={route.id}
                   route={route}
                   addRoute={!added ? this.handleClick : undefined}
-                  deleteRoute={added ?handleDeleteRoute : undefined}
+                  deleteRoute={added ? handleDeleteRoute : undefined}
                   buttonText={added ? 'Remove' : 'Add'}
                   buttonColor={added ? 'red' : 'green'}
                 />

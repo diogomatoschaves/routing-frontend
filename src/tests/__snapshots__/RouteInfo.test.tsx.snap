@@ -2,7 +2,7 @@
 
 exports[`expect to render ProfileToggler component 1`] = `
 <div
-  className="ui segment sc-ifAKCX jBBTbo"
+  className="ui segment sc-ifAKCX fFNmUo"
   position="absolute"
   right="1px"
   top="1px"
@@ -14,14 +14,14 @@ exports[`expect to render ProfileToggler component 1`] = `
     direction="column"
   >
     <div
-      className="ui header sc-gZMcBi fusogA"
+      className="ui header sc-gqjmRU eAnDBN"
       nomarginbottom={1}
       overridecolor="#000000"
     >
       Routing Service
     </div>
     <div
-      className="ui small header sc-gZMcBi fHxiEz"
+      className="ui small header sc-gqjmRU jlzsIH"
       overridecolor="#000000"
     >
       With Traffic
@@ -37,23 +37,26 @@ exports[`expect to render ProfileToggler component 1`] = `
         width="40%"
       >
         <div
-          className="sc-bwzfXH hynejD"
-          color="#e1e1e1"
+          className="sc-gZMcBi gyuikZ"
         >
           <div
-            className="sc-bdVaJa dbHwHO"
-            height="100%"
+            className="sc-bwzfXH jkexbh"
+            color="#e1e1e1"
           >
-            <i
-              aria-hidden="true"
-              className="time icon sc-htpNat jxrwEL"
-              fontSize="25px"
-              height="20px"
-              onClick={[Function]}
-              overridecolor="#000000"
-              padding="0 0 0 0"
-              position="absolute"
-            />
+            <div
+              className="sc-bdVaJa cCYAHW"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="time icon sc-htpNat kOxnLf"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#000000"
+                position="absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -63,7 +66,7 @@ exports[`expect to render ProfileToggler component 1`] = `
         width="60%"
       >
         <div
-          className="ui tiny statistic sc-gqjmRU kXpaqh"
+          className="ui tiny statistic sc-VigVT gGdolP"
           overridecolor="#000000"
           style={
             Object {
@@ -95,23 +98,26 @@ exports[`expect to render ProfileToggler component 1`] = `
         width="40%"
       >
         <div
-          className="sc-bwzfXH hynejD"
-          color="#e1e1e1"
+          className="sc-gZMcBi gyuikZ"
         >
           <div
-            className="sc-bdVaJa dbHwHO"
-            height="100%"
+            className="sc-bwzfXH jkexbh"
+            color="#e1e1e1"
           >
-            <i
-              aria-hidden="true"
-              className="road icon sc-htpNat jxrwEL"
-              fontSize="25px"
-              height="20px"
-              onClick={[Function]}
-              overridecolor="#000000"
-              padding="0 0 0 0"
-              position="absolute"
-            />
+            <div
+              className="sc-bdVaJa cCYAHW"
+              height="100%"
+            >
+              <i
+                aria-hidden="true"
+                className="road icon sc-htpNat kOxnLf"
+                fontSize="25px"
+                height="20px"
+                onClick={[Function]}
+                overridecolor="#000000"
+                position="absolute"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -121,7 +127,7 @@ exports[`expect to render ProfileToggler component 1`] = `
         width="60%"
       >
         <div
-          className="ui tiny statistic sc-gqjmRU kXpaqh"
+          className="ui tiny statistic sc-VigVT gGdolP"
           overridecolor="#000000"
           style={
             Object {

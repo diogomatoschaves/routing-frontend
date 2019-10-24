@@ -1,15 +1,15 @@
 import React from 'react'
+import { Form, TextArea } from 'semantic-ui-react'
 import styled from 'styled-components'
+import { HandleValueUpdate, InputValues, UpdateState } from '../types'
 import { PETROL_3 } from '../utils/colours'
-import { HandleValueUpdate, UpdateState, InputValues, InputColors } from '../types'
-import { TextArea, Form } from 'semantic-ui-react'
 
 interface Props {
   id: string
   handleValueUpdate?: HandleValueUpdate
   handleInputChange?: UpdateState
   rows: number
-  color?: string,
+  color?: string
   editableValue: string
   placeholder?: string
   setInputRef?: (ref: any) => void
@@ -28,7 +28,8 @@ const StyledForm = styled(Form)`
     background-color: rgb(250, 250, 250);
     user-select: text;
     z-index: 1000;
-    font-family: "BasisGrotesque Light", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif !important;
+    font-family: 'BasisGrotesque Light', Lato, 'Helvetica Neue', Arial, Helvetica,
+      sans-serif !important;
 
     &:focus {
       background-color: rgb(248, 248, 248);
@@ -51,7 +52,7 @@ const StyledForm = styled(Form)`
   }
 `
 
-export default function TextAreaInput ({
+export default function TextAreaInput({
   id,
   handleValueUpdate,
   handleInputChange,
@@ -60,9 +61,8 @@ export default function TextAreaInput ({
   editableValue,
   placeholder,
   setInputRef,
-  inputValues,
+  inputValues
 }: Props) {
-
   return (
     <StyledForm color={color} focuscolor={PETROL_3}>
       <TextArea
@@ -72,12 +72,17 @@ export default function TextAreaInput ({
         placeholder={placeholder ? placeholder : ''}
         rows={rows}
         value={editableValue}
-        onChange={(e, { id, value }) => handleInputChange && handleInputChange('inputValues', {
-          ...inputValues,
-          [id]: value
-        })}
+        onChange={(e, { id: newId, value }) =>
+          handleInputChange &&
+          handleInputChange('inputValues', {
+            ...inputValues,
+            [newId]: value
+          })
+        }
         onFocus={(e: any) => !handleInputChange && e.target.select()}
-        onBlur={() => handleValueUpdate && handleValueUpdate({ id, value: editableValue })}
+        onBlur={() =>
+          handleValueUpdate && handleValueUpdate({ id, value: editableValue })
+        }
       />
     </StyledForm>
   )

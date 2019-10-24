@@ -7,20 +7,18 @@ export const Schema = {
 } as any
 
 export const ReturnCode = {
-	"id": "/ReturnCode",
-  "description": "aed",
-  "type": "string",
-  "enum": [
-    "Ok",
-    "RequestViolatesConstraints",
-    "SnappingFailed",
-    "NoRoute",
-    "NoMatch",
-    "NoMatrix",
-    "NoTile",
-    "NoNearest",
-    "GeneralError"
+  id: '/ReturnCode',
+  description: 'aed',
+  type: 'string',
+  enum: [
+    'Ok',
+    'RequestViolatesConstraints',
+    'SnappingFailed',
+    'NoRoute',
+    'NoMatch',
+    'NoMatrix',
+    'NoTile',
+    'NoNearest',
+    'GeneralError'
   ]
 }
-
-

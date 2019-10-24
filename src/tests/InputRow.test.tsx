@@ -1,32 +1,31 @@
 import React from 'react'
+import { MemoryRouter } from 'react-router-dom'
 import TestRenderer from 'react-test-renderer'
 import InputRow from '../components/InputRow'
-import { MemoryRouter } from 'react-router-dom'
 
 const urlMatchString = '/:profile/:start/:end'
 
 it('expect to render Panel component', () => {
-
-  const item = { 
-    name: 'start', 
-    marker: 'map marker alternate',
-    placeholder: 'Origin',
+  const item = {
     lat: null,
-    lng: null
+    lng: null,
+    marker: 'map marker alternate',
+    name: 'start',
+    placeholder: 'Origin'
   }
 
   const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
+    <MemoryRouter initialEntries={['/']}>
       <InputRow
         rowKey={item.name}
         index={0}
-        coords={{lat: 52, lng: 12}}
+        coords={{ lat: 52, lng: 12 }}
         placeholder={item.placeholder}
-        iconName={item.marker} 
+        iconName={item.marker}
         updatePoint={jest.fn()}
         urlMatchString={urlMatchString}
       />
     </MemoryRouter>
   )
   expect(testInstance.toJSON()).toMatchSnapshot()
-}) 
+})
