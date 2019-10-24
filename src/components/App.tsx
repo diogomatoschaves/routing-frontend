@@ -1,51 +1,37 @@
-import React, { Component, Fragment } from 'react'
-import styled, { css } from 'styled-components'
-import { generatePath } from 'react-router-dom'
-import { Menu, Segment, Sidebar, Button, Icon, Transition } from 'semantic-ui-react'
-import Map from './Map'
-import Panel from './Panel'
-import RouteInfo from './RouteInfo'
-import TrafficLegend from './TrafficLegend'
-import InspectPanel from './InspectPanel'
-import Message from './Message'
-import '../App.css'
+import { Base64 } from 'js-base64'
+import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
+import React, { Component, Fragment } from 'react'
+import { generatePath } from 'react-router-dom'
+import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
+import styled, { css } from 'styled-components'
+import { googleDirections, routingApi } from '../apiCalls'
+import Map from './Map'
+import '../App.css'
+import { Box, EmptySpace } from '../styledComponents'
 import {
-  UpdatePoint,
-  UpdateState,
-  Location,
-  Route,
-  Routes,
   Body,
-  OptionsHandler,
-  MatchResponse,
   Coords,
-  HandleValueUpdate,
+  GeographiesHandler,
+  GoogleResponse,
   HandleConfirmButton,
   HandleDeleteRoute,
-  GoogleResponse,
-  RouteResponse,
-  GeographiesHandler,
-  Messages,
-  Responses,
-  ResponseOptionsHandler,
+  HandleValueUpdate,
   InputColors,
-  InputValues
+  InputValues,
+  Location,
+  Messages,
+  OptionsHandler,
+  ResponseOptionsHandler,
+  Responses,
+  Route,
+  RouteResponse,
+  Routes,
+  UpdatePoint,
+  UpdateState
 } from '../types'
 import {
-  splitCoords,
-  getRequestBody,
-  formatCoords,
-  validateJSON,
-  processValidResponse,
-  getAppState,
-  getAppProps,
-  processValidBody,
-  capitalize
-} from '../utils/functions'
-import { Base64 } from 'js-base64'
-import { routingApi, googleDirections } from '../apiCalls'
-import {
+  PETROL_6,
   POLYLINE_COLOR,
   ROUTING_SERVICE,
   ROUTING_SERVICE_STATS,
@@ -54,19 +40,36 @@ import {
   THIRD_PARTY_STATS,
   TRAFFIC_COLOR,
   TRAFFIC_POLYLINE,
-  TRAFFIC_STATS,
-  PETROL_6,
+  TRAFFIC_STATS
 } from '../utils/colours'
-import { EmptySpace, Box } from '../styledComponents'
-import JSON5 from 'json5'
-import { Schema } from '../utils/schemas/index'
-import { defaultRoute, defaultRouteResponse, defaultGoogleResponse } from '../utils/input';
-import { routeConverterFromRouteService, routeConverterFromGoogle, routeConverterFromMatchService } from '../utils/routeAdapter';
+import {
+  capitalize,
+  formatCoords,
+  getAppProps,
+  getAppState,
+  getRequestBody,
+  processValidBody,
+  processValidResponse,
+  splitCoords,
+  validateJSON
+} from '../utils/functions'
+import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
+import {
+  routeConverterFromGoogle,
+  routeConverterFromMatchService,
+  routeConverterFromRouteService
+} from '../utils/routeAdapter'
+import { Schema } from '../utils/schemas'
+import InspectPanel from './InspectPanel'
+import Message from './Message'
+import Panel from './Panel'
+import RouteInfo from './RouteInfo'
+import TrafficLegend from './TrafficLegend'
 
 interface State {
   validator?: Validator
   recalculate: boolean
-  locations: Array<Location>
+  locations: Location[]
   authorization: string
   responses: Responses
   routes: Routes
@@ -92,8 +95,8 @@ interface State {
   expanded: boolean
   debug: boolean
   responseEdit: boolean
-  bodyEdit: boolean,
-  addedRoutes: Array<Route>
+  bodyEdit: boolean
+  addedRoutes: Route[]
   inputValues: InputValues
   inputColors: InputColors
   routeHighlight: string
@@ -125,7 +128,6 @@ const StyledDiv = styled(Box)`
 ` as any
 
 const StyledEmptyDiv = styled(EmptySpace)`
-  /* transition: all 0.5s linear; */
   ${props =>
     props.minwidth &&
     css`
@@ -141,22 +143,24 @@ const StyledEmptyDiv = styled(EmptySpace)`
 const StyledButton = styled(Button)`
   &.ui.icon.button {
     padding: ${props => props.padding};
-    border-radius: 5px;
     display: flex;
     flex-direction: row;
     align-items: center;
     transition: all 0.3s ease;
     background-color: ${PETROL_6};
     color: white;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+    border-radius: 0 5px 5px 0;
   }
 `
 
 const StyledBox = styled(Box)`
   transition: bottom 1s ease;
   position: fixed;
-  ${(props: any) => props.bottom && css`bottom: ${props.bottom}px;`}
+  ${(props: any) =>
+    props.bottom &&
+    css`
+      bottom: ${props.bottom}px;
+    `}
 `
 
 declare global {
@@ -183,14 +187,14 @@ function hasKey<O>(obj: O, key: keyof any): key is keyof O {
 }
 
 class App extends Component<any, State> {
-  static defaultProps = getAppProps()
+  public static defaultProps = getAppProps()
 
-  messageTimeout: any
+  public messageTimeout: any
 
-  state = getAppState()
+  public state = getAppState()
 
-  getProfileLocations = (
-    locations: Array<Location>,
+  public getProfileLocations = (
+    locations: Location[],
     params: any,
     requiredParams: any
   ) => {
@@ -203,7 +207,7 @@ class App extends Component<any, State> {
     }
   }
 
-  async componentDidMount() {
+  public async componentDidMount() {
     const { windowProp, history, match, loadedProp } = this.props
     const { validator, responses, body, locations, endpointHandler } = this.state
     const { requiredParams, acceptableProfiles } = this.props.urlParams
@@ -238,12 +242,12 @@ class App extends Component<any, State> {
 
     this.setState(state => ({
       ...state,
-      validator,
       inputValues: {
         ...state.inputValues,
         body: JSON.stringify(body, null, 2),
         response: JSON.stringify(responses.routeResponse, null, 2)
-      }
+      },
+      validator
     }))
 
     const params = Object.keys(match.params)
@@ -251,7 +255,6 @@ class App extends Component<any, State> {
     if (
       params.length === 3 &&
       params.every((el: string) => {
-
         return (
           ([requiredParams.start, requiredParams.end].includes(el) &&
             Boolean(splitCoords(match.params[el]))) ||
@@ -285,7 +288,7 @@ class App extends Component<any, State> {
     }
   }
 
-  componentDidUpdate(prevProps: any, prevState: State) {
+  public componentDidUpdate(prevProps: any, prevState: State) {
     const {
       locations,
       authorization,
@@ -355,13 +358,16 @@ class App extends Component<any, State> {
           urlLocations,
           urlProfile,
           authorization,
-          googleMapsOption && prevState.endpointHandler.activeIdx === endpointHandler.activeIdx,
+          googleMapsOption &&
+            prevState.endpointHandler.activeIdx === endpointHandler.activeIdx,
           google,
           trafficOption,
           true,
           endpointHandler.options[endpointHandler.activeIdx].text
         )
-      } else this.updateState('recalculate', true)
+      } else {
+        this.updateState('recalculate', true)
+      }
     }
 
     if (prevState.visible !== visible && visible) {
@@ -376,29 +382,27 @@ class App extends Component<any, State> {
       })
     }
 
-    if (
-      prevState.body !== body || 
-      (prevState.bodyEdit !== bodyEdit && !bodyEdit)
-    ) {
+    if (prevState.body !== body || (prevState.bodyEdit !== bodyEdit && !bodyEdit)) {
       this.setState(state => ({
         ...state,
-        inputValues: {
-          ...state.inputValues,
-          body: JSON.stringify(body, null, 2)
-        },
         inputColors: {
           ...state.inputColors,
           body: defaultColor
+        },
+        inputValues: {
+          ...state.inputValues,
+          body: JSON.stringify(body, null, 2)
         }
       }))
     }
 
-    if (
-      (prevState.responseEdit !== responseEdit)
-    ) {
-      const responseOption = responseOptionsHandler.options[responseOptionsHandler.activeIdx]
+    if (prevState.responseEdit !== responseEdit) {
+      const responseOption =
+        responseOptionsHandler.options[responseOptionsHandler.activeIdx]
       const responseKey = responseOption.key
-      const response = hasKey(responses, responseKey) ? responses[responseKey] : responses.routeResponse
+      const response = hasKey(responses, responseKey)
+        ? responses[responseKey]
+        : responses.routeResponse
 
       this.setState(state => ({
         ...state,
@@ -457,44 +461,56 @@ class App extends Component<any, State> {
     if (prevState.showMessage !== showMessage && showMessage) {
       this.setState({ messageBottomProp: 40, showMessage: false })
 
-      if (this.messageTimeout) clearTimeout(this.messageTimeout)
+      if (this.messageTimeout) {
+        clearTimeout(this.messageTimeout)
+      }
       this.messageTimeout = setTimeout(() => {
-        this.setState({ 
-          messageBottomProp: -300,
-        }, () => {
-          if (this.messageTimeout) clearTimeout(this.messageTimeout)
-          this.messageTimeout = setTimeout(() => {
-            this.setState({ 
-              messages: {
-                routeMessage: null,
-                trafficMessage: null,
-                googleMessage: null
-              }
-            })
-          }, 1000)
-        })
+        this.setState(
+          {
+            messageBottomProp: -300
+          },
+          () => {
+            if (this.messageTimeout) {
+              clearTimeout(this.messageTimeout)
+            }
+            this.messageTimeout = setTimeout(() => {
+              this.setState({
+                messages: {
+                  googleMessage: null,
+                  routeMessage: null,
+                  trafficMessage: null
+                }
+              })
+            }, 1000)
+          }
+        )
       }, 4200)
     }
   }
 
-  waitTillLoaded = (loadedProp: boolean) => {
-    if (loadedProp) return Promise.resolve(loadedProp)
+  public waitTillLoaded = (loadedProp: boolean) => {
+    if (loadedProp) {
+      return Promise.resolve(loadedProp)
+    }
 
     return new Promise(resolve => {
       const timeoutCallback = () => {
         i++
         const { mapLoaded } = this.state
 
-        if (mapLoaded) resolve(mapLoaded)
-        else setTimeout(timeoutCallback, i * 300)
+        if (mapLoaded) {
+          resolve(mapLoaded)
+        } else {
+          setTimeout(timeoutCallback, i * 300)
+        }
       }
       let i = 0
       setTimeout(timeoutCallback, i * 300)
     })
   }
 
-  getRoute = (
-    locations: Array<Location>,
+  public getRoute = (
+    locations: Location[],
     profile: string,
     authorization: string,
     googleMapsOption: boolean,
@@ -513,26 +529,30 @@ class App extends Component<any, State> {
       if (googleMapsOption && google) {
         googleDirections(google, profile, locations)
           .then((googleResponse: GoogleResponse) => {
-            this.setState(state => ({ 
-              responses: {
-                ...state.responses,
-                googleResponse
-              },
+            this.setState(state => ({
               messages: {
                 ...state.messages,
                 googleMessage: null
-              }  
+              },
+              responses: {
+                ...state.responses,
+                googleResponse
+              }
             }))
           })
           .catch(() => {
             this.setState(state => ({
+              messages: {
+                ...state.messages,
+                googleMessage: (
+                  <span style={{ color: 'red' }}>
+                    There was an error fetching a route from google.
+                  </span>
+                )
+              },
               responses: {
                 ...state.responses,
                 googleResponse: defaultGoogleResponse
-              },
-              messages: {
-                ...state.messages,
-                googleMessage: <span style={{ color: 'red' }}>There was an error fetching a route from google.</span>
               },
               showMessage: true
             }))
@@ -545,47 +565,48 @@ class App extends Component<any, State> {
     }
   }
 
-  handleResponse = (
-    profile: string, 
-    authorization: string, 
-    body: Body, 
-    endpointUrl: string, 
+  public handleResponse = (
+    profile: string,
+    authorization: string,
+    body: Body,
+    endpointUrl: string,
     routeName: string
   ) => {
-
     const response = `${routeName}Response`
     const message = `${routeName}Message`
 
     routingApi(profile, authorization, body, endpointUrl)
-    .then((routeResponse: RouteResponse) => {
-      this.setState(state => ({ 
-        responses: {
-          ...state.responses,
-          [response]: routeResponse
-        }, 
-        body, 
-        messages: {
-          ...state.messages,
-          [message]: null
-        } 
-      }))
-    })
-    .catch(() =>
-      this.setState(state => ({
-        responses: {
-          ...state.responses,
-          [response]: defaultRouteResponse
-        },
-        messages: {
-          ...state.messages,
-          [message]: <span style={{ color: 'red' }}>There was an error fetching the route.</span>
-        },
-        showMessage: true
-      }))
-    )
+      .then((routeResponse: RouteResponse) => {
+        this.setState(state => ({
+          body,
+          messages: {
+            ...state.messages,
+            [message]: null
+          },
+          responses: {
+            ...state.responses,
+            [response]: routeResponse
+          }
+        }))
+      })
+      .catch(() =>
+        this.setState(state => ({
+          messages: {
+            ...state.messages,
+            [message]: (
+              <span style={{ color: 'red' }}>There was an error fetching the route.</span>
+            )
+          },
+          responses: {
+            ...state.responses,
+            [response]: defaultRouteResponse
+          },
+          showMessage: true
+        }))
+      )
   }
 
-  addGoogleObject = (windowProp: boolean) => {
+  public addGoogleObject = (windowProp: boolean) => {
     if (!windowProp && !window.google) {
       const script = document.createElement('script')
       script.type = 'text/javascript'
@@ -595,7 +616,7 @@ class App extends Component<any, State> {
       const head = document.getElementsByTagName('head')[0]
       head.appendChild(script)
 
-      script.addEventListener('load', e => {
+      script.addEventListener('load', () => {
         this.setState({ google: window.google })
       })
     } else {
@@ -604,11 +625,11 @@ class App extends Component<any, State> {
   }
 
   // TODO: Update app state based on changes
-  updatePoint: UpdatePoint = (indexes: number[], coords: Array<Coords>) => {
+  public updatePoint: UpdatePoint = (indexes: number[], coords: Coords[]) => {
     this.setState(state => {
       return {
         locations: state.locations.reduce(
-          (accum: Array<Location>, element: Location, currentIndex: number) => {
+          (accum: Location[], element: Location, currentIndex: number) => {
             if (!indexes.includes(currentIndex)) {
               return [...accum, element]
             } else {
@@ -629,10 +650,10 @@ class App extends Component<any, State> {
     })
   }
 
-  updateRoute = (response: RouteResponse, key: string, routeName: string) => {
-    if (Object.keys(response).includes('code') && response.code == 'Ok') {
+  public updateRoute = (response: RouteResponse, key: string, routeName: string) => {
+    if (Object.keys(response).includes('code') && response.code === 'Ok') {
       const trafficRoute = routeConverterFromRouteService(response, key)
-      this.setState(state => ({ 
+      this.setState(state => ({
         ...state,
         routes: {
           ...state.routes,
@@ -641,73 +662,84 @@ class App extends Component<any, State> {
       }))
     } else {
       const traffic = routeName.includes('traffic')
-      this.setState(state => ({ 
+      this.setState(state => ({
         ...state,
-        routes: {
-          ...state.routes,
-          [routeName]: defaultRoute,
-        },
         messages: {
           ...state.messages,
-          [traffic ? 'trafficMessage' : 'routeMessage']: 
+          [traffic ? 'trafficMessage' : 'routeMessage']: (
             <span>
-              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR}}>Routing Service{traffic ? ' - traffic' : ''}:</span>
+              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+                Routing Service{traffic ? ' - traffic' : ''}:
+              </span>
               <span> {response.code}. </span>
-              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR}}>{response.message}</span>
+              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+                {response.message}
+              </span>
             </span>
+          )
+        },
+        routes: {
+          ...state.routes,
+          [routeName]: defaultRoute
         },
         showMessage: true
       }))
     }
   }
 
-  updateGoogleRoute = (googleResponse: GoogleResponse) => {
+  public updateGoogleRoute = (googleResponse: GoogleResponse) => {
     if (googleResponse.status === 'OK') {
       const googleRoute = routeConverterFromGoogle(googleResponse)
-      this.setState(state => ({ 
+      this.setState(state => ({
         ...state,
         routes: {
           ...state.routes,
-          googleRoute,
-        },
-      })) 
+          googleRoute
+        }
+      }))
     } else {
-      this.setState(state => ({ 
+      this.setState(state => ({
         ...state,
-        routes: {
-          ...state.routes,
-          googleRoute: defaultRoute,
-        },
         messages: {
           ...state.messages,
-          googleMessage: 
+          googleMessage: (
             <span>
-              <span style={{ color: THIRD_PARTY_POLYLINE}}>Google: </span>
-              <span>{googleResponse.status}.</span> 
-              <span style={{ color: THIRD_PARTY_POLYLINE}}> Failed to provide a route.</span>
+              <span style={{ color: THIRD_PARTY_POLYLINE }}>Google: </span>
+              <span>{googleResponse.status}.</span>
+              <span style={{ color: THIRD_PARTY_POLYLINE }}>
+                {' '}
+                Failed to provide a route.
+              </span>
             </span>
+          )
+        },
+        routes: {
+          ...state.routes,
+          googleRoute: defaultRoute
         },
         showMessage: true
-      })) 
+      }))
     }
   }
 
-  updateState: UpdateState = (stateKey: string, value: any) => {
+  public updateState: UpdateState = (stateKey: string, value: any) => {
     this.setState(
       prevState => ({
         ...prevState,
         [stateKey]: value
       }),
-      () => { return Promise.resolve(true) }
+      () => Promise.resolve(true)
     )
   }
 
-  handleValueUpdate: HandleValueUpdate = ({ id, value }) => {
+  public handleValueUpdate: HandleValueUpdate = ({ id, value }) => {
     const { validator, addDataTabsHandler } = this.state
     const { defaultColor } = this.props
 
     const body = id === 'body'
-    const service = body ? 'Route' : capitalize(addDataTabsHandler.options[addDataTabsHandler.activeIdx].key)
+    const service = body
+      ? 'Route'
+      : capitalize(addDataTabsHandler.options[addDataTabsHandler.activeIdx].key)
 
     return validateJSON(
       value,
@@ -716,18 +748,23 @@ class App extends Component<any, State> {
       body ? 'Body' : 'Response',
       id,
       defaultColor,
-      this.updateStateCallback,
+      this.updateStateCallback
     )
   }
 
-  handleAddRoute: HandleConfirmButton = (setState, value, id)=> {
+  public handleAddRoute: HandleConfirmButton = (setState, value, id) => {
     if (this.handleValueUpdate({ id, value })) {
       const { addedRoutes, addDataTabsHandler } = this.state
 
-      const service = capitalize(addDataTabsHandler.options[addDataTabsHandler.activeIdx].key)
+      const service = capitalize(
+        addDataTabsHandler.options[addDataTabsHandler.activeIdx].key
+      )
 
       const parsedValue = JSON5.parse(value)
-      const route = service === 'Match' ? routeConverterFromMatchService(parsedValue) : routeConverterFromRouteService(parsedValue)
+      const route =
+        service === 'Match'
+          ? routeConverterFromMatchService(parsedValue)
+          : routeConverterFromRouteService(parsedValue)
       processValidResponse(this.updateState, route, addedRoutes)
       setState(false)
       this.setState(state => ({
@@ -740,7 +777,7 @@ class App extends Component<any, State> {
     }
   }
 
-  handleChangeBody: HandleConfirmButton = (setState, value, id) => {
+  public handleChangeBody: HandleConfirmButton = (setState, value) => {
     if (this.handleValueUpdate({ id: 'body', value })) {
       const { locations } = this.state
       const parsedValue = JSON5.parse(value)
@@ -749,29 +786,29 @@ class App extends Component<any, State> {
     }
   }
 
-  handleAddRouteFromDB: HandleConfirmButton = (setState, route) => {
+  public handleAddRouteFromDB: HandleConfirmButton = (setState, route) => {
     const { addedRoutes } = this.state
     processValidResponse(this.updateState, route, addedRoutes)
   }
 
-  handleCloseModal: HandleConfirmButton = (setState, value) => {
+  public handleCloseModal: HandleConfirmButton = setState => {
     setState(false)
   }
 
-  updateStateCallback = (callback: any) => {
+  public updateStateCallback = (callback: any) => {
     this.setState(callback)
   }
 
-  handleDeleteRoute: HandleDeleteRoute = (id: string) => {
+  public handleDeleteRoute: HandleDeleteRoute = (id: string) => {
     this.setState(prevState => ({
       ...prevState,
       addedRoutes: prevState.addedRoutes.filter(route => route.id !== id)
     }))
   }
 
-  handleShowClick = () => this.setState({ visible: true })
-  handleSidebarHide = () => this.setState({ visible: false })
-  handleHideClick = (e: any) => {
+  public handleShowClick = () => this.setState({ visible: true })
+  public handleSidebarHide = () => this.setState({ visible: false })
+  public handleHideClick = (e: any) => {
     e.stopPropagation()
     this.setState({ visible: false })
   }
@@ -812,7 +849,8 @@ class App extends Component<any, State> {
 
     const { routeMessage, trafficMessage, googleMessage } = messages
 
-    const responseOption = responseOptionsHandler.options[responseOptionsHandler.activeIdx]
+    const responseOption =
+      responseOptionsHandler.options[responseOptionsHandler.activeIdx]
     const responseKey = responseOption.key
 
     const showTraffic =
@@ -837,9 +875,9 @@ class App extends Component<any, State> {
               onClick={
                 visible ? (e: any) => this.handleHideClick(e) : this.handleShowClick
               }
-              onMouseEnter={(e: any) => this.setState({ expanded: true })}
-              onMouseLeave={(e: any) => this.setState({ expanded: false })}
-              icon
+              onMouseEnter={() => this.setState({ expanded: true })}
+              onMouseLeave={() => this.setState({ expanded: false })}
+              icon={true}
               className={'options-button'}
             >
               <Icon
@@ -853,7 +891,7 @@ class App extends Component<any, State> {
             as={Menu}
             animation="overlay"
             icon="labeled"
-            vertical
+            vertical={true}
             visible={visible}
             width="very wide"
           >
@@ -861,7 +899,9 @@ class App extends Component<any, State> {
               handleHideClick={this.handleHideClick}
               response={
                 serviceOptions[selectedService].key === 'Route'
-                  ? hasKey(responses, responseKey) ? responses[responseKey] : responses.routeResponse
+                  ? hasKey(responses, responseKey)
+                    ? responses[responseKey]
+                    : responses.routeResponse
                   : responses.matchResponse
               }
               responseOptionsHandler={responseOptionsHandler}
@@ -975,9 +1015,9 @@ class App extends Component<any, State> {
         </Sidebar.Pushable>
         {(routeMessage || googleMessage || trafficMessage) && (
           <StyledBox align="center" bottom={messageBottomProp}>
-            {routeMessage && <Message message={routeMessage}/>}
-            {trafficMessage && <Message message={trafficMessage}/>}
-            {googleMessage && <Message message={googleMessage}/>}
+            {routeMessage && <Message message={routeMessage} />}
+            {trafficMessage && <Message message={trafficMessage} />}
+            {googleMessage && <Message message={googleMessage} />}
           </StyledBox>
         )}
       </AppWrapper>

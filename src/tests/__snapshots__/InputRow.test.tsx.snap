@@ -6,23 +6,26 @@ exports[`expect to render Panel component 1`] = `
   direction="row"
 >
   <div
-    className="sc-bwzfXH jWeZli"
-    color="#007a93"
+    className="sc-gZMcBi fWaAxO"
   >
     <div
-      className="sc-bdVaJa lajepV"
-      height="100%"
+      className="sc-bwzfXH fNQCHt"
+      color="#007a93"
     >
-      <i
-        aria-hidden="true"
-        className="map marker alternate icon sc-htpNat iIqnlv"
-        fontSize="25px"
-        height="20px"
-        onClick={[Function]}
-        overridecolor="white"
-        padding="0 0 0 0"
-        position="absolute"
-      />
+      <div
+        className="sc-bdVaJa cCYAHW"
+        height="100%"
+      >
+        <i
+          aria-hidden="true"
+          className="map marker alternate icon sc-htpNat fQDcBg"
+          fontSize="25px"
+          height="20px"
+          onClick={[Function]}
+          overridecolor="white"
+          position="absolute"
+        />
+      </div>
     </div>
   </div>
   <div

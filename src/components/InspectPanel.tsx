@@ -1,28 +1,28 @@
 import React, { Fragment } from 'react'
-import ProfileToggler from './ProfileToggler'
-import JsonBlock from './JsonBlock'
-import RoutesList from './RoutesList'
-import { Box, StyledDropdown, StyledHeader, StyledDivider } from '../styledComponents'
+import { Box, StyledDivider, StyledHeader } from '../styledComponents'
 import {
-  RouteResponse,
   Body,
-  UpdateState,
-  UpdatePoint,
-  Location,
-  MatchResponse,
-  OptionsHandler,
-  HandleValueUpdate,
-  Route,
+  GoogleResponse,
   HandleConfirmButton,
   HandleDeleteRoute,
-  Option,
-  GoogleResponse,
+  HandleValueUpdate,
+  InputColors,
   InputValues,
-  InputColors
+  Location,
+  MatchResponse,
+  Option,
+  OptionsHandler,
+  Route,
+  RouteResponse,
+  UpdatePoint,
+  UpdateState
 } from '../types'
 import { MAIN_PETROL } from '../utils/colours'
 import EndpointRow from './EndpointRow'
-import Tabs from './Tabs';
+import JsonBlock from './JsonBlock'
+import ProfileToggler from './ProfileToggler'
+import RoutesList from './RoutesList'
+import Tabs from './Tabs'
 
 interface Props {
   handleHideClick: (e: any) => void
@@ -34,7 +34,7 @@ interface Props {
   updateState: UpdateState
   updatePoint: UpdatePoint
   handleValueUpdate: HandleValueUpdate
-  locations: Array<Location>
+  locations: Location[]
   selectedService: number
   serviceOptions: any
   bodyEdit: boolean
@@ -42,14 +42,14 @@ interface Props {
   debug: boolean
   inputValues: InputValues
   inputColors: InputColors
-  addedRoutes: Array<Route>
-	handleAddRoute: HandleConfirmButton
-	handleClickRoute: HandleConfirmButton
-	handleDeleteRoute: HandleDeleteRoute
-	handleChangeBody: HandleConfirmButton
-	handleCloseModal: HandleConfirmButton
-	addDataTabsHandler: OptionsHandler
-	modeTabsHandler: OptionsHandler
+  addedRoutes: Route[]
+  handleAddRoute: HandleConfirmButton
+  handleClickRoute: HandleConfirmButton
+  handleDeleteRoute: HandleDeleteRoute
+  handleChangeBody: HandleConfirmButton
+  handleCloseModal: HandleConfirmButton
+  addDataTabsHandler: OptionsHandler
+  modeTabsHandler: OptionsHandler
 }
 
 export default function InspectPanel(props: Props) {
@@ -89,9 +89,9 @@ export default function InspectPanel(props: Props) {
           justify="center"
         />
       </Box>
-      <StyledDivider width="90%"/>
+      <StyledDivider width="90%" />
       {debug ? (
-        <RoutesList 
+        <RoutesList
           addedRoutes={addedRoutes}
           inputValues={inputValues}
           inputColors={inputColors}
@@ -104,7 +104,12 @@ export default function InspectPanel(props: Props) {
         />
       ) : (
         <Fragment>
-          <Box padding="10px 10px 0 40px" height={'70px'} direction="row" justify="flex-start">
+          <Box
+            padding="10px 10px 0 40px"
+            height={'70px'}
+            direction="row"
+            justify="flex-start"
+          >
             <Box width="40%">
               {serviceOptions[selectedService].key === 'Route' && (
                 <ProfileToggler
@@ -158,7 +163,7 @@ export default function InspectPanel(props: Props) {
             />
           </Box>
         </Fragment>
-      )} 
+      )}
     </Box>
   )
 }

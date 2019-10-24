@@ -14,9 +14,5 @@ const StyledMessage = styled(StyledSegment)`
 `
 
 export default function Message({ message }: Props) {
-  return (
-    <StyledMessage padded>
-      {message}
-    </StyledMessage>
-  )
+  return <StyledMessage padded={true}>{message}</StyledMessage>
 }

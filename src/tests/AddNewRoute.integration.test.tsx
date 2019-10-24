@@ -1,21 +1,21 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
-import { mockCarResponse, mockMatchResponse } from '../apiCalls/__mocks__/mockResponse'
-import App from '../components/App'
-import Map from '../components/Map'
-import DebugPanel from '../components/DebugPanel'
-import TextAreaInput from '../components/TextAreaInput'
-import RoutesFromDB from '../components/RoutesFromDB'
-import Route from '../components/Route'
-import StyledInput from '../styledComponents/StyledInput'
-import { Tab } from '../components/Tabs'
-import { fetchRouteDB } from '../apiCalls'
 import { MemoryRouter, Route as RouteURL } from 'react-router-dom'
-import { getPath, formatCoords } from '../utils/functions'
+import TestRenderer from 'react-test-renderer'
+import { Button, TextArea } from 'semantic-ui-react'
+import { fetchRouteDB } from '../apiCalls'
+import { mockCarResponse, mockMatchResponse } from '../apiCalls/__mocks__/mockResponse'
 import AddDataInput from '../components/AddDataInput'
+import App from '../components/App'
+import DebugPanel from '../components/DebugPanel'
+import Map from '../components/Map'
+import Route from '../components/Route'
+import RoutesFromDB from '../components/RoutesFromDB'
+import { Tab } from '../components/Tabs'
+import TextAreaInput from '../components/TextAreaInput'
 import { StyledButton } from '../styledComponents'
-import { TextArea, Button } from 'semantic-ui-react'
-import { Coords2, MatchLeg } from '../types';
+import StyledInput from '../styledComponents/StyledInput'
+import { Coords2, MatchLeg } from '../types'
+import { formatCoords, getPath } from '../utils/functions'
 
 jest.mock('../apiCalls')
 
@@ -28,16 +28,16 @@ const delay = (ms: number) =>
 
 const urlMatchString = '/:profile/:start/:end'
 
-const getTestApp = (initialEntries: Array<string> = ['/'], loadedProp: boolean = false) =>
+const getTestApp = (initialEntries: string[] = ['/'], loadedProp: boolean = false) =>
   TestRenderer.create(
     <MemoryRouter initialEntries={initialEntries}>
       <RouteURL
         render={({ location }) => (
           <RouteURL
             path={getPath(location.pathname)}
-            render={({ location, history, match }) => (
+            render={({ location: newLocation, history, match }) => (
               <App
-                location={location}
+                location={newLocation}
                 history={history}
                 match={match}
                 urlMatchString={urlMatchString}
@@ -127,7 +127,7 @@ describe('Behaviour of textarea to add new routes from route response', () => {
         TextAreaComponent.props.onChange('', { id, value: invalidJson })
         TextAreaComponent.props.onBlur()
       })
-  
+
       it('updates the color of the textarea to red', done => {
         delay(500).then(() => {
           const { color } = TextAreaInputComponent.props
@@ -136,17 +136,17 @@ describe('Behaviour of textarea to add new routes from route response', () => {
         })
       })
     })
-  
+
     describe('Behaviour when confirm button is pressed', () => {
       beforeAll(() => {
         ConfirmButton.props.onClick()
       })
-  
+
       it('does not add a new route', () => {
         const { addedRoutes } = AppComponent.state
         expect(addedRoutes.length).toBe(0)
       })
-  
+
       it('does not plot a new polyline on the map', () => {
         const { addedRoutesIds } = MapComponent.state
         expect(addedRoutesIds.length).toBe(0)
@@ -226,18 +226,18 @@ describe('Behaviour of textarea to add new routes from route response', () => {
         TextAreaComponent.props.onBlur()
         ConfirmButton.props.onClick()
       })
-  
+
       it('adds a new route', () => {
         const { addedRoutes } = AppComponent.state
         expect(addedRoutes.length).toBe(2)
       })
-  
+
       it('plots a new polyline on the map and adds markers', () => {
         const { addedRoutesIds, addedRoutesMarkers } = MapComponent.state
         expect(addedRoutesIds.length).toBe(2)
         expect(addedRoutesMarkers.length).toBe(4)
       })
-  
+
       it('calls the addPolyline method of the Map Component', () => {
         const routePath = mockCarResponse.routes[0].legs[0].geometry
         expect(addPolylineSpy).toHaveBeenCalledTimes(2)
@@ -273,7 +273,6 @@ describe('Behaviour of textarea to add new routes from route response', () => {
 })
 
 describe('Behaviour of textarea to add new routes from match response', () => {
-
   const testInstance = getTestApp()
 
   const root = testInstance.root
@@ -384,10 +383,13 @@ describe('Behaviour of textarea to add new routes from match response', () => {
       })
 
       it('calls the addPolyline method of the Map Component', () => {
-        const routePath = mockMatchResponse.matchings[0].legs.reduce((
-          accum: Array<Coords2>,
-          leg: MatchLeg
-        ) => ([...accum, ...(leg.geometry ? leg.geometry : [])]), [])
+        const routePath = mockMatchResponse.matchings[0].legs.reduce(
+          (accum: Coords2[], leg: MatchLeg) => [
+            ...accum,
+            ...(leg.geometry ? leg.geometry : [])
+          ],
+          []
+        )
         expect(addPolylineSpy).toHaveBeenCalledTimes(1)
         expect(addPolylineSpy).toHaveBeenCalledWith(
           routePath,
@@ -423,10 +425,13 @@ describe('Behaviour of textarea to add new routes from match response', () => {
       })
 
       it('calls the addPolyline method of the Map Component', () => {
-        const routePath = mockMatchResponse.matchings[0].legs.reduce((
-          accum: Array<Coords2>,
-          leg: MatchLeg
-        ) => ([...accum, ...(leg.geometry ? leg.geometry : [])]), [])
+        const routePath = mockMatchResponse.matchings[0].legs.reduce(
+          (accum: Coords2[], leg: MatchLeg) => [
+            ...accum,
+            ...(leg.geometry ? leg.geometry : [])
+          ],
+          []
+        )
         expect(addPolylineSpy).toHaveBeenCalledTimes(2)
         expect(addPolylineSpy).toHaveBeenCalledWith(
           routePath,

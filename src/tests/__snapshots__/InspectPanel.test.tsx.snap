@@ -57,7 +57,7 @@ exports[`expect to render InspectPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle left large icon sc-gZMcBi Qfbta"
+            className="grey angle left large icon sc-kgoBCf fROEoW"
             onClick={[Function]}
           />
         </div>
@@ -66,7 +66,7 @@ exports[`expect to render InspectPanel component 1`] = `
           width="60%"
         >
           <div
-            className="ui large label sc-gqjmRU cYcDOp"
+            className="ui large label sc-kGXeez bnCwyW"
             onClick={[Function]}
           >
             No Traffic
@@ -79,7 +79,7 @@ exports[`expect to render InspectPanel component 1`] = `
         >
           <i
             aria-hidden="true"
-            className="grey angle right large icon sc-gZMcBi Qfbta"
+            className="grey angle right large icon sc-kgoBCf fROEoW"
             onClick={[Function]}
           />
         </div>
@@ -91,7 +91,7 @@ exports[`expect to render InspectPanel component 1`] = `
     width="80%"
   >
     <div
-      className="ui header sc-htoDjs iGaUEE"
+      className="ui header sc-htoDjs eoOxOA"
       overridecolor="#00677f"
     >
       Request Endpoint
@@ -102,7 +102,7 @@ exports[`expect to render InspectPanel component 1`] = `
     >
       <div
         aria-expanded={false}
-        className="ui fluid search selection dropdown sc-EHOje gIMGEB"
+        className="ui fluid search selection dropdown sc-EHOje bmMNag"
         onBlur={[Function]}
         onChange={[Function]}
         onClick={[Function]}
@@ -225,13 +225,13 @@ exports[`expect to render InspectPanel component 1`] = `
       direction="row"
     >
       <div
-        className="ui header sc-htoDjs iGaUEE"
+        className="ui header sc-htoDjs eoOxOA"
         overridecolor="#00677f"
       >
         Request Body
       </div>
       <button
-        className="ui button body-textarea sc-kGXeez fwkDyc"
+        className="ui button body-textarea sc-chPdSV bfyvDP"
         id="bodyEdit"
         marginleft="10px"
         onClick={[Function]}
@@ -245,10 +245,10 @@ exports[`expect to render InspectPanel component 1`] = `
       width="100%"
     >
       <div
-        className="sc-jTzLTM hKXGNz"
+        className="sc-jzJRlG kJvmHz"
       >
         <div
-          className="sc-VigVT kghjnk"
+          className="sc-fjdhpX cwkpjk"
           onClick={[Function]}
         >
           
@@ -259,10 +259,10 @@ exports[`expect to render InspectPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-jTzLTM hKXGNz"
+          className="sc-jzJRlG kJvmHz"
         >
           <div
-            className="sc-VigVT kghjnk"
+            className="sc-fjdhpX cwkpjk"
             onClick={[Function]}
           >
             locations
@@ -273,10 +273,10 @@ exports[`expect to render InspectPanel component 1`] = `
             />
           </div>
           <div
-            className="sc-jTzLTM hKXGNz"
+            className="sc-jzJRlG kJvmHz"
           >
             <div
-              className="sc-VigVT kghjnk"
+              className="sc-fjdhpX cwkpjk"
               onClick={[Function]}
             >
               0
@@ -287,41 +287,41 @@ exports[`expect to render InspectPanel component 1`] = `
               />
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 lat
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 52.510348
               </span>
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 lon
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 13.389869
               </span>
             </div>
           </div>
           <div
-            className="sc-jTzLTM hKXGNz"
+            className="sc-jzJRlG kJvmHz"
           >
             <div
-              className="sc-VigVT kghjnk"
+              className="sc-fjdhpX cwkpjk"
               onClick={[Function]}
             >
               1
@@ -332,31 +332,31 @@ exports[`expect to render InspectPanel component 1`] = `
               />
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 lat
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 52.510425
               </span>
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 lon
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 13.39114
               </span>
@@ -364,16 +364,16 @@ exports[`expect to render InspectPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-jTzLTM hKXGNz"
+          className="sc-jzJRlG kJvmHz"
         >
           <span
-            className="sc-fjdhpX gkBxan"
+            className="sc-cSHVUG gvhixb"
           >
             reportGeometry
             : 
           </span>
           <span
-            className="sc-jzJRlG kHJXki"
+            className="sc-kAzzGY jdxiPe"
           >
             true
           </span>
@@ -381,15 +381,15 @@ exports[`expect to render InspectPanel component 1`] = `
       </div>
     </div>
     <div
-      className="sc-chPdSV afVhS header"
+      className="sc-VigVT fTAign header"
     >
       Edit Request Body
     </div>
     <div
-      className="sc-kgoBCf gxBOZX content"
+      className="sc-jTzLTM chFRNh content"
     >
       <form
-        className="ui form sc-cSHVUG hdbCon"
+        className="ui form sc-gZMcBi hTYlPb"
         color="rgb(100, 100, 100)"
         focuscolor="#5097ab"
         onSubmit={[Function]}
@@ -417,7 +417,7 @@ exports[`expect to render InspectPanel component 1`] = `
         <button
           alignend={true}
           backgroundcolor="#00677f"
-          className="ui button sc-bZQynM gFTDLx"
+          className="ui button sc-bZQynM iSeNLM"
           onClick={[Function]}
         >
           Confirm
@@ -434,13 +434,13 @@ exports[`expect to render InspectPanel component 1`] = `
       direction="row"
     >
       <div
-        className="ui header sc-htoDjs iGaUEE"
+        className="ui header sc-htoDjs eoOxOA"
         overridecolor="#00677f"
       >
         Response
       </div>
       <button
-        className="ui button response-textarea sc-kGXeez fwkDyc"
+        className="ui button response-textarea sc-chPdSV bfyvDP"
         id="responseEdit"
         marginleft="10px"
         onClick={[Function]}
@@ -454,10 +454,10 @@ exports[`expect to render InspectPanel component 1`] = `
       width="100%"
     >
       <div
-        className="sc-jTzLTM hKXGNz"
+        className="sc-jzJRlG kJvmHz"
       >
         <div
-          className="sc-VigVT kghjnk"
+          className="sc-fjdhpX cwkpjk"
           onClick={[Function]}
         >
           
@@ -468,25 +468,25 @@ exports[`expect to render InspectPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-jTzLTM hKXGNz"
+          className="sc-jzJRlG kJvmHz"
         >
           <span
-            className="sc-fjdhpX gkBxan"
+            className="sc-cSHVUG gvhixb"
           >
             code
             : 
           </span>
           <span
-            className="sc-jzJRlG kHJXki"
+            className="sc-kAzzGY jdxiPe"
           >
             Ok
           </span>
         </div>
         <div
-          className="sc-jTzLTM hKXGNz"
+          className="sc-jzJRlG kJvmHz"
         >
           <div
-            className="sc-VigVT kghjnk"
+            className="sc-fjdhpX cwkpjk"
             onClick={[Function]}
           >
             routes
@@ -497,10 +497,10 @@ exports[`expect to render InspectPanel component 1`] = `
             />
           </div>
           <div
-            className="sc-jTzLTM hKXGNz"
+            className="sc-jzJRlG kJvmHz"
           >
             <div
-              className="sc-VigVT kghjnk"
+              className="sc-fjdhpX cwkpjk"
               onClick={[Function]}
             >
               0
@@ -511,40 +511,40 @@ exports[`expect to render InspectPanel component 1`] = `
               />
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 totalDistance
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 86.5
               </span>
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 totalDuration
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 15.1
               </span>
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <div
-                className="sc-VigVT kghjnk"
+                className="sc-fjdhpX cwkpjk"
                 onClick={[Function]}
               >
                 legs
@@ -555,10 +555,10 @@ exports[`expect to render InspectPanel component 1`] = `
                 />
               </div>
               <div
-                className="sc-jTzLTM hKXGNz"
+                className="sc-jzJRlG kJvmHz"
               >
                 <div
-                  className="sc-VigVT kghjnk"
+                  className="sc-fjdhpX cwkpjk"
                   onClick={[Function]}
                 >
                   0
@@ -569,40 +569,40 @@ exports[`expect to render InspectPanel component 1`] = `
                   />
                 </div>
                 <div
-                  className="sc-jTzLTM hKXGNz"
+                  className="sc-jzJRlG kJvmHz"
                 >
                   <span
-                    className="sc-fjdhpX gkBxan"
+                    className="sc-cSHVUG gvhixb"
                   >
                     duration
                     : 
                   </span>
                   <span
-                    className="sc-jzJRlG kHJXki"
+                    className="sc-kAzzGY jdxiPe"
                   >
                     15.1
                   </span>
                 </div>
                 <div
-                  className="sc-jTzLTM hKXGNz"
+                  className="sc-jzJRlG kJvmHz"
                 >
                   <span
-                    className="sc-fjdhpX gkBxan"
+                    className="sc-cSHVUG gvhixb"
                   >
                     distance
                     : 
                   </span>
                   <span
-                    className="sc-jzJRlG kHJXki"
+                    className="sc-kAzzGY jdxiPe"
                   >
                     86.5
                   </span>
                 </div>
                 <div
-                  className="sc-jTzLTM hKXGNz"
+                  className="sc-jzJRlG kJvmHz"
                 >
                   <div
-                    className="sc-VigVT kghjnk"
+                    className="sc-fjdhpX cwkpjk"
                     onClick={[Function]}
                   >
                     geometry
@@ -618,10 +618,10 @@ exports[`expect to render InspectPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-jTzLTM hKXGNz"
+          className="sc-jzJRlG kJvmHz"
         >
           <div
-            className="sc-VigVT kghjnk"
+            className="sc-fjdhpX cwkpjk"
             onClick={[Function]}
           >
             locations
@@ -632,10 +632,10 @@ exports[`expect to render InspectPanel component 1`] = `
             />
           </div>
           <div
-            className="sc-jTzLTM hKXGNz"
+            className="sc-jzJRlG kJvmHz"
           >
             <div
-              className="sc-VigVT kghjnk"
+              className="sc-fjdhpX cwkpjk"
               onClick={[Function]}
             >
               0
@@ -646,25 +646,25 @@ exports[`expect to render InspectPanel component 1`] = `
               />
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 snapDistance
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 0.45025736761464097
               </span>
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <div
-                className="sc-VigVT kghjnk"
+                className="sc-fjdhpX cwkpjk"
                 onClick={[Function]}
               >
                 location
@@ -677,10 +677,10 @@ exports[`expect to render InspectPanel component 1`] = `
             </div>
           </div>
           <div
-            className="sc-jTzLTM hKXGNz"
+            className="sc-jzJRlG kJvmHz"
           >
             <div
-              className="sc-VigVT kghjnk"
+              className="sc-fjdhpX cwkpjk"
               onClick={[Function]}
             >
               1
@@ -691,25 +691,25 @@ exports[`expect to render InspectPanel component 1`] = `
               />
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <span
-                className="sc-fjdhpX gkBxan"
+                className="sc-cSHVUG gvhixb"
               >
                 snapDistance
                 : 
               </span>
               <span
-                className="sc-jzJRlG kHJXki"
+                className="sc-kAzzGY jdxiPe"
               >
                 12.073291914193243
               </span>
             </div>
             <div
-              className="sc-jTzLTM hKXGNz"
+              className="sc-jzJRlG kJvmHz"
             >
               <div
-                className="sc-VigVT kghjnk"
+                className="sc-fjdhpX cwkpjk"
                 onClick={[Function]}
               >
                 location
@@ -725,15 +725,15 @@ exports[`expect to render InspectPanel component 1`] = `
       </div>
     </div>
     <div
-      className="sc-chPdSV afVhS header"
+      className="sc-VigVT fTAign header"
     >
       View Response
     </div>
     <div
-      className="sc-kgoBCf gxBOZX content"
+      className="sc-jTzLTM chFRNh content"
     >
       <form
-        className="ui form sc-cSHVUG hdbCon"
+        className="ui form sc-gZMcBi hTYlPb"
         color="rgb(100, 100, 100)"
         focuscolor="#5097ab"
         onSubmit={[Function]}
@@ -761,7 +761,7 @@ exports[`expect to render InspectPanel component 1`] = `
         <button
           alignend={true}
           backgroundcolor="#00677f"
-          className="ui button sc-bZQynM gFTDLx"
+          className="ui button sc-bZQynM iSeNLM"
           onClick={[Function]}
         >
           Close

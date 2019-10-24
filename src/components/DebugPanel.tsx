@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
+import { Icon } from 'semantic-ui-react'
 import { Box, EmptySpace, StyledButton } from '../styledComponents'
+import {
+  GeographiesHandler,
+  HandleConfirmButton,
+  HandleDeleteRoute,
+  HandleValueUpdate,
+  InputColors,
+  InputValues,
+  OptionsHandler,
+  Route,
+  UpdateState
+} from '../types'
+import AddDataInput from './AddDataInput'
 import OptionsSwitch from './OptionsSwitch'
 import ProfileToggler from './ProfileToggler'
-import AddDataInput from './AddDataInput'
-import {
-  UpdateState,
-  HandleValueUpdate,
-  HandleConfirmButton,
-  OptionsHandler,
-  HandleDeleteRoute,
-  Route,
-  GeographiesHandler,
-  InputValues,
-  InputColors
-} from '../types'
-import { Icon } from 'semantic-ui-react'
 
 interface Props {
   routingGraphVisible: boolean
@@ -28,7 +28,7 @@ interface Props {
   inputValues: InputValues
   inputColors: InputColors
   addDataTabsHandler: OptionsHandler
-  addedRoutes: Array<Route>
+  addedRoutes: Route[]
 }
 
 export default function DebugPanel(props: Props) {
@@ -54,7 +54,11 @@ export default function DebugPanel(props: Props) {
   return (
     <Box direction="column">
       <Box direction="row" padding="10px 0">
-        <StyledButton alignself onClick={() => setState(true)} className={'add-route-button'}>
+        <StyledButton
+          alignself={true}
+          onClick={() => setState(true)}
+          className={'add-route-button'}
+        >
           <Icon name="plus" />
           Add Data
         </StyledButton>

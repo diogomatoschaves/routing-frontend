@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
-import { OptionsHandler, UpdateState } from '../types';
+import { OptionsHandler, UpdateState } from '../types'
 import { MAIN_PETROL, PETROL_3 as TAB_COLOR } from '../utils/colours'
-
 
 interface Props {
   tabsHandler: OptionsHandler
@@ -16,18 +15,17 @@ interface Props {
 export const Tab = styled(Box)`
   width: ${props => props.width};
   height: 40px;
-  color: ${(props: any) => props.color ? `${TAB_COLOR}` : 'rgb(100, 100, 100)'};
+  color: ${(props: any) => (props.color ? `${TAB_COLOR}` : 'rgb(100, 100, 100)')};
   padding: 10px;
   margin: 10px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
-  border-bottom: ${(props: any) => props.border ? `3px solid ${MAIN_PETROL}` : 'none'};
+  border-bottom: ${(props: any) => (props.border ? `3px solid ${MAIN_PETROL}` : 'none')};
 ` as any
 
 export default class Tabs extends Component<Props, any> {
-  render() {
-
+  public render() {
     const { tabsHandler, updateState, id, width, justify } = this.props
 
     return (
@@ -39,10 +37,12 @@ export default class Tabs extends Component<Props, any> {
             width={width}
             border={item.value === tabsHandler.activeIdx}
             color={item.value === tabsHandler.activeIdx}
-            onClick={() => updateState(id, {
-              ...tabsHandler,
-              activeIdx: item.value
-            })}
+            onClick={() =>
+              updateState(id, {
+                ...tabsHandler,
+                activeIdx: item.value
+              })
+            }
           >
             {item.text}
           </Tab>

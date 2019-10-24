@@ -1,22 +1,22 @@
 import React, { Fragment } from 'react'
-import { Modal, Label } from 'semantic-ui-react'
+import { Label, Modal } from 'semantic-ui-react'
 import styled from 'styled-components'
-import { StyledButton, Box } from '../styledComponents'
-import { MAIN_PETROL as COLOR } from '../utils/colours'
-import TextAreaInput from './TextAreaInput'
-import ModalHOC from './ModalHOC'
-import Tabs from './Tabs'
+import { Box, StyledButton } from '../styledComponents'
 import {
-  UpdateState,
   HandleConfirmButton,
-  OptionsHandler,
   HandleDeleteRoute,
-  Route,
   HandleValueUpdate,
+  InputColors,
   InputValues,
-  InputColors
+  OptionsHandler,
+  Route,
+  UpdateState
 } from '../types'
+import { MAIN_PETROL as COLOR } from '../utils/colours'
+import ModalHOC from './ModalHOC'
 import RoutesFromDB from './RoutesFromDB'
+import Tabs from './Tabs'
+import TextAreaInput from './TextAreaInput'
 
 interface Props {
   open: boolean
@@ -30,7 +30,7 @@ interface Props {
   updateState: UpdateState
   addDataTabsHandler: OptionsHandler
   setInputRef?: (ref: any) => void
-  addedRoutes: Array<Route>
+  addedRoutes: Route[]
 }
 
 const StyledLabel = styled(Label)`
@@ -71,7 +71,7 @@ function AddDataInput(props: Props) {
   return (
     <Fragment>
       <StyledModalHeader>Add data to the map</StyledModalHeader>
-      <StyledModalContents scrolling>
+      <StyledModalContents scrolling={true}>
         <Tabs
           tabsHandler={addDataTabsHandler}
           updateState={updateState}
@@ -107,9 +107,11 @@ function AddDataInput(props: Props) {
           )}
           <StyledButton
             backgroundcolor={COLOR}
-            alignend
+            alignend={true}
             onClick={() =>
-              !loadFromDB ? handleAddRoute(setState, inputValues[key], key) : setState(false)
+              !loadFromDB
+                ? handleAddRoute(setState, inputValues[key], key)
+                : setState(false)
             }
           >
             {!loadFromDB ? 'Confirm' : 'Close'}
@@ -120,4 +122,4 @@ function AddDataInput(props: Props) {
   )
 }
 
-export default process.env.NODE_ENV === 'test' ? AddDataInput : ModalHOC(AddDataInput)
+export default (process.env.NODE_ENV === 'test' ? AddDataInput : ModalHOC(AddDataInput))

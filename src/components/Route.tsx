@@ -1,10 +1,15 @@
 import React, { useState } from 'react'
-import styled from 'styled-components'
-import { Route as RouteType, UpdateState, HandleDeleteRoute, HandleAddRoute } from '../types'
 import { Segment, Statistic } from 'semantic-ui-react'
+import styled from 'styled-components'
 import { Box, StyledButton } from '../styledComponents'
+import {
+  HandleAddRoute,
+  HandleDeleteRoute,
+  Route as RouteType,
+  UpdateState
+} from '../types'
+import { computeDistance, computeDuration } from '../utils/functions'
 import RecursiveJSONProperty from './RecursiveJSONProperty'
-import { computeDuration, computeDistance } from '../utils/functions'
 
 interface Props {
   route: RouteType
@@ -35,13 +40,12 @@ const InfoTitle = styled.div`
 `
 
 const InfoDescription = styled.div`
-   font-size: 1em;
-   font-weight: 700;
-   color: ${props => (props.color ? props.color : 'rgb(50, 50, 50)')};
-   padding-left: 10px;
-   white-space: nowrap;
- `
-
+  font-size: 1em;
+  font-weight: 700;
+  color: ${props => (props.color ? props.color : 'rgb(50, 50, 50)')};
+  padding-left: 10px;
+  white-space: nowrap;
+`
 
 const StyledStatistic = styled(Statistic)`
   &.ui.statistic > div {
@@ -51,7 +55,15 @@ const StyledStatistic = styled(Statistic)`
 `
 
 export default function Route(props: Props) {
-  const { route, updateState, extraInfo, addRoute, deleteRoute, buttonText, buttonColor } = props
+  const {
+    route,
+    updateState,
+    extraInfo,
+    addRoute,
+    deleteRoute,
+    buttonText,
+    buttonColor
+  } = props
 
   const [expanded, setState] = useState(false)
 
@@ -60,13 +72,11 @@ export default function Route(props: Props) {
 
   return (
     <StyledSegment
-      padded
-      onClick={
-        (e: any) => {
-          e.stopPropagation()
-          setState(!expanded)
-        }
-      }
+      padded={true}
+      onClick={(e: any) => {
+        e.stopPropagation()
+        setState(!expanded)
+      }}
       onMouseEnter={() => updateState && updateState('routeHighlight', route.id)}
       onMouseLeave={() => updateState && updateState('routeHighlight', '')}
     >
@@ -89,7 +99,7 @@ export default function Route(props: Props) {
                 overridecolor={'rgb(50, 50, 50)'}
                 size={'mini'}
                 style={{ margin: 0 }}
-                horizontal
+                horizontal={true}
               >
                 <Statistic.Value>{durationValue}</Statistic.Value>
                 <Statistic.Label>{durationLabel}</Statistic.Label>
@@ -101,7 +111,7 @@ export default function Route(props: Props) {
                 overridecolor={'rgb(50, 50, 50)'}
                 size={'mini'}
                 style={{ margin: 0 }}
-                horizontal
+                horizontal={true}
               >
                 <Statistic.Value>{distanceValue}</Statistic.Value>
                 <Statistic.Label>{distanceLabel}</Statistic.Label>
@@ -110,7 +120,13 @@ export default function Route(props: Props) {
           </Box>
           <Box width="20%">
             <StyledButton
-              onClick={addRoute ? () => addRoute(route) : deleteRoute ? () => deleteRoute(route.id) : ''}
+              onClick={
+                addRoute
+                  ? () => addRoute(route)
+                  : deleteRoute
+                  ? () => deleteRoute(route.id)
+                  : ''
+              }
               color={buttonColor}
             >
               {buttonText}

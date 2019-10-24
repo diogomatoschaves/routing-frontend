@@ -1,9 +1,8 @@
 import React from 'react'
+import { Checkbox, Label } from 'semantic-ui-react'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
-import { Checkbox, Label } from 'semantic-ui-react'
 import { UpdateState } from '../types'
-
 
 const StyledText = styled.label`
   width: 75%;
@@ -15,29 +14,30 @@ const StyledText = styled.label`
 `
 const StyledCheckbox = styled(Checkbox)`
   width: 25%;
-  &.ui.checked.fitted.toggle.checkbox input:checked~label:before {
+  &.ui.checked.fitted.toggle.checkbox input:checked ~ label:before {
     background-color: #79aebf !important;
   }
 `
 
 interface Props {
-  checked: boolean,
-  text: string | typeof Label,
-  id: string,
-  updateState: UpdateState,
+  checked: boolean
+  text: string | typeof Label
+  id: string
+  updateState: UpdateState
   width?: string
 }
-
 
 const OptionsSwitch = ({ checked, text, id, updateState, width }: Props) => {
   return (
     <Box direction="row" height="50px" width={width ? width : undefined}>
-      <StyledCheckbox 
+      <StyledCheckbox
         id={id}
         className="custom-class"
-        checked={checked} 
-        onChange={(e: any, { checked }: { checked: boolean }) => updateState(id, checked)}
-        toggle
+        checked={checked}
+        onChange={(e: any, { checked: newChecked }: { checked: boolean }) =>
+          updateState(id, newChecked)
+        }
+        toggle={true}
       />
       <StyledText>{text}</StyledText>
     </Box>

@@ -1,18 +1,18 @@
+import polyline from '@mapbox/polyline'
+import nanoid from 'nanoid'
 import {
-  RouteSchema,
-  Route,
-  RouteResponse,
-  GoogleResponse,
   Coords2,
-  MatchResponse,
+  GoogleResponse,
   MatchLeg,
-  RouteLeg
+  MatchResponse,
+  Route,
+  RouteLeg,
+  RouteResponse,
+  RouteSchema
 } from '../types'
 import { transformToObject } from '../utils/functions'
-import nanoid from 'nanoid'
-import polyline from '@mapbox/polyline'
 
-export const routeConverter = (routes: Array<RouteSchema>): Array<Route> => {
+export const routeConverter = (routes: RouteSchema[]): Route[] => {
   return routes.map((route: RouteSchema) => {
     const routePath = [...transformToObject(route.geometry.coordinates)]
 
@@ -34,7 +34,7 @@ export const routeConverterFromRouteService = (
     id,
     duration: response.routes[0].totalDuration,
     distance: response.routes[0].totalDistance,
-    routePath: response.routes[0].legs.reduce((accum: Array<Coords2>, leg: RouteLeg) => {
+    routePath: response.routes[0].legs.reduce((accum: Coords2[], leg: RouteLeg) => {
       return [...accum, ...(leg.geometry ? leg.geometry : [])]
     }, []),
     type: 'Route',
@@ -50,7 +50,7 @@ export const routeConverterFromMatchService = (
     id,
     ...response.matchings[0].legs.reduce(
       (
-        accum: { duration: number; distance: number; routePath: Array<Coords2> },
+        accum: { duration: number; distance: number; routePath: Coords2[] },
         leg: MatchLeg
       ) => {
         return {

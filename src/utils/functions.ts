@@ -1,16 +1,15 @@
-import round from 'lodash/round'
-import { Coords, Coords2, Location, UpdateState, UpdatePoint, Route } from '../types'
-import { layersArray, defaultGoogleResponse } from '../utils/input'
-import { Validator } from 'jsonschema'
-import { Schema } from './schemas'
 import JSON5 from 'json5'
-import nanoid from 'nanoid'
+import { Validator } from 'jsonschema'
+import round from 'lodash/round'
+import { Coords, Coords2, Location, Route, UpdatePoint, UpdateState } from '../types'
+import { defaultGoogleResponse, layersArray } from './input'
 import {
-  defaultRouteResponse,
-  defaultRoute,
+  defaultBody,
   defaultMatchResponse,
-  defaultBody
-} from '../utils/input'
+  defaultRoute,
+  defaultRouteResponse
+} from './input'
+import { Schema } from './schemas'
 
 export const getPath = (pathname: string) => {
   const matching = ['/:profile', '/:start', '/:end']
@@ -24,7 +23,9 @@ export const getPath = (pathname: string) => {
           if (item) {
             usedIndex++
             return accum + matching[usedIndex]
-          } else return accum
+          } else {
+            return accum
+          }
         }, '')
 
   return path
@@ -44,20 +45,20 @@ export const splitCoords = (value: string): Coords | null => {
   return coords.lat && coords.lng ? coords : null
 }
 
-export const transformPoints = (array: Array<Coords2>) => {
+export const transformPoints = (array: Coords2[]) => {
   return array.map(point => [point.lon, point.lat])
 }
 
-export const transformToObject = (array: number[][]): Array<Coords2> => {
+export const transformToObject = (array: number[][]): Coords2[] => {
   return array.map(point => ({
     lat: point[1],
     lon: point[0]
   }))
 }
 
-export const getRequestBody = (locations: Array<Location>) => {
+export const getRequestBody = (locations: Location[]) => {
   return {
-    locations: locations.reduce((accum: Array<Coords2>, location: Location) => {
+    locations: locations.reduce((accum: Coords2[], location: Location) => {
       return [
         ...accum,
         {
@@ -95,10 +96,7 @@ export const computeDistance = (distance: number) => {
   }
 }
 
-export const getSpeedsLayers = (
-  sourceName: string,
-  extraFilter: Array<string> | null
-) => {
+export const getSpeedsLayers = (sourceName: string, extraFilter: string[] | null) => {
   return layersArray.map((layer: any) => ({
     ...layer,
     source: sourceName,
@@ -118,8 +116,8 @@ const syntaxHighlight = (json: any) => {
     .replace(/>/g, '&gt;')
   return json.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-    function(match: any) {
-      var cls = 'number'
+    (match: any) => {
+      let cls = 'number'
       if (/^"/.test(match)) {
         if (/:$/.test(match)) {
           cls = 'key'
@@ -148,18 +146,27 @@ export const lightenDarkenColor = (col: string, amt: number) => {
 
   let r = (num >> 16) + amt
 
-  if (r > 255) r = 255
-  else if (r < 0) r = 0
+  if (r > 255) {
+    r = 255
+  } else if (r < 0) {
+    r = 0
+  }
 
   let b = ((num >> 8) & 0x00ff) + amt
 
-  if (b > 255) b = 255
-  else if (b < 0) b = 0
+  if (b > 255) {
+    b = 255
+  } else if (b < 0) {
+    b = 0
+  }
 
   let g = (num & 0x0000ff) + amt
 
-  if (g > 255) g = 255
-  else if (g < 0) g = 0
+  if (g > 255) {
+    g = 255
+  } else if (g < 0) {
+    g = 0
+  }
 
   return (usePound ? '#' : '') + (g | (b << 8) | (r << 16)).toString(16)
 }
@@ -191,10 +198,7 @@ export const validateJSON = (
     }))
     return false
   }
-  const validation = validator.validate(
-    parsedValue,
-    Schema[service][inputType]
-  )
+  const validation = validator.validate(parsedValue, Schema[service][inputType])
   if (validation.valid) {
     setState((state: any) => ({
       ...state,
@@ -220,7 +224,7 @@ export const validateJSON = (
 export const processValidResponse = (
   updateState: UpdateState,
   route: Route,
-  addedRoutes: Array<Route>
+  addedRoutes: Route[]
 ) => {
   const newAddedRoutes = [...addedRoutes, route]
 
@@ -231,7 +235,7 @@ const processValidResponse2 = (
   updateState: UpdateState,
   updatePoint: UpdatePoint,
   responseOption: string,
-  locations: Array<Location>,
+  locations: Location[],
   parsedValue: any
 ) => {
   const points: any = {
@@ -262,7 +266,7 @@ const processValidResponse2 = (
 
 export const processValidBody = (
   updatePoint: UpdatePoint,
-  locations: Array<Location>,
+  locations: Location[],
   parsedValue: any
 ) => {
   const points: any = {
@@ -286,8 +290,12 @@ export const processValidBody = (
 }
 
 export function checkNested(obj: any, ...rest: any): boolean {
-  if (obj === undefined) return false
-  if (rest.length === 1 && obj.hasOwnProperty(rest[0])) return true
+  if (obj === undefined) {
+    return false
+  }
+  if (rest.length === 1 && obj.hasOwnProperty(rest[0])) {
+    return true
+  }
   return checkNested(obj[rest[0]], rest.slice(1))
 }
 
@@ -391,10 +399,30 @@ export const getAppState = () => {
     },
     geographies: {
       options: [
-        { text: 'Berlin', coords: [13.38408, 52.51721], polygon: 'berlin.geojson', value: 0 },
-        { text: 'Stuttgart', coords: [9.033, 48.7111], polygon: 'stuttgart.geojson', value: 1 },
-        { text: 'Immendingen', coords: [8.7214, 47.912], polygon: 'immendingen.geojson', value: 2 },
-        { text: 'South Bay', coords: [-121.97588, 37.34606], polygon: 'south_bay.geojson', value: 3 }
+        {
+          text: 'Berlin',
+          coords: [13.38408, 52.51721],
+          polygon: 'berlin.geojson',
+          value: 0
+        },
+        {
+          text: 'Stuttgart',
+          coords: [9.033, 48.7111],
+          polygon: 'stuttgart.geojson',
+          value: 1
+        },
+        {
+          text: 'Immendingen',
+          coords: [8.7214, 47.912],
+          polygon: 'immendingen.geojson',
+          value: 2
+        },
+        {
+          text: 'South Bay',
+          coords: [-121.97588, 37.34606],
+          polygon: 'south_bay.geojson',
+          value: 3
+        }
       ],
       activeIdx: 0
     },
@@ -409,7 +437,7 @@ export const getAppState = () => {
     },
     inputColors: {
       route: 'rgb(100, 100, 100)',
-      match:  'rgb(100, 100, 100)',
+      match: 'rgb(100, 100, 100)',
       body: 'rgb(100, 100, 100)'
     },
     routeHighlight: '',

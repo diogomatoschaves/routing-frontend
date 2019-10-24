@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { Modal } from 'semantic-ui-react'
 import {
-  UpdateState,
-  HandleValueUpdate,
   HandleConfirmButton,
-  OptionsHandler,
   HandleDeleteRoute,
-  Route,
+  HandleValueUpdate,
+  InputColors,
   InputValues,
-  InputColors
+  OptionsHandler,
+  Route,
+  UpdateState
 } from '../types'
 
 interface Props {
@@ -28,23 +28,23 @@ interface Props {
   editable?: boolean
   buttonText?: string
   title?: string
-  addedRoutes?: Array<Route>
+  addedRoutes?: Route[]
 }
 
 const ModalHOC = (ChildComponent: any) => {
   return class extends Component<Props> {
-    inputRef: any
+    public inputRef: any
 
     constructor(props: Props) {
       super(props)
       this.setInputRef = this.setInputRef.bind(this)
     }
 
-    setInputRef(ref: any) {
+    public setInputRef(ref: any) {
       this.inputRef = ref
     }
 
-    componentDidUpdate(prevProps: Props) {
+    public componentDidUpdate(prevProps: Props) {
       const { open, updateState, inputValues, inputColors, id } = this.props
 
       if (prevProps.open !== open && open) {
@@ -69,7 +69,7 @@ const ModalHOC = (ChildComponent: any) => {
       }
     }
 
-    render() {
+    public render() {
       const { open, setState } = this.props
 
       return (
@@ -80,7 +80,7 @@ const ModalHOC = (ChildComponent: any) => {
           closeOnEscape={false}
           dimmer={'blurring'}
           closeIcon={true}
-          centered
+          centered={true}
         >
           <ChildComponent setInputRef={this.setInputRef} {...this.props} />
         </Modal>

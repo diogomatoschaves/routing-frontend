@@ -2,23 +2,23 @@
 
 exports[`expect to render App component 1`] = `
 <div
-  className="sc-gPEVay bJvjiw"
+  className="sc-iRbamj ixbijd"
 >
   <div
-    className="ui segment pushable sc-iRbamj gOGLLM"
+    className="ui segment pushable sc-jlyJG gzMqQk"
   >
     <div
-      className="sc-bwzfXH sc-jlyJG hRSjkk"
+      className="sc-bwzfXH sc-gipzik cpAbXc"
       direction="row"
       width="31%"
     >
       <div
-        className="sc-ifAKCX sc-gipzik dvMpeQ"
+        className="sc-ifAKCX sc-csuQGl bJWVGY"
         height="10%"
         width={0}
       />
       <button
-        className="ui icon button options-button sc-csuQGl dIyLUF"
+        className="ui icon button options-button sc-Rmtcm gXQYhI"
         onClick={[Function]}
         onMouseEnter={[Function]}
         onMouseLeave={[Function]}
@@ -51,7 +51,7 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="sc-bwzfXH sc-cSHVUG ddeyVz"
+              className="sc-bwzfXH sc-hMqMXs edKgCG"
               color={true}
               id="default"
               onClick={[Function]}
@@ -60,7 +60,7 @@ exports[`expect to render App component 1`] = `
               Interactive
             </div>
             <div
-              className="sc-bwzfXH sc-cSHVUG hwPHJs"
+              className="sc-bwzfXH sc-hMqMXs eFlUcI"
               color={false}
               id="debug"
               onClick={[Function]}
@@ -95,7 +95,7 @@ exports[`expect to render App component 1`] = `
               >
                 <i
                   aria-hidden="true"
-                  className="grey angle left large icon sc-jTzLTM kMqZix"
+                  className="grey angle left large icon sc-kGXeez giNWeI"
                   onClick={[Function]}
                 />
               </div>
@@ -104,7 +104,7 @@ exports[`expect to render App component 1`] = `
                 width="60%"
               >
                 <div
-                  className="ui large label sc-fjdhpX fsHjxY"
+                  className="ui large label sc-kpOJdX gsdmQd"
                   onClick={[Function]}
                 >
                   No Traffic
@@ -117,7 +117,7 @@ exports[`expect to render App component 1`] = `
               >
                 <i
                   aria-hidden="true"
-                  className="grey angle right large icon sc-jTzLTM kMqZix"
+                  className="grey angle right large icon sc-kGXeez giNWeI"
                   onClick={[Function]}
                 />
               </div>
@@ -129,7 +129,7 @@ exports[`expect to render App component 1`] = `
           width="80%"
         >
           <div
-            className="ui header sc-dnqmqq eRsqKH"
+            className="ui header sc-dnqmqq ftBRZf"
             overridecolor="#00677f"
           >
             Request Endpoint
@@ -140,7 +140,7 @@ exports[`expect to render App component 1`] = `
           >
             <div
               aria-expanded={false}
-              className="ui fluid search selection dropdown sc-bZQynM gFXwrf"
+              className="ui fluid search selection dropdown sc-bZQynM iNRwNy"
               onBlur={[Function]}
               onChange={[Function]}
               onClick={[Function]}
@@ -263,13 +263,13 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="ui header sc-dnqmqq eRsqKH"
+              className="ui header sc-dnqmqq ftBRZf"
               overridecolor="#00677f"
             >
               Request Body
             </div>
             <button
-              className="ui button body-textarea sc-jAaTju dPvgCX"
+              className="ui button body-textarea sc-kgoBCf bhYuGH"
               id="bodyEdit"
               marginleft="10px"
               onClick={[Function]}
@@ -283,10 +283,10 @@ exports[`expect to render App component 1`] = `
             width="100%"
           >
             <div
-              className="sc-chPdSV jbjPGB"
+              className="sc-cSHVUG jLnDKo"
             >
               <div
-                className="sc-kAzzGY hUkmXL"
+                className="sc-jzJRlG bWBiLk"
                 onClick={[Function]}
               >
                 
@@ -297,10 +297,10 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-cSHVUG jLnDKo"
               >
                 <div
-                  className="sc-kAzzGY hUkmXL"
+                  className="sc-jzJRlG bWBiLk"
                   onClick={[Function]}
                 >
                   locations
@@ -313,16 +313,16 @@ exports[`expect to render App component 1`] = `
                 empty array
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-cSHVUG jLnDKo"
               >
                 <span
-                  className="sc-kgoBCf jDyuzH"
+                  className="sc-kAzzGY bQKsAK"
                 >
                   reportGeometry
                   : 
                 </span>
                 <span
-                  className="sc-kGXeez hOygGA"
+                  className="sc-chPdSV leEvSR"
                 >
                   true
                 </span>
@@ -330,15 +330,15 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="sc-brqgnP izYMgW header"
+            className="sc-jTzLTM bffyPl header"
           >
             Edit Request Body
           </div>
           <div
-            className="sc-cMljjf hjreQu content"
+            className="sc-fjdhpX gwSboS content"
           >
             <form
-              className="ui form sc-jzJRlG kEUzBi"
+              className="ui form sc-gqjmRU bbqDlO"
               color="rgb(100, 100, 100)"
               focuscolor="#5097ab"
               onSubmit={[Function]}
@@ -369,7 +369,7 @@ exports[`expect to render App component 1`] = `
               <button
                 alignend={true}
                 backgroundcolor="#00677f"
-                className="ui button sc-gzVnrw cpzMIe"
+                className="ui button sc-gzVnrw iYbXmW"
                 onClick={[Function]}
               >
                 Confirm
@@ -386,13 +386,13 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="ui header sc-dnqmqq eRsqKH"
+              className="ui header sc-dnqmqq ftBRZf"
               overridecolor="#00677f"
             >
               Response
             </div>
             <button
-              className="ui button response-textarea sc-jAaTju dPvgCX"
+              className="ui button response-textarea sc-kgoBCf bhYuGH"
               id="responseEdit"
               marginleft="10px"
               onClick={[Function]}
@@ -406,10 +406,10 @@ exports[`expect to render App component 1`] = `
             width="100%"
           >
             <div
-              className="sc-chPdSV jbjPGB"
+              className="sc-cSHVUG jLnDKo"
             >
               <div
-                className="sc-kAzzGY hUkmXL"
+                className="sc-jzJRlG bWBiLk"
                 onClick={[Function]}
               >
                 
@@ -420,25 +420,25 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-cSHVUG jLnDKo"
               >
                 <span
-                  className="sc-kgoBCf jDyuzH"
+                  className="sc-kAzzGY bQKsAK"
                 >
                   code
                   : 
                 </span>
                 <span
-                  className="sc-kGXeez hOygGA"
+                  className="sc-chPdSV leEvSR"
                 >
                   Ok
                 </span>
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-cSHVUG jLnDKo"
               >
                 <div
-                  className="sc-kAzzGY hUkmXL"
+                  className="sc-jzJRlG bWBiLk"
                   onClick={[Function]}
                 >
                   routes
@@ -449,10 +449,10 @@ exports[`expect to render App component 1`] = `
                   />
                 </div>
                 <div
-                  className="sc-chPdSV jbjPGB"
+                  className="sc-cSHVUG jLnDKo"
                 >
                   <div
-                    className="sc-kAzzGY hUkmXL"
+                    className="sc-jzJRlG bWBiLk"
                     onClick={[Function]}
                   >
                     0
@@ -463,40 +463,40 @@ exports[`expect to render App component 1`] = `
                     />
                   </div>
                   <div
-                    className="sc-chPdSV jbjPGB"
+                    className="sc-cSHVUG jLnDKo"
                   >
                     <span
-                      className="sc-kgoBCf jDyuzH"
+                      className="sc-kAzzGY bQKsAK"
                     >
                       totalDuration
                       : 
                     </span>
                     <span
-                      className="sc-kGXeez hOygGA"
+                      className="sc-chPdSV leEvSR"
                     >
                       0
                     </span>
                   </div>
                   <div
-                    className="sc-chPdSV jbjPGB"
+                    className="sc-cSHVUG jLnDKo"
                   >
                     <span
-                      className="sc-kgoBCf jDyuzH"
+                      className="sc-kAzzGY bQKsAK"
                     >
                       totalDistance
                       : 
                     </span>
                     <span
-                      className="sc-kGXeez hOygGA"
+                      className="sc-chPdSV leEvSR"
                     >
                       0
                     </span>
                   </div>
                   <div
-                    className="sc-chPdSV jbjPGB"
+                    className="sc-cSHVUG jLnDKo"
                   >
                     <div
-                      className="sc-kAzzGY hUkmXL"
+                      className="sc-jzJRlG bWBiLk"
                       onClick={[Function]}
                     >
                       legs
@@ -507,10 +507,10 @@ exports[`expect to render App component 1`] = `
                       />
                     </div>
                     <div
-                      className="sc-chPdSV jbjPGB"
+                      className="sc-cSHVUG jLnDKo"
                     >
                       <div
-                        className="sc-kAzzGY hUkmXL"
+                        className="sc-jzJRlG bWBiLk"
                         onClick={[Function]}
                       >
                         0
@@ -521,10 +521,10 @@ exports[`expect to render App component 1`] = `
                         />
                       </div>
                       <div
-                        className="sc-chPdSV jbjPGB"
+                        className="sc-cSHVUG jLnDKo"
                       >
                         <div
-                          className="sc-kAzzGY hUkmXL"
+                          className="sc-jzJRlG bWBiLk"
                           onClick={[Function]}
                         >
                           geometry
@@ -537,31 +537,31 @@ exports[`expect to render App component 1`] = `
                         empty array
                       </div>
                       <div
-                        className="sc-chPdSV jbjPGB"
+                        className="sc-cSHVUG jLnDKo"
                       >
                         <span
-                          className="sc-kgoBCf jDyuzH"
+                          className="sc-kAzzGY bQKsAK"
                         >
                           duration
                           : 
                         </span>
                         <span
-                          className="sc-kGXeez hOygGA"
+                          className="sc-chPdSV leEvSR"
                         >
                           0
                         </span>
                       </div>
                       <div
-                        className="sc-chPdSV jbjPGB"
+                        className="sc-cSHVUG jLnDKo"
                       >
                         <span
-                          className="sc-kgoBCf jDyuzH"
+                          className="sc-kAzzGY bQKsAK"
                         >
                           distance
                           : 
                         </span>
                         <span
-                          className="sc-kGXeez hOygGA"
+                          className="sc-chPdSV leEvSR"
                         >
                           0
                         </span>
@@ -571,10 +571,10 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
               <div
-                className="sc-chPdSV jbjPGB"
+                className="sc-cSHVUG jLnDKo"
               >
                 <div
-                  className="sc-kAzzGY hUkmXL"
+                  className="sc-jzJRlG bWBiLk"
                   onClick={[Function]}
                 >
                   locations
@@ -589,15 +589,15 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="sc-brqgnP izYMgW header"
+            className="sc-jTzLTM bffyPl header"
           >
             View Response
           </div>
           <div
-            className="sc-cMljjf hjreQu content"
+            className="sc-fjdhpX gwSboS content"
           >
             <form
-              className="ui form sc-jzJRlG kEUzBi"
+              className="ui form sc-gqjmRU bbqDlO"
               color="rgb(100, 100, 100)"
               focuscolor="#5097ab"
               onSubmit={[Function]}
@@ -641,7 +641,7 @@ exports[`expect to render App component 1`] = `
               <button
                 alignend={true}
                 backgroundcolor="#00677f"
-                className="ui button sc-gzVnrw cpzMIe"
+                className="ui button sc-gzVnrw iYbXmW"
                 onClick={[Function]}
               >
                 Close
@@ -656,7 +656,7 @@ exports[`expect to render App component 1`] = `
     >
       0
       <div
-        className="sc-bwzfXH sc-bwzfXH sc-kkGfuU eDudgG sc-kkGfuU eDudgG"
+        className="sc-bwzfXH sc-bwzfXH sc-brqgnP gmqlch sc-brqgnP gmqlch"
         direction="column"
       >
         <div
@@ -668,7 +668,7 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="sc-bwzfXH sc-cSHVUG ddeyVz"
+              className="sc-bwzfXH sc-hMqMXs edKgCG"
               color={true}
               id="default"
               onClick={[Function]}
@@ -677,7 +677,7 @@ exports[`expect to render App component 1`] = `
               Interactive
             </div>
             <div
-              className="sc-bwzfXH sc-cSHVUG hwPHJs"
+              className="sc-bwzfXH sc-hMqMXs eFlUcI"
               color={false}
               id="debug"
               onClick={[Function]}
@@ -707,24 +707,27 @@ exports[`expect to render App component 1`] = `
                 onMouseLeave={[Function]}
               >
                 <div
-                  className="sc-htpNat oWmeC"
-                  color="#e1e1e1"
-                  cursor="pointer"
+                  className="sc-jWBwVP cPYswJ"
                 >
                   <div
-                    className="sc-bwzfXH dmJOrF"
-                    height="100%"
+                    className="sc-htpNat ePhAaB"
+                    color="#e1e1e1"
+                    cursor="pointer"
                   >
-                    <i
-                      aria-hidden="true"
-                      className="car icon sc-bxivhb vcXGv"
-                      fontSize="25px"
-                      height="20px"
-                      onClick={[Function]}
-                      overridecolor="#007a93"
-                      padding="0 0 0 0"
-                      position="absolute"
-                    />
+                    <div
+                      className="sc-bwzfXH hETasM"
+                      height="100%"
+                    >
+                      <i
+                        aria-hidden="true"
+                        className="car icon sc-bxivhb gqNSHg"
+                        fontSize="25px"
+                        height="20px"
+                        onClick={[Function]}
+                        overridecolor="#007a93"
+                        position="absolute"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -741,24 +744,27 @@ exports[`expect to render App component 1`] = `
                 onMouseLeave={[Function]}
               >
                 <div
-                  className="sc-htpNat gQmiyd"
-                  color="transparent"
-                  cursor="pointer"
+                  className="sc-jWBwVP cPYswJ"
                 >
                   <div
-                    className="sc-bwzfXH dmJOrF"
-                    height="100%"
+                    className="sc-htpNat hzXDNF"
+                    color="transparent"
+                    cursor="pointer"
                   >
-                    <i
-                      aria-hidden="true"
-                      className="male icon sc-bxivhb hFCAaS"
-                      fontSize="25px"
-                      height="20px"
-                      onClick={[Function]}
-                      overridecolor="#a6cad8"
-                      padding="0 0 0 0"
-                      position="absolute"
-                    />
+                    <div
+                      className="sc-bwzfXH hETasM"
+                      height="100%"
+                    >
+                      <i
+                        aria-hidden="true"
+                        className="male icon sc-bxivhb kPAoAB"
+                        fontSize="25px"
+                        height="20px"
+                        onClick={[Function]}
+                        overridecolor="#a6cad8"
+                        position="absolute"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -775,24 +781,27 @@ exports[`expect to render App component 1`] = `
                 onMouseLeave={[Function]}
               >
                 <div
-                  className="sc-htpNat gQmiyd"
-                  color="transparent"
-                  cursor="pointer"
+                  className="sc-jWBwVP cPYswJ"
                 >
                   <div
-                    className="sc-bwzfXH dmJOrF"
-                    height="100%"
+                    className="sc-htpNat hzXDNF"
+                    color="transparent"
+                    cursor="pointer"
                   >
-                    <i
-                      aria-hidden="true"
-                      className="rocket icon sc-bxivhb hFCAaS"
-                      fontSize="25px"
-                      height="20px"
-                      onClick={[Function]}
-                      overridecolor="#a6cad8"
-                      padding="0 0 0 0"
-                      position="absolute"
-                    />
+                    <div
+                      className="sc-bwzfXH hETasM"
+                      height="100%"
+                    >
+                      <i
+                        aria-hidden="true"
+                        className="rocket icon sc-bxivhb kPAoAB"
+                        fontSize="25px"
+                        height="20px"
+                        onClick={[Function]}
+                        overridecolor="#a6cad8"
+                        position="absolute"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -803,23 +812,26 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="sc-htpNat aNfhF"
-              color="#007a93"
+              className="sc-jWBwVP jqOagm"
             >
               <div
-                className="sc-bwzfXH gzsoVo"
-                height="100%"
+                className="sc-htpNat eEyFaK"
+                color="#007a93"
               >
-                <i
-                  aria-hidden="true"
-                  className="map marker alternate icon sc-bxivhb gUqPoa"
-                  fontSize="25px"
-                  height="20px"
-                  onClick={[Function]}
-                  overridecolor="white"
-                  padding="0 0 0 0"
-                  position="absolute"
-                />
+                <div
+                  className="sc-bwzfXH hETasM"
+                  height="100%"
+                >
+                  <i
+                    aria-hidden="true"
+                    className="map marker alternate icon sc-bxivhb bHZEgs"
+                    fontSize="25px"
+                    height="20px"
+                    onClick={[Function]}
+                    overridecolor="white"
+                    position="absolute"
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -840,23 +852,26 @@ exports[`expect to render App component 1`] = `
             direction="row"
           >
             <div
-              className="sc-htpNat aNfhF"
-              color="#007a93"
+              className="sc-jWBwVP jqOagm"
             >
               <div
-                className="sc-bwzfXH gzsoVo"
-                height="100%"
+                className="sc-htpNat eEyFaK"
+                color="#007a93"
               >
-                <i
-                  aria-hidden="true"
-                  className="map marker icon sc-bxivhb gUqPoa"
-                  fontSize="25px"
-                  height="20px"
-                  onClick={[Function]}
-                  overridecolor="white"
-                  padding="0 0 0 0"
-                  position="absolute"
-                />
+                <div
+                  className="sc-bwzfXH hETasM"
+                  height="100%"
+                >
+                  <i
+                    aria-hidden="true"
+                    className="map marker icon sc-bxivhb bHZEgs"
+                    fontSize="25px"
+                    height="20px"
+                    onClick={[Function]}
+                    overridecolor="white"
+                    position="absolute"
+                  />
+                </div>
               </div>
             </div>
             <div
@@ -883,7 +898,7 @@ exports[`expect to render App component 1`] = `
               width="65%"
             >
               <div
-                className="ui fitted toggle checkbox custom-class sc-VigVT jawxJK"
+                className="ui fitted toggle checkbox custom-class sc-cvbbAY enqNOi"
                 onChange={[Function]}
                 onClick={[Function]}
                 onMouseDown={[Function]}
@@ -902,7 +917,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <label
-                className="sc-gqjmRU esqmUJ"
+                className="sc-eHgmQL gLXudm"
               >
                 Google Maps
               </label>
@@ -914,7 +929,7 @@ exports[`expect to render App component 1`] = `
               width="35%"
             >
               <div
-                className="ui fitted toggle checkbox custom-class sc-VigVT jawxJK"
+                className="ui fitted toggle checkbox custom-class sc-cvbbAY enqNOi"
                 onChange={[Function]}
                 onClick={[Function]}
                 onMouseDown={[Function]}
@@ -933,7 +948,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <label
-                className="sc-gqjmRU esqmUJ"
+                className="sc-eHgmQL gLXudm"
               >
                 Traffic
               </label>

@@ -2,7 +2,7 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-bdVaJa sc-bdVaJa sc-kEYyzF fusQp sc-kEYyzF fusQp"
+  className="sc-bdVaJa sc-bdVaJa sc-kkGfuU eDudgG sc-kkGfuU eDudgG"
   direction="column"
 >
   <div
@@ -14,7 +14,7 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bdVaJa sc-jzJRlG hoptrx"
+        className="sc-bdVaJa sc-chPdSV hFmojQ"
         color={true}
         id="default"
         onClick={[Function]}
@@ -23,7 +23,7 @@ exports[`expect to render Panel component 1`] = `
         Interactive
       </div>
       <div
-        className="sc-bdVaJa sc-jzJRlG Iauxu"
+        className="sc-bdVaJa sc-chPdSV bJYeum"
         color={false}
         id="debug"
         onClick={[Function]}
@@ -53,24 +53,27 @@ exports[`expect to render Panel component 1`] = `
           onMouseLeave={[Function]}
         >
           <div
-            className="sc-bwzfXH deebee"
-            color="transparent"
-            cursor="pointer"
+            className="sc-kEYyzF dvALRM"
           >
             <div
-              className="sc-bdVaJa dbHwHO"
-              height="100%"
+              className="sc-bwzfXH bcGuwo"
+              color="transparent"
+              cursor="pointer"
             >
-              <i
-                aria-hidden="true"
-                className="car icon sc-htpNat bxTmCt"
-                fontSize="25px"
-                height="20px"
-                onClick={[Function]}
-                overridecolor="#a6cad8"
-                padding="0 0 0 0"
-                position="absolute"
-              />
+              <div
+                className="sc-bdVaJa cCYAHW"
+                height="100%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="car icon sc-htpNat cxjLTK"
+                  fontSize="25px"
+                  height="20px"
+                  onClick={[Function]}
+                  overridecolor="#a6cad8"
+                  position="absolute"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -87,24 +90,27 @@ exports[`expect to render Panel component 1`] = `
           onMouseLeave={[Function]}
         >
           <div
-            className="sc-bwzfXH deebee"
-            color="transparent"
-            cursor="pointer"
+            className="sc-kEYyzF dvALRM"
           >
             <div
-              className="sc-bdVaJa dbHwHO"
-              height="100%"
+              className="sc-bwzfXH bcGuwo"
+              color="transparent"
+              cursor="pointer"
             >
-              <i
-                aria-hidden="true"
-                className="male icon sc-htpNat bxTmCt"
-                fontSize="25px"
-                height="20px"
-                onClick={[Function]}
-                overridecolor="#a6cad8"
-                padding="0 0 0 0"
-                position="absolute"
-              />
+              <div
+                className="sc-bdVaJa cCYAHW"
+                height="100%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="male icon sc-htpNat cxjLTK"
+                  fontSize="25px"
+                  height="20px"
+                  onClick={[Function]}
+                  overridecolor="#a6cad8"
+                  position="absolute"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -121,24 +127,27 @@ exports[`expect to render Panel component 1`] = `
           onMouseLeave={[Function]}
         >
           <div
-            className="sc-bwzfXH deebee"
-            color="transparent"
-            cursor="pointer"
+            className="sc-kEYyzF dvALRM"
           >
             <div
-              className="sc-bdVaJa dbHwHO"
-              height="100%"
+              className="sc-bwzfXH bcGuwo"
+              color="transparent"
+              cursor="pointer"
             >
-              <i
-                aria-hidden="true"
-                className="rocket icon sc-htpNat bxTmCt"
-                fontSize="25px"
-                height="20px"
-                onClick={[Function]}
-                overridecolor="#a6cad8"
-                padding="0 0 0 0"
-                position="absolute"
-              />
+              <div
+                className="sc-bdVaJa cCYAHW"
+                height="100%"
+              >
+                <i
+                  aria-hidden="true"
+                  className="rocket icon sc-htpNat cxjLTK"
+                  fontSize="25px"
+                  height="20px"
+                  onClick={[Function]}
+                  overridecolor="#a6cad8"
+                  position="absolute"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -149,23 +158,26 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bwzfXH jWeZli"
-        color="#007a93"
+        className="sc-kEYyzF sspYH"
       >
         <div
-          className="sc-bdVaJa lajepV"
-          height="100%"
+          className="sc-bwzfXH fNQCHt"
+          color="#007a93"
         >
-          <i
-            aria-hidden="true"
-            className="map marker alternate icon sc-htpNat iIqnlv"
-            fontSize="25px"
-            height="20px"
-            onClick={[Function]}
-            overridecolor="white"
-            padding="0 0 0 0"
-            position="absolute"
-          />
+          <div
+            className="sc-bdVaJa cCYAHW"
+            height="100%"
+          >
+            <i
+              aria-hidden="true"
+              className="map marker alternate icon sc-htpNat fQDcBg"
+              fontSize="25px"
+              height="20px"
+              onClick={[Function]}
+              overridecolor="white"
+              position="absolute"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -186,23 +198,26 @@ exports[`expect to render Panel component 1`] = `
       direction="row"
     >
       <div
-        className="sc-bwzfXH jWeZli"
-        color="#007a93"
+        className="sc-kEYyzF sspYH"
       >
         <div
-          className="sc-bdVaJa lajepV"
-          height="100%"
+          className="sc-bwzfXH fNQCHt"
+          color="#007a93"
         >
-          <i
-            aria-hidden="true"
-            className="flag checkered icon sc-htpNat iIqnlv"
-            fontSize="25px"
-            height="20px"
-            onClick={[Function]}
-            overridecolor="white"
-            padding="0 0 0 0"
-            position="absolute"
-          />
+          <div
+            className="sc-bdVaJa cCYAHW"
+            height="100%"
+          >
+            <i
+              aria-hidden="true"
+              className="flag checkered icon sc-htpNat fQDcBg"
+              fontSize="25px"
+              height="20px"
+              onClick={[Function]}
+              overridecolor="white"
+              position="absolute"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -229,7 +244,7 @@ exports[`expect to render Panel component 1`] = `
         width="65%"
       >
         <div
-          className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
+          className="ui fitted toggle checkbox custom-class sc-jKJlTe cMrCif"
           onChange={[Function]}
           onClick={[Function]}
           onMouseDown={[Function]}
@@ -248,7 +263,7 @@ exports[`expect to render Panel component 1`] = `
           />
         </div>
         <label
-          className="sc-gZMcBi eCHFCo"
+          className="sc-ckVGcZ bRsLdg"
         >
           Google Maps
         </label>
@@ -260,7 +275,7 @@ exports[`expect to render Panel component 1`] = `
         width="35%"
       >
         <div
-          className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
+          className="ui fitted toggle checkbox custom-class sc-jKJlTe cMrCif"
           onChange={[Function]}
           onClick={[Function]}
           onMouseDown={[Function]}
@@ -279,7 +294,7 @@ exports[`expect to render Panel component 1`] = `
           />
         </div>
         <label
-          className="sc-gZMcBi eCHFCo"
+          className="sc-ckVGcZ bRsLdg"
         >
           Traffic
         </label>

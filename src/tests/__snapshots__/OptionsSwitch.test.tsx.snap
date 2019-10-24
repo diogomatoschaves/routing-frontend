@@ -8,7 +8,7 @@ exports[`expect to render OptionsPanel component 1`] = `
   width="65%"
 >
   <div
-    className="ui fitted toggle checkbox custom-class sc-gqjmRU kbDkMN"
+    className="ui fitted toggle checkbox custom-class sc-gqjmRU eShkJF"
     onChange={[Function]}
     onClick={[Function]}
     onMouseDown={[Function]}

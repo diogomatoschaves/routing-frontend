@@ -1,24 +1,25 @@
 import React from 'react'
-import TestRenderer from 'react-test-renderer'
-import InspectPanel from '../components/InspectPanel'
 import { MemoryRouter } from 'react-router-dom'
+import TestRenderer from 'react-test-renderer'
 import { mockCarResponse } from '../apiCalls/__mocks__/mockResponse'
+import InspectPanel from '../components/InspectPanel'
 
-
-
-const mockLocations = [{
-  name: 'start',
-  marker: 'map marker alternate',
-  placeholder: 'Origin',
-  lat: null,
-  lng: null
-}, {
-  name: 'end',
-  marker: 'flag checkered',
-  placeholder: 'Destination',
-  lat: null,
-  lng: null
-}]
+const mockLocations = [
+  {
+    lat: null,
+    lng: null,
+    marker: 'map marker alternate',
+    name: 'start',
+    placeholder: 'Origin'
+  },
+  {
+    lat: null,
+    lng: null,
+    marker: 'flag checkered',
+    name: 'end',
+    placeholder: 'Destination'
+  }
+]
 
 const mockEventStart = { lng: 13.389869, lat: 52.510348 }
 const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
@@ -32,9 +33,9 @@ const mockBody = {
     {
       lat: mockEventEnd.lat,
       lon: mockEventEnd.lng
-    },
+    }
   ],
-  reportGeometry: true,
+  reportGeometry: true
 }
 
 const serviceOptions = [
@@ -51,57 +52,68 @@ const serviceOptions = [
 ]
 
 const mockEndpointHandler = {
+  activeIdx: 0,
   options: [
-    { key: 'develop', text: 'https://routing.develop.otonomousmobility.com/${PROFILE}', value: 0 },
-    { key: 'staging', text: 'https://routing.staging.otonomousmobility.com/${PROFILE}', value: 1 },
-    { key: 'testing', text: 'https://routing.testing.otonomousmobility.com/${PROFILE}', value: 2 },
-    { key: 'localhost', text: 'http://localhost:5000', value: 3 },
-  ],
-  activeIdx: 0
+    {
+      key: 'develop',
+      text: 'https://routing.develop.otonomousmobility.com/${PROFILE}',
+      value: 0
+    },
+    {
+      key: 'staging',
+      text: 'https://routing.staging.otonomousmobility.com/${PROFILE}',
+      value: 1
+    },
+    {
+      key: 'testing',
+      text: 'https://routing.testing.otonomousmobility.com/${PROFILE}',
+      value: 2
+    },
+    { key: 'localhost', text: 'http://localhost:5000', value: 3 }
+  ]
 }
 
 const mockAddDataTabsHandler = {
+  activeIdx: 0,
   options: [
     { key: 'routingResponse', text: 'Routing Service', value: 0 },
     { key: 's3', text: 'Import from S3', value: 1 }
-  ],
-  activeIdx: 0
+  ]
 }
 
 const mockModeTabsHandler = {
+  activeIdx: 0,
   options: [
     { key: 'default', text: 'Interactive', value: 0 },
     { key: 'debug', text: 'Debugging', value: 1 }
-  ],
-  activeIdx: 0
+  ]
 }
 
 const mockResponseOptionsHandler = {
+  activeIdx: 0,
   options: [
     { key: 'routeResponse', text: 'No Traffic', value: 0 },
     { key: 'trafficResponse', text: 'w/ Traffic', value: 1 },
     { key: 'googleResponse', text: 'Google', value: 2 }
-  ],
-  activeIdx: 0
+  ]
 }
 
 const inputValues = {
-  route: '',
-  match: '',
   body: '',
-  response: ''
+  match: '',
+  response: '',
+  route: ''
 }
 
-
 const inputColors = {
-  route: 'rgb(100, 100, 100)',
-  match:  'rgb(100, 100, 100)',
-  body: 'rgb(100, 100, 100)'
+  body: 'rgb(100, 100, 100)',
+  match: 'rgb(100, 100, 100)',
+  route: 'rgb(100, 100, 100)'
 }
 
 it('expect to render InspectPanel component', () => {
   const testInstance = TestRenderer.create(
-    <MemoryRouter initialEntries={[ '/' ]}>
+    <MemoryRouter initialEntries={['/']}>
       <InspectPanel
         inputValues={inputValues}
         inputColors={inputColors}
@@ -124,7 +136,9 @@ it('expect to render InspectPanel component', () => {
         updatePoint={jest.fn()}
         updateState={jest.fn()}
         responseOptionsHandler={mockResponseOptionsHandler}
-        responseOption={mockResponseOptionsHandler.options[mockResponseOptionsHandler.activeIdx]}
+        responseOption={
+          mockResponseOptionsHandler.options[mockResponseOptionsHandler.activeIdx]
+        }
         locations={mockLocations}
         selectedService={0}
         serviceOptions={serviceOptions}
