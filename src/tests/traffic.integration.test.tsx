@@ -6,7 +6,7 @@ import { routingApi } from '../apiCalls'
 import { mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
-import { getPath } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

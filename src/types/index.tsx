@@ -207,3 +207,8 @@ export interface InputColors {
   body: string
   [key: string]: string
 }
+
+export interface ProfileItem {
+  iconName: string
+  name: string
+}

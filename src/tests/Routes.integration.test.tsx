@@ -3,7 +3,8 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import TestRenderer from 'react-test-renderer'
 import App from '../components/App'
 import Map from '../components/Map'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

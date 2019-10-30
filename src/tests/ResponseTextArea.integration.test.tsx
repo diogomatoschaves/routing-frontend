@@ -5,7 +5,8 @@ import { mockCarResponse } from '../apiCalls/__mocks__/mockResponse'
 import App from '../components/App'
 import InspectPanel from '../components/InspectPanel'
 import Map from '../components/Map'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

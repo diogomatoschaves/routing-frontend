@@ -8,7 +8,8 @@ import InspectPanel from '../components/InspectPanel'
 import Map from '../components/Map'
 import { Tab } from '../components/Tabs'
 import TextAreaInput from '../components/TextAreaInput'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
