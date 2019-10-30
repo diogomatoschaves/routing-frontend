@@ -1,11 +1,12 @@
 import React from 'react'
 import { MemoryRouter, Route } from 'react-router-dom'
-import TestRenderer, { act } from 'react-test-renderer'
+import TestRenderer from 'react-test-renderer'
 import { Checkbox, Input } from 'semantic-ui-react'
 import { mockGoogleRoute, mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

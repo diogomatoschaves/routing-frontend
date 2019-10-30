@@ -5,7 +5,8 @@ import { Dropdown, Input } from 'semantic-ui-react'
 import App from '../components/App'
 import EndpointRow from '../components/EndpointRow'
 import { Option } from '../types'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

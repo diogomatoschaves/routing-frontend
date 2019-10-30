@@ -15,7 +15,8 @@ import TextAreaInput from '../components/TextAreaInput'
 import { StyledButton } from '../styledComponents'
 import StyledInput from '../styledComponents/StyledInput'
 import { Coords2, MatchLeg } from '../types'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

@@ -3,15 +3,13 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import TestRenderer from 'react-test-renderer'
 import { Checkbox } from 'semantic-ui-react'
 import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
-import {
-  mockCarResponse,
-  mockCarTrafficResponse
-} from '../apiCalls/__mocks__/mockResponse'
+import { mockCarResponse, mockCarTrafficResponse } from '../apiCalls/__mocks__/mockResponse'
 import App from '../components/App'
 import InspectPanel from '../components/InspectPanel'
 import Map from '../components/Map'
 import { Box } from '../styledComponents'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 

@@ -5,9 +5,9 @@ import React, { Component, Fragment } from 'react'
 import { generatePath } from 'react-router-dom'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
-import { googleDirections, routingApi } from '../apiCalls'
-import Map from './Map'
+import { auth, googleDirections, routingApi } from '../apiCalls'
 import '../App.css'
+import Map from './Map'
 import { Box, EmptySpace } from '../styledComponents'
 import {
   Body,
@@ -22,6 +22,7 @@ import {
   Location,
   Messages,
   OptionsHandler,
+  ProfileItem,
   ResponseOptionsHandler,
   Responses,
   Route,
@@ -50,7 +51,6 @@ import {
   getRequestBody,
   processValidBody,
   processValidResponse,
-  splitCoords,
   validateJSON
 } from '../utils/functions'
 import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
@@ -60,6 +60,7 @@ import {
   routeConverterFromRouteService
 } from '../utils/routeAdapter'
 import { Schema } from '../utils/schemas'
+import { checkUrlValidity, extractUrlParams } from '../utils/urlConfig'
 import InspectPanel from './InspectPanel'
 import Message from './Message'
 import Panel from './Panel'
@@ -163,6 +164,26 @@ const StyledBox = styled(Box)`
     `}
 `
 
+const messageFailedRoute = (traffic: boolean, response: RouteResponse) => (
+  <span>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+      Routing Service{traffic ? ' - traffic' : ''}:
+    </span>
+    <span> {response.code}. </span>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+      {response.message}
+    </span>
+  </span>
+)
+
+const messageFailedGoogleRoute = (googleResponse: GoogleResponse) => (
+  <span>
+    <span style={{ color: THIRD_PARTY_POLYLINE }}>Google: </span>
+    <span>{googleResponse.status}.</span>
+    <span style={{ color: THIRD_PARTY_POLYLINE }}> Failed to provide a route.</span>
+  </span>
+)
+
 declare global {
   interface Window {
     google: any
@@ -193,24 +214,10 @@ class App extends Component<any, State> {
 
   public state = getAppState()
 
-  public getProfileLocations = (
-    locations: Location[],
-    params: any,
-    requiredParams: any
-  ) => {
-    return {
-      locations: locations.map((item: Location) => ({
-        ...item,
-        ...splitCoords(params[requiredParams[item.name]])
-      })),
-      profile: params[requiredParams.profile]
-    }
-  }
-
   public async componentDidMount() {
     const { windowProp, history, match, loadedProp } = this.props
     const { validator, responses, body, locations, endpointHandler } = this.state
-    const { requiredParams, acceptableProfiles } = this.props.urlParams
+    const { profiles } = this.props
 
     let authorization: string = ''
     if (process.env.NODE_ENV !== 'production') {
@@ -218,12 +225,9 @@ class App extends Component<any, State> {
       const username = process.env.REACT_APP_LDAP_USERNAME
       authorization = `Basic ${Base64.encode(`${username}:${password}`)}`
     } else {
-      const url = process.env.REACT_APP_URL + '/auth'
-      await fetch(url)
-        .then(routeResponse => routeResponse.json())
-        .then(jsonifiedResponse => {
-          authorization = jsonifiedResponse.basicAuth
-        })
+      await auth(process.env.REACT_APP_URL || '').then(jsonifiedResponse => {
+        authorization = jsonifiedResponse.basicAuth
+      })
     }
 
     this.addGoogleObject(windowProp)
@@ -250,23 +254,13 @@ class App extends Component<any, State> {
       validator
     }))
 
-    const params = Object.keys(match.params)
-
     if (
-      params.length === 3 &&
-      params.every((el: string) => {
-        return (
-          ([requiredParams.start, requiredParams.end].includes(el) &&
-            Boolean(splitCoords(match.params[el]))) ||
-          (el === requiredParams.profile && acceptableProfiles.includes(match.params[el]))
-        )
-      })
+      checkUrlValidity(match.params, profiles.map((profile: ProfileItem) => profile.name))
     ) {
       this.waitTillLoaded(loadedProp).then(() => {
-        const { profile: urlProfile, locations: urlLocations } = this.getProfileLocations(
+        const { profile: urlProfile, locations: urlLocations } = extractUrlParams(
           locations,
-          match.params,
-          requiredParams
+          match.params
         )
 
         this.getRoute(
@@ -311,7 +305,6 @@ class App extends Component<any, State> {
     const { urlMatchString, history, defaultColor } = this.props
     const { params: prevParams } = prevProps.match
     const { params } = this.props.match
-    const { requiredParams } = this.props.urlParams
 
     if (prevState.locations !== locations || prevState.profile !== profile) {
       const path = generatePath(urlMatchString, {
@@ -347,10 +340,9 @@ class App extends Component<any, State> {
         (Object.keys(params).some(key => params[key] !== prevParams[key]) ||
           Object.keys(prevParams).some(key => prevParams[key] !== params[key])))
     ) {
-      const { locations: urlLocations, profile: urlProfile } = this.getProfileLocations(
+      const { locations: urlLocations, profile: urlProfile } = extractUrlParams(
         locations,
-        params,
-        requiredParams
+        params
       )
 
       if (recalculate) {
@@ -666,16 +658,9 @@ class App extends Component<any, State> {
         ...state,
         messages: {
           ...state.messages,
-          [traffic ? 'trafficMessage' : 'routeMessage']: (
-            <span>
-              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
-                Routing Service{traffic ? ' - traffic' : ''}:
-              </span>
-              <span> {response.code}. </span>
-              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
-                {response.message}
-              </span>
-            </span>
+          [traffic ? 'trafficMessage' : 'routeMessage']: messageFailedRoute(
+            traffic,
+            response
           )
         },
         routes: {
@@ -702,16 +687,7 @@ class App extends Component<any, State> {
         ...state,
         messages: {
           ...state.messages,
-          googleMessage: (
-            <span>
-              <span style={{ color: THIRD_PARTY_POLYLINE }}>Google: </span>
-              <span>{googleResponse.status}.</span>
-              <span style={{ color: THIRD_PARTY_POLYLINE }}>
-                {' '}
-                Failed to provide a route.
-              </span>
-            </span>
-          )
+          googleMessage: messageFailedGoogleRoute(googleResponse)
         },
         routes: {
           ...state.routes,
@@ -844,7 +820,7 @@ class App extends Component<any, State> {
       inputValues,
       inputColors
     } = this.state
-    const { urlMatchString } = this.props
+    const { urlMatchString, profiles } = this.props
     const { show, hide } = this.props.animationDuration
 
     const { routeMessage, trafficMessage, googleMessage } = messages
@@ -971,6 +947,7 @@ class App extends Component<any, State> {
             )}
             <Panel
               locations={locations}
+              profiles={profiles}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
               handleAddRoute={this.handleAddRoute}

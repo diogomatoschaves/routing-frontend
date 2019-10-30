@@ -8,7 +8,7 @@ interface Props {
 
 const StyledMessage = styled(StyledSegment)`
   &.ui.segment {
-    font-size: 1.1em;
+    font-size: 0.8em;
     margin: 3px;
   }
 `
