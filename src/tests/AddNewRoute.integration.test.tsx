@@ -16,7 +16,7 @@ import { StyledButton } from '../styledComponents'
 import StyledInput from '../styledComponents/StyledInput'
 import { Coords2, MatchLeg } from '../types'
 import { formatCoords } from '../utils/functions'
-import { getPath } from '../utils/urlConfig'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -27,9 +27,11 @@ const delay = (ms: number) =>
     }, ms)
   })
 
-const urlMatchString = '/:profile/:start/:end'
-
-const getTestApp = (initialEntries: string[] = ['/'], loadedProp: boolean = false) =>
+const getTestApp = (
+  initialEntries: string[] = ['/'],
+  loadedProp: boolean = true,
+  windowProp: boolean = true
+) =>
   TestRenderer.create(
     <MemoryRouter initialEntries={initialEntries}>
       <RouteURL
@@ -43,6 +45,7 @@ const getTestApp = (initialEntries: string[] = ['/'], loadedProp: boolean = fals
                 match={match}
                 urlMatchString={urlMatchString}
                 loadedProp={loadedProp}
+                windowProp={windowProp}
               />
             )}
           />
@@ -68,11 +71,9 @@ describe('Behaviour of textarea to add new routes from route response', () => {
     lat: 55,
     lng: 15
   }
-  const initialState = `/${mockProfile}/${formatCoords(mockStart)}/${formatCoords(
-    mockEnd
-  )}`
+  const initialState = `/${mockProfile}/${formatCoords(mockStart)};${formatCoords(mockEnd)}`
 
-  const testInstance = getTestApp([initialState], true)
+  const testInstance = getTestApp([initialState])
 
   const root = testInstance.root
 
@@ -86,9 +87,11 @@ describe('Behaviour of textarea to add new routes from route response', () => {
   let addPolylineSpy: any
   let id: string
 
-  it('markers array has 2 markers', () => {
-    const { markers } = MapComponent.state
-    expect(markers).toHaveLength(2)
+  describe('Initial App State', () => {
+    it('markers array has 2 markers', () => {
+      const { markers } = MapComponent.state
+      expect(markers).toHaveLength(2)
+    })
   })
 
   describe('Behaviour when debug mode is selected', () => {

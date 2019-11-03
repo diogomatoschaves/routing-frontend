@@ -5,10 +5,9 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 // import * as serviceWorker from './serviceWorker'
 import 'semantic-ui-css/semantic.min.css'
 import App from './components/App'
-import { getPath } from './utils/urlConfig'
+import { getPath, urlMatchString } from './utils/urlConfig'
 
 const rootEl = document.getElementById('root')
-const urlMatchString = '/:profile/:start/:end'
 
 ReactDOM.render(
   <Router>
