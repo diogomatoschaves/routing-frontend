@@ -35,7 +35,7 @@ const convertQueryParamsToString = (queryParams: OptionalParams) => {
 }
 
 const getTestApp = (
-  initialEntries: string[] | Array<{ pathname: string; search: string }> = ['/'],
+  initialEntries: string[] = ['/'],
   loadedProp: boolean = true,
   windowProp: boolean = true
 ) =>

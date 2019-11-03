@@ -222,7 +222,7 @@ class App extends Component<any, State> {
 
   public messageTimeout: any
 
-  state = getAppState()
+  public state = getAppState()
 
   public getAuth = async () => {
     if (process.env.NODE_ENV !== 'production') {
@@ -363,6 +363,70 @@ class App extends Component<any, State> {
           })
         }
       )
+    }
+
+    if (
+      prevState.locations !== locations ||
+      prevState.profile !== profile ||
+      prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
+      Object.values(optionalParamsMapping).some(
+        (paramKey: string | boolean | undefined) => {
+          // @ts-ignore
+          return this.state[paramKey] !== prevState[paramKey]
+        }
+      )
+    ) {
+      const urlOptionalParams = this.getCurrentPrevious(
+        optionalParamsMapping,
+        this.state,
+        prevState
+      )
+
+      const urlParams = this.getCurrentPrevious(requiredParams, this.state, prevState)
+
+      const diff = getUrlParamsDiff(
+        urlParams.current,
+        urlParams.prev,
+        urlOptionalParams.current,
+        urlOptionalParams.prev
+      )
+      const defaultOption =
+        (diff.profile || diff.locations || diff.endpointHandler) && true
+
+      if (recalculate) {
+        this.getRoutes(
+          locations,
+          profile,
+          authorization,
+          (diff.googleMapsOption &&
+            !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
+            false,
+          google,
+          diff.trafficOption || false,
+          defaultOption || false,
+          endpointHandler.options[endpointHandler.activeIdx].text
+        )
+      } else {
+        this.updateState('recalculate', true)
+      }
+
+      const mappedQueryParams = mapOptionalParameters(
+        optionalParamsMapping,
+        urlOptionalParams.current
+      )
+
+      updateUrl(
+        locations,
+        profile,
+        endpointHandler.options[endpointHandler.activeIdx].key,
+        history,
+        location,
+        mappedQueryParams
+      )
+    }
+
+    if (prevState.responses.routeResponse !== responses.routeResponse) {
+      this.updateRoute(responses.routeResponse, 'routeDAS', 'route')
     }
 
     if (
