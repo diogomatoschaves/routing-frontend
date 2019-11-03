@@ -1,7 +1,15 @@
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
 import round from 'lodash/round'
-import { Coords, Coords2, Location, Route, UpdatePoint, UpdateState } from '../types'
+import {
+  Coords,
+  Coords2,
+  Location,
+  Route,
+  UpdatePoint,
+  UpdateState,
+  UpdateStateCallback
+} from '../types'
 import {
   defaultBody,
   defaultGoogleResponse,
@@ -11,6 +19,17 @@ import {
   layersArray
 } from './input'
 import { Schema } from './schemas'
+
+export const stringToBoolean = (str: string) => {
+  switch (str.toLowerCase().trim()) {
+    case 'true':
+    case 'yes':
+    case '1':
+      return true
+    default:
+      return false
+  }
+}
 
 export const formatCoords = (coords: Coords) =>
   coords.lat && coords.lng ? `${round(coords.lat, 7)}, ${round(coords.lng, 7)}` : ''
@@ -163,7 +182,7 @@ export const validateJSON = (
   inputType: string,
   inputId: string,
   defaultColor: string,
-  setState: any
+  setState: UpdateStateCallback
 ) => {
   let parsedValue
   try {
@@ -451,4 +470,17 @@ export const getAppProps = () => {
       }
     ]
   }
+}
+
+export const findDiff: any = (object1: any, object2: any) => {
+  return Object.keys(object1).reduce((accum, value) => {
+    if (object1[value] !== object2[value]) {
+      return {
+        ...accum,
+        [value]: object1[value]
+      }
+    } else {
+      return accum
+    }
+  }, {})
 }

@@ -6,7 +6,7 @@ import App from '../components/App'
 import InspectPanel from '../components/InspectPanel'
 import Map from '../components/Map'
 import { formatCoords } from '../utils/functions'
-import { getPath } from '../utils/urlConfig'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -33,8 +33,6 @@ const mockBody = {
   ],
   reportGeometry: true
 }
-
-const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: string[] = ['/']) =>
   TestRenderer.create(

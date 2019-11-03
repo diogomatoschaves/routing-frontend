@@ -6,7 +6,7 @@ import { mockGoogleRoute, mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
 import { formatCoords } from '../utils/functions'
-import { getPath } from '../utils/urlConfig'
+import { getPath, matchingParams, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -34,9 +34,11 @@ const toggle = (
   Toggler.props.onChange('', { checked })
 }
 
-const urlMatchString = '/:profile/:start/:end'
-
-const getTestApp = (initialEntries: string[] = ['/']) =>
+const getTestApp = (
+  initialEntries: string[] = ['/'],
+  loadedProp: boolean = true,
+  windowProp: boolean = true
+) =>
   TestRenderer.create(
     <MemoryRouter initialEntries={initialEntries}>
       <Route
@@ -49,7 +51,8 @@ const getTestApp = (initialEntries: string[] = ['/']) =>
                 history={history}
                 match={match}
                 urlMatchString={urlMatchString}
-                windowProp={true}
+                windowProp={windowProp}
+                loadedProp={loadedProp}
               />
             )}
           />
@@ -94,7 +97,7 @@ describe('Start point Input works as expected on blur', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(2)
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
     })
   })
 
@@ -133,9 +136,8 @@ describe('Start point Input works as expected on blur', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(4)
-      expect(splitUrl[2]).toBe(formatCoords(mockCoords))
-      expect(splitUrl[3]).toBe('-')
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
+      expect(splitUrl[2]).toBe(`${formatCoords(mockCoords)};-`)
     })
   })
 })
@@ -176,7 +178,7 @@ describe('End point Input works as expected on blur', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(2)
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
     })
   })
 
@@ -216,9 +218,8 @@ describe('End point Input works as expected on blur', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(4)
-      expect(splitUrl[2]).toBe('-')
-      expect(splitUrl[3]).toBe(formatCoords(mockCoords))
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
+      expect(splitUrl[2]).toBe(`-;${formatCoords(mockCoords)}`)
     })
   })
 })
@@ -257,9 +258,8 @@ describe('Route is shown on map when both inputs have valid coordinates', () => 
 
     const splitUrl = location.pathname.split('/')
 
-    expect(splitUrl).toHaveLength(4)
-    expect(splitUrl[2]).toBe(formatCoords(mockCoords))
-    expect(splitUrl[3]).toBe(formatCoords(mockCoords))
+    expect(splitUrl).toHaveLength(matchingParams.length + 1)
+    expect(splitUrl[2]).toBe(`${formatCoords(mockCoords)};${formatCoords(mockCoords)}`)
   })
 })
 

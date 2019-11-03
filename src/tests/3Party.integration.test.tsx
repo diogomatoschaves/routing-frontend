@@ -6,7 +6,7 @@ import { googleDirections } from '../apiCalls'
 import { mockGoogleRoute, mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
-import { getPath } from '../utils/urlConfig'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -33,8 +33,6 @@ const toggle = (
 
   Toggler.props.onChange('', { checked })
 }
-
-const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: string[] = ['/']) =>
   TestRenderer.create(
