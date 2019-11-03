@@ -140,7 +140,6 @@ export const extractUrlParams = (
           activeIdx: endpointIdx
         }
       : endpoints
-
   return {
     endpointHandler: updatedEndpointHandler,
     locations: coords
