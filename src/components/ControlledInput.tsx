@@ -35,8 +35,12 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
   public componentDidUpdate(prevProps: Props, prevState: State) {
     const { coords } = this.props
 
-    if (prevProps.coords !== coords && coords.lat && coords.lng) {
-      this.setState({ value: formatCoords(coords) })
+    if (prevProps.coords !== coords) {
+      if (coords.lat && coords.lng) {
+        this.setState({ value: formatCoords(coords) })
+      } else {
+        this.setState({ value: '' })
+      }
     }
   }
 
