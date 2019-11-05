@@ -1,3 +1,4 @@
+import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
@@ -235,9 +236,37 @@ class App extends Component<any, State> {
     }
   }
 
+  public listenHistory = (history: History) => {
+    return history.listen((location: any, action: any) => {
+      if (action === 'POP') {
+        const { endpointHandler, locations, profile } = this.state
+        const { profiles, match } = this.props
+
+        const queryParams = extractQueryParams(location.search)
+
+        getSettingsFromUrl(
+          queryParams,
+          locations,
+          profile,
+          match.params,
+          endpointHandler,
+          profiles,
+          true,
+          history,
+          location,
+          this.waitTillLoaded
+        ).then((urlSettings: any) => {
+          this.setState(urlSettings)
+        })
+      }
+    })
+  }
+
   public async componentDidMount() {
     const { windowProp, match, location, history, loadedProp, profiles } = this.props
     const { validator, responses, body, locations, endpointHandler, profile } = this.state
+
+    const unlisten = this.listenHistory(history)
 
     this.getAuth().then(authorization => {
       this.setState({ authorization }, () => {

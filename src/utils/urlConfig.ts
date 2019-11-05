@@ -20,16 +20,6 @@ export interface OptionalParams {
   [key: string]: boolean | undefined | string
 }
 
-interface UrlParams {
-  locations?: Location[]
-  profile?: string
-  googleMapsOption?: boolean
-  trafficOption?: boolean
-  polygonsVisible?: boolean
-  routingGraphVisible?: boolean
-  debug?: boolean
-}
-
 export const requiredParams: Params = {
   endpointHandler: 'endpointHandler',
   locations: 'locations',
