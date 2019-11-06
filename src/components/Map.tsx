@@ -672,7 +672,7 @@ export default class Map extends Component<Props, State> {
       padding: {
         bottom: 120,
         left: 550,
-        right: 250,
+        right: 300,
         top: 350
       }
     })

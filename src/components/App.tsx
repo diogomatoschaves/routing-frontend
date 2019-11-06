@@ -110,6 +110,7 @@ interface State {
   inputValues: InputValues
   inputColors: InputColors
   routeHighlight: string
+  loading: boolean
   [key: string]: any
 }
 
@@ -394,18 +395,20 @@ class App extends Component<any, State> {
         (diff.profile || diff.locations || diff.endpointHandler) && true
 
       if (recalculate) {
-        this.getRoutes(
-          locations,
-          profile,
-          authorization,
-          (diff.googleMapsOption &&
-            !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
-            false,
-          google,
-          diff.trafficOption || false,
-          defaultOption || false,
-          endpointHandler.options[endpointHandler.activeIdx].text
-        )
+        this.setState({ loading: true }, () => {
+          this.getRoutes(
+            locations,
+            profile,
+            authorization,
+            (diff.googleMapsOption &&
+              !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
+              false,
+            google,
+            diff.trafficOption || false,
+            defaultOption || false,
+            endpointHandler.options[endpointHandler.activeIdx].text
+          ).finally(() => this.setState({ loading: false }))
+        })
       } else {
         this.updateState('recalculate', true)
       }
@@ -658,7 +661,7 @@ class App extends Component<any, State> {
           this.handleGoogleRequest(google, profile, locations)
       ])
     } else {
-      return Promise.resolve()
+      return Promise.all([])
     }
   }
 
@@ -1005,7 +1008,8 @@ class App extends Component<any, State> {
       messages,
       messageBottomProp,
       inputValues,
-      inputColors
+      inputColors,
+      loading
     } = this.state
     const { urlMatchString, profiles } = this.props
     const { show, hide } = this.props.animationDuration
@@ -1155,6 +1159,7 @@ class App extends Component<any, State> {
               inputColors={inputColors}
               addDataTabsHandler={addDataTabsHandler}
               addedRoutes={addedRoutes}
+              loading={loading}
             />
             <Map
               locations={locations}

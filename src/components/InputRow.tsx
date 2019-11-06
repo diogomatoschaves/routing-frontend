@@ -13,6 +13,7 @@ interface Props {
   iconName: string | any
   updatePoint: UpdatePoint
   urlMatchString: string
+  loading: boolean
 }
 
 const diameter = 38
@@ -27,7 +28,8 @@ const InputRow = (props: Props) => {
     coords,
     updatePoint,
     placeholder,
-    urlMatchString
+    urlMatchString,
+    loading
   } = props
 
   return (
@@ -39,6 +41,7 @@ const InputRow = (props: Props) => {
         circle={true}
         iconName={iconName}
         margin={'0 10px 0 0'}
+        loading={loading}
       />
       <ControlledInput
         rowKey={rowKey}

@@ -16,7 +16,7 @@ export type GetRoutes = (
   trafficOption: boolean,
   defaultOption: boolean,
   endpointUrl: string
-) => Promise<unknown[]> | Promise<void>
+) => Promise<unknown[]>
 export type UpdateStateCallback = (callback: any) => Promise<void>
 
 // Objects
