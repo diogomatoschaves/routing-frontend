@@ -2,7 +2,7 @@ import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
 import { auth, googleDirections, routingApi } from '../apiCalls'
@@ -35,15 +35,9 @@ import {
 } from '../types'
 import {
   PETROL_6,
-  POLYLINE_COLOR,
-  ROUTING_SERVICE,
-  ROUTING_SERVICE_STATS,
-  THIRD_PARTY_COLOR,
+  ROUTING_SERVICE_POLYLINE,
   THIRD_PARTY_POLYLINE,
-  THIRD_PARTY_STATS,
-  TRAFFIC_COLOR,
   TRAFFIC_POLYLINE,
-  TRAFFIC_STATS
 } from '../utils/colours'
 import {
   capitalize,
@@ -73,7 +67,7 @@ import {
 import InspectPanel from './InspectPanel'
 import Message from './Message'
 import Panel from './Panel'
-import RouteInfo from './RouteInfo'
+import RoutesInfoContainer from './RoutesInfoContainer'
 import TrafficLegend from './TrafficLegend'
 
 interface State {
@@ -177,11 +171,11 @@ const StyledBox = styled(Box)`
 
 const messageFailedRoute = (traffic: boolean, response: RouteResponse) => (
   <span>
-    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
       Routing Service{traffic ? ' - traffic' : ''}:
     </span>
     <span> {response.code}. </span>
-    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
       {response.message}
     </span>
   </span>
@@ -1097,45 +1091,7 @@ class App extends Component<any, State> {
             />
           </Sidebar>
           <Sidebar.Pusher>
-            {!debug && (
-              <Fragment>
-                {routes.route.distance && (
-                  <RouteInfo
-                    statsColor={ROUTING_SERVICE_STATS}
-                    textColor={ROUTING_SERVICE}
-                    iconColor={POLYLINE_COLOR}
-                    title={'Routing Service'}
-                    subTitle={'No Traffic'}
-                    route={routes.route}
-                    top={'40px'}
-                    right={'50px'}
-                  />
-                )}
-                {showTraffic && (
-                  <RouteInfo
-                    statsColor={TRAFFIC_STATS}
-                    textColor={TRAFFIC_COLOR}
-                    iconColor={TRAFFIC_POLYLINE}
-                    title={'Routing Service'}
-                    subTitle={'With Traffic'}
-                    route={routes.trafficRoute}
-                    top={'270px'}
-                    right={'50px'}
-                  />
-                )}
-                {googleMapsOption && routes.googleRoute.distance && (
-                  <RouteInfo
-                    statsColor={THIRD_PARTY_STATS}
-                    textColor={THIRD_PARTY_COLOR}
-                    iconColor={THIRD_PARTY_POLYLINE}
-                    title={'Google Maps'}
-                    route={routes.googleRoute}
-                    top={showTraffic ? '515px' : '270px'}
-                    right={'50px'}
-                  />
-                )}
-              </Fragment>
-            )}
+            {!debug && <RoutesInfoContainer routes={routes} />}
             <Panel
               locations={locations}
               profiles={profiles}
