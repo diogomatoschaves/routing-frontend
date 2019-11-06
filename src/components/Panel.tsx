@@ -43,6 +43,7 @@ interface Props {
   inputValues: InputValues
   inputColors: InputColors
   addedRoutes: Route[]
+  loading: boolean
 }
 
 const PanelWrapper: any = styled(Box)`
@@ -83,7 +84,8 @@ const Panel: any = (props: Props) => {
     inputValues,
     inputColors,
     addDataTabsHandler,
-    addedRoutes
+    addedRoutes,
+    loading,
   } = props
 
   return (
@@ -132,6 +134,7 @@ const Panel: any = (props: Props) => {
           urlMatchString={urlMatchString}
           trafficOption={trafficOption}
           profiles={profiles}
+          loading={loading}
         />
       )}
     </PanelWrapper>
