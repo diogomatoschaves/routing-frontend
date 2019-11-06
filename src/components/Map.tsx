@@ -15,7 +15,7 @@ import {
   UpdatePoint,
   UpdateState
 } from '../types'
-import { POLYLINE_COLOR, THIRD_PARTY_POLYLINE, TRAFFIC_POLYLINE } from '../utils/colours'
+import { ROUTING_SERVICE_POLYLINE, THIRD_PARTY_POLYLINE, TRAFFIC_POLYLINE } from '../utils/colours'
 import { checkNested, getSpeedsLayers, transformPoints } from '../utils/functions'
 import {
   defaultRoute,
@@ -82,7 +82,7 @@ export default class Map extends Component<Props, State> {
     ],
     routeProperties: [
       {
-        color: POLYLINE_COLOR,
+        color: ROUTING_SERVICE_POLYLINE,
         id: 'routeDAS',
         routeId: 'route',
         routingGraphVisible: true,
@@ -172,7 +172,7 @@ export default class Map extends Component<Props, State> {
           map,
           routingGraphVisible,
           routeName,
-          POLYLINE_COLOR,
+          ROUTING_SERVICE_POLYLINE,
           6.0
         )
       } else {
@@ -426,7 +426,7 @@ export default class Map extends Component<Props, State> {
           checkNested(routeKey, 'parsedValue', 'provider', 'name') &&
             routeKey.parsedValue.provider.name === 'Google'
             ? THIRD_PARTY_POLYLINE
-            : POLYLINE_COLOR,
+            : ROUTING_SERVICE_POLYLINE,
           6.0
         )
 

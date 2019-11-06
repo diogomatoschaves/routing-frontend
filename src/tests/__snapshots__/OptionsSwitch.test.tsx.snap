@@ -2,7 +2,7 @@
 
 exports[`expect to render OptionsPanel component 1`] = `
 <div
-  className="sc-bdVaJa dbyCSG"
+  className="sc-bdVaJa djbUSw"
   direction="row"
   height="50px"
   width="65%"
