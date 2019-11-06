@@ -544,28 +544,36 @@ class App extends Component<any, State> {
       }))
     }
 
-    if (prevState.trafficOption !== trafficOption) {
-      if (!trafficOption) {
-        this.setState(state => ({
-          ...state,
-          responses: {
-            ...state.responses,
-            trafficResponse: defaultRouteResponse
-          }
-        }))
-      }
+    if (prevState.profile !== profile) {
+      this.setState(state => ({
+        ...state,
+        responses: {
+          ...state.responses,
+          googleResponse: defaultGoogleResponse,
+          routeResponse: defaultRouteResponse,
+          trafficResponse: defaultRouteResponse
+        }
+      }))
     }
 
-    if (prevState.googleMapsOption !== googleMapsOption) {
-      if (!googleMapsOption) {
-        this.setState(state => ({
-          ...state,
-          responses: {
-            ...state.responses,
-            googleResponse: defaultGoogleResponse
-          }
-        }))
-      }
+    if (prevState.trafficOption !== trafficOption && !trafficOption) {
+      this.setState(state => ({
+        ...state,
+        responses: {
+          ...state.responses,
+          trafficResponse: defaultRouteResponse
+        }
+      }))
+    }
+
+    if (prevState.googleMapsOption !== googleMapsOption && !googleMapsOption) {
+      this.setState(state => ({
+        ...state,
+        responses: {
+          ...state.responses,
+          googleResponse: defaultGoogleResponse
+        }
+      }))
     }
 
     if (prevState.showMessage !== showMessage && showMessage) {
