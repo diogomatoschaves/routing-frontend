@@ -6,7 +6,7 @@ import {
   Coords2,
   GeographiesHandler,
   Geography,
-  Location,
+  LocationInfo,
   MapboxStyle,
   OptionsHandler,
   Route,
@@ -42,7 +42,7 @@ interface State {
 }
 
 interface Props {
-  locations: Location[]
+  locations: LocationInfo[]
   profile: string
   updatePoint: UpdatePoint
   updateState: UpdateState
@@ -433,7 +433,7 @@ export default class Map extends Component<Props, State> {
         if (routeKey.routePath.length >= 2) {
           const startLocation = {
             lat: routeKey.routePath[0].lat,
-            lng: routeKey.routePath[0].lon,
+            lon: routeKey.routePath[0].lon,
             marker: 'map marker alternate',
             markerOffset: [0, 5],
             name: 'start',
@@ -441,7 +441,7 @@ export default class Map extends Component<Props, State> {
           }
           const endLocation = {
             lat: routeKey.routePath.slice(-1)[0].lat,
-            lng: routeKey.routePath.slice(-1)[0].lon,
+            lon: routeKey.routePath.slice(-1)[0].lon,
             marker: 'map marker',
             markerOffset: [0, 5],
             name: 'end',
@@ -534,10 +534,10 @@ export default class Map extends Component<Props, State> {
 
     const coords = {
       lat: event.lngLat.lat,
-      lng: event.lngLat.lng
+      lon: event.lngLat.lng
     }
 
-    if (!locations[0].lat || !locations[0].lng) {
+    if (!locations[0].lat || !locations[0].lon) {
       updatePoint([0], [coords])
     } else {
       updatePoint([locations.length - 1], [coords])
@@ -545,14 +545,14 @@ export default class Map extends Component<Props, State> {
   }
 
   private addLocationMarkers = (
-    locations: Location[],
+    locations: LocationInfo[],
     map: mapboxgl.Map,
     updatePoint: UpdatePoint,
     id: string
   ) => {
     return locations.reduce(
-      (accum: MarkerObject[], location: Location, index: number) => {
-        if (location.lng && location.lat) {
+      (accum: MarkerObject[], location: LocationInfo, index: number) => {
+        if (location.lon && location.lat) {
           return [...accum, this.addMarker(location, map, index, updatePoint, true, id)]
         } else {
           return accum
@@ -563,7 +563,7 @@ export default class Map extends Component<Props, State> {
   }
 
   private addMarker = (
-    location: Location,
+    location: LocationInfo,
     map: mapboxgl.Map,
     index: number,
     updatePoint: UpdatePoint,
@@ -581,14 +581,14 @@ export default class Map extends Component<Props, State> {
         location.markerOffset &&
         new mapboxgl.Point(location.markerOffset[0], location.markerOffset[1])
     })
-      .setLngLat([location.lng ? location.lng : 0, location.lat ? location.lat : 0])
+      .setLngLat([location.lon ? location.lon : 0, location.lat ? location.lat : 0])
       .addTo(map)
 
     marker &&
       draggable &&
       marker.on('dragend', () => {
         const coords = marker.getLngLat()
-        updatePoint([index], [{ lat: coords.lat, lng: coords.lng }])
+        updatePoint([index], [{ lat: coords.lat, lon: coords.lng }])
       })
 
     return {

@@ -7,32 +7,32 @@ import InspectPanel from '../components/InspectPanel'
 const mockLocations = [
   {
     lat: null,
-    lng: null,
+    lon: null,
     marker: 'map marker alternate',
     name: 'start',
     placeholder: 'Origin'
   },
   {
     lat: null,
-    lng: null,
+    lon: null,
     marker: 'flag checkered',
     name: 'end',
     placeholder: 'Destination'
   }
 ]
 
-const mockEventStart = { lng: 13.389869, lat: 52.510348 }
-const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
+const mockEventStart = { lon: 13.389869, lat: 52.510348 }
+const mockEventEnd = { lon: 13.39114, lat: 52.510425 }
 
 const mockBody = {
   locations: [
     {
       lat: mockEventStart.lat,
-      lon: mockEventStart.lng
+      lon: mockEventStart.lon
     },
     {
       lat: mockEventEnd.lat,
-      lon: mockEventEnd.lng
+      lon: mockEventEnd.lon
     }
   ],
   reportGeometry: true

@@ -1,7 +1,7 @@
 import { History, Location as BrowserLocation } from 'history'
 import queryString from 'query-string'
 import { generatePath } from 'react-router'
-import { Coords, Location, OptionsHandler, ProfileItem, WaitTillLoaded } from '../types'
+import { Coords, LocationInfo, OptionsHandler, ProfileItem, WaitTillLoaded } from '../types'
 import { findDiff, formatCoords, splitCoords, stringToBoolean } from './functions'
 
 interface Params {
@@ -38,7 +38,7 @@ export const urlMatchString = matchingParams.join('')
 
 export const getSettingsFromUrl = (
   queryParams: OptionalParams,
-  locations: Location[],
+  locations: LocationInfo[],
   profile: string,
   params: Params,
   endpoints: OptionsHandler,
@@ -86,8 +86,8 @@ export const checkUrlValidity = (
       if (el === requiredParams.locations) {
         const coords = params[requiredParams.locations]
           .split(';')
-          .map(item => splitCoords(item) || { lat: null, lng: null })
-        return coords.every(coord => coord.lat && coord.lng)
+          .map(item => splitCoords(item) || { lat: null, lon: null })
+        return coords.every(coord => coord.lat && coord.lon)
       } else if (el === requiredParams.profile) {
         return acceptableProfiles.includes(params[el])
       } else if (el === requiredParams.endpointHandler) {
@@ -114,8 +114,35 @@ export const getPath = (pathname: string) => {
       }, '')
 }
 
+export const generateFullPath = (
+  locations: LocationInfo[],
+  profile: string,
+  endpointHandler: string,
+  queryParams: OptionalParams
+) => {
+  const urlParamsString = generatePath(urlMatchString, {
+    endpointHandler,
+    locations: locations
+      .map(location => {
+        return location.lat && location.lon
+          ? formatCoords({ lat: location.lat, lon: location.lon })
+          : '-'
+      })
+      .join(';'),
+    profile
+  })
+
+  const queryParamsString = Object.entries(queryParams)
+    .reduce((str: string, param: any) => {
+      return `${str}${param[0]}=${String(param[1])}&`
+    }, '?')
+    .slice(0, -1)
+
+  return urlParamsString + queryParamsString
+}
+
 export const extractUrlParams = (
-  locations: Location[],
+  locations: LocationInfo[],
   params: Params,
   endpoints: OptionsHandler
 ) => {
@@ -127,7 +154,7 @@ export const extractUrlParams = (
     validLocation &&
     params[requiredParams.locations]
       .split(';')
-      .map(item => splitCoords(item) || { lat: null, lng: null })
+      .map(item => splitCoords(item) || { lat: null, lon: null })
 
   const endpointIdx = endpoints.options.findIndex(
     el => el.key === params[requiredParams.endpointHandler]
@@ -150,33 +177,6 @@ export const extractUrlParams = (
       : locations,
     profile: params[requiredParams.profile]
   }
-}
-
-export const generateFullPath = (
-  locations: Location[],
-  profile: string,
-  endpointHandler: string,
-  queryParams: OptionalParams
-) => {
-  const urlParamsString = generatePath(urlMatchString, {
-    endpointHandler,
-    locations: locations
-      .map(location => {
-        return location.lat && location.lng
-          ? formatCoords({ lat: location.lat, lng: location.lng })
-          : '-'
-      })
-      .join(';'),
-    profile
-  })
-
-  const queryParamsString = Object.entries(queryParams)
-    .reduce((str: string, param: any) => {
-      return `${str}${param[0]}=${String(param[1])}&`
-    }, '?')
-    .slice(0, -1)
-
-  return urlParamsString + queryParamsString
 }
 
 export const extractQueryParams = (queryParams: string) => {
@@ -217,7 +217,7 @@ export const getUrlParamsDiff = (
 }
 
 export const updateUrl = (
-  locations: Location[],
+  locations: LocationInfo[],
   profile: string,
   endpoint: string,
   history: History,

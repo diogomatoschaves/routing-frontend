@@ -65,11 +65,11 @@ describe('Behaviour of textarea to add new routes from route response', () => {
   const mockProfile = 'car'
   const mockStart = {
     lat: 53,
-    lng: 12
+    lon: 12
   }
   const mockEnd = {
     lat: 55,
-    lng: 15
+    lon: 15
   }
   const initialState = `/${mockProfile}/${formatCoords(mockStart)};${formatCoords(mockEnd)}`
 

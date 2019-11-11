@@ -20,8 +20,8 @@ const delay = (ms: number) =>
     }, ms)
   })
 
-const mockEventStart = { lng: 13.389869, lat: 52.510348 }
-const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
+const mockEventStart = { lon: 13.389869, lat: 52.510348 }
+const mockEventEnd = { lon: 13.39114, lat: 52.510425 }
 
 const selectNext = (root: any) => {
   const NextProfile = root.findAllByType(Box).filter((el: any) => {

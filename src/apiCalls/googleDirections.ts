@@ -11,10 +11,10 @@ const googleDirections = (
   locations: any
 ): Promise<GoogleResponse> => {
   return new Promise(resolve => {
-    const origin = new google.maps.LatLng(locations[0].lat, locations[0].lng)
+    const origin = new google.maps.LatLng(locations[0].lat, locations[0].lon)
     const destination = new google.maps.LatLng(
       locations.slice(-1)[0].lat,
-      locations.slice(-1)[0].lng
+      locations.slice(-1)[0].lon
     )
 
     new google.maps.DirectionsService().route(
