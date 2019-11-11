@@ -19,7 +19,7 @@ const delay = (ms: number) =>
 
 const mockCoords = {
   lat: 53,
-  lng: 12
+  lon: 12
 }
 
 const toggle = (
@@ -81,9 +81,9 @@ describe('When 3rd party option is selected', () => {
       const input = root.findAllByType(Input)
 
       // act(() => {
-      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
       input[0].props.onBlur()
-      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
       input[1].props.onBlur()
       // })
     })

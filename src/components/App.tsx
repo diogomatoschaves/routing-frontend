@@ -11,7 +11,6 @@ import Map from './Map'
 import { Box, EmptySpace } from '../styledComponents'
 import {
   Body,
-  Coords,
   GeographiesHandler,
   GetRoutes,
   GoogleResponse,
@@ -21,6 +20,7 @@ import {
   InputColors,
   InputValues,
   Location,
+  LocationInfo,
   Messages,
   OptionsHandler,
   ResponseOptionsHandler,
@@ -73,7 +73,7 @@ import TrafficLegend from './TrafficLegend'
 interface State {
   validator?: Validator
   recalculate: boolean
-  locations: Location[]
+  locations: LocationInfo[]
   authorization: string
   responses: Responses
   routes: Routes
@@ -219,6 +219,8 @@ class App extends Component<any, State> {
 
   public state = getAppState()
 
+  public propsToReset = new Set(['bearing', 'radius'])
+
   public getAuth = async () => {
     if (process.env.NODE_ENV !== 'production') {
       const password = process.env.REACT_APP_LDAP_PASSWORD
@@ -321,7 +323,6 @@ class App extends Component<any, State> {
 
   public componentDidUpdate(prevProps: any, prevState: State) {
     const {
-      debug,
       mapLoaded,
       locations,
       authorization,
@@ -625,7 +626,7 @@ class App extends Component<any, State> {
   }
 
   public getRoutes: GetRoutes = (
-    locations: Location[],
+    locations: LocationInfo[],
     profile: string,
     authorization: string,
     googleMapsOption: boolean,
@@ -634,8 +635,13 @@ class App extends Component<any, State> {
     defaultOption: boolean,
     endpointUrl: string
   ) => {
-    if (locations.length >= 2 && !locations.some((el: Location) => !el.lat || !el.lng)) {
+    if (
+      locations.length >= 2 &&
+      !locations.some((el: LocationInfo) => !el.lat || !el.lon)
+    ) {
       const body = getRequestBody(locations)
+
+      this.setState({ body })
 
       return Promise.all([
         defaultOption &&
@@ -674,7 +680,6 @@ class App extends Component<any, State> {
         .then((routeResponse: RouteResponse) => {
           this.setState(
             state => ({
-              body,
               messages: {
                 ...state.messages,
                 [message]: null
@@ -710,7 +715,11 @@ class App extends Component<any, State> {
     })
   }
 
-  public handleGoogleRequest = (google: any, profile: string, locations: Location[]) => {
+  public handleGoogleRequest = (
+    google: any,
+    profile: string,
+    locations: LocationInfo[]
+  ) => {
     return new Promise(resolve => {
       googleDirections(google, profile, locations)
         .then((googleResponse: GoogleResponse) => {
@@ -775,21 +784,32 @@ class App extends Component<any, State> {
     }
   }
 
-  public updatePoint: UpdatePoint = (indexes: number[], coords: Coords[]) => {
+  public updatePoint: UpdatePoint = (indexes: number[], newLocations: Location[]) => {
     this.setState(state => {
       return {
         locations: state.locations.reduce(
-          (accum: Location[], element: Location, currentIndex: number) => {
+          (accum: LocationInfo[], element: LocationInfo, currentIndex: number) => {
             if (!indexes.includes(currentIndex)) {
               return [...accum, element]
             } else {
               const index = indexes.findIndex(el => el === currentIndex)
+              const resettedLocation = Object.keys(element).reduce(
+                (newObj: any, prop) => {
+                  return this.propsToReset.has(prop)
+                    ? newObj
+                    : {
+                        ...newObj,
+                        [prop]: element[prop]
+                      }
+                },
+                {}
+              )
+
               return [
                 ...accum,
                 {
-                  ...element,
-                  lat: coords[index].lat,
-                  lng: coords[index].lng
+                  ...resettedLocation,
+                  ...newLocations[index]
                 }
               ]
             }

@@ -8,7 +8,7 @@ import {
   HandleValueUpdate,
   InputColors,
   InputValues,
-  Location,
+  LocationInfo,
   OptionsHandler,
   ProfileItem,
   Route,
@@ -26,7 +26,7 @@ interface Props {
   handleClickRoute: HandleConfirmButton
   handleDeleteRoute: HandleDeleteRoute
   handleShowClick: () => void
-  locations: Location[]
+  locations: LocationInfo[]
   profiles: ProfileItem[]
   routingGraphVisible: boolean
   polygonsVisible: boolean

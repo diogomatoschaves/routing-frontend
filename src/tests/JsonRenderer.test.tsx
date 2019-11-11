@@ -3,18 +3,18 @@ import { MemoryRouter } from 'react-router-dom'
 import TestRenderer from 'react-test-renderer'
 import TextAreaInput from '../components/TextAreaInput'
 
-const mockEventStart = { lng: 13.389869, lat: 52.510348 }
-const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
+const mockEventStart = { lon: 13.389869, lat: 52.510348 }
+const mockEventEnd = { lon: 13.39114, lat: 52.510425 }
 
 const mockBody = {
   locations: [
     {
       lat: mockEventStart.lat,
-      lon: mockEventStart.lng
+      lon: mockEventStart.lon
     },
     {
       lat: mockEventEnd.lat,
-      lon: mockEventEnd.lng
+      lon: mockEventEnd.lon
     }
   ],
   reportGeometry: true

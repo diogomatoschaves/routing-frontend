@@ -13,7 +13,7 @@ it('expect to render App component', () => {
         updateColor={jest.fn()}
         rowKey="start"
         index={0}
-        coords={{ lat: 52, lng: 12 }}
+        coords={{ lat: 52, lon: 12 }}
         placeholder="Origin"
         urlMatchString={urlMatchString}
       />

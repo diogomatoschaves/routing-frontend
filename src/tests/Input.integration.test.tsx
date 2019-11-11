@@ -19,7 +19,7 @@ const delay = (ms: number) =>
 
 const mockCoords = {
   lat: 53,
-  lng: 12
+  lon: 12
 }
 
 const toggle = (
@@ -84,7 +84,7 @@ describe('Start point Input works as expected on blur', () => {
       const startPoint = locations.find((el: any) => el.name === 'start')
 
       expect(startPoint.lat).toBe(null)
-      expect(startPoint.lng).toBe(null)
+      expect(startPoint.lon).toBe(null)
     })
 
     it('does not insert a marker on the Map component', () => {
@@ -111,7 +111,7 @@ describe('Start point Input works as expected on blur', () => {
     const MapComponent = root.findByType(Map).instance
 
     beforeAll(() => {
-      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
       input[0].props.onBlur()
     })
 
@@ -123,7 +123,7 @@ describe('Start point Input works as expected on blur', () => {
       const startPoint = locations.find((el: any) => el.name === 'start')
 
       expect(startPoint.lat).toBe(mockCoords.lat)
-      expect(startPoint.lng).toBe(mockCoords.lng)
+      expect(startPoint.lon).toBe(mockCoords.lon)
     })
 
     it('inserts a marker on the Map component', () => {
@@ -165,7 +165,7 @@ describe('End point Input works as expected on blur', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(endPoint.lat).toBe(null)
-      expect(endPoint.lng).toBe(null)
+      expect(endPoint.lon).toBe(null)
     })
 
     it('does not insert a marker on the Map component', () => {
@@ -192,7 +192,7 @@ describe('End point Input works as expected on blur', () => {
     const MapComponent = root.findByType(Map).instance
 
     beforeAll(() => {
-      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
       input[1].props.onBlur()
     })
 
@@ -204,7 +204,7 @@ describe('End point Input works as expected on blur', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(endPoint.lat).toBe(mockCoords.lat)
-      expect(endPoint.lng).toBe(mockCoords.lng)
+      expect(endPoint.lon).toBe(mockCoords.lon)
     })
 
     it('inserts a marker on the Map component', () => {
@@ -234,9 +234,9 @@ describe('Route is shown on map when both inputs have valid coordinates', () => 
   const MapComponent = root.findByType(Map).instance
 
   beforeAll(() => {
-    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
     input[0].props.onBlur()
-    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
     input[1].props.onBlur()
   })
 
@@ -334,9 +334,9 @@ describe('Deleting one of the coordinates', () => {
   describe('Behaviour when input is deleted', () => {
     beforeAll(() => {
       const input = root.findAllByType(Input)
-      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
       input[0].props.onBlur()
-      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+      input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
       input[1].props.onBlur()
     })
 
@@ -403,9 +403,9 @@ describe('Behaviour when response returns no result', () => {
       true
     )
 
-    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+    input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
     input[0].props.onBlur()
-    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+    input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
     input[1].props.onBlur()
   })
 
@@ -421,18 +421,18 @@ describe('Behaviour when response returns no result', () => {
     beforeAll(() => {
       const mockCoordsInner = {
         lat: 100,
-        lng: 100
+        lon: 100
       }
 
       removeSourceLayerSpy = jest.spyOn(MapComponent, 'removeSourceLayer')
       addPolylineSpy = jest.spyOn(MapComponent, 'addPolyline')
 
       input[0].props.onChange('', {
-        value: `${mockCoordsInner.lat},${mockCoordsInner.lng}`
+        value: `${mockCoordsInner.lat},${mockCoordsInner.lon}`
       })
       input[0].props.onBlur()
       input[1].props.onChange('', {
-        value: `${mockCoordsInner.lat},${mockCoordsInner.lng}`
+        value: `${mockCoordsInner.lat},${mockCoordsInner.lon}`
       })
       input[1].props.onBlur()
     })

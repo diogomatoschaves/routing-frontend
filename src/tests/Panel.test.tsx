@@ -6,14 +6,14 @@ import Panel from '../components/Panel'
 const mockLocations = [
   {
     lat: null,
-    lng: null,
+    lon: null,
     marker: 'map marker alternate',
     name: 'start',
     placeholder: 'Origin'
   },
   {
     lat: null,
-    lng: null,
+    lon: null,
     marker: 'flag checkered',
     name: 'end',
     placeholder: 'Destination'
