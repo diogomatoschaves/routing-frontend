@@ -6,6 +6,18 @@ export type HandleValueUpdate = ({ id, value }: { id: string; value: any }) => b
 export type HandleConfirmButton = (setState: any, value: any, id: string) => void
 export type HandleAddRoute = (route: Route) => void
 export type HandleDeleteRoute = (id: string) => void
+export type WaitTillLoaded = (loadedProp: boolean) => Promise<boolean>
+export type GetRoutes = (
+  locations: Location[],
+  profile: string,
+  authorization: string,
+  googleMapsOption: boolean,
+  google: any,
+  trafficOption: boolean,
+  defaultOption: boolean,
+  endpointUrl: string
+) => Promise<unknown[]> | Promise<void>
+export type UpdateStateCallback = (callback: any) => Promise<void>
 
 // Objects
 export interface Location {
@@ -206,4 +218,9 @@ export interface InputColors {
   match: string
   body: string
   [key: string]: string
+}
+
+export interface ProfileItem {
+  iconName: string
+  name: string
 }

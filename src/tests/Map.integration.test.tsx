@@ -7,7 +7,8 @@ import App from '../components/App'
 import EndpointRow from '../components/EndpointRow'
 import Map from '../components/Map'
 import { Tab } from '../components/Tabs'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath, matchingParams, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -31,8 +32,6 @@ const mockEventEnd = {
     lng: 15
   }
 }
-
-const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: string[] = ['/']) =>
   TestRenderer.create(
@@ -108,9 +107,8 @@ describe('Start and end points work as expected', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(4)
-      expect(splitUrl[2]).toBe(formatCoords(mockEventStart.lngLat))
-      expect(splitUrl[3]).toBe('-')
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
+      expect(splitUrl[2]).toBe(`${formatCoords(mockEventStart.lngLat)};-`)
     })
   })
 
@@ -167,9 +165,10 @@ describe('Start and end points work as expected', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(4)
-      expect(splitUrl[2]).toBe(formatCoords(mockEventStart.lngLat))
-      expect(splitUrl[3]).toBe(formatCoords(mockEventEnd.lngLat))
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
+      expect(splitUrl[2]).toBe(
+        `${formatCoords(mockEventStart.lngLat)};${formatCoords(mockEventEnd.lngLat)}`
+      )
     })
   })
 })

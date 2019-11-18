@@ -1,29 +1,15 @@
 import React, { Fragment } from 'react'
-import { UpdateState } from '../types'
+import { ProfileItem, UpdateState } from '../types'
 import ProfileButton from './ProfileButton'
 
 interface Props {
   diameter: number
   updateState: UpdateState
   profile: string
+  profiles: ProfileItem[]
 }
 
-const profiles = [
-  {
-    iconName: 'car',
-    name: 'car'
-  },
-  {
-    iconName: 'male',
-    name: 'foot'
-  },
-  {
-    iconName: 'rocket',
-    name: 'pilot'
-  }
-]
-
-export default function ProfilesRow({ diameter, updateState, profile }: Props) {
+export default function ProfilesRow({ diameter, updateState, profile, profiles }: Props) {
   return (
     <Fragment>
       {profiles.map(profileEntry => {

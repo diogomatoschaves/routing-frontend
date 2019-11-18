@@ -1,34 +1,34 @@
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
 import round from 'lodash/round'
-import { Coords, Coords2, Location, Route, UpdatePoint, UpdateState } from '../types'
-import { defaultGoogleResponse, layersArray } from './input'
+import {
+  Coords,
+  Coords2,
+  Location,
+  Route,
+  UpdatePoint,
+  UpdateState,
+  UpdateStateCallback
+} from '../types'
 import {
   defaultBody,
+  defaultGoogleResponse,
   defaultMatchResponse,
   defaultRoute,
-  defaultRouteResponse
+  defaultRouteResponse,
+  layersArray
 } from './input'
 import { Schema } from './schemas'
 
-export const getPath = (pathname: string) => {
-  const matching = ['/:profile', '/:start', '/:end']
-  const splitUrl = pathname.split('/')
-
-  let usedIndex = -1
-  const path =
-    splitUrl.length > 4
-      ? ''
-      : splitUrl.reduce((accum: string, item: string, index: number) => {
-          if (item) {
-            usedIndex++
-            return accum + matching[usedIndex]
-          } else {
-            return accum
-          }
-        }, '')
-
-  return path
+export const stringToBoolean = (str: string) => {
+  switch (str.toLowerCase().trim()) {
+    case 'true':
+    case 'yes':
+    case '1':
+      return true
+    default:
+      return false
+  }
 }
 
 export const formatCoords = (coords: Coords) =>
@@ -182,7 +182,7 @@ export const validateJSON = (
   inputType: string,
   inputId: string,
   defaultColor: string,
-  setState: any
+  setState: UpdateStateCallback
 ) => {
   let parsedValue
   try {
@@ -443,9 +443,9 @@ export const getAppState = () => {
     routeHighlight: '',
     showMessage: false,
     messages: {
+      googleMessage: null,
       routeMessage: null,
-      trafficMessage: null,
-      googleMessage: null
+      trafficMessage: null
     },
     messageBottomProp: -300
   }
@@ -453,16 +453,34 @@ export const getAppState = () => {
 
 export const getAppProps = () => {
   return {
-    urlParams: {
-      matching: ['', '/:profile', '/:start', '/:end'],
-      requiredParams: {
-        profile: 'profile',
-        start: 'start',
-        end: 'end'
-      },
-      acceptableProfiles: ['car', 'foot']
-    },
     animationDuration: { show: 500, hide: 100 },
-    defaultColor: 'rgb(100, 100, 100)'
+    defaultColor: 'rgb(100, 100, 100)',
+    profiles: [
+      {
+        iconName: 'car',
+        name: 'car'
+      },
+      {
+        iconName: 'male',
+        name: 'foot'
+      },
+      {
+        iconName: 'rocket',
+        name: 'pilot'
+      }
+    ]
   }
+}
+
+export const findDiff: any = (object1: any, object2: any) => {
+  return Object.keys(object1).reduce((accum, value) => {
+    if (object1[value] !== object2[value]) {
+      return {
+        ...accum,
+        [value]: object1[value]
+      }
+    } else {
+      return accum
+    }
+  }, {})
 }

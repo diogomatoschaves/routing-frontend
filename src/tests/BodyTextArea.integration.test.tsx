@@ -8,7 +8,8 @@ import InspectPanel from '../components/InspectPanel'
 import Map from '../components/Map'
 import { Tab } from '../components/Tabs'
 import TextAreaInput from '../components/TextAreaInput'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath, matchingParams, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -35,8 +36,6 @@ const mockBody = {
   ],
   reportGeometry: true
 }
-
-const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: string[] = ['/']) =>
   TestRenderer.create(
@@ -190,9 +189,10 @@ describe('Behaviour of Changing Body raw data', () => {
 
       const splitUrl = location.pathname.split('/')
 
-      expect(splitUrl).toHaveLength(4)
-      expect(splitUrl[2]).toBe(formatCoords(mockEventStart))
-      expect(splitUrl[3]).toBe(formatCoords(mockEventEnd))
+      expect(splitUrl).toHaveLength(matchingParams.length + 1)
+      expect(splitUrl[2]).toBe(
+        `${formatCoords(mockEventStart)};${formatCoords(mockEventEnd)}`
+      )
     })
   })
 })

@@ -3,15 +3,13 @@ import { MemoryRouter, Route } from 'react-router-dom'
 import TestRenderer from 'react-test-renderer'
 import { Checkbox } from 'semantic-ui-react'
 import mockGoogleResponse from '../apiCalls/__mocks__/mockGoogleResponse'
-import {
-  mockCarResponse,
-  mockCarTrafficResponse
-} from '../apiCalls/__mocks__/mockResponse'
+import { mockCarResponse, mockCarTrafficResponse } from '../apiCalls/__mocks__/mockResponse'
 import App from '../components/App'
 import InspectPanel from '../components/InspectPanel'
 import Map from '../components/Map'
 import { Box } from '../styledComponents'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -25,20 +23,6 @@ const delay = (ms: number) =>
 const mockEventStart = { lng: 13.389869, lat: 52.510348 }
 const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
 
-const urlMatchString = '/:profile/:start/:end'
-
-const toggle = (
-  root: any,
-  togglerProps: { text: string; id: string },
-  checked: boolean
-) => {
-  const Toggler = root.findAllByType(Checkbox).filter((el: any) => {
-    return el.props.id === togglerProps.id
-  })[0]
-
-  Toggler.props.onChange('', { checked })
-}
-
 const selectNext = (root: any) => {
   const NextProfile = root.findAllByType(Box).filter((el: any) => {
     return el.props.right
@@ -47,7 +31,11 @@ const selectNext = (root: any) => {
   NextProfile.props.onClick()
 }
 
-const getTestApp = (initialEntries: string[] = ['/']) =>
+const getTestApp = (
+  initialEntries: string[] = ['/'],
+  loadedProp: boolean = true,
+  windowProp: boolean = true
+) =>
   TestRenderer.create(
     <MemoryRouter initialEntries={initialEntries}>
       <Route
@@ -60,7 +48,8 @@ const getTestApp = (initialEntries: string[] = ['/']) =>
                 history={history}
                 match={match}
                 urlMatchString={urlMatchString}
-                loadedProp={true}
+                windowProp={windowProp}
+                loadedProp={loadedProp}
               />
             )}
           />
@@ -72,45 +61,37 @@ const getTestApp = (initialEntries: string[] = ['/']) =>
 describe('Behaviour of Responses Toggler', () => {
   const mockProfile = 'car'
 
+  const queryParams = {
+    google: true,
+    traffic: true
+  }
+
+  const queryParamsString = Object.entries(queryParams)
+    .reduce((str: string, param: any) => {
+      return `${str}${param[0]}=${String(param[1])}&`
+    }, '?')
+    .slice(0, -1)
+
   const testInstance = getTestApp([
-    `/${mockProfile}/${formatCoords(mockEventStart)}/${formatCoords(mockEventEnd)}`
+    `/${mockProfile}/${formatCoords(mockEventStart)};${formatCoords(mockEventEnd)}` +
+      queryParamsString
   ])
 
   const root = testInstance.root
 
-  const AppComponent = root.findByType(App).instance
-  const MapComponent = root.findByType(Map).instance
-
   const InspectPanelComponent = root.findByType(InspectPanel)
 
   describe('Initial state', () => {
-    beforeAll(() => {
-      toggle(
-        root,
-        {
-          id: 'trafficOption',
-          text: 'Traffic'
-        },
-        true
-      )
+    delay(500).then(() => {
+      it('Default response is routing service without traffic', done => {
+        const { response } = InspectPanelComponent.props
 
-      toggle(
-        root,
-        {
-          id: 'googleMapsOption',
-          text: 'Compare 3rd Party'
-        },
-        true
-      )
-    })
+        const duration = response.routes[0].totalDuration
+        const mockDuration = mockCarResponse.routes[0].totalDuration
 
-    it('Default response is routing service without traffic', () => {
-      const { response } = InspectPanelComponent.props
-
-      const duration = response.routes[0].totalDuration
-      const mockDuration = mockCarResponse.routes[0].totalDuration
-
-      expect(duration).toBe(mockDuration)
+        expect(duration).toBe(mockDuration)
+        done()
+      })
     })
   })
 

@@ -6,7 +6,7 @@ import { routingApi } from '../apiCalls'
 import { mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
-import { getPath } from '../utils/functions'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -21,8 +21,6 @@ const mockCoords = {
   lat: 53,
   lng: 12
 }
-
-const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: string[] = ['/']) =>
   TestRenderer.create(

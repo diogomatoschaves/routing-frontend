@@ -9,6 +9,7 @@ export const routingApi = jest.fn().mockImplementation((profile, authorization, 
       code: 'LocationInvalid'
     })
   }
+
   return profile === 'car'
     ? Promise.resolve(mockCarResponse)
     : profile === 'car-traffic'

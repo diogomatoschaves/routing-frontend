@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/runtime": "^7.4.5",
     "@mapbox/polyline": "^1.1.0",
+    "@types/googlemaps": "^3.38.0",
     "@types/jest": "^24.0.13",
     "@types/js-base64": "^2.3.1",
     "@types/json5": "0.0.30",
@@ -25,6 +26,7 @@
     "lodash": "^4.17.11",
     "mapbox-gl": "^0.54.0",
     "nanoid": "^2.0.3",
+    "query-string": "^6.8.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",

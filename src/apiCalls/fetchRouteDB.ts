@@ -1,5 +1,3 @@
-import { Body } from '../types'
-
 const fetchRouteDB = async (routeId: string) => {
   const headers = new Headers() as any
 
@@ -11,8 +9,8 @@ const fetchRouteDB = async (routeId: string) => {
   const url = `${baseUrl}/search?id=${routeId}`
 
   const response = await fetch(url, {
-    method: 'GET',
     headers,
+    method: 'GET'
   })
 
   return await response.json()
