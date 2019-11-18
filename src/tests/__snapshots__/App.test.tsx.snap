@@ -352,10 +352,7 @@ exports[`expect to render App component 1`] = `
                 onInput={[Function]}
                 placeholder=""
                 rows={15}
-                value="{
-  \\"locations\\": [],
-  \\"reportGeometry\\": true
-}"
+                value=""
               />
             </form>
           </div>
@@ -611,23 +608,7 @@ exports[`expect to render App component 1`] = `
                 onInput={[Function]}
                 placeholder=""
                 rows={15}
-                value="{
-  \\"code\\": \\"Ok\\",
-  \\"routes\\": [
-    {
-      \\"totalDuration\\": 0,
-      \\"totalDistance\\": 0,
-      \\"legs\\": [
-        {
-          \\"geometry\\": [],
-          \\"duration\\": 0,
-          \\"distance\\": 0
-        }
-      ]
-    }
-  ],
-  \\"locations\\": []
-}"
+                value=""
               />
             </form>
           </div>

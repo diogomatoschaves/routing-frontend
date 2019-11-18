@@ -51,11 +51,27 @@ const mockGeographies = [
   }
 ]
 
+const profiles = [
+  {
+    iconName: 'car',
+    name: 'car'
+  },
+  {
+    iconName: 'male',
+    name: 'foot'
+  },
+  {
+    iconName: 'rocket',
+    name: 'pilot'
+  }
+]
+
 it('expect to render Panel component', () => {
   const testInstance = TestRenderer.create(
     <MemoryRouter initialEntries={['/']}>
       <Panel
         locations={mockLocations}
+        profiles={profiles}
         updatePoint={jest.fn()}
         updateState={jest.fn()}
         handleValueUpdate={jest.fn()}

@@ -5,7 +5,8 @@ import { Dropdown, Input } from 'semantic-ui-react'
 import App from '../components/App'
 import EndpointRow from '../components/EndpointRow'
 import { Option } from '../types'
-import { formatCoords, getPath } from '../utils/functions'
+import { formatCoords } from '../utils/functions'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -23,7 +24,6 @@ const defaultEndpointID = 0
 const mockNewEndpointID = 2
 const mockNewEndpointString = 'https://routing.testing.otonomousmobility.com/${PROFILE}'
 const mockNewCustomEndpoint = 'http://localhost:5001'
-const urlMatchString = '/:profile/:start/:end'
 
 const setCoordinates = (input: any) => {
   input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
@@ -97,12 +97,12 @@ describe('On a blank app, use the correct expected endpoint when requesting rout
     })
 
     it('sends the next route request to the selected endpoint', () => {
-      const getRouteSpy = jest.spyOn(AppComponent, 'getRoute')
+      const getRouteSpy = jest.spyOn(AppComponent, 'getRoutes')
 
       // set coordinates to trigger a route request
       setCoordinates(root.findAllByType(Input))
 
-      // check getRoute is being called with the correct endpoint
+      // check getRoutes is being called with the correct endpoint
       expectGetRouteToUseCorrectEndpoint(getRouteSpy, mockNewEndpointString)
     })
   })
@@ -125,12 +125,12 @@ describe('On a blank app, use the correct expected endpoint when requesting rout
       expect(endpointHandler.activeIdx).toBe(customEndpoint.value)
     })
     it('sends the next route request to the new endpoint', () => {
-      const getRouteSpy = jest.spyOn(AppComponent, 'getRoute')
+      const getRouteSpy = jest.spyOn(AppComponent, 'getRoutes')
 
       // set coordinates to trigger a route request
       setCoordinates(root.findAllByType(Input))
 
-      // check getRoute is being called with the new endpoint
+      // check getRoutes is being called with the new endpoint
       expectGetRouteToUseCorrectEndpoint(getRouteSpy, mockNewCustomEndpoint)
     })
   })
@@ -146,24 +146,24 @@ describe('When there is already a route being displayed, choosing another endpoi
 
   it('updates the route that is being displayed when selecting another endpoint', () => {
     const AppComponent = root.findByType(App).instance
-    const getRouteSpy = jest.spyOn(AppComponent, 'getRoute')
+    const getRouteSpy = jest.spyOn(AppComponent, 'getRoutes')
 
     // choose the second dropdown item as the new enpoint
     const endpointRowComponent = root.findByType(EndpointRow).findByType(Dropdown)
     endpointRowComponent.props.onChange({}, { value: mockNewEndpointID })
 
-    // check getRoute is being called with the correct endpoint
+    // check getRoutes is being called with the correct endpoint
     expectGetRouteToUseCorrectEndpoint(getRouteSpy, mockNewEndpointString)
   })
   it('updates the route that is being displayed when a new custom endpoint is entered', () => {
     const AppComponent = root.findByType(App).instance
-    const getRouteSpy = jest.spyOn(AppComponent, 'getRoute')
+    const getRouteSpy = jest.spyOn(AppComponent, 'getRoutes')
 
     // add a new custom endpoint
     const endpointRowComponent = root.findByType(EndpointRow).findByType(Dropdown)
     endpointRowComponent.props.onAddItem({}, { value: mockNewCustomEndpoint })
 
-    // check getRoute is being called with the new endpoint
+    // check getRoutes is being called with the new endpoint
     expectGetRouteToUseCorrectEndpoint(getRouteSpy, mockNewEndpointString)
   })
 })

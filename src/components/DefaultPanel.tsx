@@ -1,6 +1,12 @@
 import React from 'react'
 import { Box } from '../styledComponents'
-import { GeographiesHandler, Location, UpdatePoint, UpdateState } from '../types'
+import {
+  GeographiesHandler,
+  Location,
+  ProfileItem,
+  UpdatePoint,
+  UpdateState
+} from '../types'
 import InputRow from './InputRow'
 import OptionsSwitch from './OptionsSwitch'
 import ProfilesRow from './ProfilesRow'
@@ -16,6 +22,7 @@ interface Props {
   geographies: GeographiesHandler
   profile: string
   urlMatchString: string
+  profiles: ProfileItem[]
 }
 
 const diameter = 50
@@ -28,13 +35,19 @@ export default function DefaultPanel(props: Props) {
     updateState,
     profile,
     urlMatchString,
-    trafficOption
+    trafficOption,
+    profiles
   } = props
 
   return (
     <Box direction="column" justify="flex-start">
       <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
-        <ProfilesRow diameter={diameter} updateState={updateState} profile={profile} />
+        <ProfilesRow
+          diameter={diameter}
+          updateState={updateState}
+          profile={profile}
+          profiles={profiles}
+        />
       </Box>
       {locations.map((item: Location, index: number) => {
         return (

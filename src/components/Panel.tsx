@@ -10,6 +10,7 @@ import {
   InputValues,
   Location,
   OptionsHandler,
+  ProfileItem,
   Route,
   UpdatePoint,
   UpdateState
@@ -26,6 +27,7 @@ interface Props {
   handleDeleteRoute: HandleDeleteRoute
   handleShowClick: () => void
   locations: Location[]
+  profiles: ProfileItem[]
   routingGraphVisible: boolean
   polygonsVisible: boolean
   googleMapsOption: boolean
@@ -66,6 +68,7 @@ const Panel: any = (props: Props) => {
     handleDeleteRoute,
     handleClickRoute,
     locations,
+    profiles,
     routingGraphVisible,
     polygonsVisible,
     googleMapsOption,
@@ -128,6 +131,7 @@ const Panel: any = (props: Props) => {
           profile={profile}
           urlMatchString={urlMatchString}
           trafficOption={trafficOption}
+          profiles={profiles}
         />
       )}
     </PanelWrapper>

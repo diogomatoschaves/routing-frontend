@@ -1,18 +1,19 @@
+import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
 import React, { Component, Fragment } from 'react'
-import { generatePath } from 'react-router-dom'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
-import { googleDirections, routingApi } from '../apiCalls'
-import Map from './Map'
+import { auth, googleDirections, routingApi } from '../apiCalls'
 import '../App.css'
+import Map from './Map'
 import { Box, EmptySpace } from '../styledComponents'
 import {
   Body,
   Coords,
   GeographiesHandler,
+  GetRoutes,
   GoogleResponse,
   HandleConfirmButton,
   HandleDeleteRoute,
@@ -28,7 +29,9 @@ import {
   RouteResponse,
   Routes,
   UpdatePoint,
-  UpdateState
+  UpdateState,
+  UpdateStateCallback,
+  WaitTillLoaded
 } from '../types'
 import {
   PETROL_6,
@@ -44,13 +47,11 @@ import {
 } from '../utils/colours'
 import {
   capitalize,
-  formatCoords,
   getAppProps,
   getAppState,
   getRequestBody,
   processValidBody,
   processValidResponse,
-  splitCoords,
   validateJSON
 } from '../utils/functions'
 import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
@@ -60,6 +61,15 @@ import {
   routeConverterFromRouteService
 } from '../utils/routeAdapter'
 import { Schema } from '../utils/schemas'
+import {
+  extractQueryParams,
+  getSettingsFromUrl,
+  getUrlParamsDiff,
+  mapOptionalParameters,
+  optionalParamsMapping,
+  requiredParams,
+  updateUrl
+} from '../utils/urlConfig'
 import InspectPanel from './InspectPanel'
 import Message from './Message'
 import Panel from './Panel'
@@ -100,6 +110,7 @@ interface State {
   inputValues: InputValues
   inputColors: InputColors
   routeHighlight: string
+  [key: string]: any
 }
 
 const AppWrapper: any = styled.div`
@@ -163,6 +174,26 @@ const StyledBox = styled(Box)`
     `}
 `
 
+const messageFailedRoute = (traffic: boolean, response: RouteResponse) => (
+  <span>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+      Routing Service{traffic ? ' - traffic' : ''}:
+    </span>
+    <span> {response.code}. </span>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+      {response.message}
+    </span>
+  </span>
+)
+
+const messageFailedGoogleRoute = (googleResponse: GoogleResponse) => (
+  <span>
+    <span style={{ color: THIRD_PARTY_POLYLINE }}>Google: </span>
+    <span>{googleResponse.status}.</span>
+    <span style={{ color: THIRD_PARTY_POLYLINE }}> Failed to provide a route.</span>
+  </span>
+)
+
 declare global {
   interface Window {
     google: any
@@ -191,44 +222,86 @@ class App extends Component<any, State> {
 
   public messageTimeout: any
 
-  public state = getAppState()
+  state = getAppState()
 
-  public getProfileLocations = (
-    locations: Location[],
-    params: any,
-    requiredParams: any
-  ) => {
-    return {
-      locations: locations.map((item: Location) => ({
-        ...item,
-        ...splitCoords(params[requiredParams[item.name]])
-      })),
-      profile: params[requiredParams.profile]
-    }
-  }
-
-  public async componentDidMount() {
-    const { windowProp, history, match, loadedProp } = this.props
-    const { validator, responses, body, locations, endpointHandler } = this.state
-    const { requiredParams, acceptableProfiles } = this.props.urlParams
-
-    let authorization: string = ''
+  public getAuth = async () => {
     if (process.env.NODE_ENV !== 'production') {
       const password = process.env.REACT_APP_LDAP_PASSWORD
       const username = process.env.REACT_APP_LDAP_USERNAME
-      authorization = `Basic ${Base64.encode(`${username}:${password}`)}`
+      return `Basic ${Base64.encode(`${username}:${password}`)}`
     } else {
-      const url = process.env.REACT_APP_URL + '/auth'
-      await fetch(url)
-        .then(routeResponse => routeResponse.json())
-        .then(jsonifiedResponse => {
-          authorization = jsonifiedResponse.basicAuth
-        })
+      return auth(process.env.REACT_APP_URL || '').then(jsonifiedResponse => {
+        return jsonifiedResponse.basicAuth
+      })
     }
+  }
 
-    this.addGoogleObject(windowProp)
+  public listenHistory = (history: History) => {
+    return history.listen((location: any, action: any) => {
+      if (action === 'POP') {
+        const { endpointHandler, locations, profile } = this.state
+        const { profiles, match } = this.props
 
-    this.setState({ authorization })
+        const queryParams = extractQueryParams(location.search)
+
+        getSettingsFromUrl(
+          queryParams,
+          locations,
+          profile,
+          match.params,
+          endpointHandler,
+          profiles,
+          true,
+          history,
+          location,
+          this.waitTillLoaded
+        ).then((urlSettings: any) => {
+          this.setState(urlSettings)
+        })
+      }
+    })
+  }
+
+  public async componentDidMount() {
+    const { windowProp, match, location, history, loadedProp, profiles } = this.props
+    const { validator, responses, body, locations, endpointHandler, profile } = this.state
+
+    const unlisten = this.listenHistory(history)
+
+    this.getAuth().then(authorization => {
+      this.setState({ authorization }, () => {
+        this.addGoogleObject(windowProp).then(() => {
+          const queryParams = extractQueryParams(location.search)
+
+          getSettingsFromUrl(
+            queryParams,
+            locations,
+            profile,
+            match.params,
+            endpointHandler,
+            profiles,
+            loadedProp,
+            history,
+            location,
+            this.waitTillLoaded
+          ).then((urlSettings: any) => {
+            const urlQueryParams = mapOptionalParameters(
+              optionalParamsMapping,
+              queryParams
+            )
+            updateUrl(
+              locations,
+              profile,
+              endpointHandler.options[endpointHandler.activeIdx].key,
+              history,
+              location,
+              urlQueryParams
+            )
+            this.setState(urlSettings)
+          })
+        })
+      })
+    })
 
     Promise.resolve(
       Object.keys(Schema.Route).forEach((obj: any) => {
@@ -249,53 +322,20 @@ class App extends Component<any, State> {
       },
       validator
     }))
-
-    const params = Object.keys(match.params)
-
-    if (
-      params.length === 3 &&
-      params.every((el: string) => {
-        return (
-          ([requiredParams.start, requiredParams.end].includes(el) &&
-            Boolean(splitCoords(match.params[el]))) ||
-          (el === requiredParams.profile && acceptableProfiles.includes(match.params[el]))
-        )
-      })
-    ) {
-      this.waitTillLoaded(loadedProp).then(() => {
-        const { profile: urlProfile, locations: urlLocations } = this.getProfileLocations(
-          locations,
-          match.params,
-          requiredParams
-        )
-
-        this.getRoute(
-          urlLocations,
-          urlProfile,
-          authorization,
-          false, // googleMapsOption,
-          null, // google,
-          false, // trafficOption
-          true,
-          endpointHandler.options[endpointHandler.activeIdx].text
-        )
-        this.setState({ profile: urlProfile, locations: urlLocations })
-      })
-    } else {
-      const { profile } = this.state
-      const path = generatePath('/:profile', { profile })
-      history.push(path)
-    }
   }
 
   public componentDidUpdate(prevProps: any, prevState: State) {
     const {
+      debug,
+      mapLoaded,
       locations,
       authorization,
       profile,
       googleMapsOption,
       google,
       trafficOption,
+      polygonsVisible,
+      routingGraphVisible,
       endpointHandler,
       recalculate,
       visible,
@@ -308,23 +348,81 @@ class App extends Component<any, State> {
       responses
     } = this.state
 
-    const { urlMatchString, history, defaultColor } = this.props
-    const { params: prevParams } = prevProps.match
-    const { params } = this.props.match
-    const { requiredParams } = this.props.urlParams
+    const { history, location, defaultColor } = this.props
 
-    if (prevState.locations !== locations || prevState.profile !== profile) {
-      const path = generatePath(urlMatchString, {
-        ...locations.reduce((accum, item) => {
-          return {
-            ...accum,
-            [item.name]:
-              item.lat && item.lng ? formatCoords({ lat: item.lat, lng: item.lng }) : '-'
-          }
-        }, {}),
-        profile
-      })
-      history.push(path)
+    if (mapLoaded !== prevState.mapLoaded && mapLoaded) {
+      this.setState(
+        {
+          polygonsVisible: false,
+          routingGraphVisible: false
+        },
+        () => {
+          this.setState({
+            polygonsVisible,
+            routingGraphVisible
+          })
+        }
+      )
+    }
+
+    if (
+      prevState.locations !== locations ||
+      prevState.profile !== profile ||
+      prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
+      Object.values(optionalParamsMapping).some(
+        (paramKey: string | undefined | boolean) => {
+          // @ts-ignore
+          return this.state[paramKey] !== prevState[paramKey]
+        }
+      )
+    ) {
+      const urlOptionalParams = this.getCurrentPrevious(
+        optionalParamsMapping,
+        this.state,
+        prevState
+      )
+
+      const urlParams = this.getCurrentPrevious(requiredParams, this.state, prevState)
+
+      const diff = getUrlParamsDiff(
+        urlParams.current,
+        urlParams.prev,
+        urlOptionalParams.current,
+        urlOptionalParams.prev
+      )
+      const defaultOption =
+        (diff.profile || diff.locations || diff.endpointHandler) && true
+
+      if (recalculate) {
+        this.getRoutes(
+          locations,
+          profile,
+          authorization,
+          (diff.googleMapsOption &&
+            !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
+            false,
+          google,
+          diff.trafficOption || false,
+          defaultOption || false,
+          endpointHandler.options[endpointHandler.activeIdx].text
+        )
+      } else {
+        this.updateState('recalculate', true)
+      }
+
+      const mappedQueryParams = mapOptionalParameters(
+        optionalParamsMapping,
+        urlOptionalParams.current
+      )
+
+      updateUrl(
+        locations,
+        profile,
+        endpointHandler.options[endpointHandler.activeIdx].key,
+        history,
+        location,
+        mappedQueryParams
+      )
     }
 
     if (prevState.responses.routeResponse !== responses.routeResponse) {
@@ -337,37 +435,6 @@ class App extends Component<any, State> {
 
     if (prevState.responses.googleResponse !== responses.googleResponse) {
       this.updateGoogleRoute(responses.googleResponse)
-    }
-
-    // TODO: Check if there is a callback for back and forward buttons
-    // Check if coordinates are given by checking the URL parameters
-    if (
-      Object.keys(params).length === 3 &&
-      (prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
-        (Object.keys(params).some(key => params[key] !== prevParams[key]) ||
-          Object.keys(prevParams).some(key => prevParams[key] !== params[key])))
-    ) {
-      const { locations: urlLocations, profile: urlProfile } = this.getProfileLocations(
-        locations,
-        params,
-        requiredParams
-      )
-
-      if (recalculate) {
-        this.getRoute(
-          urlLocations,
-          urlProfile,
-          authorization,
-          googleMapsOption &&
-            prevState.endpointHandler.activeIdx === endpointHandler.activeIdx,
-          google,
-          trafficOption,
-          true,
-          endpointHandler.options[endpointHandler.activeIdx].text
-        )
-      } else {
-        this.updateState('recalculate', true)
-      }
     }
 
     if (prevState.visible !== visible && visible) {
@@ -422,19 +489,9 @@ class App extends Component<any, State> {
             trafficResponse: defaultRouteResponse
           }
         }))
-      } else {
-        this.getRoute(
-          locations,
-          profile,
-          authorization,
-          false,
-          google,
-          trafficOption,
-          false,
-          endpointHandler.options[endpointHandler.activeIdx].text
-        )
       }
     }
+
     if (prevState.googleMapsOption !== googleMapsOption) {
       if (!googleMapsOption) {
         this.setState(state => ({
@@ -444,17 +501,6 @@ class App extends Component<any, State> {
             googleResponse: defaultGoogleResponse
           }
         }))
-      } else {
-        this.getRoute(
-          locations,
-          profile,
-          authorization,
-          googleMapsOption,
-          google,
-          false,
-          false,
-          endpointHandler.options[endpointHandler.activeIdx].text
-        )
       }
     }
 
@@ -488,7 +534,7 @@ class App extends Component<any, State> {
     }
   }
 
-  public waitTillLoaded = (loadedProp: boolean) => {
+  public waitTillLoaded: WaitTillLoaded = loadedProp => {
     if (loadedProp) {
       return Promise.resolve(loadedProp)
     }
@@ -509,7 +555,7 @@ class App extends Component<any, State> {
     })
   }
 
-  public getRoute = (
+  public getRoutes: GetRoutes = (
     locations: Location[],
     profile: string,
     authorization: string,
@@ -522,14 +568,85 @@ class App extends Component<any, State> {
     if (locations.length >= 2 && !locations.some((el: Location) => !el.lat || !el.lng)) {
       const body = getRequestBody(locations)
 
-      if (defaultOption) {
-        this.handleResponse(profile, authorization, body, endpointUrl, 'route')
-      }
+      return Promise.all([
+        defaultOption &&
+          this.handleDasRequest(profile, authorization, body, endpointUrl, 'route'),
+        trafficOption &&
+          ['car'].includes(profile) &&
+          this.handleDasRequest(
+            'car-traffic',
+            authorization,
+            body,
+            endpointUrl,
+            'traffic'
+          ),
+        googleMapsOption &&
+          google &&
+          ['car', 'foot'].includes(profile) &&
+          this.handleGoogleRequest(google, profile, locations)
+      ])
+    } else {
+      return Promise.resolve()
+    }
+  }
 
-      if (googleMapsOption && google) {
-        googleDirections(google, profile, locations)
-          .then((googleResponse: GoogleResponse) => {
-            this.setState(state => ({
+  public handleDasRequest = async (
+    profile: string,
+    authorization: string,
+    body: Body,
+    endpointUrl: string,
+    routeName: string
+  ) => {
+    const response = `${routeName}Response`
+    const message = `${routeName}Message`
+
+    return new Promise(resolve => {
+      routingApi(profile, authorization, body, endpointUrl)
+        .then((routeResponse: RouteResponse) => {
+          this.setState(
+            state => ({
+              body,
+              messages: {
+                ...state.messages,
+                [message]: null
+              },
+              responses: {
+                ...state.responses,
+                [response]: routeResponse
+              }
+            }),
+            () => resolve()
+          )
+        })
+        .catch(() => {
+          this.setState(
+            state => ({
+              messages: {
+                ...state.messages,
+                [message]: (
+                  <span style={{ color: 'red' }}>
+                    There was an error fetching the route.
+                  </span>
+                )
+              },
+              responses: {
+                ...state.responses,
+                [response]: defaultRouteResponse
+              },
+              showMessage: true
+            }),
+            () => resolve()
+          )
+        })
+    })
+  }
+
+  public handleGoogleRequest = (google: any, profile: string, locations: Location[]) => {
+    return new Promise(resolve => {
+      googleDirections(google, profile, locations)
+        .then((googleResponse: GoogleResponse) => {
+          this.setState(
+            state => ({
               messages: {
                 ...state.messages,
                 googleMessage: null
@@ -538,10 +655,13 @@ class App extends Component<any, State> {
                 ...state.responses,
                 googleResponse
               }
-            }))
-          })
-          .catch(() => {
-            this.setState(state => ({
+            }),
+            () => resolve()
+          )
+        })
+        .catch(() => {
+          this.setState(
+            state => ({
               messages: {
                 ...state.messages,
                 googleMessage: (
@@ -555,76 +675,37 @@ class App extends Component<any, State> {
                 googleResponse: defaultGoogleResponse
               },
               showMessage: true
-            }))
-          })
-      }
-
-      if (trafficOption && profile === 'car') {
-        this.handleResponse('car-traffic', authorization, body, endpointUrl, 'traffic')
-      }
-    }
+            }),
+            () => resolve()
+          )
+        })
+    })
   }
 
-  public handleResponse = (
-    profile: string,
-    authorization: string,
-    body: Body,
-    endpointUrl: string,
-    routeName: string
-  ) => {
-    const response = `${routeName}Response`
-    const message = `${routeName}Message`
-
-    routingApi(profile, authorization, body, endpointUrl)
-      .then((routeResponse: RouteResponse) => {
-        this.setState(state => ({
-          body,
-          messages: {
-            ...state.messages,
-            [message]: null
-          },
-          responses: {
-            ...state.responses,
-            [response]: routeResponse
-          }
-        }))
-      })
-      .catch(() =>
-        this.setState(state => ({
-          messages: {
-            ...state.messages,
-            [message]: (
-              <span style={{ color: 'red' }}>There was an error fetching the route.</span>
-            )
-          },
-          responses: {
-            ...state.responses,
-            [response]: defaultRouteResponse
-          },
-          showMessage: true
-        }))
-      )
-  }
-
-  public addGoogleObject = (windowProp: boolean) => {
+  public addGoogleObject = async (windowProp: boolean) => {
     if (!windowProp && !window.google) {
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.src = `https://maps.google.com/maps/api/js?key=${
-        process.env.REACT_APP_GOOGLE_MAPS_TOKEN
-      }`
-      const head = document.getElementsByTagName('head')[0]
-      head.appendChild(script)
+      return new Promise(resolve => {
+        const script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.src = `https://maps.google.com/maps/api/js?key=${
+          process.env.REACT_APP_GOOGLE_MAPS_TOKEN
+        }`
+        const head = document.getElementsByTagName('head')[0]
+        head.appendChild(script)
 
-      script.addEventListener('load', () => {
-        this.setState({ google: window.google })
+        script.addEventListener('load', () => {
+          this.setState({ google: window.google }, () => {
+            resolve(window.google)
+          })
+        })
       })
     } else {
-      this.setState({ google: window.google || windowProp })
+      await this.setState({ google: window.google || windowProp }, () => {
+        return Promise.resolve(window.google)
+      })
     }
   }
 
-  // TODO: Update app state based on changes
   public updatePoint: UpdatePoint = (indexes: number[], coords: Coords[]) => {
     this.setState(state => {
       return {
@@ -666,16 +747,9 @@ class App extends Component<any, State> {
         ...state,
         messages: {
           ...state.messages,
-          [traffic ? 'trafficMessage' : 'routeMessage']: (
-            <span>
-              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
-                Routing Service{traffic ? ' - traffic' : ''}:
-              </span>
-              <span> {response.code}. </span>
-              <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
-                {response.message}
-              </span>
-            </span>
+          [traffic ? 'trafficMessage' : 'routeMessage']: messageFailedRoute(
+            traffic,
+            response
           )
         },
         routes: {
@@ -702,16 +776,7 @@ class App extends Component<any, State> {
         ...state,
         messages: {
           ...state.messages,
-          googleMessage: (
-            <span>
-              <span style={{ color: THIRD_PARTY_POLYLINE }}>Google: </span>
-              <span>{googleResponse.status}.</span>
-              <span style={{ color: THIRD_PARTY_POLYLINE }}>
-                {' '}
-                Failed to provide a route.
-              </span>
-            </span>
-          )
+          googleMessage: messageFailedGoogleRoute(googleResponse)
         },
         routes: {
           ...state.routes,
@@ -795,8 +860,10 @@ class App extends Component<any, State> {
     setState(false)
   }
 
-  public updateStateCallback = (callback: any) => {
-    this.setState(callback)
+  public updateStateCallback: UpdateStateCallback = async callback => {
+    this.setState(callback, () => {
+      return
+    })
   }
 
   public handleDeleteRoute: HandleDeleteRoute = (id: string) => {
@@ -811,6 +878,30 @@ class App extends Component<any, State> {
   public handleHideClick = (e: any) => {
     e.stopPropagation()
     this.setState({ visible: false })
+  }
+
+  public getCurrentPrevious: any = (fields: any, state: State, prevState: State) => {
+    return Object.values(fields).reduce(
+      (accum: any, paramKey) => {
+        return {
+          ...accum,
+          current: {
+            ...accum.current,
+            // @ts-ignore
+            [paramKey]: state[paramKey]
+          },
+          prev: {
+            ...accum.prev,
+            // @ts-ignore
+            [paramKey]: prevState[paramKey]
+          }
+        }
+      },
+      {
+        current: {},
+        prev: {}
+      }
+    )
   }
 
   public render() {
@@ -844,7 +935,7 @@ class App extends Component<any, State> {
       inputValues,
       inputColors
     } = this.state
-    const { urlMatchString } = this.props
+    const { urlMatchString, profiles } = this.props
     const { show, hide } = this.props.animationDuration
 
     const { routeMessage, trafficMessage, googleMessage } = messages
@@ -971,6 +1062,7 @@ class App extends Component<any, State> {
             )}
             <Panel
               locations={locations}
+              profiles={profiles}
               updatePoint={this.updatePoint}
               updateState={this.updateState}
               handleAddRoute={this.handleAddRoute}

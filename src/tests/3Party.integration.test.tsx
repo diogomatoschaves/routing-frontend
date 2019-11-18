@@ -1,12 +1,12 @@
 import React from 'react'
 import { MemoryRouter, Route } from 'react-router-dom'
-import TestRenderer, { act } from 'react-test-renderer'
+import TestRenderer from 'react-test-renderer'
 import { Checkbox, Input } from 'semantic-ui-react'
 import { googleDirections } from '../apiCalls'
 import { mockGoogleRoute, mockRoute } from '../apiCalls/__mocks__/mockRoute'
 import App from '../components/App'
 import Map from '../components/Map'
-import { getPath } from '../utils/functions'
+import { getPath, urlMatchString } from '../utils/urlConfig'
 
 jest.mock('../apiCalls')
 
@@ -33,8 +33,6 @@ const toggle = (
 
   Toggler.props.onChange('', { checked })
 }
-
-const urlMatchString = '/:profile/:start/:end'
 
 const getTestApp = (initialEntries: string[] = ['/']) =>
   TestRenderer.create(
