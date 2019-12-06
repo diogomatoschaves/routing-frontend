@@ -23,6 +23,7 @@ interface Props {
   profile: string
   urlMatchString: string
   profiles: ProfileItem[]
+  loading: boolean
 }
 
 const diameter = 50
@@ -36,7 +37,8 @@ export default function DefaultPanel(props: Props) {
     profile,
     urlMatchString,
     trafficOption,
-    profiles
+    profiles,
+    loading
   } = props
 
   return (
@@ -60,6 +62,7 @@ export default function DefaultPanel(props: Props) {
             iconName={item.marker}
             updatePoint={updatePoint}
             urlMatchString={urlMatchString}
+            loading={loading}
           />
         )
       })}

@@ -9,8 +9,8 @@ import BackgroundIcon from './BackgroundIcon'
 
 interface Props {
   route: Route
-  top: string
-  right: string
+  top?: string
+  right?: string
   title: string
   subTitle?: string
   textColor: string
@@ -39,8 +39,6 @@ const StyledStatistic = styled(Statistic)`
 const diameter = 50
 
 export default function RouteInfo({
-  right,
-  top,
   route,
   title,
   textColor,
@@ -52,13 +50,7 @@ export default function RouteInfo({
   const [distanceValue, distanceLabel] = computeDistance(route.distance)
 
   return (
-    <StyledSegment
-      position="absolute"
-      right={right}
-      top={top}
-      zindex={1000}
-      width="200px"
-    >
+    <StyledSegment width="100%" padding="15px 25px" noBoxShadow={false}>
       <Box direction="column" justify="space-between">
         <StyledHeader nomarginbottom={1} overridecolor={textColor}>
           {title}

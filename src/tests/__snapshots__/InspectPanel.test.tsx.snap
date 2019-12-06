@@ -2,18 +2,18 @@
 
 exports[`expect to render InspectPanel component 1`] = `
 <div
-  className="sc-bdVaJa eBppGN"
+  className="sc-bdVaJa gTcUee"
 >
   <div
-    className="sc-bdVaJa dcMlZW"
+    className="sc-bdVaJa bXrONo"
     direction="row"
   >
     <div
-      className="sc-bdVaJa kygzpb"
+      className="sc-bdVaJa kIdygq"
       direction="row"
     >
       <div
-        className="sc-bdVaJa sc-eNQAEJ ibiofc"
+        className="sc-bdVaJa sc-eNQAEJ lbdFpg"
         color={true}
         id="default"
         onClick={[Function]}
@@ -22,7 +22,7 @@ exports[`expect to render InspectPanel component 1`] = `
         Interactive
       </div>
       <div
-        className="sc-bdVaJa sc-eNQAEJ fTBrZq"
+        className="sc-bdVaJa sc-eNQAEJ hkcRKl"
         color={false}
         id="debug"
         onClick={[Function]}
@@ -37,21 +37,21 @@ exports[`expect to render InspectPanel component 1`] = `
     width="90%"
   />
   <div
-    className="sc-bdVaJa dNMDiv"
+    className="sc-bdVaJa imTUnK"
     direction="row"
     height="70px"
   >
     <div
-      className="sc-bdVaJa gOaCBL"
+      className="sc-bdVaJa iSvncs"
       width="40%"
     >
       <div
-        className="sc-bdVaJa gxFsig"
+        className="sc-bdVaJa icfjib"
         direction="row"
         height="45px"
       >
         <div
-          className="sc-bdVaJa clGjkA"
+          className="sc-bdVaJa ebjZlz"
           onClick={[Function]}
           width="10%"
         >
@@ -62,7 +62,7 @@ exports[`expect to render InspectPanel component 1`] = `
           />
         </div>
         <div
-          className="sc-bdVaJa gNhOwl"
+          className="sc-bdVaJa kZwOvi"
           width="60%"
         >
           <div
@@ -73,7 +73,7 @@ exports[`expect to render InspectPanel component 1`] = `
           </div>
         </div>
         <div
-          className="sc-bdVaJa clGjkA"
+          className="sc-bdVaJa CNgxq"
           onClick={[Function]}
           width="10%"
         >
@@ -87,7 +87,7 @@ exports[`expect to render InspectPanel component 1`] = `
     </div>
   </div>
   <div
-    className="sc-bdVaJa fEcaVD"
+    className="sc-bdVaJa ijaazC"
     width="80%"
   >
     <div
@@ -97,7 +97,7 @@ exports[`expect to render InspectPanel component 1`] = `
       Request Endpoint
     </div>
     <div
-      className="sc-bdVaJa fuiAsE"
+      className="sc-bdVaJa ifkFvf"
       direction="row"
     >
       <div
@@ -217,11 +217,11 @@ exports[`expect to render InspectPanel component 1`] = `
     </div>
   </div>
   <div
-    className="sc-bdVaJa fEcaVD"
+    className="sc-bdVaJa ijaazC"
     width="80%"
   >
     <div
-      className="sc-bdVaJa kRVJAa"
+      className="sc-bdVaJa bdzXtn"
       direction="row"
     >
       <div
@@ -240,7 +240,7 @@ exports[`expect to render InspectPanel component 1`] = `
       </button>
     </div>
     <div
-      className="sc-bdVaJa kRVJAa"
+      className="sc-bdVaJa bdzXtn"
       direction="row"
       width="100%"
     >
@@ -411,7 +411,7 @@ exports[`expect to render InspectPanel component 1`] = `
       className="actions"
     >
       <div
-        className="sc-bdVaJa fXWXpp"
+        className="sc-bdVaJa jtPKFM"
         direction="row"
       >
         <button
@@ -426,11 +426,11 @@ exports[`expect to render InspectPanel component 1`] = `
     </div>
   </div>
   <div
-    className="sc-bdVaJa fEcaVD"
+    className="sc-bdVaJa ijaazC"
     width="80%"
   >
     <div
-      className="sc-bdVaJa kRVJAa"
+      className="sc-bdVaJa bdzXtn"
       direction="row"
     >
       <div
@@ -449,7 +449,7 @@ exports[`expect to render InspectPanel component 1`] = `
       </button>
     </div>
     <div
-      className="sc-bdVaJa kRVJAa"
+      className="sc-bdVaJa bdzXtn"
       direction="row"
       width="100%"
     >
@@ -755,7 +755,7 @@ exports[`expect to render InspectPanel component 1`] = `
       className="actions"
     >
       <div
-        className="sc-bdVaJa fXWXpp"
+        className="sc-bdVaJa jtPKFM"
         direction="row"
       >
         <button

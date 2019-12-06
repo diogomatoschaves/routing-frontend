@@ -2,15 +2,13 @@
 
 exports[`expect to render ProfileToggler component 1`] = `
 <div
-  className="ui segment sc-ifAKCX fFNmUo"
-  position="absolute"
-  right="1px"
-  top="1px"
-  width="200px"
-  zindex={1000}
+  className="ui segment sc-ifAKCX bRACfR"
+  noBoxShadow={false}
+  padding="15px 25px"
+  width="100%"
 >
   <div
-    className="sc-bdVaJa sCrMI"
+    className="sc-bdVaJa fKJBrF"
     direction="column"
   >
     <div
@@ -27,12 +25,12 @@ exports[`expect to render ProfileToggler component 1`] = `
       With Traffic
     </div>
     <div
-      className="sc-bdVaJa bLeABi"
+      className="sc-bdVaJa jzIkVo"
       direction="row"
       width="100%"
     >
       <div
-        className="sc-bdVaJa hEXywC"
+        className="sc-bdVaJa ehaESb"
         direction="row"
         width="40%"
       >
@@ -40,11 +38,11 @@ exports[`expect to render ProfileToggler component 1`] = `
           className="sc-gZMcBi gyuikZ"
         >
           <div
-            className="sc-bwzfXH jkexbh"
+            className="sc-bwzfXH lYGau"
             color="#e1e1e1"
           >
             <div
-              className="sc-bdVaJa cCYAHW"
+              className="sc-bdVaJa hVRN"
               height="100%"
             >
               <i
@@ -61,7 +59,7 @@ exports[`expect to render ProfileToggler component 1`] = `
         </div>
       </div>
       <div
-        className="sc-bdVaJa bgVkOo"
+        className="sc-bdVaJa jEnIfZ"
         direction="row"
         width="60%"
       >
@@ -88,12 +86,12 @@ exports[`expect to render ProfileToggler component 1`] = `
       </div>
     </div>
     <div
-      className="sc-bdVaJa bLeABi"
+      className="sc-bdVaJa jzIkVo"
       direction="row"
       width="100%"
     >
       <div
-        className="sc-bdVaJa hEXywC"
+        className="sc-bdVaJa ehaESb"
         direction="row"
         width="40%"
       >
@@ -101,11 +99,11 @@ exports[`expect to render ProfileToggler component 1`] = `
           className="sc-gZMcBi gyuikZ"
         >
           <div
-            className="sc-bwzfXH jkexbh"
+            className="sc-bwzfXH lYGau"
             color="#e1e1e1"
           >
             <div
-              className="sc-bdVaJa cCYAHW"
+              className="sc-bdVaJa hVRN"
               height="100%"
             >
               <i
@@ -122,7 +120,7 @@ exports[`expect to render ProfileToggler component 1`] = `
         </div>
       </div>
       <div
-        className="sc-bdVaJa bgVkOo"
+        className="sc-bdVaJa jEnIfZ"
         direction="row"
         width="60%"
       >

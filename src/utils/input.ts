@@ -1,4 +1,4 @@
-import { colors, POLYLINE_COLOR } from './colours'
+import { colors, ROUTING_SERVICE_POLYLINE } from './colours'
 
 export const defaultBody = {
   locations: [],
@@ -113,7 +113,7 @@ export const routeLineSettings = {
     'line-join': 'round'
   },
   paint: {
-    'line-color': POLYLINE_COLOR,
+    'line-color': ROUTING_SERVICE_POLYLINE,
     'line-width': 6.5,
     'line-opacity': 0.55
   }

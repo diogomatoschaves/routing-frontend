@@ -2,18 +2,18 @@
 
 exports[`expect to render Panel component 1`] = `
 <div
-  className="sc-bdVaJa gSlpgJ"
+  className="sc-bdVaJa HzLK"
   direction="row"
 >
   <div
     className="sc-gZMcBi fWaAxO"
   >
     <div
-      className="sc-bwzfXH fNQCHt"
+      className="sc-bwzfXH lccGat"
       color="#007a93"
     >
       <div
-        className="sc-bdVaJa cCYAHW"
+        className="sc-bdVaJa hVRN"
         height="100%"
       >
         <i

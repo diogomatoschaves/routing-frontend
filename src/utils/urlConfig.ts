@@ -114,33 +114,6 @@ export const getPath = (pathname: string) => {
       }, '')
 }
 
-export const generateFullPath = (
-  locations: Location[],
-  profile: string,
-  endpointHandler: string,
-  queryParams: OptionalParams
-) => {
-  const urlParamsString = generatePath(urlMatchString, {
-    endpointHandler,
-    locations: locations
-      .map(location => {
-        return location.lat && location.lng
-          ? formatCoords({ lat: location.lat, lng: location.lng })
-          : '-'
-      })
-      .join(';'),
-    profile
-  })
-
-  const queryParamsString = Object.entries(queryParams)
-    .reduce((str: string, param: any) => {
-      return `${str}${param[0]}=${String(param[1])}&`
-    }, '?')
-    .slice(0, -1)
-
-  return urlParamsString + queryParamsString
-}
-
 export const extractUrlParams = (
   locations: Location[],
   params: Params,
@@ -178,6 +151,33 @@ export const extractUrlParams = (
       : locations,
     profile: params[requiredParams.profile]
   }
+}
+
+export const generateFullPath = (
+  locations: Location[],
+  profile: string,
+  endpointHandler: string,
+  queryParams: OptionalParams
+) => {
+  const urlParamsString = generatePath(urlMatchString, {
+    endpointHandler,
+    locations: locations
+      .map(location => {
+        return location.lat && location.lng
+          ? formatCoords({ lat: location.lat, lng: location.lng })
+          : '-'
+      })
+      .join(';'),
+    profile
+  })
+
+  const queryParamsString = Object.entries(queryParams)
+    .reduce((str: string, param: any) => {
+      return `${str}${param[0]}=${String(param[1])}&`
+    }, '?')
+    .slice(0, -1)
+
+  return urlParamsString + queryParamsString
 }
 
 export const extractQueryParams = (queryParams: string) => {

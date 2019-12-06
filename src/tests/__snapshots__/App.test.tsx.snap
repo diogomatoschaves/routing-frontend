@@ -8,7 +8,7 @@ exports[`expect to render App component 1`] = `
     className="ui segment pushable sc-jlyJG gzMqQk"
   >
     <div
-      className="sc-bwzfXH sc-gipzik cpAbXc"
+      className="sc-bwzfXH sc-gipzik jUHXdm"
       direction="row"
       width="31%"
     >
@@ -40,18 +40,18 @@ exports[`expect to render App component 1`] = `
       className="ui vertical labeled icon ui overlay left very wide sidebar menu"
     >
       <div
-        className="sc-bwzfXH dlzeER"
+        className="sc-bwzfXH gsIuvy"
       >
         <div
-          className="sc-bwzfXH cwyxvS"
+          className="sc-bwzfXH eQfqcI"
           direction="row"
         >
           <div
-            className="sc-bwzfXH lacXsB"
+            className="sc-bwzfXH gRXLjM"
             direction="row"
           >
             <div
-              className="sc-bwzfXH sc-hMqMXs edKgCG"
+              className="sc-bwzfXH sc-hMqMXs esXrOa"
               color={true}
               id="default"
               onClick={[Function]}
@@ -60,7 +60,7 @@ exports[`expect to render App component 1`] = `
               Interactive
             </div>
             <div
-              className="sc-bwzfXH sc-hMqMXs eFlUcI"
+              className="sc-bwzfXH sc-hMqMXs eLNwrK"
               color={false}
               id="debug"
               onClick={[Function]}
@@ -75,21 +75,21 @@ exports[`expect to render App component 1`] = `
           width="90%"
         />
         <div
-          className="sc-bwzfXH dpPFld"
+          className="sc-bwzfXH eimQik"
           direction="row"
           height="70px"
         >
           <div
-            className="sc-bwzfXH jzFvfk"
+            className="sc-bwzfXH gyDvUQ"
             width="40%"
           >
             <div
-              className="sc-bwzfXH dfIKGx"
+              className="sc-bwzfXH gXZmd"
               direction="row"
               height="45px"
             >
               <div
-                className="sc-bwzfXH gmInAj"
+                className="sc-bwzfXH eOcFfl"
                 onClick={[Function]}
                 width="10%"
               >
@@ -100,7 +100,7 @@ exports[`expect to render App component 1`] = `
                 />
               </div>
               <div
-                className="sc-bwzfXH gCPlrj"
+                className="sc-bwzfXH ldjCdv"
                 width="60%"
               >
                 <div
@@ -111,7 +111,7 @@ exports[`expect to render App component 1`] = `
                 </div>
               </div>
               <div
-                className="sc-bwzfXH gmInAj"
+                className="sc-bwzfXH kvHkKl"
                 onClick={[Function]}
                 width="10%"
               >
@@ -125,7 +125,7 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="sc-bwzfXH kwvKmS"
+          className="sc-bwzfXH bqZNdM"
           width="80%"
         >
           <div
@@ -135,7 +135,7 @@ exports[`expect to render App component 1`] = `
             Request Endpoint
           </div>
           <div
-            className="sc-bwzfXH iSONxz"
+            className="sc-bwzfXH fnfzPv"
             direction="row"
           >
             <div
@@ -255,11 +255,11 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="sc-bwzfXH kwvKmS"
+          className="sc-bwzfXH bqZNdM"
           width="80%"
         >
           <div
-            className="sc-bwzfXH ewJcDl"
+            className="sc-bwzfXH eoBMUS"
             direction="row"
           >
             <div
@@ -278,7 +278,7 @@ exports[`expect to render App component 1`] = `
             </button>
           </div>
           <div
-            className="sc-bwzfXH ewJcDl"
+            className="sc-bwzfXH eoBMUS"
             direction="row"
             width="100%"
           >
@@ -360,7 +360,7 @@ exports[`expect to render App component 1`] = `
             className="actions"
           >
             <div
-              className="sc-bwzfXH fcyEOL"
+              className="sc-bwzfXH exyPiQ"
               direction="row"
             >
               <button
@@ -375,11 +375,11 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="sc-bwzfXH kwvKmS"
+          className="sc-bwzfXH bqZNdM"
           width="80%"
         >
           <div
-            className="sc-bwzfXH ewJcDl"
+            className="sc-bwzfXH eoBMUS"
             direction="row"
           >
             <div
@@ -398,7 +398,7 @@ exports[`expect to render App component 1`] = `
             </button>
           </div>
           <div
-            className="sc-bwzfXH ewJcDl"
+            className="sc-bwzfXH eoBMUS"
             direction="row"
             width="100%"
           >
@@ -616,7 +616,7 @@ exports[`expect to render App component 1`] = `
             className="actions"
           >
             <div
-              className="sc-bwzfXH fcyEOL"
+              className="sc-bwzfXH exyPiQ"
               direction="row"
             >
               <button
@@ -635,21 +635,20 @@ exports[`expect to render App component 1`] = `
     <div
       className="pusher"
     >
-      0
       <div
-        className="sc-bwzfXH sc-bwzfXH sc-brqgnP gmqlch sc-brqgnP gmqlch"
+        className="sc-bwzfXH sc-bwzfXH sc-brqgnP cvHVfC sc-brqgnP cvHVfC"
         direction="column"
       >
         <div
-          className="sc-bwzfXH jzxLsv"
+          className="sc-bwzfXH jlnjkH"
           direction="row"
         >
           <div
-            className="sc-bwzfXH ewJcDl"
+            className="sc-bwzfXH eoBMUS"
             direction="row"
           >
             <div
-              className="sc-bwzfXH sc-hMqMXs edKgCG"
+              className="sc-bwzfXH sc-hMqMXs esXrOa"
               color={true}
               id="default"
               onClick={[Function]}
@@ -658,7 +657,7 @@ exports[`expect to render App component 1`] = `
               Interactive
             </div>
             <div
-              className="sc-bwzfXH sc-hMqMXs eFlUcI"
+              className="sc-bwzfXH sc-hMqMXs eLNwrK"
               color={false}
               id="debug"
               onClick={[Function]}
@@ -669,11 +668,11 @@ exports[`expect to render App component 1`] = `
           </div>
         </div>
         <div
-          className="sc-bwzfXH islmOK"
+          className="sc-bwzfXH ixQWzO"
           direction="column"
         >
           <div
-            className="sc-bwzfXH iSONxz"
+            className="sc-bwzfXH fnfzPv"
             direction="row"
           >
             <div
@@ -691,12 +690,12 @@ exports[`expect to render App component 1`] = `
                   className="sc-jWBwVP cPYswJ"
                 >
                   <div
-                    className="sc-htpNat ePhAaB"
+                    className="sc-htpNat gumpvD"
                     color="#e1e1e1"
                     cursor="pointer"
                   >
                     <div
-                      className="sc-bwzfXH hETasM"
+                      className="sc-bwzfXH gRVIkM"
                       height="100%"
                     >
                       <i
@@ -728,12 +727,12 @@ exports[`expect to render App component 1`] = `
                   className="sc-jWBwVP cPYswJ"
                 >
                   <div
-                    className="sc-htpNat hzXDNF"
+                    className="sc-htpNat dmxhhx"
                     color="transparent"
                     cursor="pointer"
                   >
                     <div
-                      className="sc-bwzfXH hETasM"
+                      className="sc-bwzfXH gRVIkM"
                       height="100%"
                     >
                       <i
@@ -765,12 +764,12 @@ exports[`expect to render App component 1`] = `
                   className="sc-jWBwVP cPYswJ"
                 >
                   <div
-                    className="sc-htpNat hzXDNF"
+                    className="sc-htpNat dmxhhx"
                     color="transparent"
                     cursor="pointer"
                   >
                     <div
-                      className="sc-bwzfXH hETasM"
+                      className="sc-bwzfXH gRVIkM"
                       height="100%"
                     >
                       <i
@@ -789,18 +788,18 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="sc-bwzfXH fOQsml"
+            className="sc-bwzfXH fWNeWl"
             direction="row"
           >
             <div
               className="sc-jWBwVP jqOagm"
             >
               <div
-                className="sc-htpNat eEyFaK"
+                className="sc-htpNat eqZmol"
                 color="#007a93"
               >
                 <div
-                  className="sc-bwzfXH hETasM"
+                  className="sc-bwzfXH gRVIkM"
                   height="100%"
                 >
                   <i
@@ -829,18 +828,18 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="sc-bwzfXH fOQsml"
+            className="sc-bwzfXH fWNeWl"
             direction="row"
           >
             <div
               className="sc-jWBwVP jqOagm"
             >
               <div
-                className="sc-htpNat eEyFaK"
+                className="sc-htpNat eqZmol"
                 color="#007a93"
               >
                 <div
-                  className="sc-bwzfXH hETasM"
+                  className="sc-bwzfXH gRVIkM"
                   height="100%"
                 >
                   <i
@@ -869,11 +868,11 @@ exports[`expect to render App component 1`] = `
             </div>
           </div>
           <div
-            className="sc-bwzfXH fOQsml"
+            className="sc-bwzfXH fWNeWl"
             direction="row"
           >
             <div
-              className="sc-bwzfXH eoImHn"
+              className="sc-bwzfXH hhXwqy"
               direction="row"
               height="50px"
               width="65%"
@@ -904,7 +903,7 @@ exports[`expect to render App component 1`] = `
               </label>
             </div>
             <div
-              className="sc-bwzfXH cQpeMM"
+              className="sc-bwzfXH gMRYci"
               direction="row"
               height="50px"
               width="35%"

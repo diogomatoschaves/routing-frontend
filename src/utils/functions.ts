@@ -447,7 +447,8 @@ export const getAppState = () => {
       routeMessage: null,
       trafficMessage: null
     },
-    messageBottomProp: -300
+    messageBottomProp: -300,
+    loading: false
   }
 }
 
