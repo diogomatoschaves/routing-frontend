@@ -17,8 +17,7 @@ const ColoredDiv: any = styled.div`
     props.cursor &&
     css`
       cursor: ${props.cursor};
-    `}
-    margin: ${(props: any) => props.margin && props.margin};
+    `};
 ` as any
 
 export default ColoredDiv

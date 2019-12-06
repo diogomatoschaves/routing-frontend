@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Box, ColoredDiv, StyledIcon } from '../styledComponents'
+import { Loader } from 'semantic-ui-react'
 
 interface Props {
   diameter: number
@@ -10,6 +11,7 @@ interface Props {
   iconName: any
   margin: string
   cursor?: string
+  loading?: boolean
 }
 
 const Wrapper: any = styled.div`
@@ -23,7 +25,8 @@ export default function BackgroundIcon({
   circle,
   iconName,
   margin,
-  cursor
+  cursor,
+  loading
 }: Props) {
   return (
     <Wrapper margin={margin}>
@@ -35,13 +38,17 @@ export default function BackgroundIcon({
         cursor={cursor}
       >
         <Box justify="center" height="100%">
-          <StyledIcon
-            fontSize="25px"
-            height="20px"
-            overridecolor={iconColor}
-            name={iconName}
-            position="absolute"
-          />
+          {loading ? (
+            <Loader active={true} inline={true} inverted={true} size={'small'} />
+          ) : (
+            <StyledIcon
+              fontSize="25px"
+              height="20px"
+              overridecolor={iconColor}
+              name={iconName}
+              position="absolute"
+            />
+          )}
         </Box>
       </ColoredDiv>
     </Wrapper>

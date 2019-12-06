@@ -2,12 +2,12 @@
 
 exports[`expect to render ProfileToggler component 1`] = `
 <div
-  className="sc-bdVaJa gxFsig"
+  className="sc-bdVaJa icfjib"
   direction="row"
   height="45px"
 >
   <div
-    className="sc-bdVaJa clGjkA"
+    className="sc-bdVaJa ebjZlz"
     onClick={[Function]}
     width="10%"
   >
@@ -18,7 +18,7 @@ exports[`expect to render ProfileToggler component 1`] = `
     />
   </div>
   <div
-    className="sc-bdVaJa gNhOwl"
+    className="sc-bdVaJa kZwOvi"
     width="60%"
   >
     <div
@@ -29,7 +29,7 @@ exports[`expect to render ProfileToggler component 1`] = `
     </div>
   </div>
   <div
-    className="sc-bdVaJa clGjkA"
+    className="sc-bdVaJa CNgxq"
     onClick={[Function]}
     width="10%"
   >

@@ -34,12 +34,6 @@ const StyledSegment: any = styled(Segment as any)`
     css`
       right: ${props.right};
     `}
-
-  ${(props: any) =>
-    props.background &&
-    css`
-      background-color: ${props.background};
-    `}
   ${(props: any) =>
     props.zindex &&
     css`
@@ -47,11 +41,6 @@ const StyledSegment: any = styled(Segment as any)`
     `}
 
   color: ${(props: any) => (props.overridecolor ? props.overridecolor : 'black')};
-  ${(props: any) =>
-    props.padding &&
-    css`
-      padding: ${props.padding};
-    `}
   ${(props: any) =>
     props.fontSize &&
     css`
@@ -69,10 +58,22 @@ const StyledSegment: any = styled(Segment as any)`
       css`
         position: ${props.position};
       `};
+    ${(props: any) =>
+      props.padding &&
+      css`
+        padding: ${props.padding};
+      `};
+    ${(props: any) =>
+      props.margin &&
+      css`
+        padding: ${props.margin};
+      `};
     border: none;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 10px 10px 16px -9px rgba(77,77,77,0.5);
+    background: ${props =>
+      props.background ? props.background : 'rgba(255, 255, 255, 0.92)'};
+    box-shadow: ${props =>
+      !props.noBoxShadow ? '10px 10px 16px -9px rgba(77,77,77,0.5)' : 'none'};
   }
   font-family: "BasisGrotesque Medium", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
 

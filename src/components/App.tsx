@@ -2,7 +2,7 @@ import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
 import { auth, googleDirections, routingApi } from '../apiCalls'
@@ -35,15 +35,9 @@ import {
 } from '../types'
 import {
   PETROL_6,
-  POLYLINE_COLOR,
-  ROUTING_SERVICE,
-  ROUTING_SERVICE_STATS,
-  THIRD_PARTY_COLOR,
+  ROUTING_SERVICE_POLYLINE,
   THIRD_PARTY_POLYLINE,
-  THIRD_PARTY_STATS,
-  TRAFFIC_COLOR,
   TRAFFIC_POLYLINE,
-  TRAFFIC_STATS
 } from '../utils/colours'
 import {
   capitalize,
@@ -73,7 +67,7 @@ import {
 import InspectPanel from './InspectPanel'
 import Message from './Message'
 import Panel from './Panel'
-import RouteInfo from './RouteInfo'
+import RoutesInfoContainer from './RoutesInfoContainer'
 import TrafficLegend from './TrafficLegend'
 
 interface State {
@@ -110,6 +104,7 @@ interface State {
   inputValues: InputValues
   inputColors: InputColors
   routeHighlight: string
+  loading: boolean
   [key: string]: any
 }
 
@@ -176,11 +171,11 @@ const StyledBox = styled(Box)`
 
 const messageFailedRoute = (traffic: boolean, response: RouteResponse) => (
   <span>
-    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
       Routing Service{traffic ? ' - traffic' : ''}:
     </span>
     <span> {response.code}. </span>
-    <span style={{ color: traffic ? TRAFFIC_POLYLINE : POLYLINE_COLOR }}>
+    <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
       {response.message}
     </span>
   </span>
@@ -222,7 +217,7 @@ class App extends Component<any, State> {
 
   public messageTimeout: any
 
-  state = getAppState()
+  public state = getAppState()
 
   public getAuth = async () => {
     if (process.env.NODE_ENV !== 'production') {
@@ -370,6 +365,72 @@ class App extends Component<any, State> {
       prevState.profile !== profile ||
       prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
       Object.values(optionalParamsMapping).some(
+        (paramKey: string | boolean | undefined) => {
+          // @ts-ignore
+          return this.state[paramKey] !== prevState[paramKey]
+        }
+      )
+    ) {
+      const urlOptionalParams = this.getCurrentPrevious(
+        optionalParamsMapping,
+        this.state,
+        prevState
+      )
+
+      const urlParams = this.getCurrentPrevious(requiredParams, this.state, prevState)
+
+      const diff = getUrlParamsDiff(
+        urlParams.current,
+        urlParams.prev,
+        urlOptionalParams.current,
+        urlOptionalParams.prev
+      )
+      const defaultOption =
+        (diff.profile || diff.locations || diff.endpointHandler) && true
+
+      if (recalculate) {
+        this.setState({ loading: true }, () => {
+          this.getRoutes(
+            locations,
+            profile,
+            authorization,
+            (diff.googleMapsOption &&
+              !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
+              false,
+            google,
+            diff.trafficOption || false,
+            defaultOption || false,
+            endpointHandler.options[endpointHandler.activeIdx].text
+          ).finally(() => this.setState({ loading: false }))
+        })
+      } else {
+        this.updateState('recalculate', true)
+      }
+
+      const mappedQueryParams = mapOptionalParameters(
+        optionalParamsMapping,
+        urlOptionalParams.current
+      )
+
+      updateUrl(
+        locations,
+        profile,
+        endpointHandler.options[endpointHandler.activeIdx].key,
+        history,
+        location,
+        mappedQueryParams
+      )
+    }
+
+    if (prevState.responses.routeResponse !== responses.routeResponse) {
+      this.updateRoute(responses.routeResponse, 'routeDAS', 'route')
+    }
+
+    if (
+      prevState.locations !== locations ||
+      prevState.profile !== profile ||
+      prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
+      Object.values(optionalParamsMapping).some(
         (paramKey: string | undefined | boolean) => {
           // @ts-ignore
           return this.state[paramKey] !== prevState[paramKey]
@@ -480,28 +541,36 @@ class App extends Component<any, State> {
       }))
     }
 
-    if (prevState.trafficOption !== trafficOption) {
-      if (!trafficOption) {
-        this.setState(state => ({
-          ...state,
-          responses: {
-            ...state.responses,
-            trafficResponse: defaultRouteResponse
-          }
-        }))
-      }
+    if (prevState.profile !== profile) {
+      this.setState(state => ({
+        ...state,
+        responses: {
+          ...state.responses,
+          googleResponse: defaultGoogleResponse,
+          routeResponse: defaultRouteResponse,
+          trafficResponse: defaultRouteResponse
+        }
+      }))
     }
 
-    if (prevState.googleMapsOption !== googleMapsOption) {
-      if (!googleMapsOption) {
-        this.setState(state => ({
-          ...state,
-          responses: {
-            ...state.responses,
-            googleResponse: defaultGoogleResponse
-          }
-        }))
-      }
+    if (prevState.trafficOption !== trafficOption && !trafficOption) {
+      this.setState(state => ({
+        ...state,
+        responses: {
+          ...state.responses,
+          trafficResponse: defaultRouteResponse
+        }
+      }))
+    }
+
+    if (prevState.googleMapsOption !== googleMapsOption && !googleMapsOption) {
+      this.setState(state => ({
+        ...state,
+        responses: {
+          ...state.responses,
+          googleResponse: defaultGoogleResponse
+        }
+      }))
     }
 
     if (prevState.showMessage !== showMessage && showMessage) {
@@ -586,7 +655,7 @@ class App extends Component<any, State> {
           this.handleGoogleRequest(google, profile, locations)
       ])
     } else {
-      return Promise.resolve()
+      return Promise.all([])
     }
   }
 
@@ -933,7 +1002,8 @@ class App extends Component<any, State> {
       messages,
       messageBottomProp,
       inputValues,
-      inputColors
+      inputColors,
+      loading
     } = this.state
     const { urlMatchString, profiles } = this.props
     const { show, hide } = this.props.animationDuration
@@ -1021,45 +1091,7 @@ class App extends Component<any, State> {
             />
           </Sidebar>
           <Sidebar.Pusher>
-            {!debug && (
-              <Fragment>
-                {routes.route.distance && (
-                  <RouteInfo
-                    statsColor={ROUTING_SERVICE_STATS}
-                    textColor={ROUTING_SERVICE}
-                    iconColor={POLYLINE_COLOR}
-                    title={'Routing Service'}
-                    subTitle={'No Traffic'}
-                    route={routes.route}
-                    top={'40px'}
-                    right={'50px'}
-                  />
-                )}
-                {showTraffic && (
-                  <RouteInfo
-                    statsColor={TRAFFIC_STATS}
-                    textColor={TRAFFIC_COLOR}
-                    iconColor={TRAFFIC_POLYLINE}
-                    title={'Routing Service'}
-                    subTitle={'With Traffic'}
-                    route={routes.trafficRoute}
-                    top={'270px'}
-                    right={'50px'}
-                  />
-                )}
-                {googleMapsOption && routes.googleRoute.distance && (
-                  <RouteInfo
-                    statsColor={THIRD_PARTY_STATS}
-                    textColor={THIRD_PARTY_COLOR}
-                    iconColor={THIRD_PARTY_POLYLINE}
-                    title={'Google Maps'}
-                    route={routes.googleRoute}
-                    top={showTraffic ? '515px' : '270px'}
-                    right={'50px'}
-                  />
-                )}
-              </Fragment>
-            )}
+            {!debug && <RoutesInfoContainer routes={routes} />}
             <Panel
               locations={locations}
               profiles={profiles}
@@ -1083,6 +1115,7 @@ class App extends Component<any, State> {
               inputColors={inputColors}
               addDataTabsHandler={addDataTabsHandler}
               addedRoutes={addedRoutes}
+              loading={loading}
             />
             <Map
               locations={locations}
