@@ -18,12 +18,12 @@ const delay = (ms: number) =>
 
 const mockStart = {
   lat: 53,
-  lng: 12
+  lon: 12
 }
 
 const mockEnd = {
   lat: 55,
-  lng: 15
+  lon: 15
 }
 
 const convertQueryParamsToString = (queryParams: OptionalParams) => {
@@ -143,9 +143,9 @@ describe('App starting with valid URL', () => {
     const endPoint = locations.find((el: any) => el.name === 'end')
 
     expect(startPoint.lat).toBe(mockStart.lat)
-    expect(startPoint.lng).toBe(mockStart.lng)
+    expect(startPoint.lon).toBe(mockStart.lon)
     expect(endPoint.lat).toBe(mockEnd.lat)
-    expect(endPoint.lng).toBe(mockEnd.lng)
+    expect(endPoint.lon).toBe(mockEnd.lon)
   })
 
   it('correctly updates the endpoint', () => {
@@ -254,9 +254,9 @@ describe('App reaction to back and forward buttons', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(startPoint.lat).toBe(mockStart.lat)
-      expect(startPoint.lng).toBe(mockStart.lng)
+      expect(startPoint.lon).toBe(mockStart.lon)
       expect(endPoint.lat).toBe(mockEnd.lat)
-      expect(endPoint.lng).toBe(mockEnd.lng)
+      expect(endPoint.lon).toBe(mockEnd.lon)
     })
 
     it('correctly updates the endpoint', () => {
@@ -294,9 +294,9 @@ describe('App reaction to back and forward buttons', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(startPoint.lat).toBe(null)
-      expect(startPoint.lng).toBe(null)
+      expect(startPoint.lon).toBe(null)
       expect(endPoint.lat).toBe(null)
-      expect(endPoint.lng).toBe(null)
+      expect(endPoint.lon).toBe(null)
     })
 
     it('correctly updates the endpoint', () => {

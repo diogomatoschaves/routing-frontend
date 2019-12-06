@@ -12,12 +12,12 @@ jest.mock('../apiCalls')
 
 const mockCoords = {
   lat: 53,
-  lng: 12
+  lon: 12
 }
 
 const mockCoords2 = {
   lat: 55,
-  lng: 15
+  lon: 15
 }
 
 const defaultEndpointID = 0
@@ -26,9 +26,9 @@ const mockNewEndpointString = 'https://routing.testing.otonomousmobility.com/${P
 const mockNewCustomEndpoint = 'http://localhost:5001'
 
 const setCoordinates = (input: any) => {
-  input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+  input[0].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
   input[0].props.onBlur()
-  input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lng}` })
+  input[1].props.onChange('', { value: `${mockCoords.lat},${mockCoords.lon}` })
   input[1].props.onBlur()
 }
 

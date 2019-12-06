@@ -8,7 +8,7 @@ import {
   HandleValueUpdate,
   InputColors,
   InputValues,
-  Location,
+  LocationInfo,
   MatchResponse,
   Option,
   OptionsHandler,
@@ -34,7 +34,7 @@ interface Props {
   updateState: UpdateState
   updatePoint: UpdatePoint
   handleValueUpdate: HandleValueUpdate
-  locations: Location[]
+  locations: LocationInfo[]
   selectedService: number
   serviceOptions: any
   bodyEdit: boolean

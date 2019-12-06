@@ -5,6 +5,7 @@ import {
   Coords,
   Coords2,
   Location,
+  LocationInfo,
   Route,
   UpdatePoint,
   UpdateState,
@@ -32,17 +33,17 @@ export const stringToBoolean = (str: string) => {
 }
 
 export const formatCoords = (coords: Coords) =>
-  coords.lat && coords.lng ? `${round(coords.lat, 7)}, ${round(coords.lng, 7)}` : ''
+  coords.lat && coords.lon ? `${round(coords.lat, 7)}, ${round(coords.lon, 7)}` : ''
 
 export const splitCoords = (value: string): Coords | null => {
-  const [lat, lng] = value.split(',')
+  const [lat, lon] = value.split(',')
 
   const coords = {
     lat: Number(lat),
-    lng: Number(lng)
+    lon: Number(lon)
   }
 
-  return coords.lat && coords.lng ? coords : null
+  return coords.lat && coords.lon ? coords : null
 }
 
 export const transformPoints = (array: Coords2[]) => {
@@ -56,14 +57,16 @@ export const transformToObject = (array: number[][]): Coords2[] => {
   }))
 }
 
-export const getRequestBody = (locations: Location[]) => {
+export const getRequestBody = (locations: LocationInfo[]) => {
   return {
-    locations: locations.reduce((accum: Coords2[], location: Location) => {
+    locations: locations.reduce((accum: Location[], location: LocationInfo) => {
       return [
         ...accum,
         {
-          lat: location.lat ? location.lat : 0,
-          lon: location.lng ? location.lng : 0
+          ...(location.bearing && { bearing: location.bearing }),
+          lat: location.lat,
+          lon: location.lon,
+          ...(location.radius && { radius: location.radius })
         }
       ]
     }, []),
@@ -235,7 +238,7 @@ const processValidResponse2 = (
   updateState: UpdateState,
   updatePoint: UpdatePoint,
   responseOption: string,
-  locations: Location[],
+  locations: LocationInfo[],
   parsedValue: any
 ) => {
   const points: any = {
@@ -245,7 +248,7 @@ const processValidResponse2 = (
 
   if (
     [locations[0], locations.slice(-1)[0]].some(el => {
-      return el.lat !== points[el.name].lat || el.lng !== points[el.name].lon
+      return el.lat !== points[el.name].lat || el.lon !== points[el.name].lon
     })
   ) {
     new Promise(resolve => {
@@ -254,8 +257,8 @@ const processValidResponse2 = (
       updatePoint(
         [0, 1],
         [
-          { lat: points.start.lat, lng: points.start.lon },
-          { lat: points.end.lat, lng: points.end.lon }
+          { lat: points.start.lat, lon: points.start.lon },
+          { lat: points.end.lat, lon: points.end.lon }
         ]
       )
     })
@@ -266,27 +269,27 @@ const processValidResponse2 = (
 
 export const processValidBody = (
   updatePoint: UpdatePoint,
-  locations: Location[],
+  locations: LocationInfo[],
   parsedValue: any
 ) => {
-  const points: any = {
+  const points: { start: Location; end: Location } = {
     start: parsedValue.locations[0],
     end: parsedValue.locations.slice(-1)[0]
   }
 
-  if (
-    [locations[0], locations.slice(-1)[0]].some(el => {
-      return el.lat !== points[el.name].lat || el.lng !== points[el.name].lon
-    })
-  ) {
-    updatePoint(
-      [0, 1],
-      [
-        { lat: points.start.lat, lng: points.start.lon },
-        { lat: points.end.lat, lng: points.end.lon }
-      ]
-    )
-  }
+  // if (
+  //   [locations[0], locations.slice(-1)[0]].some(el => {
+  //     return (
+  //       el.lat !== points[el.name].lat ||
+  //       el.lon !== points[el.name].lon ||
+  //       el.bearing !== points[el.name].bearing ||
+  //       el.radius !== points[el.name].radius
+  //     )
+  //   })
+  // ) {
+
+  updatePoint([0, 1], [points.start, points.end])
+  // }
 }
 
 export function checkNested(obj: any, ...rest: any): boolean {
@@ -342,7 +345,7 @@ export const getAppState = () => {
         markerOffset: [0, 5],
         placeholder: 'Origin',
         lat: null,
-        lng: null
+        lon: null
       },
       {
         name: 'end',
@@ -350,7 +353,7 @@ export const getAppState = () => {
         markerOffset: [0, 5],
         placeholder: 'Destination',
         lat: null,
-        lng: null
+        lon: null
       }
     ],
     endpointHandler: {

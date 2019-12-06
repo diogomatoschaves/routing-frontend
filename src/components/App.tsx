@@ -2,7 +2,7 @@ import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
 import { auth, googleDirections, routingApi } from '../apiCalls'
@@ -11,7 +11,6 @@ import Map from './Map'
 import { Box, EmptySpace } from '../styledComponents'
 import {
   Body,
-  Coords,
   GeographiesHandler,
   GetRoutes,
   GoogleResponse,
@@ -21,6 +20,7 @@ import {
   InputColors,
   InputValues,
   Location,
+  LocationInfo,
   Messages,
   OptionsHandler,
   ResponseOptionsHandler,
@@ -73,7 +73,7 @@ import TrafficLegend from './TrafficLegend'
 interface State {
   validator?: Validator
   recalculate: boolean
-  locations: Location[]
+  locations: LocationInfo[]
   authorization: string
   responses: Responses
   routes: Routes
@@ -219,6 +219,8 @@ class App extends Component<any, State> {
 
   public state = getAppState()
 
+  public propsToReset = new Set(['bearing', 'radius'])
+
   public getAuth = async () => {
     if (process.env.NODE_ENV !== 'production') {
       const password = process.env.REACT_APP_LDAP_PASSWORD
@@ -321,7 +323,6 @@ class App extends Component<any, State> {
 
   public componentDidUpdate(prevProps: any, prevState: State) {
     const {
-      debug,
       mapLoaded,
       locations,
       authorization,
@@ -424,66 +425,6 @@ class App extends Component<any, State> {
 
     if (prevState.responses.routeResponse !== responses.routeResponse) {
       this.updateRoute(responses.routeResponse, 'routeDAS', 'route')
-    }
-
-    if (
-      prevState.locations !== locations ||
-      prevState.profile !== profile ||
-      prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
-      Object.values(optionalParamsMapping).some(
-        (paramKey: string | undefined | boolean) => {
-          // @ts-ignore
-          return this.state[paramKey] !== prevState[paramKey]
-        }
-      )
-    ) {
-      const urlOptionalParams = this.getCurrentPrevious(
-        optionalParamsMapping,
-        this.state,
-        prevState
-      )
-
-      const urlParams = this.getCurrentPrevious(requiredParams, this.state, prevState)
-
-      const diff = getUrlParamsDiff(
-        urlParams.current,
-        urlParams.prev,
-        urlOptionalParams.current,
-        urlOptionalParams.prev
-      )
-      const defaultOption =
-        (diff.profile || diff.locations || diff.endpointHandler) && true
-
-      if (recalculate) {
-        this.getRoutes(
-          locations,
-          profile,
-          authorization,
-          (diff.googleMapsOption &&
-            !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
-            false,
-          google,
-          diff.trafficOption || false,
-          defaultOption || false,
-          endpointHandler.options[endpointHandler.activeIdx].text
-        )
-      } else {
-        this.updateState('recalculate', true)
-      }
-
-      const mappedQueryParams = mapOptionalParameters(
-        optionalParamsMapping,
-        urlOptionalParams.current
-      )
-
-      updateUrl(
-        locations,
-        profile,
-        endpointHandler.options[endpointHandler.activeIdx].key,
-        history,
-        location,
-        mappedQueryParams
-      )
     }
 
     if (prevState.responses.routeResponse !== responses.routeResponse) {
@@ -625,7 +566,7 @@ class App extends Component<any, State> {
   }
 
   public getRoutes: GetRoutes = (
-    locations: Location[],
+    locations: LocationInfo[],
     profile: string,
     authorization: string,
     googleMapsOption: boolean,
@@ -634,8 +575,13 @@ class App extends Component<any, State> {
     defaultOption: boolean,
     endpointUrl: string
   ) => {
-    if (locations.length >= 2 && !locations.some((el: Location) => !el.lat || !el.lng)) {
+    if (
+      locations.length >= 2 &&
+      !locations.some((el: LocationInfo) => !el.lat || !el.lon)
+    ) {
       const body = getRequestBody(locations)
+
+      this.setState({ body })
 
       return Promise.all([
         defaultOption &&
@@ -674,7 +620,6 @@ class App extends Component<any, State> {
         .then((routeResponse: RouteResponse) => {
           this.setState(
             state => ({
-              body,
               messages: {
                 ...state.messages,
                 [message]: null
@@ -710,7 +655,11 @@ class App extends Component<any, State> {
     })
   }
 
-  public handleGoogleRequest = (google: any, profile: string, locations: Location[]) => {
+  public handleGoogleRequest = (
+    google: any,
+    profile: string,
+    locations: LocationInfo[]
+  ) => {
     return new Promise(resolve => {
       googleDirections(google, profile, locations)
         .then((googleResponse: GoogleResponse) => {
@@ -775,21 +724,32 @@ class App extends Component<any, State> {
     }
   }
 
-  public updatePoint: UpdatePoint = (indexes: number[], coords: Coords[]) => {
+  public updatePoint: UpdatePoint = (indexes: number[], newLocations: Location[]) => {
     this.setState(state => {
       return {
         locations: state.locations.reduce(
-          (accum: Location[], element: Location, currentIndex: number) => {
+          (accum: LocationInfo[], element: LocationInfo, currentIndex: number) => {
             if (!indexes.includes(currentIndex)) {
               return [...accum, element]
             } else {
               const index = indexes.findIndex(el => el === currentIndex)
+              const resettedLocation = Object.keys(element).reduce(
+                (newObj: any, prop) => {
+                  return this.propsToReset.has(prop)
+                    ? newObj
+                    : {
+                        ...newObj,
+                        [prop]: element[prop]
+                      }
+                },
+                {}
+              )
+
               return [
                 ...accum,
                 {
-                  ...element,
-                  lat: coords[index].lat,
-                  lng: coords[index].lng
+                  ...resettedLocation,
+                  ...newLocations[index]
                 }
               ]
             }

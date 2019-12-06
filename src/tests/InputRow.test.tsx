@@ -8,7 +8,7 @@ const urlMatchString = '/:profile/:start/:end'
 it('expect to render Panel component', () => {
   const item = {
     lat: null,
-    lng: null,
+    lon: null,
     marker: 'map marker alternate',
     name: 'start',
     placeholder: 'Origin'
@@ -19,7 +19,7 @@ it('expect to render Panel component', () => {
       <InputRow
         rowKey={item.name}
         index={0}
-        coords={{ lat: 52, lng: 12 }}
+        coords={{ lat: 52, lon: 12 }}
         placeholder={item.placeholder}
         iconName={item.marker}
         updatePoint={jest.fn()}
