@@ -20,18 +20,18 @@ const delay = (ms: number) =>
     }, ms)
   })
 
-const mockEventStart = { lng: 13.389869, lat: 52.510348 }
-const mockEventEnd = { lng: 13.39114, lat: 52.510425 }
+const mockEventStart = { lon: 13.389869, lat: 52.510348 }
+const mockEventEnd = { lon: 13.39114, lat: 52.510425 }
 
 const mockBody = {
   locations: [
     {
       lat: mockEventStart.lat,
-      lon: mockEventStart.lng
+      lon: mockEventStart.lon
     },
     {
       lat: mockEventEnd.lat,
-      lon: mockEventEnd.lng
+      lon: mockEventEnd.lon
     }
   ],
   reportGeometry: true
@@ -121,9 +121,9 @@ describe('Behaviour of Changing Body raw data', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(endPoint.lat).toBe(null)
-      expect(endPoint.lng).toBe(null)
+      expect(endPoint.lon).toBe(null)
       expect(startPoint.lat).toBe(null)
-      expect(startPoint.lng).toBe(null)
+      expect(startPoint.lon).toBe(null)
     })
 
     it('does not insert a marker on the Map component', () => {
@@ -173,9 +173,9 @@ describe('Behaviour of Changing Body raw data', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(startPoint.lat).toBe(mockEventStart.lat)
-      expect(startPoint.lng).toBe(mockEventStart.lng)
+      expect(startPoint.lon).toBe(mockEventStart.lon)
       expect(endPoint.lat).toBe(mockEventEnd.lat)
-      expect(endPoint.lng).toBe(mockEventEnd.lng)
+      expect(endPoint.lon).toBe(mockEventEnd.lon)
     })
 
     it('inserts a marker on the Map component', () => {

@@ -82,18 +82,23 @@ describe('Start and end points work as expected', () => {
       const startPoint = locations.find((el: any) => el.name === 'start')
 
       expect(startPoint.lat).toBe(mockEventStart.lngLat.lat)
-      expect(startPoint.lng).toBe(mockEventStart.lngLat.lng)
+      expect(startPoint.lon).toBe(mockEventStart.lngLat.lng)
 
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(endPoint.lat).toBe(null)
-      expect(endPoint.lng).toBe(null)
+      expect(endPoint.lon).toBe(null)
     })
 
-    it("updates start input's value", () => {
-      const { value: valueStartInput } = input[0].props
+    it("updates start input's value", done => {
+      delay(500).then(() => {
+        const { value: valueStartInput } = input[0].props
 
-      expect(valueStartInput).toBe(formatCoords(mockEventStart.lngLat))
+        expect(valueStartInput).toBe(
+          formatCoords({ lat: mockEventStart.lngLat.lat, lon: mockEventStart.lngLat.lng })
+        )
+        done()
+      })
     })
 
     it('inserts a marker on the map', () => {
@@ -108,7 +113,12 @@ describe('Start and end points work as expected', () => {
       const splitUrl = location.pathname.split('/')
 
       expect(splitUrl).toHaveLength(matchingParams.length + 1)
-      expect(splitUrl[2]).toBe(`${formatCoords(mockEventStart.lngLat)};-`)
+      expect(splitUrl[2]).toBe(
+        `${formatCoords({
+          lat: mockEventStart.lngLat.lat,
+          lon: mockEventStart.lngLat.lng
+        })};-`
+      )
     })
   })
 
@@ -134,17 +144,21 @@ describe('Start and end points work as expected', () => {
       const endPoint = locations.find((el: any) => el.name === 'end')
 
       expect(startPoint.lat).toBe(mockEventStart.lngLat.lat)
-      expect(startPoint.lng).toBe(mockEventStart.lngLat.lng)
+      expect(startPoint.lon).toBe(mockEventStart.lngLat.lng)
       expect(endPoint.lat).toBe(mockEventEnd.lngLat.lat)
-      expect(endPoint.lng).toBe(mockEventEnd.lngLat.lng)
+      expect(endPoint.lon).toBe(mockEventEnd.lngLat.lng)
     })
 
     it("updates start and end inputs' value", () => {
       const { value: valueStartInput } = input[0].props
       const { value: valueEndInput } = input[1].props
 
-      expect(valueStartInput).toBe(formatCoords(mockEventStart.lngLat))
-      expect(valueEndInput).toBe(formatCoords(mockEventEnd.lngLat))
+      expect(valueStartInput).toBe(
+        formatCoords({ lat: mockEventStart.lngLat.lat, lon: mockEventStart.lngLat.lng })
+      )
+      expect(valueEndInput).toBe(
+        formatCoords({ lat: mockEventEnd.lngLat.lat, lon: mockEventEnd.lngLat.lng })
+      )
     })
 
     it('inserts a marker on the map', () => {
@@ -167,7 +181,13 @@ describe('Start and end points work as expected', () => {
 
       expect(splitUrl).toHaveLength(matchingParams.length + 1)
       expect(splitUrl[2]).toBe(
-        `${formatCoords(mockEventStart.lngLat)};${formatCoords(mockEventEnd.lngLat)}`
+        `${formatCoords({
+          lat: mockEventStart.lngLat.lat,
+          lon: mockEventStart.lngLat.lng
+        })};${formatCoords({
+          lat: mockEventEnd.lngLat.lat,
+          lon: mockEventEnd.lngLat.lng
+        })}`
       )
     })
   })

@@ -36,7 +36,7 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     const { coords } = this.props
 
     if (prevProps.coords !== coords) {
-      if (coords.lat && coords.lng) {
+      if (coords.lat && coords.lon) {
         this.setState({ value: formatCoords(coords) })
       } else {
         this.setState({ value: '' })
@@ -59,13 +59,13 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
     if (coords && formatCoords(prevCoords) !== formatCoords(coords)) {
       updatePoint([index], [coords])
     } else if (value === '') {
-      updatePoint([index], [{ lat: null, lng: null }])
+      updatePoint([index], [{ lat: null, lon: null }])
     }
   }
 
   public cleanInput = () => {
     const { index, updatePoint } = this.props
-    this.setState({ value: '' }, () => updatePoint([index], [{ lat: null, lng: null }]))
+    this.setState({ value: '' }, () => updatePoint([index], [{ lat: null, lon: null }]))
   }
 
   public render() {

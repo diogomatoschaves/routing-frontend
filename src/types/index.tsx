@@ -1,4 +1,6 @@
 // Functions
+import * as React from 'react'
+
 export type UpdatePoint = (index: number[], coords: Coords[]) => void
 export type UpdateState = (stateKey: string, value: any) => void
 export type HandleChange = ({ id, value }: { id: string; value: any }) => boolean
@@ -8,7 +10,7 @@ export type HandleAddRoute = (route: Route) => void
 export type HandleDeleteRoute = (id: string) => void
 export type WaitTillLoaded = (loadedProp: boolean) => Promise<boolean>
 export type GetRoutes = (
-  locations: Location[],
+  locations: LocationInfo[],
   profile: string,
   authorization: string,
   googleMapsOption: boolean,
@@ -16,27 +18,36 @@ export type GetRoutes = (
   trafficOption: boolean,
   defaultOption: boolean,
   endpointUrl: string
-) => Promise<unknown[]>
+) => Promise<unknown[]> | Promise<void>
 export type UpdateStateCallback = (callback: any) => Promise<void>
 
 // Objects
-export interface Location {
+export interface LocationInfo extends Location {
   name: string
   marker: string
   markerOffset?: number[]
   placeholder: string
-  lat: null | number
-  lng: null | number
+  [key: string]: string | number[] | number | Bearing | undefined | null
 }
 
 export interface Coords {
   lat: null | number
-  lng: null | number
+  lon: null | number
 }
 
 export interface Coords2 {
   lat: number
   lon: number
+}
+
+interface Bearing {
+  degree: number
+  range: number
+}
+
+export interface Location extends Coords {
+  bearing?: Bearing
+  radius?: number
 }
 
 export interface Responses {
@@ -121,7 +132,7 @@ export interface MapboxStyle {
 }
 
 export interface Body {
-  locations: Coords2[]
+  locations: Location[]
   reportGeometry: boolean
   reportNodes?: true
 }

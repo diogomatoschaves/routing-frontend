@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '../styledComponents'
 import {
   GeographiesHandler,
-  Location,
+  LocationInfo,
   ProfileItem,
   UpdatePoint,
   UpdateState
@@ -13,7 +13,7 @@ import ProfilesRow from './ProfilesRow'
 
 interface Props {
   updatePoint: UpdatePoint
-  locations: Location[]
+  locations: LocationInfo[]
   routingGraphVisible: boolean
   polygonsVisible: boolean
   googleMapsOption: boolean
@@ -51,13 +51,13 @@ export default function DefaultPanel(props: Props) {
           profiles={profiles}
         />
       </Box>
-      {locations.map((item: Location, index: number) => {
+      {locations.map((item: LocationInfo, index: number) => {
         return (
           <InputRow
             key={index}
             rowKey={item.name}
             index={index}
-            coords={{ lat: item.lat, lng: item.lng }}
+            coords={{ lat: item.lat, lon: item.lon }}
             placeholder={item.placeholder}
             iconName={item.marker}
             updatePoint={updatePoint}
