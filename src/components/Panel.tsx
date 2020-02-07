@@ -55,7 +55,7 @@ const PanelWrapper: any = styled(Box)`
   max-height: 1000px;
   left: 40px;
   top: 40px;
-  padding: 25px;
+  padding: 25px 25px 35px 25px;
   background: rgba(255, 255, 255, 0.92);
   border-radius: 10px;
   box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);

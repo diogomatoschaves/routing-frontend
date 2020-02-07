@@ -14,7 +14,6 @@ import {
   OptionsHandler,
   OSRMRouteResponse,
   Route,
-  RouteResponse,
   UpdatePoint,
   UpdateState
 } from '../types'
@@ -105,23 +104,6 @@ export default function InspectPanel(props: Props) {
         />
       ) : (
         <Fragment>
-          <Box
-            padding="10px 10px 0 40px"
-            height={'70px'}
-            direction="row"
-            justify="flex-start"
-          >
-            <Box width="40%">
-              {serviceOptions[selectedService].key === 'Route' && (
-                <ProfileToggler
-                  optionsArray={responseOptionsHandler.options}
-                  selectedOption={responseOption}
-                  updateState={updateState}
-                  id={'responseOptionsHandler'}
-                />
-              )}
-            </Box>
-          </Box>
           <Box width="80%" padding="10px 0 10px 0">
             <StyledHeader overridecolor={MAIN_PETROL}>Request Endpoint</StyledHeader>
             <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
