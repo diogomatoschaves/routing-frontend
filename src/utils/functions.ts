@@ -377,8 +377,7 @@ export const getAppState = () => {
     addDataTabsHandler: {
       options: [
         { key: 'route', text: 'Route Response', value: 0 },
-        { key: 'match', text: 'Match Response', value: 1 },
-        { key: 'db', text: 'Load from DB', value: 2 }
+        { key: 'match', text: 'Match Response', value: 1 }
       ],
       activeIdx: 0
     },
