@@ -43,7 +43,6 @@ export default function BackgroundIcon({
           ) : (
             <StyledIcon
               fontSize="25px"
-              height="20px"
               overridecolor={iconColor}
               name={iconName}
               position="absolute"
