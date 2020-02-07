@@ -3,8 +3,7 @@ import { Location } from '../types'
 const osrmRoutingApi = async (
   locations: Location[],
   profile: string,
-  endpoint: string = process.env.REACT_APP_ROUTING_URL ||
-    'https://router.project-osrm.org/route'
+  endpoint: string = process.env.REACT_APP_ROUTING_URL || ''
 ) => {
   const headers = new Headers() as any
 
@@ -14,7 +13,7 @@ const osrmRoutingApi = async (
 
   const coords = locations.map(loc => `${loc.lon},${loc.lat}`).join(';')
 
-  const url = `${endpoint}/v1/${profile}/${coords}?overview=false&alternatives=true&steps=true`
+  const url = `${endpoint}/route/v1/${profile}/${coords}?overview=false&alternatives=true&steps=true`
 
   const response = await fetch(url, {
     headers,
