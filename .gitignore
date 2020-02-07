@@ -30,6 +30,8 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+routing-frontend.git*
+
 
 # Exclude .devspace generated files
 .devspace/

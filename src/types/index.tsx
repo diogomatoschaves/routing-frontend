@@ -51,11 +51,11 @@ export interface Location extends Coords {
 }
 
 export interface Responses {
-  routeResponse: RouteResponse
-  trafficResponse: RouteResponse
+  routeResponse: OSRMRouteResponse
+  trafficResponse: OSRMRouteResponse
   googleResponse: GoogleResponse
   matchResponse: MatchResponse
-  [key: string]: RouteResponse | GoogleResponse | MatchResponse | undefined
+  [key: string]: OSRMRouteResponse | GoogleResponse | MatchResponse | undefined
 }
 
 export interface Messages {

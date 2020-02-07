@@ -5,7 +5,7 @@ import { Validator } from 'jsonschema'
 import React, { Component, Fragment } from 'react'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
-import { auth, googleDirections, routingApi } from '../apiCalls'
+import { auth, googleDirections, osrmRoutingApi, routingApi } from '../apiCalls'
 import '../App.css'
 import Map from './Map'
 import { Box, EmptySpace } from '../styledComponents'
@@ -22,7 +22,7 @@ import {
   Location,
   LocationInfo,
   Messages,
-  OptionsHandler,
+  OptionsHandler, OSRMRouteResponse,
   ResponseOptionsHandler,
   Responses,
   Route,
@@ -37,7 +37,7 @@ import {
   PETROL_6,
   ROUTING_SERVICE_POLYLINE,
   THIRD_PARTY_POLYLINE,
-  TRAFFIC_POLYLINE,
+  TRAFFIC_POLYLINE
 } from '../utils/colours'
 import {
   capitalize,
@@ -51,7 +51,7 @@ import {
 import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
 import {
   routeConverterFromGoogle,
-  routeConverterFromMatchService,
+  routeConverterFromMatchService, routeConverterFromOSRM,
   routeConverterFromRouteService
 } from '../utils/routeAdapter'
 import { Schema } from '../utils/schemas'
@@ -169,14 +169,14 @@ const StyledBox = styled(Box)`
     `}
 `
 
-const messageFailedRoute = (traffic: boolean, response: RouteResponse) => (
+const messageFailedRoute = (traffic: boolean, response: OSRMRouteResponse) => (
   <span>
     <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
-      Routing Service{traffic ? ' - traffic' : ''}:
+      OSRM {traffic ? ' - traffic' : ''}:
     </span>
     <span> {response.code}. </span>
     <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
-      {response.message}
+      An error occurred while fetching the route.
     </span>
   </span>
 )
@@ -427,10 +427,6 @@ class App extends Component<any, State> {
       this.updateRoute(responses.routeResponse, 'routeDAS', 'route')
     }
 
-    if (prevState.responses.routeResponse !== responses.routeResponse) {
-      this.updateRoute(responses.routeResponse, 'routeDAS', 'route')
-    }
-
     if (prevState.responses.trafficResponse !== responses.trafficResponse) {
       this.updateRoute(responses.trafficResponse, 'routeTrafficDAS', 'trafficRoute')
     }
@@ -584,17 +580,10 @@ class App extends Component<any, State> {
       this.setState({ body })
 
       return Promise.all([
-        defaultOption &&
-          this.handleDasRequest(profile, authorization, body, endpointUrl, 'route'),
+        defaultOption && this.handleOSRMRequest(profile, locations, endpointUrl, 'route'),
         trafficOption &&
           ['car'].includes(profile) &&
-          this.handleDasRequest(
-            'car-traffic',
-            authorization,
-            body,
-            endpointUrl,
-            'traffic'
-          ),
+          this.handleOSRMRequest('car-traffic', locations, endpointUrl, 'traffic'),
         googleMapsOption &&
           google &&
           ['car', 'foot'].includes(profile) &&
@@ -605,10 +594,9 @@ class App extends Component<any, State> {
     }
   }
 
-  public handleDasRequest = async (
+  public handleOSRMRequest = async (
     profile: string,
-    authorization: string,
-    body: Body,
+    locations: Location[],
     endpointUrl: string,
     routeName: string
   ) => {
@@ -616,8 +604,8 @@ class App extends Component<any, State> {
     const message = `${routeName}Message`
 
     return new Promise(resolve => {
-      routingApi(profile, authorization, body, endpointUrl)
-        .then((routeResponse: RouteResponse) => {
+      osrmRoutingApi(locations, profile)
+        .then((routeResponse: OSRMRouteResponse) => {
           this.setState(
             state => ({
               messages: {
@@ -760,14 +748,14 @@ class App extends Component<any, State> {
     })
   }
 
-  public updateRoute = (response: RouteResponse, key: string, routeName: string) => {
+  public updateRoute = (response: OSRMRouteResponse, key: string, routeName: string) => {
     if (Object.keys(response).includes('code') && response.code === 'Ok') {
-      const trafficRoute = routeConverterFromRouteService(response, key)
+      const route = routeConverterFromOSRM(response, key)
       this.setState(state => ({
         ...state,
         routes: {
           ...state.routes,
-          [routeName]: trafficRoute
+          [routeName]: route
         }
       }))
     } else {
