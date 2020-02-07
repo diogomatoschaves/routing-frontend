@@ -9,7 +9,7 @@ import {
   HandleValueUpdate,
   InputColors,
   InputValues,
-  MatchResponse,
+  MatchResponse, OSRMRouteResponse,
   RouteResponse,
   UpdateState
 } from '../types'
@@ -21,7 +21,7 @@ interface Props {
   id: string
   buttonId: string
   buttonText: string
-  value: RouteResponse | MatchResponse | GoogleResponse | Body
+  value: OSRMRouteResponse | MatchResponse | GoogleResponse | Body
   inputValues: InputValues
   inputColors: InputColors
   updateState: UpdateState
