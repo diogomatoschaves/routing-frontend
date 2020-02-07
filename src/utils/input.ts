@@ -9,18 +9,26 @@ export const defaultRouteResponse = {
   code: 'Ok',
   routes: [
     {
-      totalDuration: 0,
-      totalDistance: 0,
+      duration: 0,
+      distance: 0,
+      weight_name: '',
+      weight: 0,
       legs: [
         {
-          geometry: [],
+          summary: '',
+          weight: 0,
           duration: 0,
-          distance: 0
+          distance: 0,
+          steps: [
+            {
+              geometry: ''
+            }
+          ]
         }
       ]
     }
   ],
-  locations: []
+  waypoints: []
 }
 
 export const defaultGoogleResponse = {

@@ -12,6 +12,7 @@ import {
   MatchResponse,
   Option,
   OptionsHandler,
+  OSRMRouteResponse,
   Route,
   RouteResponse,
   UpdatePoint,
@@ -26,7 +27,7 @@ import Tabs from './Tabs'
 
 interface Props {
   handleHideClick: (e: any) => void
-  response: RouteResponse | GoogleResponse | MatchResponse
+  response: OSRMRouteResponse | GoogleResponse | MatchResponse
   responseOptionsHandler: OptionsHandler
   responseOption: Option
   body: Body

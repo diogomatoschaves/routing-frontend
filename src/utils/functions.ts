@@ -316,7 +316,7 @@ export const getAppState = () => {
     polygonsVisible: false,
     googleMapsOption: false,
     trafficOption: false,
-    profile: 'car',
+    profile: 'driving',
     geography: {
       text: 'Berlin',
       coords: [13.38408, 52.51721],
@@ -462,7 +462,7 @@ export const getAppProps = () => {
     profiles: [
       {
         iconName: 'car',
-        name: 'car'
+        name: 'driving'
       },
       {
         iconName: 'male',
