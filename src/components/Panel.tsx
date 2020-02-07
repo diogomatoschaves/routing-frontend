@@ -49,7 +49,7 @@ interface Props {
 const PanelWrapper: any = styled(Box)`
   position: absolute;
   z-index: 1000;
-  width: 24%;
+  width: 30%;
   min-width: 350px;
   max-width: 450px;
   max-height: 1000px;
