@@ -691,9 +691,9 @@ export default class Map extends Component<Props, State> {
     return speedsEntries
       .map(input => {
         const sourceName = input.id
+        const profileStr = profile === 'driving' ? 'car' : profile
 
-        endpointUrlString = endpointUrlString.replace('${PROFILE}', profile)
-        const url = `${endpointUrlString}/v1/tile/{x},{y},{z}`
+        const url = `${endpointUrlString}/tile/v1/${profileStr}/tile({x},{y},{z}).mvt`
 
         map.addSource(input.id, {
           maxzoom: 18,
