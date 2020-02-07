@@ -27,6 +27,7 @@ interface Props {
 }
 
 const diameter = 50
+const extraOptions = false
 
 export default function DefaultPanel(props: Props) {
   const {
@@ -66,22 +67,24 @@ export default function DefaultPanel(props: Props) {
           />
         )
       })}
-      <Box direction="row" justify="space-around" padding="10px 0">
-        <OptionsSwitch
-          checked={googleMapsOption}
-          text={'Google Maps'}
-          id={'googleMapsOption'}
-          updateState={updateState}
-          width={'65%'}
-        />
-        <OptionsSwitch
-          checked={trafficOption}
-          text={'Traffic'}
-          id={'trafficOption'}
-          updateState={updateState}
-          width={'35%'}
-        />
-      </Box>
+      {extraOptions && (
+        <Box direction="row" justify="space-around" padding="10px 0">
+          <OptionsSwitch
+            checked={googleMapsOption}
+            text={'Google Maps'}
+            id={'googleMapsOption'}
+            updateState={updateState}
+            width={'65%'}
+          />
+          <OptionsSwitch
+            checked={trafficOption}
+            text={'Traffic'}
+            id={'trafficOption'}
+            updateState={updateState}
+            width={'35%'}
+          />
+        </Box>
+      )}
     </Box>
   )
 }
