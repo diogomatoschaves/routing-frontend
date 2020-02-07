@@ -84,6 +84,31 @@ export interface RouteLeg {
   geometry: Coords2[]
 }
 
+export interface OSRMRouteResponse {
+  code: string
+  routes: OSRMRoute[]
+  waypoints: any[]
+}
+
+export interface OSRMRoute {
+  weight_name: string
+  weight: number
+  duration: number
+  distance: number
+  legs: OSRMRouteLeg[]
+}
+
+export interface OSRMRouteLeg {
+  summary: string
+  weight: number
+  duration: number
+  distance: number
+  steps: Array<{
+    geometry: string
+    [x: string]: any
+  }>
+}
+
 export interface GoogleResponse {
   geocoded_waypoints?: any[]
   routes: any[]

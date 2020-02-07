@@ -5,6 +5,9 @@ import {
   GoogleResponse,
   MatchLeg,
   MatchResponse,
+  OSRMRoute,
+  OSRMRouteLeg,
+  OSRMRouteResponse,
   Route,
   RouteLeg,
   RouteResponse,
@@ -84,5 +87,30 @@ export const routeConverterFromGoogle = (response: GoogleResponse) => {
     routePath: polyline
       .decode(tripPolyline)
       .map(coord => ({ lat: coord[0], lon: coord[1] }))
+  }
+}
+
+export const routeConverterFromOSRM = (response: OSRMRouteResponse, id = nanoid()) => {
+  return {
+    distance: response.routes.reduce((accum, route) => {
+      return accum + route.distance
+    }, 0),
+    duration: response.routes.reduce((accum, route) => {
+      return accum + route.duration
+    }, 0),
+    id,
+    parsedValue: response,
+    routePath: response.routes[0].legs.reduce((legPath: Coords2[], leg: OSRMRouteLeg) => {
+      return [
+        ...legPath,
+        ...leg.steps.reduce((stepPath: Coords2[], step) => {
+          const path = polyline
+            .decode(step.geometry)
+            .map(coord => ({ lat: coord[0], lon: coord[1] }))
+          return [...stepPath, ...path]
+        }, [])
+      ]
+    }, []),
+    type: 'Route'
   }
 }
