@@ -26,8 +26,8 @@ const NAME_MAPPING: any = {
   },
   route: {
     color: 'ROUTING_SERVICE',
-    subTitle: 'No traffic',
-    title: 'Routing Service',
+    title: 'OSRM',
+    subTitle: 'Route Stats',
     order: 1
   },
   trafficRoute: {

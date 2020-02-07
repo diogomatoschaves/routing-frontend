@@ -604,7 +604,7 @@ class App extends Component<any, State> {
     const message = `${routeName}Message`
 
     return new Promise(resolve => {
-      osrmRoutingApi(locations, profile)
+      osrmRoutingApi(locations, profile, endpointUrl)
         .then((routeResponse: OSRMRouteResponse) => {
           this.setState(
             state => ({

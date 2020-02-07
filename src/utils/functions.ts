@@ -358,22 +358,12 @@ export const getAppState = () => {
     ],
     endpointHandler: {
       options: [
+        { key: 'localhost', text: 'http://localhost:5000', value: 0 },
         {
-          key: 'develop',
-          text: 'https://routing.develop.otonomousmobility.com/${PROFILE}',
-          value: 0
-        },
-        {
-          key: 'staging',
-          text: 'https://routing.staging.otonomousmobility.com/${PROFILE}',
+          key: 'osrm-backend',
+          text: 'https://router.project-osrm.org',
           value: 1
-        },
-        {
-          key: 'testing',
-          text: 'https://routing.testing.otonomousmobility.com/${PROFILE}',
-          value: 2
-        },
-        { key: 'localhost', text: 'http://localhost:5000', value: 3 }
+        }
       ],
       activeIdx: 0
     },
