@@ -11,7 +11,11 @@ const osrmRoutingApi = async (
   headers.set('sec-fetch-mode', 'cors')
   headers.set('origin', 'https://map.project-osrm.org')
 
-  const coords = locations.map(loc => `${loc.lon},${loc.lat}`).join(';')
+  const coords = locations
+    .reduce((accum: string[], loc) => {
+      return loc.lat && loc.lon ? [...accum, `${loc.lon},${loc.lat}`] : accum
+    }, [])
+    .join(';')
 
   const url = `${endpoint}/route/v1/${profile}/${coords}?overview=false&alternatives=true&steps=true`
 

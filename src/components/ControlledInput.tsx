@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom'
 import { StyledInput } from '../styledComponents'
 import { Coords, UpdatePoint } from '../types'
 import { FOCUSED_INPUT, NORMAL_INPUT } from '../utils/colours'
-import { formatCoords, splitCoords } from '../utils/functions'
+import { formatCoords, lightenDarkenColor, splitCoords } from '../utils/functions'
 
 interface Props {
   updatePoint: UpdatePoint
@@ -15,7 +15,7 @@ interface Props {
   history?: any
   location?: any
   urlMatchString: string
-  color: string
+  defaultColor: string
 }
 
 interface State {
@@ -23,6 +23,8 @@ interface State {
 }
 
 class ControlledInput extends Component<Props & RouteComponentProps, State> {
+  public input: any
+
   public state = {
     value: ''
   }
@@ -50,9 +52,15 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
   public handleBlur = (): void => {
     const { value } = this.state
-    const { index, updatePoint, coords: prevCoords, updateColor, color } = this.props
+    const {
+      index,
+      updatePoint,
+      coords: prevCoords,
+      updateColor,
+      defaultColor
+    } = this.props
 
-    updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT)
+    updateColor(defaultColor)
 
     const coords = splitCoords(value)
 
@@ -65,20 +73,24 @@ class ControlledInput extends Component<Props & RouteComponentProps, State> {
 
   public cleanInput = () => {
     const { index, updatePoint } = this.props
+    this.input.focus()
     this.setState({ value: '' }, () => updatePoint([index], [{ lat: null, lon: null }]))
   }
 
   public render() {
     const { value } = this.state
-    const { placeholder, updateColor, color } = this.props
+    const { placeholder, updateColor, defaultColor } = this.props
 
     return (
       <StyledInput
+        ref={input => {
+          this.input = input
+        }}
         fluid={true}
         value={value}
         onChange={(e, { value: newValue }) => this.handleChange(newValue)}
         onBlur={this.handleBlur}
-        onFocus={() => updateColor(color === NORMAL_INPUT ? FOCUSED_INPUT : NORMAL_INPUT)}
+        onFocus={() => updateColor(lightenDarkenColor(defaultColor, 20))}
         placeholder={placeholder}
         icon={
           value !== ''

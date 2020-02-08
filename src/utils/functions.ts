@@ -11,13 +11,16 @@ import {
   UpdateState,
   UpdateStateCallback
 } from '../types'
+import { END_MARKER, START_MARKER, WAYPOINT_MARKER } from './colours'
 import {
   defaultBody,
   defaultGoogleResponse,
   defaultMatchResponse,
   defaultRoute,
   defaultRouteResponse,
-  layersArray
+  destinationTemplate,
+  layersArray,
+  waypointTemplate
 } from './input'
 import { Schema } from './schemas'
 
@@ -60,15 +63,17 @@ export const transformToObject = (array: number[][]): Coords2[] => {
 export const getRequestBody = (locations: LocationInfo[]) => {
   return {
     locations: locations.reduce((accum: Location[], location: LocationInfo) => {
-      return [
-        ...accum,
-        {
-          ...(location.bearing && { bearing: location.bearing }),
-          lat: location.lat,
-          lon: location.lon,
-          ...(location.radius && { radius: location.radius })
-        }
-      ]
+      return location.lat && location.lon
+        ? [
+            ...accum,
+            {
+              ...(location.bearing && { bearing: location.bearing }),
+              lat: location.lat,
+              lon: location.lon,
+              ...(location.radius && { radius: location.radius })
+            }
+          ]
+        : accum
     }, []),
     reportGeometry: true
   }
@@ -342,6 +347,7 @@ export const getAppState = () => {
       {
         name: 'start',
         marker: 'map marker alternate',
+        markerColor: START_MARKER,
         markerOffset: [0, 5],
         placeholder: 'Origin',
         lat: null,
@@ -349,7 +355,8 @@ export const getAppState = () => {
       },
       {
         name: 'end',
-        marker: 'map marker',
+        marker: 'map marker alternate',
+        markerColor: END_MARKER,
         markerOffset: [0, 5],
         placeholder: 'Destination',
         lat: null,
@@ -476,4 +483,72 @@ export const findDiff: any = (object1: any, object2: any) => {
       return accum
     }
   }, {})
+}
+
+export const getWaypoint = (lat: number | null, lon: number | null) => {
+  return {
+    ...waypointTemplate,
+    lat,
+    lon
+  }
+}
+
+export const addWaypoint = (locations: LocationInfo[]) => {
+  const lastWaypoint = locations.slice(-1)[0]
+  return [
+    ...locations.slice(0, -1),
+    getWaypoint(lastWaypoint.lat, lastWaypoint.lon),
+    destinationTemplate
+  ]
+}
+
+export const sortWaypoints = (locations: LocationInfo[]) => {
+  return locations.map((location: LocationInfo, index: number) => {
+    if (index === 0) {
+      return {
+        ...location,
+        name: 'start',
+        marker: 'map marker alternate',
+        markerColor: START_MARKER,
+        markerOffset: [0, 5],
+        placeholder: 'Origin'
+      }
+    } else if (!locations[index + 1]) {
+      return {
+        ...location,
+        name: 'end',
+        marker: 'map marker alternate',
+        markerColor: END_MARKER,
+        markerOffset: [0, 5],
+        placeholder: 'Destination'
+      }
+    } else {
+      return location
+    }
+  })
+}
+
+export const removeWaypoint = (locations: LocationInfo[], indexToRemove: number) => {
+  const prunedLocations = locations.reduce(
+    (accum: LocationInfo[], location: LocationInfo, index: number) => {
+      if (index !== indexToRemove) {
+        return [...accum, location]
+      } else {
+        return accum
+      }
+    },
+    []
+  )
+  return sortWaypoints(prunedLocations)
+}
+
+export const atLeastTwoLocations = (locations: LocationInfo[]) => {
+  let count = 0
+
+  locations.forEach((el: LocationInfo) => {
+    if (el.lat && el.lon) {
+      count++
+    }
+  })
+  return count >= 2
 }

@@ -1,9 +1,9 @@
-import React, { Component, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box } from '../styledComponents'
-import { Coords, UpdatePoint } from '../types'
-import { NORMAL_INPUT } from '../utils/colours'
+import { Coords, LocationInfo, UpdatePoint, UpdateState } from '../types'
 import BackgroundIcon from './BackgroundIcon'
 import ControlledInput from './ControlledInput'
+import { removeWaypoint } from '../utils/functions'
 
 interface Props {
   rowKey: string
@@ -12,36 +12,59 @@ interface Props {
   placeholder: string
   iconName: string | any
   updatePoint: UpdatePoint
+  updateState: UpdateState
   urlMatchString: string
   loading: boolean
+  defaultColor: string
+  locations: LocationInfo[]
 }
 
 const diameter = 38
 
 const InputRow = (props: Props) => {
-  const [color, setColor] = useState(NORMAL_INPUT)
-
   const {
     iconName,
     rowKey,
     index,
     coords,
     updatePoint,
+    updateState,
     placeholder,
     urlMatchString,
-    loading
+    loading,
+    defaultColor,
+    locations
   } = props
 
+  const [color, setColor] = useState(defaultColor)
+  const [removeRow, setRemoveRow] = useState(false)
+
+  useEffect(() => {
+    setColor(props.defaultColor)
+  })
+
+  const removeAllowed = locations.length > 2
+
   return (
-    <Box direction="row" justify="space-around" padding="10px 0">
+    <Box
+      direction="row"
+      justify="space-around"
+      padding="10px 0"
+      onMouseEnter={() => setRemoveRow(true)}
+      onMouseLeave={() => setRemoveRow(false)}
+    >
       <BackgroundIcon
+        onClick={() =>
+          removeAllowed && updateState('locations', removeWaypoint(locations, index))
+        }
         diameter={diameter}
         color={color}
         iconColor={'white'}
         circle={true}
-        iconName={iconName}
+        iconName={removeAllowed && removeRow ? 'remove' : iconName}
         margin={'0 10px 0 0'}
         loading={loading}
+        cursor="pointer"
       />
       <ControlledInput
         rowKey={rowKey}
@@ -51,7 +74,7 @@ const InputRow = (props: Props) => {
         updateColor={setColor}
         placeholder={placeholder}
         urlMatchString={urlMatchString}
-        color={color}
+        defaultColor={defaultColor}
       />
     </Box>
   )

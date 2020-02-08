@@ -40,6 +40,7 @@ import {
   TRAFFIC_POLYLINE
 } from '../utils/colours'
 import {
+  atLeastTwoLocations,
   capitalize,
   getAppProps,
   getAppState,
@@ -172,11 +173,13 @@ const StyledBox = styled(Box)`
 const messageFailedRoute = (traffic: boolean, response: OSRMRouteResponse) => (
   <span>
     <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
-      OSRM {traffic ? ' - traffic' : ''}:
+      OSRM {traffic ? ' - traffic' : ''}
     </span>
-    <span> {response.code}. </span>
+    <span> {response.code}: </span>
     <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
-      An error occurred while fetching the route.
+      {response.message
+        ? response.message
+        : 'An error occurred while fetching the route.'}
     </span>
   </span>
 )
@@ -571,10 +574,7 @@ class App extends Component<any, State> {
     defaultOption: boolean,
     endpointUrl: string
   ) => {
-    if (
-      locations.length >= 2 &&
-      !locations.some((el: LocationInfo) => !el.lat || !el.lon)
-    ) {
+    if (atLeastTwoLocations(locations)) {
       const body = getRequestBody(locations)
 
       this.setState({ body })

@@ -1,4 +1,4 @@
-import { colors, ROUTING_SERVICE_POLYLINE } from './colours'
+import { colors, END_MARKER, ROUTING_SERVICE_POLYLINE, WAYPOINT_MARKER } from './colours'
 
 export const defaultBody = {
   locations: [],
@@ -551,3 +551,23 @@ export const layersArray = [
     interactive: true
   }
 ]
+
+export const waypointTemplate = {
+  name: 'waypoint',
+  marker: 'map marker',
+  markerColor: WAYPOINT_MARKER,
+  markerOffset: [0, 5],
+  placeholder: 'Waypoint',
+  lat: null,
+  lon: null
+}
+
+export const destinationTemplate = {
+  name: 'end',
+  marker: 'map marker alternate',
+  markerColor: END_MARKER,
+  markerOffset: [0, 5],
+  placeholder: 'Destination',
+  lat: null,
+  lon: null
+}

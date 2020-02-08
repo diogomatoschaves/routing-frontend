@@ -25,12 +25,15 @@ export const VALUE_COLOR = '#5e4fa2'
 export const NORMAL_INPUT = PETROL_4
 export const FOCUSED_INPUT = PETROL_5
 export const PROFILE_BACKGROUND = GREY_5
+export const ADD_WAYPOINT = PETROL_3
 
+export const START_MARKER = '#66c2a5'
+export const END_MARKER = '#d53e4f'
+export const WAYPOINT_MARKER = '#3288bd'
 
 export const ROUTING_SERVICE_POLYLINE = PETROL_3
 export const ROUTING_SERVICE_COLOR = PETROL_6
 export const ROUTING_SERVICE_STATS = PETROL_5
-
 
 // export const THIRD_PARTY_COLOR = '#8A0F00'
 // export const THIRD_PARTY_STATS = '#C44D3D'
@@ -52,8 +55,8 @@ export const colors: Dict = {
   '90+': '#9e0142', // purple
   '80-90': '#d53e4f', // blue
   '70-80': '#f46d43', // teal
-  '60-70': '#fdae61', // green 
-  '50-60': '#fee08b', // light green 
+  '60-70': '#fdae61', // green
+  '50-60': '#fee08b', // light green
   '40-50': '#e6f598', // yellow
   '30-40': '#abdda4', // light orange
   '20-30': '#66c2a5', // orange
