@@ -15,7 +15,13 @@ import {
   UpdatePoint,
   UpdateState
 } from '../types'
-import { ROUTING_SERVICE_POLYLINE, THIRD_PARTY_POLYLINE, TRAFFIC_POLYLINE } from '../utils/colours'
+import {
+  END_MARKER,
+  ROUTING_SERVICE_POLYLINE,
+  START_MARKER,
+  THIRD_PARTY_POLYLINE,
+  TRAFFIC_POLYLINE
+} from '../utils/colours'
 import { checkNested, getSpeedsLayers, transformPoints } from '../utils/functions'
 import {
   defaultRoute,
@@ -435,6 +441,7 @@ export default class Map extends Component<Props, State> {
             lat: routeKey.routePath[0].lat,
             lon: routeKey.routePath[0].lon,
             marker: 'map marker alternate',
+            markerColor: START_MARKER,
             markerOffset: [0, 5],
             name: 'start',
             placeholder: 'Origin'
@@ -443,6 +450,7 @@ export default class Map extends Component<Props, State> {
             lat: routeKey.routePath.slice(-1)[0].lat,
             lon: routeKey.routePath.slice(-1)[0].lon,
             marker: 'map marker',
+            markerColor: END_MARKER,
             markerOffset: [0, 5],
             name: 'end',
             placeholder: 'Destination'
@@ -571,7 +579,7 @@ export default class Map extends Component<Props, State> {
     id: string
   ) => {
     const el = document.createElement('i')
-    el.className = `${location.marker} icon custom-marker`
+    el.className = `${location.marker} icon custom-marker ${location.name}`
 
     const marker = new mapboxgl.Marker({
       anchor: 'bottom',

@@ -52,7 +52,7 @@ const PanelWrapper: any = styled(Box)`
   width: 30%;
   min-width: 350px;
   max-width: 450px;
-  max-height: 1000px;
+  max-height: 80vh;
   left: 40px;
   top: 40px;
   padding: 25px 25px 35px 25px;
@@ -60,6 +60,7 @@ const PanelWrapper: any = styled(Box)`
   border-radius: 10px;
   box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);
   transition: flex 1s ease-out;
+  overflow: auto;
 `
 
 const Panel: any = (props: Props) => {

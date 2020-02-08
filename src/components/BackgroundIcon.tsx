@@ -12,6 +12,7 @@ interface Props {
   margin: string
   cursor?: string
   loading?: boolean
+  onClick?: any
 }
 
 const Wrapper: any = styled.div`
@@ -26,10 +27,11 @@ export default function BackgroundIcon({
   iconName,
   margin,
   cursor,
-  loading
+  loading,
+  onClick
 }: Props) {
   return (
-    <Wrapper margin={margin}>
+    <Wrapper margin={margin} onClick={onClick}>
       <ColoredDiv
         circle={circle}
         diameter={diameter}

@@ -1,8 +1,21 @@
 import { History, Location as BrowserLocation } from 'history'
 import queryString from 'query-string'
 import { generatePath } from 'react-router'
-import { Coords, LocationInfo, OptionsHandler, ProfileItem, WaitTillLoaded } from '../types'
-import { findDiff, formatCoords, splitCoords, stringToBoolean } from './functions'
+import {
+  Coords,
+  LocationInfo,
+  OptionsHandler,
+  ProfileItem,
+  WaitTillLoaded
+} from '../types'
+import {
+  findDiff,
+  formatCoords,
+  getWaypoint,
+  sortWaypoints,
+  splitCoords,
+  stringToBoolean
+} from './functions'
 
 interface Params {
   locations: string
@@ -167,14 +180,14 @@ export const extractUrlParams = (
           activeIdx: endpointIdx
         }
       : endpoints
+
+  const updatedLocations = coords
+    ? sortWaypoints(coords.map(coord => getWaypoint(coord.lat, coord.lon)))
+    : locations
+
   return {
     endpointHandler: updatedEndpointHandler,
-    locations: coords
-      ? coords.map((item: Coords, index: number) => ({
-          ...locations[index],
-          ...item
-        }))
-      : locations,
+    locations: updatedLocations,
     profile: params[requiredParams.profile]
   }
 }
