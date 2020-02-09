@@ -13,6 +13,7 @@ export type GetRoutes = (
   locations: LocationInfo[],
   profile: string,
   authorization: string,
+  prevCoordsString: string,
   googleMapsOption: boolean,
   google: any,
   trafficOption: boolean,
