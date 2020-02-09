@@ -447,7 +447,8 @@ export const getAppState = () => {
       trafficMessage: null
     },
     messageBottomProp: -300,
-    loading: false
+    loading: false,
+    prevCoordsString: ''
   }
 }
 
@@ -552,3 +553,10 @@ export const atLeastTwoLocations = (locations: LocationInfo[]) => {
   })
   return count >= 2
 }
+
+export const getCoordsString = (locations: LocationInfo[]) =>
+  locations
+    .reduce((accum: string[], loc: Location) => {
+      return loc.lat && loc.lon ? [...accum, `${loc.lon},${loc.lat}`] : accum
+    }, [])
+    .join(';')

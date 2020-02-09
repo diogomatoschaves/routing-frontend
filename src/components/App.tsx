@@ -22,11 +22,11 @@ import {
   Location,
   LocationInfo,
   Messages,
-  OptionsHandler, OSRMRouteResponse,
+  OptionsHandler,
+  OSRMRouteResponse,
   ResponseOptionsHandler,
   Responses,
   Route,
-  RouteResponse,
   Routes,
   UpdatePoint,
   UpdateState,
@@ -44,6 +44,7 @@ import {
   capitalize,
   getAppProps,
   getAppState,
+  getCoordsString,
   getRequestBody,
   processValidBody,
   processValidResponse,
@@ -52,7 +53,8 @@ import {
 import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
 import {
   routeConverterFromGoogle,
-  routeConverterFromMatchService, routeConverterFromOSRM,
+  routeConverterFromMatchService,
+  routeConverterFromOSRM,
   routeConverterFromRouteService
 } from '../utils/routeAdapter'
 import { Schema } from '../utils/schemas'
@@ -106,6 +108,7 @@ interface State {
   inputColors: InputColors
   routeHighlight: string
   loading: boolean
+  prevCoordsString: string
   [key: string]: any
 }
 
@@ -344,7 +347,8 @@ class App extends Component<any, State> {
       bodyEdit,
       showMessage,
       responseOptionsHandler,
-      responses
+      responses,
+      prevCoordsString
     } = this.state
 
     const { history, location, defaultColor } = this.props
@@ -398,6 +402,7 @@ class App extends Component<any, State> {
             locations,
             profile,
             authorization,
+            prevCoordsString,
             (diff.googleMapsOption &&
               !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
               false,
@@ -568,6 +573,7 @@ class App extends Component<any, State> {
     locations: LocationInfo[],
     profile: string,
     authorization: string,
+    prevCoordsString: string,
     googleMapsOption: boolean,
     google: any,
     trafficOption: boolean,
@@ -575,9 +581,13 @@ class App extends Component<any, State> {
     endpointUrl: string
   ) => {
     if (atLeastTwoLocations(locations)) {
-      const body = getRequestBody(locations)
+      const coordsString = getCoordsString(locations)
 
-      this.setState({ body })
+      if (coordsString === prevCoordsString) {
+        return Promise.all([])
+      }
+
+      this.setState({ body: getRequestBody(locations), prevCoordsString: coordsString })
 
       return Promise.all([
         defaultOption && this.handleOSRMRequest(profile, locations, endpointUrl, 'route'),

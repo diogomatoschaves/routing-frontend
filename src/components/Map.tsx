@@ -22,7 +22,12 @@ import {
   THIRD_PARTY_POLYLINE,
   TRAFFIC_POLYLINE
 } from '../utils/colours'
-import { checkNested, getSpeedsLayers, transformPoints } from '../utils/functions'
+import {
+  addWaypoint,
+  checkNested,
+  getSpeedsLayers,
+  transformPoints
+} from '../utils/functions'
 import {
   defaultRoute,
   emptyLineString,
@@ -534,7 +539,7 @@ export default class Map extends Component<Props, State> {
   }
 
   private handleMapClick = (event: any) => {
-    const { updatePoint, locations, debug } = this.props
+    const { updatePoint, locations, debug, updateState } = this.props
 
     if (debug) {
       return
@@ -547,8 +552,28 @@ export default class Map extends Component<Props, State> {
 
     if (!locations[0].lat || !locations[0].lon) {
       updatePoint([0], [coords])
+    } else if (!locations[1].lat || !locations[1].lon) {
+      updatePoint([1], [coords])
     } else {
-      updatePoint([locations.length - 1], [coords])
+      if (!locations.slice(-1)[0].lat) {
+        updatePoint([locations.length - 1], [coords])
+      } else {
+        const newLocations = addWaypoint(locations)
+        updateState(
+          'locations',
+          newLocations.map((location, index) => {
+            if (!newLocations[index + 1]) {
+              return {
+                ...location,
+                lat: coords.lat,
+                lon: coords.lon
+              }
+            } else {
+              return location
+            }
+          })
+        )
+      }
     }
   }
 

@@ -29,7 +29,8 @@ export const ADD_WAYPOINT = PETROL_3
 
 export const START_MARKER = '#66c2a5'
 export const END_MARKER = '#d53e4f'
-export const WAYPOINT_MARKER = '#3288bd'
+// export const WAYPOINT_MARKER = '#3288bd'
+export const WAYPOINT_MARKER = MAIN_PETROL
 
 export const ROUTING_SERVICE_POLYLINE = PETROL_3
 export const ROUTING_SERVICE_COLOR = PETROL_6

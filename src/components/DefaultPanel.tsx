@@ -7,7 +7,7 @@ import {
   UpdatePoint,
   UpdateState
 } from '../types'
-import { ADD_WAYPOINT, END_MARKER, WAYPOINT_MARKER } from '../utils/colours'
+import { ADD_WAYPOINT } from '../utils/colours'
 import { addWaypoint } from '../utils/functions'
 import BackgroundIcon from './BackgroundIcon'
 import InputRow from './InputRow'
