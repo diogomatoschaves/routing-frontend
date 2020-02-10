@@ -31,10 +31,19 @@ body * :not(.icon){
   font-family: "BasisGrotesque Bold", Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
 }
 
-.custom-marker {
-  color: #007a93;
+.custom-marker.start {
   font-size: 3.6em !important;
-  /* box-shadow: 0px 17px 5px 0px rgba(0,0,0,0.75); */
+  color: #66c2a5;
+}
+
+.custom-marker.end {
+  font-size: 3.6em !important;
+  color: #d53e4f;
+}
+
+.custom-marker.waypoint {
+  font-size: 2.7em !important;
+  color: #007a93;
 }
 
 .key {

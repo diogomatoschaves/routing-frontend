@@ -22,11 +22,11 @@ import {
   Location,
   LocationInfo,
   Messages,
-  OptionsHandler, OSRMRouteResponse,
+  OptionsHandler,
+  OSRMRouteResponse,
   ResponseOptionsHandler,
   Responses,
   Route,
-  RouteResponse,
   Routes,
   UpdatePoint,
   UpdateState,
@@ -40,9 +40,11 @@ import {
   TRAFFIC_POLYLINE
 } from '../utils/colours'
 import {
+  atLeastTwoLocations,
   capitalize,
   getAppProps,
   getAppState,
+  getCoordsString,
   getRequestBody,
   processValidBody,
   processValidResponse,
@@ -51,7 +53,8 @@ import {
 import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
 import {
   routeConverterFromGoogle,
-  routeConverterFromMatchService, routeConverterFromOSRM,
+  routeConverterFromMatchService,
+  routeConverterFromOSRM,
   routeConverterFromRouteService
 } from '../utils/routeAdapter'
 import { Schema } from '../utils/schemas'
@@ -105,6 +108,8 @@ interface State {
   inputColors: InputColors
   routeHighlight: string
   loading: boolean
+  prevCoordsString: string
+  dropEvent: boolean
   [key: string]: any
 }
 
@@ -172,11 +177,13 @@ const StyledBox = styled(Box)`
 const messageFailedRoute = (traffic: boolean, response: OSRMRouteResponse) => (
   <span>
     <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
-      OSRM {traffic ? ' - traffic' : ''}:
+      OSRM {traffic ? ' - traffic' : ''}
     </span>
-    <span> {response.code}. </span>
+    <span> {response.code}: </span>
     <span style={{ color: traffic ? TRAFFIC_POLYLINE : ROUTING_SERVICE_POLYLINE }}>
-      An error occurred while fetching the route.
+      {response.message
+        ? response.message
+        : 'An error occurred while fetching the route.'}
     </span>
   </span>
 )
@@ -341,7 +348,9 @@ class App extends Component<any, State> {
       bodyEdit,
       showMessage,
       responseOptionsHandler,
-      responses
+      responses,
+      prevCoordsString,
+      dropEvent
     } = this.state
 
     const { history, location, defaultColor } = this.props
@@ -362,7 +371,8 @@ class App extends Component<any, State> {
     }
 
     if (
-      prevState.locations !== locations ||
+      (prevState.locations !== locations && dropEvent) ||
+      (prevState.dropEvent !== dropEvent && dropEvent) ||
       prevState.profile !== profile ||
       prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
       Object.values(optionalParamsMapping).some(
@@ -387,7 +397,8 @@ class App extends Component<any, State> {
         urlOptionalParams.prev
       )
       const defaultOption =
-        (diff.profile || diff.locations || diff.endpointHandler) && true
+        ((diff.profile || diff.locations || diff.endpointHandler) && true) ||
+        prevState.dropEvent !== dropEvent
 
       if (recalculate) {
         this.setState({ loading: true }, () => {
@@ -395,6 +406,7 @@ class App extends Component<any, State> {
             locations,
             profile,
             authorization,
+            prevCoordsString,
             (diff.googleMapsOption &&
               !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
               false,
@@ -405,7 +417,7 @@ class App extends Component<any, State> {
           ).finally(() => this.setState({ loading: false }))
         })
       } else {
-        this.updateState('recalculate', true)
+        this.setState({ recalculate: true })
       }
 
       const mappedQueryParams = mapOptionalParameters(
@@ -565,19 +577,21 @@ class App extends Component<any, State> {
     locations: LocationInfo[],
     profile: string,
     authorization: string,
+    prevCoordsString: string,
     googleMapsOption: boolean,
     google: any,
     trafficOption: boolean,
     defaultOption: boolean,
     endpointUrl: string
   ) => {
-    if (
-      locations.length >= 2 &&
-      !locations.some((el: LocationInfo) => !el.lat || !el.lon)
-    ) {
-      const body = getRequestBody(locations)
+    if (atLeastTwoLocations(locations)) {
+      const coordsString = getCoordsString(locations)
 
-      this.setState({ body })
+      if (coordsString === prevCoordsString) {
+        return Promise.all([])
+      }
+
+      this.setState({ body: getRequestBody(locations), prevCoordsString: coordsString })
 
       return Promise.all([
         defaultOption && this.handleOSRMRequest(profile, locations, endpointUrl, 'route'),

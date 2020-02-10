@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box } from '../styledComponents'
 import {
   GeographiesHandler,
@@ -7,6 +7,9 @@ import {
   UpdatePoint,
   UpdateState
 } from '../types'
+import { ADD_WAYPOINT } from '../utils/colours'
+import { addWaypoint, reorderWaypoints, sortWaypoints } from '../utils/functions'
+import BackgroundIcon from './BackgroundIcon'
 import InputRow from './InputRow'
 import OptionsSwitch from './OptionsSwitch'
 import ProfilesRow from './ProfilesRow'
@@ -42,6 +45,18 @@ export default function DefaultPanel(props: Props) {
     loading
   } = props
 
+  const moveRow = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      updateState(
+        'locations',
+        sortWaypoints(reorderWaypoints(locations, dragIndex, hoverIndex))
+      )
+    },
+    [locations]
+  )
+
+  const [itemDragging, setItemDragging] = useState(null)
+
   return (
     <Box direction="column" justify="flex-start">
       <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
@@ -62,11 +77,34 @@ export default function DefaultPanel(props: Props) {
             placeholder={item.placeholder}
             iconName={item.marker}
             updatePoint={updatePoint}
+            updateState={updateState}
+            moveRow={moveRow}
             urlMatchString={urlMatchString}
             loading={loading}
+            defaultColor={item.markerColor}
+            locations={locations}
+            itemDragging={itemDragging}
+            setItemDragging={setItemDragging}
           />
         )
       })}
+      {locations.slice(-1)[0].lat && (
+        <Box direction="row" justify="flex-start" padding="10px 0 0 0">
+          <div onClick={() => updateState('locations', addWaypoint(locations))}>
+            <BackgroundIcon
+              diameter={38}
+              color={ADD_WAYPOINT}
+              iconColor={'white'}
+              circle={true}
+              iconName={'plus'}
+              margin={'0 10px 0 0'}
+              loading={false}
+              cursor="pointer"
+            />
+          </div>
+          Add Destination
+        </Box>
+      )}
       {extraOptions && (
         <Box direction="row" justify="space-around" padding="10px 0">
           <OptionsSwitch
