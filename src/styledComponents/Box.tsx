@@ -38,6 +38,22 @@ const Box: any = styled.div`
     css`
       z-index: ${props.zindex};
     `}
+  ${(props: any) =>
+    props.cursor &&
+    css`
+      cursor: ${props.cursor};
+    `}
+  ${(props: any) =>
+    props.borderradius &&
+    css`
+      border-radius: ${props.borderradius};
+    `}
+  ${(props: any) =>
+    props.opacity &&
+    css`
+      opacity: ${props.opacity};
+    `}
+  
 ` as any
 
 export default Box

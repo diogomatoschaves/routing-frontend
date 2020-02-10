@@ -109,6 +109,7 @@ interface State {
   routeHighlight: string
   loading: boolean
   prevCoordsString: string
+  dropEvent: boolean
   [key: string]: any
 }
 
@@ -348,7 +349,8 @@ class App extends Component<any, State> {
       showMessage,
       responseOptionsHandler,
       responses,
-      prevCoordsString
+      prevCoordsString,
+      dropEvent
     } = this.state
 
     const { history, location, defaultColor } = this.props
@@ -369,7 +371,8 @@ class App extends Component<any, State> {
     }
 
     if (
-      prevState.locations !== locations ||
+      (prevState.locations !== locations && dropEvent) ||
+      (prevState.dropEvent !== dropEvent && dropEvent) ||
       prevState.profile !== profile ||
       prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
       Object.values(optionalParamsMapping).some(
@@ -394,7 +397,8 @@ class App extends Component<any, State> {
         urlOptionalParams.prev
       )
       const defaultOption =
-        (diff.profile || diff.locations || diff.endpointHandler) && true
+        ((diff.profile || diff.locations || diff.endpointHandler) && true) ||
+        prevState.dropEvent !== dropEvent
 
       if (recalculate) {
         this.setState({ loading: true }, () => {
@@ -413,7 +417,7 @@ class App extends Component<any, State> {
           ).finally(() => this.setState({ loading: false }))
         })
       } else {
-        this.updateState('recalculate', true)
+        this.setState({ recalculate: true })
       }
 
       const mappedQueryParams = mapOptionalParameters(

@@ -1,4 +1,6 @@
 import React from 'react'
+import { DndProvider } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
 import {
@@ -86,59 +88,61 @@ const Panel: any = (props: Props) => {
     inputColors,
     addDataTabsHandler,
     addedRoutes,
-    loading,
+    loading
   } = props
 
   return (
-    <PanelWrapper
-      as={PanelWrapper}
-      direction="column"
-      justify="flex-start"
-      animation={'scale'}
-      duration={500}
-      flex={debug}
-    >
-      <Box direction="row" justify="flex-start" padding="0 0 10px 0">
-        <Tabs
-          tabsHandler={modeTabsHandler}
-          updateState={updateState}
-          id="modeTabsHandler"
-          width="100px"
-          justify="flex-start"
-        />
-      </Box>
-      {debug ? (
-        <DebugPanel
-          routingGraphVisible={routingGraphVisible}
-          polygonsVisible={polygonsVisible}
-          updateState={updateState}
-          geographies={geographies}
-          handleValueUpdate={handleValueUpdate}
-          handleAddRoute={handleAddRoute}
-          handleDeleteRoute={handleDeleteRoute}
-          handleClickRoute={handleClickRoute}
-          inputValues={inputValues}
-          inputColors={inputColors}
-          addDataTabsHandler={addDataTabsHandler}
-          addedRoutes={addedRoutes}
-        />
-      ) : (
-        <DefaultPanel
-          updatePoint={updatePoint}
-          locations={locations}
-          routingGraphVisible={routingGraphVisible}
-          polygonsVisible={polygonsVisible}
-          googleMapsOption={googleMapsOption}
-          updateState={updateState}
-          geographies={geographies}
-          profile={profile}
-          urlMatchString={urlMatchString}
-          trafficOption={trafficOption}
-          profiles={profiles}
-          loading={loading}
-        />
-      )}
-    </PanelWrapper>
+    <DndProvider backend={Backend}>
+      <PanelWrapper
+        as={PanelWrapper}
+        direction="column"
+        justify="flex-start"
+        animation={'scale'}
+        duration={500}
+        flex={debug}
+      >
+        <Box direction="row" justify="flex-start" padding="0 0 10px 0">
+          <Tabs
+            tabsHandler={modeTabsHandler}
+            updateState={updateState}
+            id="modeTabsHandler"
+            width="100px"
+            justify="flex-start"
+          />
+        </Box>
+        {debug ? (
+          <DebugPanel
+            routingGraphVisible={routingGraphVisible}
+            polygonsVisible={polygonsVisible}
+            updateState={updateState}
+            geographies={geographies}
+            handleValueUpdate={handleValueUpdate}
+            handleAddRoute={handleAddRoute}
+            handleDeleteRoute={handleDeleteRoute}
+            handleClickRoute={handleClickRoute}
+            inputValues={inputValues}
+            inputColors={inputColors}
+            addDataTabsHandler={addDataTabsHandler}
+            addedRoutes={addedRoutes}
+          />
+        ) : (
+          <DefaultPanel
+            updatePoint={updatePoint}
+            locations={locations}
+            routingGraphVisible={routingGraphVisible}
+            polygonsVisible={polygonsVisible}
+            googleMapsOption={googleMapsOption}
+            updateState={updateState}
+            geographies={geographies}
+            profile={profile}
+            urlMatchString={urlMatchString}
+            trafficOption={trafficOption}
+            profiles={profiles}
+            loading={loading}
+          />
+        )}
+      </PanelWrapper>
+    </DndProvider>
   )
 }
 

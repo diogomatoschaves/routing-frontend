@@ -571,3 +571,7 @@ export const destinationTemplate = {
   lat: null,
   lon: null
 }
+
+export const ItemTypes = {
+  LOCATION: 'location'
+}
