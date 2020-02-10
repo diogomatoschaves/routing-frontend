@@ -396,8 +396,12 @@ class App extends Component<any, State> {
         urlOptionalParams.current,
         urlOptionalParams.prev
       )
+
+      const coordsString = getCoordsString(locations)
+
       const defaultOption =
-        ((diff.profile || diff.locations || diff.endpointHandler) && true) ||
+        ((diff.profile || coordsString !== prevCoordsString || diff.endpointHandler) &&
+          true) ||
         prevState.dropEvent !== dropEvent
 
       if (recalculate) {
@@ -406,7 +410,7 @@ class App extends Component<any, State> {
             locations,
             profile,
             authorization,
-            prevCoordsString,
+            coordsString,
             (diff.googleMapsOption &&
               !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
               false,
@@ -577,7 +581,7 @@ class App extends Component<any, State> {
     locations: LocationInfo[],
     profile: string,
     authorization: string,
-    prevCoordsString: string,
+    coordsString: string,
     googleMapsOption: boolean,
     google: any,
     trafficOption: boolean,
@@ -585,11 +589,6 @@ class App extends Component<any, State> {
     endpointUrl: string
   ) => {
     if (atLeastTwoLocations(locations)) {
-      const coordsString = getCoordsString(locations)
-
-      if (coordsString === prevCoordsString) {
-        return Promise.all([])
-      }
 
       this.setState({ body: getRequestBody(locations), prevCoordsString: coordsString })
 
