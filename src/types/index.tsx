@@ -13,6 +13,7 @@ export type GetRoutes = (
   locations: LocationInfo[],
   profile: string,
   authorization: string,
+  prevCoordsString: string,
   googleMapsOption: boolean,
   google: any,
   trafficOption: boolean,
@@ -25,6 +26,7 @@ export type UpdateStateCallback = (callback: any) => Promise<void>
 export interface LocationInfo extends Location {
   name: string
   marker: string
+  markerColor: string
   markerOffset?: number[]
   placeholder: string
   [key: string]: string | number[] | number | Bearing | undefined | null
@@ -88,6 +90,7 @@ export interface OSRMRouteResponse {
   code: string
   routes: OSRMRoute[]
   waypoints: any[]
+  message?: string
 }
 
 export interface OSRMRoute {

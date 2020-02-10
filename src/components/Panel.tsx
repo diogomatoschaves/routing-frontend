@@ -1,4 +1,6 @@
 import React from 'react'
+import { DndProvider } from 'react-dnd'
+import Backend from 'react-dnd-html5-backend'
 import styled from 'styled-components'
 import { Box } from '../styledComponents'
 import {
@@ -52,7 +54,7 @@ const PanelWrapper: any = styled(Box)`
   width: 30%;
   min-width: 350px;
   max-width: 450px;
-  max-height: 1000px;
+  max-height: 80vh;
   left: 40px;
   top: 40px;
   padding: 25px 25px 35px 25px;
@@ -60,6 +62,7 @@ const PanelWrapper: any = styled(Box)`
   border-radius: 10px;
   box-shadow: 10px 10px 16px -9px rgba(77, 77, 77, 0.5);
   transition: flex 1s ease-out;
+  overflow: auto;
 `
 
 const Panel: any = (props: Props) => {
@@ -85,59 +88,61 @@ const Panel: any = (props: Props) => {
     inputColors,
     addDataTabsHandler,
     addedRoutes,
-    loading,
+    loading
   } = props
 
   return (
-    <PanelWrapper
-      as={PanelWrapper}
-      direction="column"
-      justify="flex-start"
-      animation={'scale'}
-      duration={500}
-      flex={debug}
-    >
-      <Box direction="row" justify="flex-start" padding="0 0 10px 0">
-        <Tabs
-          tabsHandler={modeTabsHandler}
-          updateState={updateState}
-          id="modeTabsHandler"
-          width="100px"
-          justify="flex-start"
-        />
-      </Box>
-      {debug ? (
-        <DebugPanel
-          routingGraphVisible={routingGraphVisible}
-          polygonsVisible={polygonsVisible}
-          updateState={updateState}
-          geographies={geographies}
-          handleValueUpdate={handleValueUpdate}
-          handleAddRoute={handleAddRoute}
-          handleDeleteRoute={handleDeleteRoute}
-          handleClickRoute={handleClickRoute}
-          inputValues={inputValues}
-          inputColors={inputColors}
-          addDataTabsHandler={addDataTabsHandler}
-          addedRoutes={addedRoutes}
-        />
-      ) : (
-        <DefaultPanel
-          updatePoint={updatePoint}
-          locations={locations}
-          routingGraphVisible={routingGraphVisible}
-          polygonsVisible={polygonsVisible}
-          googleMapsOption={googleMapsOption}
-          updateState={updateState}
-          geographies={geographies}
-          profile={profile}
-          urlMatchString={urlMatchString}
-          trafficOption={trafficOption}
-          profiles={profiles}
-          loading={loading}
-        />
-      )}
-    </PanelWrapper>
+    <DndProvider backend={Backend}>
+      <PanelWrapper
+        as={PanelWrapper}
+        direction="column"
+        justify="flex-start"
+        animation={'scale'}
+        duration={500}
+        flex={debug}
+      >
+        <Box direction="row" justify="flex-start" padding="0 0 10px 0">
+          <Tabs
+            tabsHandler={modeTabsHandler}
+            updateState={updateState}
+            id="modeTabsHandler"
+            width="100px"
+            justify="flex-start"
+          />
+        </Box>
+        {debug ? (
+          <DebugPanel
+            routingGraphVisible={routingGraphVisible}
+            polygonsVisible={polygonsVisible}
+            updateState={updateState}
+            geographies={geographies}
+            handleValueUpdate={handleValueUpdate}
+            handleAddRoute={handleAddRoute}
+            handleDeleteRoute={handleDeleteRoute}
+            handleClickRoute={handleClickRoute}
+            inputValues={inputValues}
+            inputColors={inputColors}
+            addDataTabsHandler={addDataTabsHandler}
+            addedRoutes={addedRoutes}
+          />
+        ) : (
+          <DefaultPanel
+            updatePoint={updatePoint}
+            locations={locations}
+            routingGraphVisible={routingGraphVisible}
+            polygonsVisible={polygonsVisible}
+            googleMapsOption={googleMapsOption}
+            updateState={updateState}
+            geographies={geographies}
+            profile={profile}
+            urlMatchString={urlMatchString}
+            trafficOption={trafficOption}
+            profiles={profiles}
+            loading={loading}
+          />
+        )}
+      </PanelWrapper>
+    </DndProvider>
   )
 }
 
