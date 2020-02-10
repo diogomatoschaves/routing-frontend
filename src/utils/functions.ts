@@ -448,7 +448,8 @@ export const getAppState = () => {
     },
     messageBottomProp: -300,
     loading: false,
-    prevCoordsString: ''
+    prevCoordsString: '',
+    dropEvent: true
   }
 }
 
@@ -503,6 +504,28 @@ export const addWaypoint = (locations: LocationInfo[]) => {
   ]
 }
 
+export const reorderWaypoints = (
+  locations: LocationInfo[],
+  indexFrom: number,
+  indexTo: number
+) => {
+  if (indexFrom < indexTo) {
+    return [
+      ...locations.slice(0, indexFrom),
+      ...locations.slice(indexFrom + 1, indexTo + 1),
+      locations[indexFrom],
+      ...locations.slice(indexTo + 1)
+    ]
+  }
+
+  return [
+    ...locations.slice(0, indexTo),
+    locations[indexFrom],
+    ...locations.slice(indexTo, indexFrom),
+    ...locations.slice(indexFrom + 1)
+  ]
+}
+
 export const sortWaypoints = (locations: LocationInfo[]) => {
   return locations.map((location: LocationInfo, index: number) => {
     if (index === 0) {
@@ -524,7 +547,14 @@ export const sortWaypoints = (locations: LocationInfo[]) => {
         placeholder: 'Destination'
       }
     } else {
-      return location
+      return {
+        ...location,
+        name: 'waypoint',
+        marker: 'map marker',
+        markerColor: WAYPOINT_MARKER,
+        markerOffset: [0, 5],
+        placeholder: 'Waypoint'
+      }
     }
   })
 }

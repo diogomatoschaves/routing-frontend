@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Box } from '../styledComponents'
 import {
   GeographiesHandler,
@@ -8,7 +8,7 @@ import {
   UpdateState
 } from '../types'
 import { ADD_WAYPOINT } from '../utils/colours'
-import { addWaypoint } from '../utils/functions'
+import { addWaypoint, reorderWaypoints, sortWaypoints } from '../utils/functions'
 import BackgroundIcon from './BackgroundIcon'
 import InputRow from './InputRow'
 import OptionsSwitch from './OptionsSwitch'
@@ -45,6 +45,18 @@ export default function DefaultPanel(props: Props) {
     loading
   } = props
 
+  const moveRow = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      updateState(
+        'locations',
+        sortWaypoints(reorderWaypoints(locations, dragIndex, hoverIndex))
+      )
+    },
+    [locations]
+  )
+
+  const [itemDragging, setItemDragging] = useState(null)
+
   return (
     <Box direction="column" justify="flex-start">
       <Box direction="row" justify="flex-start" padding="5px 0 10px 0">
@@ -66,10 +78,13 @@ export default function DefaultPanel(props: Props) {
             iconName={item.marker}
             updatePoint={updatePoint}
             updateState={updateState}
+            moveRow={moveRow}
             urlMatchString={urlMatchString}
             loading={loading}
             defaultColor={item.markerColor}
             locations={locations}
+            itemDragging={itemDragging}
+            setItemDragging={setItemDragging}
           />
         )
       })}
