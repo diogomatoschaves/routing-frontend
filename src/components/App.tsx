@@ -589,7 +589,6 @@ class App extends Component<any, State> {
     endpointUrl: string
   ) => {
     if (atLeastTwoLocations(locations)) {
-
       this.setState({ body: getRequestBody(locations), prevCoordsString: coordsString })
 
       return Promise.all([

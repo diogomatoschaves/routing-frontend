@@ -19,7 +19,7 @@
     "@types/react-router-dom": "^4.3.3",
     "@types/react-test-renderer": "^16.8.1",
     "@types/styled-components": "^4.1.15",
-    "google-maps-react": "^2.0.2",
+    "@types/turf": "^3.5.32",
     "js-base64": "^2.5.1",
     "json5": "^2.1.0",
     "jsonschema": "^1.2.4",
@@ -35,7 +35,8 @@
     "react-scripts": "2.1.8",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.87.1",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "turf": "^3.0.14"
   },
   "scripts": {
     "start": "react-scripts start",

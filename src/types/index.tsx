@@ -168,7 +168,7 @@ export interface Route {
   id: string
   distance: number
   duration: number
-  routePath: Coords2[]
+  routePath: Coords2[][]
   type?: string
   parsedValue?: any
 }
