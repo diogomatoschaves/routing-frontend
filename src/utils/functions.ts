@@ -467,8 +467,8 @@ export const getAppProps = () => {
         name: 'foot'
       },
       {
-        iconName: 'rocket',
-        name: 'pilot'
+        iconName: 'bicycle',
+        name: 'bike'
       }
     ]
   }
