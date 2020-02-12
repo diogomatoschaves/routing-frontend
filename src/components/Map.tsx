@@ -29,10 +29,13 @@ import {
   addWaypoint,
   checkNested,
   getSpeedsLayers,
+  reorderWaypoints,
+  sortWaypoints,
   transformPoints
 } from '../utils/functions'
 import {
   defaultRoute,
+  destinationTemplate,
   emptyLineString,
   routeLineSettings,
   speedTilesInput
@@ -55,6 +58,10 @@ interface State {
   style: string
   lineId: string
   legPath: number[][]
+  locationIndex: number
+  mouseDown: boolean
+  mouseOnMarker: boolean
+  listeners: Listeners
   [key: string]:
     | string
     | mapboxgl.Map
@@ -63,6 +70,9 @@ interface State {
     | string[]
     | undefined
     | number[][]
+    | number
+    | boolean
+    | Listeners
 }
 
 interface Props {
@@ -90,6 +100,10 @@ interface Props {
 interface MarkerObject {
   id: string
   marker: mapboxgl.Marker
+}
+
+interface Listeners {
+  [key: string]: any
 }
 
 export default class Map extends Component<Props, State> {
@@ -142,9 +156,14 @@ export default class Map extends Component<Props, State> {
       polylineMarkers: [],
       style: 'light',
       lineId: '',
-      legPath: []
+      legPath: [],
+      locationIndex: 0,
+      mouseDown: false,
+      mouseOnMarker: false,
+      listeners: {}
     }
-    this.onMove = throttle(this.onMove, 40)
+    // this.drawPolylineEventMarker = throttle(this.drawPolylineEventMarker, 50)
+    this.removeSourceLayer = throttle(this.removeSourceLayer, 50)
   }
 
   public componentDidUpdate(prevProps: Props, prevState: State) {
@@ -396,53 +415,6 @@ export default class Map extends Component<Props, State> {
     return <MapWrapper ref={el => (this.mapContainer = el)} />
   }
 
-  public onMove = (e: any) => {
-    const coords = e.lngLat
-
-    const { map, polylineMarkers, lineId, legPath } = this.state
-
-    if (!map) {
-      return
-    }
-
-    const features = map.queryRenderedFeatures(
-      [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
-      {
-        layers: [lineId]
-      }
-    )
-
-    if (features.length >= 1) {
-      this.removeMarkers(polylineMarkers, 'polylineMarkers')
-
-      const nearestPoint = turf.pointOnLine(
-        turf.lineString(legPath),
-        turf.point([coords.lng, coords.lat])
-        // { units: 'meters' }
-      )
-
-      const location = {
-        name: 'polyline-circle',
-        marker: '',
-        markerColor: 'circle',
-        markerOffset: [0, 8],
-        placeholder: 'Circle',
-        lat: nearestPoint.geometry.coordinates[1],
-        lon: nearestPoint.geometry.coordinates[0]
-      }
-
-      this.setState({
-        polylineMarkers: [this.addMarker(location, map, null, null, false, location.name)]
-      })
-    } else {
-      const canvas = map.getCanvasContainer()
-      canvas.style.cursor = 'grab'
-
-      this.removeMarkers(polylineMarkers, 'polylineMarkers')
-      map.off('mousemove', this.onMove)
-    }
-  }
-
   private loadMap = (mapboxStyle: MapboxStyle, updateState: UpdateState) => {
     const mapContainer = this.mapContainer
 
@@ -685,8 +657,14 @@ export default class Map extends Component<Props, State> {
 
     marker &&
       draggable &&
-      marker.on('mouseenter', () => {
-        this.removeMarkers(this.state.polylineMarkers, 'polylineMarkers')
+      el.addEventListener('mouseenter', () => {
+        this.setState({ mouseOnMarker: true })
+      })
+
+    marker &&
+      draggable &&
+      el.addEventListener('mouseleave', () => {
+        this.setState({ mouseOnMarker: false })
       })
 
     marker &&
@@ -841,7 +819,7 @@ export default class Map extends Component<Props, State> {
     })
   }
 
-  private addRoute = (
+  private addRoute = async (
     routePath: Coords2[][],
     markers: MarkerObject[],
     map: mapboxgl.Map,
@@ -851,6 +829,21 @@ export default class Map extends Component<Props, State> {
     width: number
   ) => {
     const points = this.getMarkerCoords(markers)
+
+    const { listeners } = this.state
+
+    await Object.keys(listeners).forEach(lineId => {
+      Object.keys(listeners[lineId]).forEach((listener: string) => {
+        map.off(
+          // @ts-ignore
+          listener.toLowerCase().replace('on', ''),
+          lineId,
+          listeners[lineId][listener]
+        )
+      })
+    })
+
+    await this.setState({ listeners: {} })
 
     Promise.resolve(this.removeSourceLayer(id, map)).then(() => {
       const routeCoords = routePath.map((leg, i) => {
@@ -870,7 +863,7 @@ export default class Map extends Component<Props, State> {
   }
 
   private addPolyline = (
-    routePath: number[][],
+    legPath: number[][],
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
     type: { color: string; id: string; secondaryId: string; width: number }
@@ -884,7 +877,7 @@ export default class Map extends Component<Props, State> {
               ...emptyLineString.features[0],
               geometry: {
                 ...emptyLineString.features[0].geometry,
-                coordinates: routePath
+                coordinates: legPath
               }
             }
           ]
@@ -908,14 +901,161 @@ export default class Map extends Component<Props, State> {
         source: type.secondaryId
       })
 
-      map.on('mouseenter', lineId, event => {
-        this.setState({ lineId, legPath: routePath })
+      const canvas = map.getCanvasContainer()
+      const locationIndex = Number(lineId.split('-')[1])
 
-        const canvas = map.getCanvasContainer()
+      const onMouseEnter = (e: any) => {
+        if (this.state.mouseOnMarker) {
+          return
+        }
+
         canvas.style.cursor = 'none'
 
-        map.on('mousemove', this.onMove)
-      })
+        map.on('mousemove', onMouseMove)
+        map.on('mousedown', onMouseDown)
+      }
+
+      const onMouseMove = (e: any) => {
+        const coords = {
+          lat: e.lngLat.lat,
+          lon: e.lngLat.lng
+        }
+
+        const { mouseOnMarker, mouseDown, listeners } = this.state
+
+        if (mouseOnMarker) {
+          onMouseLeave()
+        } else if (mouseDown) {
+          this.drawPolylineEventMarker(map, legPath, coords, false)
+        } else {
+          const features = map.queryRenderedFeatures(
+            [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
+            {
+              layers: Object.keys(listeners)
+            }
+          )
+
+          if (features.length >= 1) {
+            if (features[0].layer.id === lineId) {
+              this.drawPolylineEventMarker(map, legPath, coords, true)
+            }
+          } else {
+            onMouseLeave()
+          }
+        }
+      }
+
+      const onMouseLeave = () => {
+        canvas.style.cursor = 'grab'
+        this.removeMarkers(this.state.polylineMarkers, 'polylineMarkers')
+        map.off('mousemove', onMouseMove)
+        map.off('mousedown', onMouseDown)
+        map.off('mouseup', onMouseUp)
+      }
+
+      const onMouseDown = (e: any) => {
+        e.preventDefault()
+
+        this.setState({ mouseDown: true })
+
+        const features = map.queryRenderedFeatures(
+          [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
+          {
+            layers: Object.keys(this.state.listeners)
+          }
+        )
+
+        if (features.length >= 1 && features[0].layer.id !== lineId) {
+          map.off('mouseenter', lineId, onMouseEnter)
+          map.off('mousemove', onMouseMove)
+          map.off('mousedown', onMouseDown)
+          map.off('mouseup', onMouseUp)
+        } else {
+          map.once('mouseup', onMouseUp)
+        }
+      }
+
+      const onMouseUp = (e: any) => {
+        this.setState({ mouseDown: false })
+
+        const { locations, updateState } = this.props
+
+        const coords = e.lngLat
+
+        const newLocations = [
+          ...locations,
+          {
+            ...destinationTemplate,
+            lat: coords.lat,
+            lon: coords.lng
+          }
+        ]
+
+        updateState(
+          'locations',
+          sortWaypoints(
+            reorderWaypoints(newLocations, newLocations.length - 1, locationIndex + 1)
+          )
+        )
+        onMouseLeave()
+        map.off('mousedown', onMouseDown)
+        map.off('mouseup', onMouseUp)
+      }
+
+      map.on('mouseenter', lineId, onMouseEnter)
+
+      this.setState(prevState => ({
+        listeners: {
+          ...prevState.listeners,
+          [lineId]: {
+            onMouseDown,
+            onMouseEnter,
+            onMouseMove,
+            onMouseUp
+          }
+        }
+      }))
+    })
+  }
+
+  private drawPolylineEventMarker = (
+    map: mapboxgl.Map,
+    legPath: number[][],
+    coords: Coords2,
+    inLine: boolean
+  ) => {
+    this.removeMarkers(this.state.polylineMarkers, 'polylineMarkers')
+
+    let location
+    if (inLine) {
+      const nearestPoint = turf.pointOnLine(
+        turf.lineString(legPath),
+        turf.point([coords.lon, coords.lat])
+      )
+
+      location = {
+        name: 'polyline-circle',
+        marker: '',
+        markerColor: 'circle',
+        markerOffset: [0, 8],
+        placeholder: 'Circle',
+        lat: nearestPoint.geometry.coordinates[1],
+        lon: nearestPoint.geometry.coordinates[0]
+      }
+    } else {
+      location = {
+        name: 'polyline-circle',
+        marker: '',
+        markerColor: 'circle',
+        markerOffset: [0, 8],
+        placeholder: 'Circle',
+        lat: coords.lat,
+        lon: coords.lon
+      }
+    }
+
+    this.setState({
+      polylineMarkers: [this.addMarker(location, map, null, null, false, location.name)]
     })
   }
 }
