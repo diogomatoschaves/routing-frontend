@@ -550,7 +550,7 @@ export const sortWaypoints = (locations: LocationInfo[]) => {
       return {
         ...location,
         name: 'waypoint',
-        marker: 'map marker',
+        marker: '',
         markerColor: WAYPOINT_MARKER,
         markerOffset: [0, 5],
         placeholder: 'Waypoint'

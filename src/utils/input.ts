@@ -554,7 +554,7 @@ export const layersArray = [
 
 export const waypointTemplate = {
   name: 'waypoint',
-  marker: 'map marker',
+  marker: '',
   markerColor: WAYPOINT_MARKER,
   markerOffset: [0, 5],
   placeholder: 'Waypoint',
