@@ -61,6 +61,7 @@ interface State {
   locationIndex: number
   mouseDown: boolean
   mouseOnMarker: boolean
+  mouseHovering: boolean
   listeners: Listeners
   [key: string]:
     | string
@@ -160,6 +161,7 @@ export default class Map extends Component<Props, State> {
       locationIndex: 0,
       mouseDown: false,
       mouseOnMarker: false,
+      mouseHovering: false,
       listeners: {}
     }
     // this.drawPolylineEventMarker = throttle(this.drawPolylineEventMarker, 50)
@@ -578,8 +580,9 @@ export default class Map extends Component<Props, State> {
 
   private handleMapClick = (event: any) => {
     const { updatePoint, locations, debug, updateState } = this.props
+    const { mouseHovering } = this.state
 
-    if (debug) {
+    if (debug || mouseHovering) {
       return
     }
 
@@ -909,6 +912,8 @@ export default class Map extends Component<Props, State> {
           return
         }
 
+        this.setState({ mouseHovering: true })
+
         canvas.style.cursor = 'none'
 
         map.on('mousemove', onMouseMove)
@@ -946,7 +951,12 @@ export default class Map extends Component<Props, State> {
       }
 
       const onMouseLeave = () => {
+        setTimeout(() => {
+          this.setState({ mouseHovering: false })
+        }, 300)
+
         canvas.style.cursor = 'grab'
+
         this.removeMarkers(this.state.polylineMarkers, 'polylineMarkers')
         map.off('mousemove', onMouseMove)
         map.off('mousedown', onMouseDown)
@@ -975,28 +985,50 @@ export default class Map extends Component<Props, State> {
         }
       }
 
-      const onMouseUp = (e: any) => {
+      const onMouseUp = async (e: any) => {
         this.setState({ mouseDown: false })
 
+        const { mouseHovering } = this.state
         const { locations, updateState } = this.props
 
         const coords = e.lngLat
 
-        const newLocations = [
-          ...locations,
-          {
+        let location
+        if (mouseHovering) {
+          const features = map.queryRenderedFeatures(
+            [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
+            {
+              layers: Object.keys(this.state.listeners)
+            }
+          )
+
+          const nearestPoint = turf.pointOnLine(
+            turf.lineString(legPath),
+            turf.point([coords.lng, coords.lat])
+          )
+
+          location = {
+            ...destinationTemplate,
+            lat: nearestPoint.geometry.coordinates[1],
+            lon: nearestPoint.geometry.coordinates[0]
+          }
+        } else {
+          location = {
             ...destinationTemplate,
             lat: coords.lat,
             lon: coords.lng
           }
-        ]
+        }
 
-        updateState(
+        const newLocations = [...locations, location]
+
+        await updateState(
           'locations',
           sortWaypoints(
             reorderWaypoints(newLocations, newLocations.length - 1, locationIndex + 1)
           )
         )
+
         onMouseLeave()
         map.off('mousedown', onMouseDown)
         map.off('mouseup', onMouseUp)
