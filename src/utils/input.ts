@@ -71,7 +71,7 @@ export const defaultRoute = {
   id: '',
   duration: 0,
   distance: 0,
-  routePath: [{ lat: 0, lon: 0 }]
+  routePath: [[{ lat: 0, lon: 0 }]]
 }
 
 export const exampleLine = [
@@ -554,7 +554,7 @@ export const layersArray = [
 
 export const waypointTemplate = {
   name: 'waypoint',
-  marker: 'map marker',
+  marker: '',
   markerColor: WAYPOINT_MARKER,
   markerOffset: [0, 5],
   placeholder: 'Waypoint',

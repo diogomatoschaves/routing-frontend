@@ -1,7 +1,9 @@
+import throttle from 'lodash/throttle'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import turf from 'turf'
 import {
   Coords2,
   GeographiesHandler,
@@ -20,16 +22,20 @@ import {
   ROUTING_SERVICE_POLYLINE,
   START_MARKER,
   THIRD_PARTY_POLYLINE,
-  TRAFFIC_POLYLINE
+  TRAFFIC_POLYLINE,
+  WAYPOINT_MARKER
 } from '../utils/colours'
 import {
   addWaypoint,
   checkNested,
   getSpeedsLayers,
+  reorderWaypoints,
+  sortWaypoints,
   transformPoints
 } from '../utils/functions'
 import {
   defaultRoute,
+  destinationTemplate,
   emptyLineString,
   routeLineSettings,
   speedTilesInput
@@ -47,9 +53,26 @@ interface State {
   map?: mapboxgl.Map
   markers: MarkerObject[]
   addedRoutesMarkers: MarkerObject[]
+  polylineMarkers: MarkerObject[]
   addedRoutesIds: string[]
   style: string
-  [key: string]: string | mapboxgl.Map | MarkerObject[] | string[] | undefined
+  lineId: string
+  legPath: number[][]
+  locationIndex: number
+  mouseDown: boolean
+  mouseOnMarker: boolean
+  listeners: Listeners
+  [key: string]:
+    | string
+    | mapboxgl.Map
+    | HTMLElement
+    | MarkerObject[]
+    | string[]
+    | undefined
+    | number[][]
+    | number
+    | boolean
+    | Listeners
 }
 
 interface Props {
@@ -77,6 +100,10 @@ interface Props {
 interface MarkerObject {
   id: string
   marker: mapboxgl.Marker
+}
+
+interface Listeners {
+  [key: string]: any
 }
 
 export default class Map extends Component<Props, State> {
@@ -126,8 +153,17 @@ export default class Map extends Component<Props, State> {
       addedRoutesIds: [],
       addedRoutesMarkers: [],
       markers: [],
-      style: 'light'
+      polylineMarkers: [],
+      style: 'light',
+      lineId: '',
+      legPath: [],
+      locationIndex: 0,
+      mouseDown: false,
+      mouseOnMarker: false,
+      listeners: {}
     }
+    // this.drawPolylineEventMarker = throttle(this.drawPolylineEventMarker, 50)
+    this.removeSourceLayer = throttle(this.removeSourceLayer, 50)
   }
 
   public componentDidUpdate(prevProps: Props, prevState: State) {
@@ -176,8 +212,8 @@ export default class Map extends Component<Props, State> {
 
     if (map && prevProps.routes.route.routePath !== routes.route.routePath) {
       const routeName = 'routeDAS'
-      if (routes.route.routePath.length > 1) {
-        this.addPolyline(
+      if (routes.route.routePath.some(leg => leg.length > 1)) {
+        this.addRoute(
           routes.route.routePath,
           markers,
           map,
@@ -196,8 +232,8 @@ export default class Map extends Component<Props, State> {
       prevProps.routes.trafficRoute.routePath !== routes.trafficRoute.routePath
     ) {
       const routeName = 'routeTrafficDAS'
-      if (routes.trafficRoute.routePath.length > 1) {
-        this.addPolyline(
+      if (routes.trafficRoute.routePath.some(leg => leg.length > 1)) {
+        this.addRoute(
           routes.trafficRoute.routePath,
           markers,
           map,
@@ -213,8 +249,8 @@ export default class Map extends Component<Props, State> {
 
     if (map && prevProps.routes.googleRoute.routePath !== routes.googleRoute.routePath) {
       const routeName = 'routeGOOGLE'
-      if (routes.googleRoute.routePath.length > 1) {
-        this.addPolyline(
+      if (routes.googleRoute.routePath.some(leg => leg.length > 1)) {
+        this.addRoute(
           routes.googleRoute.routePath,
           markers,
           map,
@@ -324,7 +360,7 @@ export default class Map extends Component<Props, State> {
         routeProperties.forEach(item => {
           const routePath = routes[item.routeId].routePath
           routePath.length > 1 &&
-            this.addPolyline(
+            this.addRoute(
               routes[item.routeId].routePath,
               markers,
               map,
@@ -428,7 +464,7 @@ export default class Map extends Component<Props, State> {
 
     const newAddedRoutesIds = addedRoutes.reduce((accum: string[], routeKey: Route) => {
       if (!addedRoutesIds.includes(routeKey.id)) {
-        this.addPolyline(
+        this.addRoute(
           routeKey.routePath,
           [],
           map,
@@ -441,10 +477,12 @@ export default class Map extends Component<Props, State> {
           6.0
         )
 
-        if (routeKey.routePath.length >= 2) {
+        const totalRoutePath = routeKey.routePath.map(leg => transformPoints(leg)).flat()
+
+        if (totalRoutePath.length >= 2) {
           const startLocation = {
-            lat: routeKey.routePath[0].lat,
-            lon: routeKey.routePath[0].lon,
+            lat: totalRoutePath[0][1],
+            lon: totalRoutePath[0][0],
             marker: 'map marker alternate',
             markerColor: START_MARKER,
             markerOffset: [0, 5],
@@ -452,8 +490,8 @@ export default class Map extends Component<Props, State> {
             placeholder: 'Origin'
           }
           const endLocation = {
-            lat: routeKey.routePath.slice(-1)[0].lat,
-            lon: routeKey.routePath.slice(-1)[0].lon,
+            lat: totalRoutePath.slice(-1)[0][1],
+            lon: totalRoutePath.slice(-1)[0][0],
             marker: 'map marker',
             markerColor: END_MARKER,
             markerOffset: [0, 5],
@@ -598,8 +636,8 @@ export default class Map extends Component<Props, State> {
   private addMarker = (
     location: LocationInfo,
     map: mapboxgl.Map,
-    index: number,
-    updatePoint: UpdatePoint,
+    index: number | null,
+    updatePoint: UpdatePoint | null,
     draggable: boolean,
     id: string
   ) => {
@@ -619,6 +657,20 @@ export default class Map extends Component<Props, State> {
 
     marker &&
       draggable &&
+      el.addEventListener('mouseenter', () => {
+        this.setState({ mouseOnMarker: true })
+      })
+
+    marker &&
+      draggable &&
+      el.addEventListener('mouseleave', () => {
+        this.setState({ mouseOnMarker: false })
+      })
+
+    marker &&
+      draggable &&
+      updatePoint &&
+      index !== null &&
       marker.on('dragend', () => {
         const coords = marker.getLngLat()
         updatePoint([index], [{ lat: coords.lat, lon: coords.lng }])
@@ -670,7 +722,7 @@ export default class Map extends Component<Props, State> {
   ) => {
     const routeCoords = routes.reduce((accum: number[][], route: Route) => {
       if (route.id !== exemptRoute && route.routePath.length > 1) {
-        return [...accum, ...transformPoints(route.routePath)]
+        return [...accum, ...route.routePath.map(leg => transformPoints(leg).flat())]
       } else {
         return [...accum]
       }
@@ -756,13 +808,19 @@ export default class Map extends Component<Props, State> {
             map.removeLayer(layer.id)
           })
     ).then(() => {
-      map.getSource(sourceName) && map.removeSource(sourceName)
+      styles &&
+        styles.sources &&
+        Object.keys(styles.sources)
+          .filter(source => source.includes(sourceName))
+          .forEach(source => {
+            map.removeSource(source)
+          })
       return sourceName
     })
   }
 
-  private addPolyline = (
-    routePath: Coords2[],
+  private addRoute = async (
+    routePath: Coords2[][],
     markers: MarkerObject[],
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
@@ -770,55 +828,234 @@ export default class Map extends Component<Props, State> {
     color: string,
     width: number
   ) => {
-    const routeCoords = transformPoints(routePath)
     const points = this.getMarkerCoords(markers)
-    const type = {
-      color,
-      id,
-      width
-    }
-    this.addRoute(routeCoords, map, routingGraphVisible, type)
-    this.fitBounds([...points, ...routeCoords], map)
+
+    const { listeners } = this.state
+
+    await Object.keys(listeners).forEach(lineId => {
+      Object.keys(listeners[lineId]).forEach((listener: string) => {
+        map.off(
+          // @ts-ignore
+          listener.toLowerCase().replace('on', ''),
+          lineId,
+          listeners[lineId][listener]
+        )
+      })
+    })
+
+    await this.setState({ listeners: {} })
+
+    Promise.resolve(this.removeSourceLayer(id, map)).then(() => {
+      const routeCoords = routePath.map((leg, i) => {
+        const type = {
+          color,
+          id,
+          secondaryId: `${id}-${i}`,
+          width
+        }
+
+        const legCoords = transformPoints(leg)
+        this.addPolyline(legCoords, map, routingGraphVisible, type)
+        return legCoords
+      })
+      this.fitBounds([...points, ...routeCoords.flat()], map)
+    })
   }
 
-  private addRoute = (
-    routePath: number[][],
+  private addPolyline = (
+    legPath: number[][],
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
-    type: { color: string; id: string; width: number }
+    type: { color: string; id: string; secondaryId: string; width: number }
   ) => {
-    Promise.resolve(this.removeSourceLayer(type.id, map))
-      .then(() => {
-        return map.addSource(type.id, {
-          data: {
-            ...(emptyLineString as any),
-            features: [
-              {
-                ...emptyLineString.features[0],
-                geometry: {
-                  ...emptyLineString.features[0].geometry,
-                  coordinates: routePath
-                }
+    Promise.resolve(
+      map.addSource(type.secondaryId, {
+        data: {
+          ...(emptyLineString as any),
+          features: [
+            {
+              ...emptyLineString.features[0],
+              geometry: {
+                ...emptyLineString.features[0].geometry,
+                coordinates: legPath
               }
-            ]
-          },
-          type: 'geojson'
-        })
+            }
+          ]
+        },
+        type: 'geojson'
       })
-      .then(() => {
-        map.addLayer({
-          ...(routeLineSettings as any),
-          id: `${type.id}-polyline`,
-          paint: {
-            ...routeLineSettings.paint,
-            'line-color': type.color,
-            'line-opacity': routingGraphVisible
-              ? 0.85
-              : routeLineSettings.paint['line-opacity'],
-            'line-width': routingGraphVisible ? 2 * type.width : type.width
-          },
-          source: type.id
-        })
+    ).then(() => {
+      const lineId = `${type.secondaryId}-polyline`
+
+      map.addLayer({
+        ...(routeLineSettings as any),
+        id: lineId,
+        paint: {
+          ...routeLineSettings.paint,
+          'line-color': type.color,
+          'line-opacity': routingGraphVisible
+            ? 0.85
+            : routeLineSettings.paint['line-opacity'],
+          'line-width': routingGraphVisible ? 2 * type.width : type.width
+        },
+        source: type.secondaryId
       })
+
+      const canvas = map.getCanvasContainer()
+      const locationIndex = Number(lineId.split('-')[1])
+
+      const onMouseEnter = (e: any) => {
+        if (this.state.mouseOnMarker) {
+          return
+        }
+
+        canvas.style.cursor = 'none'
+
+        map.on('mousemove', onMouseMove)
+        map.on('mousedown', onMouseDown)
+      }
+
+      const onMouseMove = (e: any) => {
+        const coords = {
+          lat: e.lngLat.lat,
+          lon: e.lngLat.lng
+        }
+
+        const { mouseOnMarker, mouseDown, listeners } = this.state
+
+        if (mouseOnMarker) {
+          onMouseLeave()
+        } else if (mouseDown) {
+          this.drawPolylineEventMarker(map, legPath, coords, false)
+        } else {
+          const features = map.queryRenderedFeatures(
+            [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
+            {
+              layers: Object.keys(listeners)
+            }
+          )
+
+          if (features.length >= 1) {
+            if (features[0].layer.id === lineId) {
+              this.drawPolylineEventMarker(map, legPath, coords, true)
+            }
+          } else {
+            onMouseLeave()
+          }
+        }
+      }
+
+      const onMouseLeave = () => {
+        canvas.style.cursor = 'grab'
+        this.removeMarkers(this.state.polylineMarkers, 'polylineMarkers')
+        map.off('mousemove', onMouseMove)
+        map.off('mousedown', onMouseDown)
+        map.off('mouseup', onMouseUp)
+      }
+
+      const onMouseDown = (e: any) => {
+        e.preventDefault()
+
+        this.setState({ mouseDown: true })
+
+        const features = map.queryRenderedFeatures(
+          [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
+          {
+            layers: Object.keys(this.state.listeners)
+          }
+        )
+
+        if (features.length >= 1 && features[0].layer.id !== lineId) {
+          map.off('mouseenter', lineId, onMouseEnter)
+          map.off('mousemove', onMouseMove)
+          map.off('mousedown', onMouseDown)
+          map.off('mouseup', onMouseUp)
+        } else {
+          map.once('mouseup', onMouseUp)
+        }
+      }
+
+      const onMouseUp = (e: any) => {
+        this.setState({ mouseDown: false })
+
+        const { locations, updateState } = this.props
+
+        const coords = e.lngLat
+
+        const newLocations = [
+          ...locations,
+          {
+            ...destinationTemplate,
+            lat: coords.lat,
+            lon: coords.lng
+          }
+        ]
+
+        updateState(
+          'locations',
+          sortWaypoints(
+            reorderWaypoints(newLocations, newLocations.length - 1, locationIndex + 1)
+          )
+        )
+        onMouseLeave()
+        map.off('mousedown', onMouseDown)
+        map.off('mouseup', onMouseUp)
+      }
+
+      map.on('mouseenter', lineId, onMouseEnter)
+
+      this.setState(prevState => ({
+        listeners: {
+          ...prevState.listeners,
+          [lineId]: {
+            onMouseDown,
+            onMouseEnter,
+            onMouseMove,
+            onMouseUp
+          }
+        }
+      }))
+    })
+  }
+
+  private drawPolylineEventMarker = (
+    map: mapboxgl.Map,
+    legPath: number[][],
+    coords: Coords2,
+    inLine: boolean
+  ) => {
+    this.removeMarkers(this.state.polylineMarkers, 'polylineMarkers')
+
+    let location
+    if (inLine) {
+      const nearestPoint = turf.pointOnLine(
+        turf.lineString(legPath),
+        turf.point([coords.lon, coords.lat])
+      )
+
+      location = {
+        name: 'polyline-circle',
+        marker: '',
+        markerColor: 'circle',
+        markerOffset: [0, 8],
+        placeholder: 'Circle',
+        lat: nearestPoint.geometry.coordinates[1],
+        lon: nearestPoint.geometry.coordinates[0]
+      }
+    } else {
+      location = {
+        name: 'polyline-circle',
+        marker: '',
+        markerColor: 'circle',
+        markerOffset: [0, 8],
+        placeholder: 'Circle',
+        lat: coords.lat,
+        lon: coords.lon
+      }
+    }
+
+    this.setState({
+      polylineMarkers: [this.addMarker(location, map, null, null, false, location.name)]
+    })
   }
 }
