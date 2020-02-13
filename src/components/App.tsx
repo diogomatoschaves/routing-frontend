@@ -732,7 +732,6 @@ class App extends Component<any, State> {
   }
 
   public updatePoint: UpdatePoint = (indexes: number[], newLocations: Location[]) => {
-    console.log('update point called')
     this.setState(state => {
       return {
         locations: state.locations.reduce(
