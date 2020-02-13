@@ -2,6 +2,7 @@ import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
+import debounce from 'lodash/debounce'
 import React, { Component, Fragment } from 'react'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
@@ -72,6 +73,7 @@ import Message from './Message'
 import Panel from './Panel'
 import RoutesInfoContainer from './RoutesInfoContainer'
 import TrafficLegend from './TrafficLegend'
+import throttle from 'lodash/throttle'
 
 interface State {
   validator?: Validator
@@ -224,9 +226,14 @@ class App extends Component<any, State> {
 
   public messageTimeout: any
 
+  public propsToReset = new Set(['bearing', 'radius'])
+
   public state = getAppState()
 
-  public propsToReset = new Set(['bearing', 'radius'])
+  public constructor(props: any) {
+    super(props)
+    this.getRoutes = throttle(this.getRoutes, 1000, { leading: true })
+  }
 
   public getAuth = async () => {
     if (process.env.NODE_ENV !== 'production') {
@@ -589,7 +596,6 @@ class App extends Component<any, State> {
     endpointUrl: string
   ) => {
     if (atLeastTwoLocations(locations)) {
-
       this.setState({ body: getRequestBody(locations), prevCoordsString: coordsString })
 
       return Promise.all([
@@ -726,6 +732,7 @@ class App extends Component<any, State> {
   }
 
   public updatePoint: UpdatePoint = (indexes: number[], newLocations: Location[]) => {
+    console.log('update point called')
     this.setState(state => {
       return {
         locations: state.locations.reduce(

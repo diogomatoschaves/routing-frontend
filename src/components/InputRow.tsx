@@ -151,7 +151,13 @@ const InputRow = (props: Props) => {
         color={color}
         iconColor={'white'}
         circle={true}
-        iconName={removeAllowed && removeRow ? 'remove' : iconName}
+        iconName={
+          removeAllowed && removeRow
+            ? 'remove'
+            : iconName
+            ? iconName
+            : 'map marker alternate'
+        }
         margin={'0 10px 0 0'}
         loading={loading}
         cursor="pointer"
