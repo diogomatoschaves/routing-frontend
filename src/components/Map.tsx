@@ -28,7 +28,7 @@ import {
 import {
   addWaypoint,
   checkNested,
-  getSpeedsLayers,
+  getSpeedsLayers, removeWaypoint,
   reorderWaypoints,
   sortWaypoints,
   transformPoints
@@ -580,9 +580,9 @@ export default class Map extends Component<Props, State> {
 
   private handleMapClick = (event: any) => {
     const { updatePoint, locations, debug, updateState } = this.props
-    const { mouseHovering } = this.state
+    const { mouseHovering, mouseOnMarker } = this.state
 
-    if (debug || mouseHovering) {
+    if (debug || mouseHovering || mouseOnMarker) {
       return
     }
 
@@ -639,13 +639,15 @@ export default class Map extends Component<Props, State> {
   private addMarker = (
     location: LocationInfo,
     map: mapboxgl.Map,
-    index: number | null,
+    index: number,
     updatePoint: UpdatePoint | null,
     draggable: boolean,
     id: string
   ) => {
     const el = document.createElement('i')
     el.className = `${location.marker} icon custom-marker ${location.name}`
+
+    const { updateState } = this.props
 
     const marker = new mapboxgl.Marker({
       anchor: 'bottom',
@@ -662,18 +664,36 @@ export default class Map extends Component<Props, State> {
       draggable &&
       el.addEventListener('mouseenter', () => {
         this.setState({ mouseOnMarker: true })
+
+        const canvas = map.getCanvasContainer()
+        canvas.style.cursor = 'pointer'
       })
 
     marker &&
       draggable &&
       el.addEventListener('mouseleave', () => {
         this.setState({ mouseOnMarker: false })
+
+        const canvas = map.getCanvasContainer()
+        canvas.style.cursor = 'grab'
+      })
+
+    marker &&
+      draggable &&
+      el.addEventListener('dblclick', () => {
+        const { locations } = this.props
+        if (locations.length > 2) {
+          updateState('locations', removeWaypoint(this.props.locations, index))
+          this.setState({ mouseOnMarker: false })
+
+          const canvas = map.getCanvasContainer()
+          canvas.style.cursor = 'grab'
+        }
       })
 
     marker &&
       draggable &&
       updatePoint &&
-      index !== null &&
       marker.on('dragend', () => {
         const coords = marker.getLngLat()
         updatePoint([index], [{ lat: coords.lat, lon: coords.lng }])
@@ -943,6 +963,9 @@ export default class Map extends Component<Props, State> {
           if (features.length >= 1) {
             if (features[0].layer.id === lineId) {
               this.drawPolylineEventMarker(map, legPath, coords, true)
+              setTimeout(() => {
+                this.setState({ mouseHovering: false })
+              }, 300)
             }
           } else {
             onMouseLeave()
@@ -995,13 +1018,6 @@ export default class Map extends Component<Props, State> {
 
         let location
         if (mouseHovering) {
-          const features = map.queryRenderedFeatures(
-            [[e.point.x - 10, e.point.y - 10], [e.point.x + 10, e.point.y + 10]],
-            {
-              layers: Object.keys(this.state.listeners)
-            }
-          )
-
           const nearestPoint = turf.pointOnLine(
             turf.lineString(legPath),
             turf.point([coords.lng, coords.lat])
@@ -1087,7 +1103,7 @@ export default class Map extends Component<Props, State> {
     }
 
     this.setState({
-      polylineMarkers: [this.addMarker(location, map, null, null, false, location.name)]
+      polylineMarkers: [this.addMarker(location, map, 0, null, false, location.name)]
     })
   }
 }
