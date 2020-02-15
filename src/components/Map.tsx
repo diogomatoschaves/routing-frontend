@@ -1079,7 +1079,7 @@ export default class Map extends Component<Props, State> {
       const nearestPoint = turf.pointOnLine(
         turf.lineString(legPath),
         turf.point([coords.lon, coords.lat])
-      )
+      ).geometry.coordinates
 
       location = {
         name: 'polyline-circle',
@@ -1087,8 +1087,8 @@ export default class Map extends Component<Props, State> {
         markerColor: 'circle',
         markerOffset: [0, 8],
         placeholder: 'Circle',
-        lat: nearestPoint.geometry.coordinates[1],
-        lon: nearestPoint.geometry.coordinates[0]
+        lat: nearestPoint[1],
+        lon: nearestPoint[0]
       }
     } else {
       location = {
@@ -1102,8 +1102,22 @@ export default class Map extends Component<Props, State> {
       }
     }
 
-    this.setState({
-      polylineMarkers: [this.addMarker(location, map, 0, null, false, location.name)]
-    })
+    const polylineMarkers = [this.addMarker(location, map, 0, null, false, location.name)]
+
+    if (inLine) {
+      polylineMarkers.forEach(marker => {
+        marker.marker
+          .setPopup(
+            new mapboxgl.Popup({
+              className: 'custom-popup',
+              closeButton: false,
+              offset: 10
+            }).setText('Drag to re-route')
+          )
+          .togglePopup()
+      })
+    }
+
+    this.setState({ polylineMarkers })
   }
 }
