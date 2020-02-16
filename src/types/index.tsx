@@ -14,6 +14,7 @@ export type GetRoutes = (
   profile: string,
   authorization: string,
   prevCoordsString: string,
+  overrideQueryParams: OSRMQueryParams,
   googleMapsOption: boolean,
   google: any,
   trafficOption: boolean,
@@ -99,6 +100,7 @@ export interface OSRMRoute {
   duration: number
   distance: number
   legs: OSRMRouteLeg[]
+  geometry?: string
 }
 
 export interface OSRMRouteLeg {
@@ -262,4 +264,18 @@ export interface InputColors {
 export interface ProfileItem {
   iconName: string
   name: string
+}
+
+export interface OSRMQueryParams {
+  steps?: boolean
+  overview?: boolean
+  alternatives?: boolean
+  waypoints?: string
+}
+
+export interface TempRoute {
+  lat: number
+  lon: number
+  index: number
+  newWaypoint: boolean
 }
