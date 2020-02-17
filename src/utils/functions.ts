@@ -449,7 +449,9 @@ export const getAppState = () => {
     messageBottomProp: -300,
     loading: false,
     prevCoordsString: '',
-    dropEvent: true
+    dropEvent: true,
+    tempRoute: null,
+    tempRoutePath: null
   }
 }
 

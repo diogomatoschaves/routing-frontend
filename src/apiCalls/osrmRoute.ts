@@ -1,9 +1,10 @@
-import { Location } from '../types'
+import { OSRMQueryParams } from '../types'
 
 const osrmRoutingApi = async (
-  locations: Location[],
+  coordsString: string,
   profile: string,
-  endpoint: string = process.env.REACT_APP_ROUTING_URL || ''
+  endpoint: string = process.env.REACT_APP_ROUTING_URL || '',
+  overrideQueryParams: OSRMQueryParams
 ) => {
   const headers = new Headers() as any
 
@@ -11,13 +12,18 @@ const osrmRoutingApi = async (
   headers.set('sec-fetch-mode', 'cors')
   headers.set('origin', 'https://map.project-osrm.org')
 
-  const coordsString = locations
-    .reduce((accum: string[], loc: Location) => {
-      return loc.lat && loc.lon ? [...accum, `${loc.lon},${loc.lat}`] : accum
-    }, [])
-    .join(';')
+  const queryParams = {
+    alternatives: false,
+    overview: false,
+    steps: true,
+    ...overrideQueryParams
+  }
 
-  const url = `${endpoint}/route/v1/${profile}/${coordsString}?overview=false&alternatives=true&steps=true`
+  const queryParamsString = Object.entries(queryParams)
+    .map(([param, value]) => `${param}=${value}`)
+    .join('&')
+
+  const url = `${endpoint}/route/v1/${profile}/${coordsString}?${queryParamsString}`
 
   const response = await fetch(url, {
     headers,
