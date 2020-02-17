@@ -2,7 +2,6 @@ import { History } from 'history'
 import { Base64 } from 'js-base64'
 import JSON5 from 'json5'
 import { Validator } from 'jsonschema'
-import debounce from 'lodash/debounce'
 import React, { Component, Fragment } from 'react'
 import { Button, Icon, Menu, Segment, Sidebar, Transition } from 'semantic-ui-react'
 import styled, { css } from 'styled-components'
@@ -12,6 +11,7 @@ import Map from './Map'
 import { Box, EmptySpace } from '../styledComponents'
 import {
   Body,
+  Coords2,
   GeographiesHandler,
   GetRoutes,
   GoogleResponse,
@@ -24,11 +24,13 @@ import {
   LocationInfo,
   Messages,
   OptionsHandler,
+  OSRMQueryParams,
   OSRMRouteResponse,
   ResponseOptionsHandler,
   Responses,
   Route,
   Routes,
+  TempRoute,
   UpdatePoint,
   UpdateState,
   UpdateStateCallback,
@@ -49,9 +51,15 @@ import {
   getRequestBody,
   processValidBody,
   processValidResponse,
+  reorderWaypoints,
   validateJSON
 } from '../utils/functions'
-import { defaultGoogleResponse, defaultRoute, defaultRouteResponse } from '../utils/input'
+import {
+  defaultGoogleResponse,
+  defaultRoute,
+  defaultRouteResponse,
+  destinationTemplate
+} from '../utils/input'
 import {
   routeConverterFromGoogle,
   routeConverterFromMatchService,
@@ -73,7 +81,6 @@ import Message from './Message'
 import Panel from './Panel'
 import RoutesInfoContainer from './RoutesInfoContainer'
 import TrafficLegend from './TrafficLegend'
-import throttle from 'lodash/throttle'
 
 interface State {
   validator?: Validator
@@ -112,6 +119,8 @@ interface State {
   loading: boolean
   prevCoordsString: string
   dropEvent: boolean
+  tempRoute: TempRoute | null
+  tempRoutePath: number[][] | null
   [key: string]: any
 }
 
@@ -232,7 +241,6 @@ class App extends Component<any, State> {
 
   public constructor(props: any) {
     super(props)
-    this.getRoutes = throttle(this.getRoutes, 1000, { leading: true })
   }
 
   public getAuth = async () => {
@@ -271,6 +279,49 @@ class App extends Component<any, State> {
         })
       }
     })
+  }
+
+  public getTempWaypointParams = (tempRoute: TempRoute, locations: LocationInfo[]) => {
+    const tempLocations = tempRoute.newWaypoint
+      ? reorderWaypoints(
+          [
+            ...locations,
+            {
+              ...destinationTemplate,
+              lat: tempRoute.lat,
+              lon: tempRoute.lon
+            }
+          ],
+          locations.length,
+          tempRoute.index
+        )
+      : locations.map((loc, index) => {
+          if (index !== tempRoute.index) {
+            return loc
+          } else {
+            return {
+              ...loc,
+              lat: tempRoute.lat,
+              lon: tempRoute.lon
+            }
+          }
+        })
+
+    const coordsString = getCoordsString(tempLocations)
+
+    const extraQueryParams = {
+      alternatives: false,
+      overview: 'simplified',
+      steps: false,
+      ...(tempRoute.newWaypoint && {
+        waypoints: tempLocations
+          .map((loc, index) => index)
+          .filter(index => index !== tempRoute.index)
+          .join(';')
+      })
+    }
+
+    return [coordsString, extraQueryParams]
   }
 
   public async componentDidMount() {
@@ -357,7 +408,8 @@ class App extends Component<any, State> {
       responseOptionsHandler,
       responses,
       prevCoordsString,
-      dropEvent
+      dropEvent,
+      tempRoute
     } = this.state
 
     const { history, location, defaultColor } = this.props
@@ -380,6 +432,7 @@ class App extends Component<any, State> {
     if (
       (prevState.locations !== locations && dropEvent) ||
       (prevState.dropEvent !== dropEvent && dropEvent) ||
+      (prevState.tempRoute !== tempRoute && tempRoute) ||
       prevState.profile !== profile ||
       prevState.endpointHandler.activeIdx !== endpointHandler.activeIdx ||
       Object.values(optionalParamsMapping).some(
@@ -389,35 +442,61 @@ class App extends Component<any, State> {
         }
       )
     ) {
-      const urlOptionalParams = this.getCurrentPrevious(
-        optionalParamsMapping,
-        this.state,
-        prevState
-      )
+      let diff: any
+      if (!tempRoute) {
+        const urlOptionalParams = this.getCurrentPrevious(
+          optionalParamsMapping,
+          this.state,
+          prevState
+        )
 
-      const urlParams = this.getCurrentPrevious(requiredParams, this.state, prevState)
+        const urlParams = this.getCurrentPrevious(requiredParams, this.state, prevState)
 
-      const diff = getUrlParamsDiff(
-        urlParams.current,
-        urlParams.prev,
-        urlOptionalParams.current,
-        urlOptionalParams.prev
-      )
+        diff = getUrlParamsDiff(
+          urlParams.current,
+          urlParams.prev,
+          urlOptionalParams.current,
+          urlOptionalParams.prev
+        )
 
-      const coordsString = getCoordsString(locations)
+        const mappedQueryParams = mapOptionalParameters(
+          optionalParamsMapping,
+          urlOptionalParams.current
+        )
+
+        updateUrl(
+          locations,
+          profile,
+          endpointHandler.options[endpointHandler.activeIdx].key,
+          history,
+          location,
+          mappedQueryParams
+        )
+      } else {
+        diff = {}
+      }
+
+      const [coordsString, extraQueryParams] = tempRoute
+        ? this.getTempWaypointParams(
+            // @ts-ignore
+            tempRoute,
+            locations
+          )
+        : [getCoordsString(locations), {}]
 
       const defaultOption =
-        ((diff.profile || coordsString !== prevCoordsString || diff.endpointHandler) &&
-          true) ||
-        prevState.dropEvent !== dropEvent
+        ((diff.profile || diff.locations || diff.endpointHandler) && true) ||
+        prevState.dropEvent !== dropEvent ||
+        tempRoute
 
       if (recalculate) {
-        this.setState({ loading: true }, () => {
+        this.setState({ loading: !tempRoute }, () => {
           this.getRoutes(
             locations,
             profile,
             authorization,
             coordsString,
+            extraQueryParams,
             (diff.googleMapsOption &&
               !(diff.endpointHandler && !diff.locations && !diff.profile)) ||
               false,
@@ -425,25 +504,13 @@ class App extends Component<any, State> {
             diff.trafficOption || false,
             defaultOption || false,
             endpointHandler.options[endpointHandler.activeIdx].text
-          ).finally(() => this.setState({ loading: false }))
+          ).finally(() => {
+            this.setState({ loading: false })
+          })
         })
       } else {
         this.setState({ recalculate: true })
       }
-
-      const mappedQueryParams = mapOptionalParameters(
-        optionalParamsMapping,
-        urlOptionalParams.current
-      )
-
-      updateUrl(
-        locations,
-        profile,
-        endpointHandler.options[endpointHandler.activeIdx].key,
-        history,
-        location,
-        mappedQueryParams
-      )
     }
 
     if (prevState.responses.routeResponse !== responses.routeResponse) {
@@ -589,6 +656,7 @@ class App extends Component<any, State> {
     profile: string,
     authorization: string,
     coordsString: string,
+    extraQueryParams: OSRMQueryParams,
     googleMapsOption: boolean,
     google: any,
     trafficOption: boolean,
@@ -596,13 +664,26 @@ class App extends Component<any, State> {
     endpointUrl: string
   ) => {
     if (atLeastTwoLocations(locations)) {
-      this.setState({ body: getRequestBody(locations), prevCoordsString: coordsString })
+      this.setState({ prevCoordsString: coordsString })
 
       return Promise.all([
-        defaultOption && this.handleOSRMRequest(profile, locations, endpointUrl, 'route'),
+        defaultOption &&
+          this.handleOSRMRequest(
+            profile,
+            coordsString,
+            endpointUrl,
+            'route',
+            extraQueryParams
+          ),
         trafficOption &&
           ['car'].includes(profile) &&
-          this.handleOSRMRequest('car-traffic', locations, endpointUrl, 'traffic'),
+          this.handleOSRMRequest(
+            'car-traffic',
+            coordsString,
+            endpointUrl,
+            'traffic',
+            extraQueryParams
+          ),
         googleMapsOption &&
           google &&
           ['car', 'foot'].includes(profile) &&
@@ -615,15 +696,16 @@ class App extends Component<any, State> {
 
   public handleOSRMRequest = async (
     profile: string,
-    locations: Location[],
+    coordsString: string,
     endpointUrl: string,
-    routeName: string
+    routeName: string,
+    overrideQueryParams: OSRMQueryParams = {}
   ) => {
     const response = `${routeName}Response`
     const message = `${routeName}Message`
 
     return new Promise(resolve => {
-      osrmRoutingApi(locations, profile, endpointUrl)
+      osrmRoutingApi(coordsString, profile, endpointUrl, overrideQueryParams)
         .then((routeResponse: OSRMRouteResponse) => {
           this.setState(
             state => ({
@@ -732,7 +814,6 @@ class App extends Component<any, State> {
   }
 
   public updatePoint: UpdatePoint = (indexes: number[], newLocations: Location[]) => {
-    console.log('update point called')
     this.setState(state => {
       return {
         locations: state.locations.reduce(
@@ -770,14 +851,19 @@ class App extends Component<any, State> {
 
   public updateRoute = (response: OSRMRouteResponse, key: string, routeName: string) => {
     if (Object.keys(response).includes('code') && response.code === 'Ok') {
-      const route = routeConverterFromOSRM(response, key)
-      this.setState(state => ({
-        ...state,
-        routes: {
-          ...state.routes,
-          [routeName]: route
-        }
-      }))
+      if (response.routes[0].geometry) {
+        // @ts-ignore
+        this.setState({ tempRoutePath: routeConverterFromOSRM(response, key) })
+      } else {
+        // @ts-ignore
+        this.setState(state => ({
+          ...state,
+          routes: {
+            ...state.routes,
+            [routeName]: routeConverterFromOSRM(response, key)
+          }
+        }))
+      }
     } else {
       const traffic = routeName.includes('traffic')
       this.setState(state => ({
@@ -971,7 +1057,9 @@ class App extends Component<any, State> {
       messageBottomProp,
       inputValues,
       inputColors,
-      loading
+      loading,
+      tempRoute,
+      tempRoutePath
     } = this.state
     const { urlMatchString, profiles } = this.props
     const { show, hide } = this.props.animationDuration
@@ -1102,6 +1190,8 @@ class App extends Component<any, State> {
               debug={debug}
               addedRoutes={addedRoutes}
               routeHighlight={routeHighlight}
+              tempRoute={tempRoute}
+              tempRoutePath={tempRoutePath}
             />
             {routingGraphVisible && <TrafficLegend />}
           </Sidebar.Pusher>

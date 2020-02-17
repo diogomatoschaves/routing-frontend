@@ -90,30 +90,41 @@ export const routeConverterFromGoogle = (response: GoogleResponse) => {
   }
 }
 
-export const routeConverterFromOSRM = (response: OSRMRouteResponse, id = nanoid()) => {
+export const routeConverterFromOSRM: (
+  response: OSRMRouteResponse,
+  id?: string
+) =>
+  | number[][]
+  | {
+      duration: number
+      routePath: number[][][] | Coords2[][]
+      distance: number
+      parsedValue: OSRMRouteResponse
+      id: string
+      type: string
+    } = (response: OSRMRouteResponse, id = nanoid()) => {
+  const firstRoute = response.routes[0]
+
+  if (firstRoute.geometry) {
+    return polyline.decode(firstRoute.geometry).map(point => point.reverse())
+  }
+
   return {
-    distance: response.routes.reduce((accum, route) => {
-      return accum + route.distance
-    }, 0),
-    duration: response.routes.reduce((accum, route) => {
-      return accum + route.duration
-    }, 0),
+    distance: firstRoute.distance,
+    duration: firstRoute.duration,
     id,
     parsedValue: response,
-    routePath: response.routes[0].legs.reduce(
-      (legPath: Coords2[][], leg: OSRMRouteLeg) => {
-        return [
-          ...legPath,
-          leg.steps.reduce((stepPath: Coords2[], step) => {
-            const path = polyline
-              .decode(step.geometry)
-              .map(coord => ({ lat: coord[0], lon: coord[1] }))
-            return [...stepPath, ...path]
-          }, [])
-        ]
-      },
-      []
-    ),
+    routePath: firstRoute.legs.reduce((legPath: Coords2[][], leg: OSRMRouteLeg) => {
+      return [
+        ...legPath,
+        leg.steps.reduce((stepPath: Coords2[], step) => {
+          const path = polyline
+            .decode(step.geometry)
+            .map(coord => ({ lat: coord[0], lon: coord[1] }))
+          return [...stepPath, ...path]
+        }, [])
+      ]
+    }, []),
     type: 'Route'
   }
 }
