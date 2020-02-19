@@ -60,7 +60,6 @@ interface State {
   polylineMarkers: MarkerObject[]
   addedRoutesIds: string[]
   style: string
-  lineId: string
   legPath: number[][]
   locationIndex: number
   mouseDown: boolean
@@ -164,7 +163,6 @@ export default class Map extends Component<Props, State> {
       markers: [],
       polylineMarkers: [],
       style: 'light',
-      lineId: '',
       legPath: [],
       locationIndex: 0,
       mouseDown: false,
@@ -242,7 +240,7 @@ export default class Map extends Component<Props, State> {
       }
 
       if (prevProps.routes.route.routePath.length === 1) {
-        this.removeSourceLayer('tempRoute-0', map, true)
+        this.removeSourceLayer('tempRoute', map, true)
       }
     }
 
@@ -276,7 +274,7 @@ export default class Map extends Component<Props, State> {
         const lineSettings = {
           id: routeName,
           color: ROUTING_SERVICE_POLYLINE,
-          width: 4.5,
+          width: 6,
           opacity: 0.6
         }
 
@@ -1022,25 +1020,30 @@ export default class Map extends Component<Props, State> {
       ).then(() => {
         const lineId = `${lineSettings.secondaryId}-polyline`
 
-        map.addLayer({
-          ...(routeLineSettings as any),
-          id: lineId,
-          paint: {
-            ...routeLineSettings.paint,
-            'line-color': lineSettings.color,
-            'line-opacity': routingGraphVisible
-              ? 0.85
-              : lineSettings.opacity
-              ? lineSettings.opacity
-              : routeLineSettings.paint['line-opacity'],
-            'line-width': routingGraphVisible
-              ? 2 * lineSettings.width
-              : lineSettings.width
-          },
-          source: lineSettings.secondaryId
+        const linesArr = temporary ? [0, -1, 1, 0] : [0, -1, 1, 0]
+        linesArr.forEach((x: number, j: number) => {
+          map.addLayer({
+            ...(routeLineSettings as any),
+            id: lineId + '-' + j,
+            layout: {
+              'line-cap': j === 3 ? 'butt' : 'square',
+              'line-join': 'miter'
+            },
+            paint: {
+              'line-color': j === 3 ? lineSettings.color : 'white',
+              'line-offset': x * 3,
+              'line-opacity': lineSettings.opacity
+                ? lineSettings.opacity
+                : routeLineSettings.paint['line-opacity'],
+              'line-width': j === 3 ? lineSettings.width : lineSettings.width / 2
+            },
+            source: lineSettings.secondaryId
+          })
         })
 
         if (!temporary) {
+          const middleLayerId = lineId + '-' + '3'
+
           const canvas = map.getCanvasContainer()
           const locationIndex = Number(lineId.split('-')[1])
           const { updateState } = this.props
@@ -1080,7 +1083,7 @@ export default class Map extends Component<Props, State> {
               )
 
               if (features.length >= 1) {
-                if (features[0].layer.id === lineId) {
+                if (features[0].layer.id === middleLayerId) {
                   this.drawPolylineEventMarker(map, legPath, coords, true)
                   setTimeout(() => {
                     this.setState({ mouseHovering: false })
@@ -1131,8 +1134,8 @@ export default class Map extends Component<Props, State> {
               }
             )
 
-            if (features.length >= 1 && features[0].layer.id !== lineId) {
-              map.off('mouseenter', lineId, onMouseEnter)
+            if (features.length >= 1 && features[0].layer.id !== middleLayerId) {
+              map.off('mouseenter', middleLayerId, onMouseEnter)
               map.off('mousemove', onMouseMove)
               map.off('mousedown', onMouseDown)
               map.off('mouseup', onMouseUp)
@@ -1191,13 +1194,13 @@ export default class Map extends Component<Props, State> {
             map.off('mouseup', onMouseUp)
           }
 
-          map.on('mouseenter', lineId, onMouseEnter)
+          map.on('mouseenter', middleLayerId, onMouseEnter)
 
           this.setState(
             prevState => ({
               listeners: {
                 ...prevState.listeners,
-                [lineId]: {
+                [middleLayerId]: {
                   onMouseDown,
                   onMouseEnter,
                   onMouseMove,
