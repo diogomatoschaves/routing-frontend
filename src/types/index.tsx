@@ -279,3 +279,11 @@ export interface TempRoute {
   index: number
   newWaypoint: boolean
 }
+
+export interface LineSettings {
+  id: string
+  width: number
+  color: string
+  opacity?: number
+  secondaryId?: string
+}
