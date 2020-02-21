@@ -123,7 +123,7 @@ export const routeLineSettings = {
   paint: {
     'line-color': ROUTING_SERVICE_POLYLINE,
     'line-width': 6.5,
-    'line-opacity': 0.9
+    'line-opacity': 0.95
   }
 }
 
