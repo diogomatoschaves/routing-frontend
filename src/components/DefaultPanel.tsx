@@ -90,19 +90,38 @@ export default function DefaultPanel(props: Props) {
       })}
       {locations.slice(-1)[0].lat && (
         <Box direction="row" justify="flex-start" padding="10px 0 0 0">
-          <div onClick={() => updateState('locations', addWaypoint(locations))}>
-            <BackgroundIcon
-              diameter={38}
-              color={ADD_WAYPOINT}
-              iconColor={'white'}
-              circle={true}
-              iconName={'plus'}
-              margin={'0 10px 0 0'}
-              loading={false}
-              cursor="pointer"
-            />
-          </div>
-          Add Destination
+          <Box direction="row" justify="flex-start" width="50%">
+            <div onClick={() => updateState('locations', addWaypoint(locations))}>
+              <BackgroundIcon
+                diameter={38}
+                color={ADD_WAYPOINT}
+                iconColor={'white'}
+                circle={false}
+                iconName={'plus'}
+                margin={'0 10px 0 0'}
+                loading={false}
+                cursor="pointer"
+              />
+            </div>
+            Add Destination
+          </Box>
+          <Box direction="row" justify="flex-start" width="50%">
+            <div onClick={() => updateState('locations', sortWaypoints(locations.reverse()))}>
+              <BackgroundIcon
+                diameter={38}
+                color={ADD_WAYPOINT}
+                iconColor={'white'}
+                circle={false}
+                iconName={'exchange'}
+                margin={'0 10px 0 0'}
+                padding={'0 0 0 5px'}
+                loading={false}
+                cursor="pointer"
+                rotated={'clockwise'}
+              />
+            </div>
+            Swap locations
+          </Box>
         </Box>
       )}
       {extraOptions && (

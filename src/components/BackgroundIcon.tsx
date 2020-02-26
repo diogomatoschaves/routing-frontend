@@ -10,9 +10,11 @@ interface Props {
   circle?: boolean
   iconName: any
   margin: string
+  padding?: string
   cursor?: string
   loading?: boolean
   onClick?: any
+  rotated?: 'clockwise' | 'counterclockwise'
 }
 
 const Wrapper: any = styled.div`
@@ -26,9 +28,11 @@ export default function BackgroundIcon({
   circle,
   iconName,
   margin,
+  padding,
   cursor,
   loading,
-  onClick
+  onClick,
+  rotated
 }: Props) {
   return (
     <Wrapper margin={margin} onClick={onClick}>
@@ -39,7 +43,7 @@ export default function BackgroundIcon({
         position="relative"
         cursor={cursor}
       >
-        <Box justify="center" height="100%">
+        <Box justify="center" height="100%" padding={padding}>
           {loading ? (
             <Loader active={true} inline={true} inverted={true} size={'small'} />
           ) : (
@@ -48,6 +52,7 @@ export default function BackgroundIcon({
               overridecolor={iconColor}
               name={iconName}
               position="absolute"
+              rotated={rotated}
             />
           )}
         </Box>
