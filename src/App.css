@@ -32,7 +32,7 @@ body * :not(.icon){
 }
 
 .custom-marker {
-  z-index: 100;
+  z-index: 0;
 }
 
 .custom-marker.start {
@@ -70,6 +70,15 @@ body * :not(.icon){
 
 .custom-popup {
   z-index: 130;
+}
+
+.mapboxgl-popup-content {
+  z-index: 20 !important;
+}
+
+.custom-popup-route .mapboxgl-popup-content {
+  padding: 0 !important;
+  border-radius: 20px;
 }
 
 .key {

@@ -171,6 +171,7 @@ export interface Route {
   distance: number
   duration: number
   routePath: Coords2[][]
+  legStats: Array<{ distance: number; duration: number }>
   type?: string
   parsedValue?: any
 }

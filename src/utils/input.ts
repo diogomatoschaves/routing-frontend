@@ -71,7 +71,8 @@ export const defaultRoute = {
   id: '',
   duration: 0,
   distance: 0,
-  routePath: [[{ lat: 0, lon: 0 }]]
+  routePath: [[{ lat: 0, lon: 0 }]],
+  legStats: []
 }
 
 export const exampleLine = [

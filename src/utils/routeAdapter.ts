@@ -24,7 +24,8 @@ export const routeConverter = (routes: RouteSchema[]): Route[] => {
       duration: route.eta,
       id: route.id,
       parsedValue: route,
-      routePath
+      routePath,
+      legStats: []
     }
   })
 }
@@ -41,6 +42,18 @@ export const routeConverterFromRouteService = (
     routePath: response.routes[0].legs.reduce((accum: Coords2[][], leg: RouteLeg) => {
       return [...accum, leg.geometry ? leg.geometry : []]
     }, []),
+    legStats: response.routes[0].legs.reduce(
+      (legStats: Array<{ distance: number; duration: number }>, leg: any) => {
+        return [
+          ...legStats,
+          {
+            distance: leg.distance.value,
+            duration: leg.duration.value
+          }
+        ]
+      },
+      []
+    ),
     type: 'Route'
   }
 }
@@ -68,6 +81,18 @@ export const routeConverterFromMatchService = (
         routePath: []
       }
     ),
+    legStats: response.matchings[0].legs.reduce(
+      (legStats: Array<{ distance: number; duration: number }>, leg: any) => {
+        return [
+          ...legStats,
+          {
+            distance: leg.distance.value,
+            duration: leg.duration.value
+          }
+        ]
+      },
+      []
+    ),
     parsedValue: response,
     type: 'Match'
   }
@@ -86,7 +111,19 @@ export const routeConverterFromGoogle = (response: GoogleResponse) => {
     parsedValue: response,
     routePath: [
       polyline.decode(tripPolyline).map(coord => ({ lat: coord[0], lon: coord[1] }))
-    ]
+    ],
+    legStats: response.routes[0].legs.reduce(
+      (legStats: Array<{ distance: number; duration: number }>, leg: any) => {
+        return [
+          ...legStats,
+          {
+            distance: leg.distance.value,
+            duration: leg.duration.value
+          }
+        ]
+      },
+      []
+    ),
   }
 }
 
@@ -125,6 +162,18 @@ export const routeConverterFromOSRM: (
         }, [])
       ]
     }, []),
+    legStats: firstRoute.legs.reduce(
+      (legStats: Array<{ distance: number; duration: number }>, leg: OSRMRouteLeg) => {
+        return [
+          ...legStats,
+          {
+            distance: leg.distance,
+            duration: leg.duration
+          }
+        ]
+      },
+      []
+    ),
     type: 'Route'
   }
 }
