@@ -451,7 +451,7 @@ export const getAppState = () => {
     prevCoordsString: '',
     dropEvent: true,
     tempRoute: null,
-    tempRoutePath: null
+    tempRoutePath: null,
   }
 }
 

@@ -15,6 +15,7 @@ interface Props {
   loading?: boolean
   onClick?: any
   rotated?: 'clockwise' | 'counterclockwise'
+  fontSize?: string
 }
 
 const Wrapper: any = styled.div`
@@ -32,7 +33,8 @@ export default function BackgroundIcon({
   cursor,
   loading,
   onClick,
-  rotated
+  rotated,
+  fontSize
 }: Props) {
   return (
     <Wrapper margin={margin} onClick={onClick}>
@@ -48,7 +50,7 @@ export default function BackgroundIcon({
             <Loader active={true} inline={true} inverted={true} size={'small'} />
           ) : (
             <StyledIcon
-              fontSize="25px"
+              fontSize={fontSize ? fontSize : '25px'}
               overridecolor={iconColor}
               name={iconName}
               position="absolute"

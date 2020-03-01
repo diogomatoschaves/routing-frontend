@@ -2,6 +2,7 @@ import throttle from 'lodash/throttle'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import React, { Component } from 'react'
+import { renderToString } from 'react-dom/server'
 import styled from 'styled-components'
 import turf from 'turf'
 import {
@@ -20,8 +21,8 @@ import {
   UpdateState
 } from '../types'
 import {
-  END_MARKER,
-  ROUTING_SERVICE_POLYLINE,
+  END_MARKER, PROFILE_BACKGROUND, ROUTING_SERVICE_COLOR,
+  ROUTING_SERVICE_POLYLINE, ROUTING_SERVICE_STATS,
   START_MARKER,
   THIRD_PARTY_POLYLINE,
   TRAFFIC_POLYLINE,
@@ -29,7 +30,7 @@ import {
 } from '../utils/colours'
 import {
   addWaypoint,
-  checkNested,
+  checkNested, computeDistance, computeDuration,
   getSpeedsLayers,
   removeWaypoint,
   reorderWaypoints,
@@ -44,6 +45,7 @@ import {
   routeLineSettings,
   speedTilesInput
 } from '../utils/input'
+import RouteInfo from './RouteInfo'
 
 const MapWrapper = styled.div`
   position: absolute;
@@ -59,6 +61,7 @@ interface State {
   addedRoutesMarkers: MarkerObject[]
   polylineMarkers: MarkerObject[]
   addedRoutesIds: string[]
+  routePopups: Array<mapboxgl.Popup | null>
   style: string
   legPath: number[][]
   locationIndex: number
@@ -66,6 +69,7 @@ interface State {
   mouseOnMarker: boolean
   mouseHovering: boolean
   listeners: Listeners
+  zoom: number
   [key: string]:
     | string
     | mapboxgl.Map
@@ -102,6 +106,7 @@ interface Props {
   tempRoute: TempRoute | null
   tempRoutePath: number[][] | null
   throttleDelay: number
+  zoomThreshold: number
 }
 
 interface MarkerObject {
@@ -148,7 +153,8 @@ export default class Map extends Component<Props, State> {
         width: 6.5
       }
     ],
-    throttleDelay: 350
+    throttleDelay: 350,
+    zoomThreshold: 11
   }
 
   public mapContainer: any
@@ -162,13 +168,15 @@ export default class Map extends Component<Props, State> {
       addedRoutesMarkers: [],
       markers: [],
       polylineMarkers: [],
+      routePopups: [],
       style: 'light',
       legPath: [],
       locationIndex: 0,
       mouseDown: false,
       mouseOnMarker: false,
       mouseHovering: false,
-      listeners: {}
+      listeners: {},
+      zoom: 0
     }
     this.triggerRouteUpdate = throttle(this.triggerRouteUpdate, props.throttleDelay)
   }
@@ -193,10 +201,28 @@ export default class Map extends Component<Props, State> {
       addedRoutes,
       routeHighlight,
       tempRoute,
-      tempRoutePath
+      tempRoutePath,
+      zoomThreshold
     } = this.props
-    const { map, markers, addedRoutesIds, addedRoutesMarkers } = this.state
+    const {
+      map,
+      markers,
+      addedRoutesIds,
+      addedRoutesMarkers,
+      zoom,
+      routePopups
+    } = this.state
     const geography = geographies.options[geographies.activeIdx]
+
+    if (prevState.zoom !== zoom) {
+      if (zoom < zoomThreshold && prevState.zoom >= zoomThreshold) {
+        this.removePopups(false)
+      } else if (zoom >= zoomThreshold && prevState.zoom < zoomThreshold) {
+        if (map) {
+          routePopups.forEach((popup) => popup && popup.addTo(map))
+        }
+      }
+    }
 
     if (map && prevProps.locations !== locations) {
       this.removeMarkers(markers, 'markers')
@@ -228,13 +254,7 @@ export default class Map extends Component<Props, State> {
           width: 6.0
         }
 
-        this.addRoute(
-          routes.route.routePath,
-          markers,
-          map,
-          routingGraphVisible,
-          lineSettings
-        )
+        this.addRoute(routes.route, markers, map, routingGraphVisible, lineSettings)
       } else if (!tempRoute) {
         this.removeSourceLayer(routeName, map)
       }
@@ -257,7 +277,7 @@ export default class Map extends Component<Props, State> {
         }
 
         this.addRoute(
-          routes.trafficRoute.routePath,
+          routes.trafficRoute,
           markers,
           map,
           routingGraphVisible,
@@ -278,8 +298,13 @@ export default class Map extends Component<Props, State> {
           opacity: 0.6
         }
 
+        const tempRoute = {
+          ...defaultRoute,
+          routePath: [transformToObject(tempRoutePath)]
+        }
+
         this.addRoute(
-          [transformToObject(tempRoutePath)],
+          tempRoute,
           markers,
           map,
           routingGraphVisible,
@@ -306,7 +331,7 @@ export default class Map extends Component<Props, State> {
         }
 
         this.addRoute(
-          routes.googleRoute.routePath,
+          routes.googleRoute,
           markers,
           map,
           routingGraphVisible,
@@ -394,6 +419,7 @@ export default class Map extends Component<Props, State> {
       if (debug) {
         this.removeMarkers(markers, 'markers')
         this.removeSourceLayer('route', map)
+        this.removePopups(false)
 
         this.addAddedRoutes(
           addedRoutes,
@@ -410,6 +436,8 @@ export default class Map extends Component<Props, State> {
           markers: this.addLocationMarkers(locations, map, updatePoint, 'route')
         })
 
+        routePopups.forEach((popup) => popup && popup.addTo(map))
+
         routeProperties.forEach(item => {
           const routePath = routes[item.routeId].routePath
 
@@ -421,7 +449,7 @@ export default class Map extends Component<Props, State> {
 
           routePath.length > 1 &&
             this.addRoute(
-              routes[item.routeId].routePath,
+              routes[item.routeId],
               markers,
               map,
               routingGraphVisible,
@@ -508,6 +536,10 @@ export default class Map extends Component<Props, State> {
     )
 
     map.on('click', event => this.handleMapClick(event))
+
+    map.on('zoom', (e) => {
+      this.setState({ zoom: Math.round(map.getZoom() * 100) / 100})
+    })
   }
 
   private addAddedRoutes = (
@@ -532,7 +564,7 @@ export default class Map extends Component<Props, State> {
           width: 6.0
         }
 
-        this.addRoute(routeKey.routePath, [], map, routingGraphVisible, lineSettings)
+        this.addRoute(routeKey, [], map, routingGraphVisible, lineSettings)
 
         const totalRoutePath = routeKey.routePath.map(leg => transformPoints(leg)).flat()
 
@@ -970,7 +1002,7 @@ export default class Map extends Component<Props, State> {
   }
 
   private addRoute = async (
-    routePath: Coords2[][],
+    route: Route,
     markers: MarkerObject[],
     map: mapboxgl.Map,
     routingGraphVisible: boolean,
@@ -978,30 +1010,94 @@ export default class Map extends Component<Props, State> {
     temporary: boolean = false
   ) => {
     let routeCoords: number[][] = []
-    return this.removeSourceLayer(lineSettings.id, map).then(() => {
+    return Promise.all([
+      this.removePopups(),
+      this.removeSourceLayer(lineSettings.id, map)
+    ]).then(() => {
       return Promise.all(
-        routePath.map((leg, i) => {
+        route.routePath.map((leg, i) => {
           const legCoords = transformPoints(leg)
           routeCoords = [...routeCoords, ...legCoords]
 
-          return this.addPolyline(
-            legCoords,
-            map,
-            routingGraphVisible,
-            {
-              ...lineSettings,
-              secondaryId: `${lineSettings.id}-${i}`
-            },
-            temporary
-          )
+          return Promise.all([
+            this.addPolylineTooltip(map, legCoords, route.legStats[i], temporary),
+            this.addPolyline(
+              legCoords,
+              map,
+              routingGraphVisible,
+              {
+                ...lineSettings,
+                secondaryId: `${lineSettings.id}-${i}`
+              },
+              temporary
+            )
+          ])
         })
-      ).then(() => {
+      ).then(promisesArr => {
+        const routePopups = promisesArr.map(prmses => prmses[0])
+
+        this.setState({ routePopups })
+
         if (!temporary) {
           const points = this.getMarkerCoords(markers)
           this.fitBounds([...points, ...routeCoords], map)
         }
       })
     })
+  }
+
+  private addPolylineTooltip = async (
+    map: mapboxgl.Map,
+    legCoords: number[][],
+    legStats: { duration: number; distance: number },
+    temporary: boolean
+  ) => {
+    if (!temporary) {
+      const { zoomThreshold } = this.props
+
+      const duration = legStats.duration
+      const distance = legStats.distance
+
+      const line = turf.lineString(legCoords)
+      const midPoint = turf.along(line, distance / 2, 'meters').geometry.coordinates
+
+      const position = new mapboxgl.LngLat(midPoint[0], midPoint[1])
+
+      const div = renderToString(
+        <RouteInfo
+          statsColor={ROUTING_SERVICE_STATS}
+          textColor={ROUTING_SERVICE_COLOR}
+          iconColor={ROUTING_SERVICE_POLYLINE}
+          route={{ duration, distance, id: '', routePath: [], legStats: [] }}
+          size={'mini'}
+          diameter={30}
+          horizontal={true}
+          padding={'10px 10px 10px 10px'}
+        />
+      )
+
+      const popup = new mapboxgl.Popup({
+        className: 'custom-popup-route',
+        closeButton: false,
+        closeOnClick: false
+      })
+        .setLngLat(position)
+        .setHTML(div)
+
+      if (map.getZoom() > zoomThreshold) {
+        popup.addTo(map)
+      }
+
+      return popup
+    }
+
+    return null
+  }
+
+  private removePopups = (erase: boolean = true) => {
+    const { routePopups } = this.state
+    routePopups.forEach(popup => popup && popup.remove())
+    erase && this.setState({ routePopups: [] })
   }
 
   private addPolyline = (

@@ -11,11 +11,15 @@ interface Props {
   route: Route
   top?: string
   right?: string
-  title: string
+  title?: string
   subTitle?: string
   textColor: string
   iconColor: string
   statsColor: string
+  size?: string
+  diameter?: number
+  horizontal?: boolean
+  padding?: string
 }
 
 const StyledHeader = styled(Header)`
@@ -36,7 +40,7 @@ const StyledStatistic = styled(Statistic)`
   }
 `
 
-const diameter = 50
+const defaultDiameter = 50
 
 export default function RouteInfo({
   route,
@@ -44,37 +48,51 @@ export default function RouteInfo({
   textColor,
   iconColor,
   statsColor,
-  subTitle
+  subTitle,
+  size,
+  diameter,
+  horizontal,
+  padding
 }: Props) {
   const [durationValue, durationLabel] = computeDuration(route.duration)
   const [distanceValue, distanceLabel] = computeDistance(route.distance)
 
   return (
-    <StyledSegment width="100%" padding="15px 25px" noBoxShadow={false}>
+    <StyledSegment
+      width="100%"
+      padding={padding ? padding : '15px 25px'}
+      noBoxShadow={size === 'mini'}
+    >
       <Box direction="column" justify="space-between">
-        <StyledHeader nomarginbottom={1} overridecolor={textColor}>
-          {title}
-        </StyledHeader>
+        {title && (
+          <StyledHeader nomarginbottom={1} overridecolor={textColor}>
+            {title}
+          </StyledHeader>
+        )}
         {subTitle && (
           <StyledHeader size="small" overridecolor={iconColor}>
             {subTitle}
           </StyledHeader>
         )}
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <Box direction="row" width="40%" justify="center">
-            <BackgroundIcon
-              diameter={diameter}
-              color={PROFILE_BACKGROUND}
-              iconColor={iconColor}
-              circle={false}
-              iconName={'time'}
-              margin={'0 7px 0 0'}
-            />
-          </Box>
+          {size !== 'mini' && (
+            <Box direction="row" width="40%" justify="center">
+              <BackgroundIcon
+                diameter={diameter ? diameter : defaultDiameter}
+                color={PROFILE_BACKGROUND}
+                iconColor={iconColor}
+                circle={false}
+                iconName={'time'}
+                margin={'0 7px 0 0'}
+                fontSize={size === 'mini' ? '15px' : undefined}
+              />
+            </Box>
+          )}
           <Box direction="row" width="60%" justify="center">
             <StyledStatistic
+              horizontal={horizontal}
               overridecolor={statsColor}
-              size={'tiny'}
+              size={size ? size : 'tiny'}
               style={{ margin: 0 }}
             >
               <Statistic.Value>{durationValue}</Statistic.Value>
@@ -83,20 +101,24 @@ export default function RouteInfo({
           </Box>
         </Box>
         <Box direction="row" justify="space-around" width="100%" padding="5px 0 5px 0">
-          <Box direction="row" width="40%" justify="center">
-            <BackgroundIcon
-              diameter={diameter}
-              color={PROFILE_BACKGROUND}
-              iconColor={iconColor}
-              circle={false}
-              iconName={'road'}
-              margin={'0 7px 0 0'}
-            />
-          </Box>
+          {size !== 'mini' && (
+            <Box direction="row" width="40%" justify="center">
+              <BackgroundIcon
+                diameter={diameter ? diameter : defaultDiameter}
+                color={PROFILE_BACKGROUND}
+                iconColor={iconColor}
+                circle={false}
+                iconName={'road'}
+                margin={'0 7px 0 0'}
+                fontSize={size === 'mini' ? '15px' : undefined}
+              />
+            </Box>
+          )}
           <Box direction="row" width="60%" justify="center">
             <StyledStatistic
+              horizontal={horizontal}
               overridecolor={statsColor}
-              size={'tiny'}
+              size={size ? size : 'tiny'}
               style={{ margin: 0 }}
             >
               <Statistic.Value>{distanceValue}</Statistic.Value>
