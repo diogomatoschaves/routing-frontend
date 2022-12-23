@@ -29,3 +29,5 @@ where `OSRM_PBF_URL` points to the geographic area pbf file you want to route on
 ## Contributing
 
 Pull Requests are welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
